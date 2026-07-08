@@ -6,8 +6,8 @@ Marketplace platform for booking sports turfs & courts, with split-cost Open Ses
 
 | Doc | Purpose |
 |---|---|
-| [PROJECT_BRIEF.md](./PROJECT_BRIEF.md) | What we're building, for whom, and the roadmap |
-| [TECH_STACK.md](./TECH_STACK.md) | Stack choices and why |
+| [PROJECT_BRIEF.md](./PROJECT-BRIEF.md) | What we're building, for whom, and the roadmap |
+| [TECH_STACK.md](./TECH-STACK.md) | Stack choices and why |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | Folder structure, module design, data model mapping |
 
 
