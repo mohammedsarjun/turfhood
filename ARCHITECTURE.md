@@ -1,9 +1,9 @@
-# TurfHub - Architecture
+# TurfHood - Architecture
 
 Monorepo with the frontend and backend in a single repository.
 
 ```
-turfhub/
+turfhood/
 ├── frontend/          # Next.js app
 ├── backend/           # Express + Clean Architecture
 ├── shared/            # Shared TypeScript types (DTOs used by both sides)

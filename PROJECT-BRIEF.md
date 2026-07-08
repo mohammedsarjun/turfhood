@@ -1,8 +1,8 @@
-# TurfHub - Project Brief
+# TurfHood - Project Brief
 
-## What is TurfHub?
+## What is TurfHood?
 
-TurfHub is a marketplace platform for booking sports turfs and courts (football, cricket, badminton, etc.), connecting three user types:
+TurfHood is a marketplace platform for booking sports turfs and courts (football, cricket, badminton, etc.), connecting three user types:
 
 | User | Role |
 |---|---|
@@ -14,7 +14,7 @@ TurfHub is a marketplace platform for booking sports turfs and courts (football,
 
 Turf/court booking today is largely manual (phone calls, WhatsApp groups, walk-ins), causing double-bookings, no-shows, and no structured way to fill unused slots.
 
-| Problem | TurfHub's Solution |
+| Problem | TurfHood's Solution |
 |---|---|
 | Double-bookings | Slot uniqueness (`courtId + date + startTime`) enforced at the database level |
 | Empty/unfilled slots | Open Sessions — one person books, others join to split the cost |

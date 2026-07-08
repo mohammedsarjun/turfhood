@@ -1,4 +1,4 @@
-# TurfHub
+# TurfHood
 
 Marketplace platform for booking sports turfs & courts, with split-cost Open Sessions and automated WhatsApp notifications.
 
@@ -9,8 +9,8 @@ Marketplace platform for booking sports turfs & courts, with split-cost Open Ses
 | [PROJECT_BRIEF.md](./PROJECT_BRIEF.md) | What we're building, for whom, and the roadmap |
 | [TECH_STACK.md](./TECH_STACK.md) | Stack choices and why |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | Folder structure, module design, data model mapping |
-| [CONTRIBUTING.md](./CONTRIBUTING.md) | Coding standards, commit convention, git workflow |
-| [FEATURES_ALL.md](./FEATURES_ALL.md) | Full feature breakdown → GitHub issues |
+
+
 
 ## Stack at a glance
 
@@ -35,8 +35,8 @@ Marketplace platform for booking sports turfs & courts, with split-cost Open Ses
 ### Installation
 
 ```bash
-git clone https://github.com/your-username/turfhub.git
-cd turfhub
+git clone https://github.com/mohammedsarjun/turfhood.git
+cd turfhood
 npm install
 ```
 
@@ -61,4 +61,4 @@ npm run dev
 
 ## License
 
-MIT (or your choice)
+This project is licensed under the MIT License.

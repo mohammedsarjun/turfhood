@@ -1,4 +1,4 @@
-# TurfHub - Tech Stack
+# TurfHood - Tech Stack
 
 ## Frontend
 
