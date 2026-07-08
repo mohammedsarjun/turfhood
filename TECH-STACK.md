@@ -1,35 +1,49 @@
-TurfHub - Tech Stack
+# TurfHub - Tech Stack
 
-Frontend
+## Frontend
 
-LayerChoiceWhyFrameworkNext.js (App Router)SSR/SEO for public turf listings, file-based routing fits distinct user areas (customer/owner/admin)LanguageTypeScriptType safety across a schema this large (20+ collections) is not optionalComponent libraryMaterial UI (MUI)Fast, accessible, pre-built complex components (data tables for owner/admin dashboards, date pickers for slot selection, modals)Styling utilityTailwind CSSRapid custom layout/spacing for one-off layout needs
+| Layer | Choice | Why |
+|---|---|---|
+| Framework | Next.js (App Router) | SSR/SEO for public turf listings, file-based routing fits distinct user areas |
+| Language | TypeScript | Type safety across a schema this large (20+ collections) |
+| Component library | Material UI (MUI) | Fast, accessible, pre-built complex components (data tables, date pickers, modals) |
+| Styling utility | Tailwind CSS | Rapid custom layout/spacing for one-off needs |
 
-Backend
+## Backend
 
-LayerChoiceWhyRuntimeNode.jsMatches team's JS/TS skillset, non-blocking I/O suits notification/scheduled-job-heavy domainFrameworkExpressMinimal, well-understood, plenty of middleware ecosystem (auth, rate limiting)LanguageTypeScriptSame reasoning as frontend — this schema has heavy referential integrity to get rightArchitectureClean Architecture (monolith)Domain (bookings, slots, payments, open sessions) is complex enough to benefit from separating business rules from framework/DB details, without the operational overhead of microservicesDeployment shapeMonolithSingle team, single deploy cadence — see note below on future extraction
+| Layer | Choice | Why |
+|---|---|---|
+| Runtime | Node.js | Matches team's JS/TS skillset, non-blocking I/O suits job-heavy domain |
+| Framework | Express | Minimal, well-understood, rich middleware ecosystem |
+| Language | TypeScript | Heavy referential integrity across this schema needs strict typing |
+| Architecture | Clean Architecture (monolith) | Separates business rules from framework/DB details without microservices overhead |
+| Deployment shape | Monolith | Single team, single deploy cadence |
 
-Database
+## Database
 
-LayerChoiceWhyDatabaseMongoDBGiven schema — document model fits the referenced-not-embedded design already decided (turf_images, bookings, payments, etc. all separate collections with ObjectId references)ODMMongooseSchema validation + TypeScript types across a 20+ collection domain
+| Layer | Choice | Why |
+|---|---|---|
+| Database | MongoDB | Fits the referenced-not-embedded design already decided in the schema |
+| ODM | Mongoose | Schema validation + TypeScript types across 20+ collections |
 
-Auth & Integrations
+## Auth & Integrations
 
+| Integration | Purpose |
+|---|---|
+| Twilio (OTP) | Phone-based signup/login verification |
+| JWT | Access token issuance + role claims (customer/turf_owner/admin) |
+| Razorpay | Primary payment gateway |
+| Internal Wallet | Alternate payment source, append-only transaction ledger |
+| WhatsApp Business API (Twilio) | Booking confirmations, cancellations/refunds, reminders, two-way replies |
 
-OTP: Phone-based, via Twilio (also the WhatsApp Business API provider)
-JWT: Access token issuance + role claims (customer/turf_owner/admin)
-Payments: Razorpay (primary), plus internal wallet as a payment source
-WhatsApp Business API (via Twilio): Booking confirmations, cancellations/refunds, reminders, two-way replies (Phase 4)
+## Scheduled Jobs
 
+| Job | Trigger | What it does |
+|---|---|---|
+| Nightly slot generation | Cron, nightly | Reads `pricing_rules` + `availability_overrides` per court, generates `slots` for a rolling 14–30 day window |
+| Open Session auto-cancel | Cron, periodic | Checks `autoCancelAt` (48hrs before slot start), cancels unfilled sessions, releases slot, triggers refunds/notifications |
+| Booking reminders | Cron, before slot start | Sends WhatsApp reminder ahead of a customer's booked slot |
 
-Scheduled Jobs
+## Note on Monolith vs Future Extraction
 
-Two recurring background jobs are core to the domain and need a scheduler (e.g. node-cron, or a managed queue like BullMQ if load grows):
-
-
-Nightly slot generation — reads pricing_rules + availability_overrides per court, generates slots for a rolling window (14–30 days)
-Open Session auto-cancel — checks autoCancelAt (48hrs before slot start) and auto-cancels unfilled sessions, releasing the slot and triggering refunds/notifications
-
-
-Note on "Monolith" vs future extraction
-
-Clean Architecture inside a monolith is a deliberate choice: it keeps deployment simple now (one repo, one process, one team) while keeping domain logic (bookings, slots, payments, open sessions) decoupled from Express/Mongoose. If the platform later needs to split out, say, the booking/slot engine into its own service, the domain layer can move with minimal rewrite, because it never depended on Express or Mongoose directly in the first place.
+Clean Architecture inside a monolith keeps deployment simple now (one repo, one process, one team) while keeping domain logic (bookings, slots, payments, open sessions) decoupled from Express and Mongoose. If a module later needs to become its own service, the domain layer moves with minimal rewrite because it never depended on Express or Mongoose directly.

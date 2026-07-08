@@ -1,4 +1,4 @@
-# TurfHub — Architecture
+# TurfHub - Architecture
 
 Monorepo with the frontend and backend in a single repository.
 
