@@ -54,7 +54,7 @@ npm run dev
 
 | Phase | Focus | Status |
 |---|---|---|
-| Phase 1 | Foundation, Auth, Turf/Court Setup | 🔲 Not started |
+| Phase 1 | Foundation, Auth, Turf/Court Setup | 🚧 In Progress |
 | Phase 2 | Slot Engine, Booking Flow, Payments | 🔲 Not started |
 | Phase 3 | Open Sessions, Owner Ops, Turf Approval | 🔲 Not started |
 | Phase 4 | Admin Tools, Polish, Hardening | 🔲 Not started |
