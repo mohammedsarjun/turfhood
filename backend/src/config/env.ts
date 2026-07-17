@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { DEFAULT_OTP_EXPIRY_SECONDS } from '@turfhub/shared';
 
 function requireEnv(key: string): string {
   const value = process.env[key];
@@ -13,4 +14,9 @@ export const env = {
   MONGODB_URI: requireEnv('MONGODB_URI'),
   JWT_SECRET: requireEnv('JWT_SECRET'),
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN ?? '1d',
-} as const;
+  RESEND_API_KEY: requireEnv('RESEND_API_KEY'),
+  RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL ?? 'Turfhood <onboarding@resend.dev>',
+  OTP_EXPIRY_SECONDS: Number(process.env.OTP_EXPIRY_SECONDS ?? DEFAULT_OTP_EXPIRY_SECONDS),
+  OTP_MAX_ATTEMPTS: Number(process.env.OTP_MAX_ATTEMPTS ?? 5),
+
+}

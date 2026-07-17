@@ -1,5 +1,6 @@
 import type { IUserRepository } from '../../src/domain/user/repositories/IUserRepository.js';
 import type { User } from '../../src/domain/user/entities/User.js';
+import type { Email } from '../../src/domain/user/value-objects/Email.js';
 
 interface FakeUserRepositoryOptions {
   /** Returned by findByEmail(); set this to simulate "an account with this email already exists". */
@@ -27,4 +28,6 @@ export class FakeUserRepository implements IUserRepository {
   async create(user: User): Promise<User> {
     return user;
   }
+
+  async markVerified(_email: Email): Promise<void> {}
 }
