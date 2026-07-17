@@ -4,8 +4,9 @@
   
     "rootDir": "./src",
     "outDir": "./dist",
-    "module": "nodenext",
-    "target": "esnext",
+    "module": "esnext",
+    "target": "ES2022",
+    "moduleResolution": "bundler",
     "types": [],
 
     "sourceMap": true,
@@ -22,14 +23,17 @@
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
       "paths": {
       "@domain/*": ["./src/domain/*"],
       "@application/*": ["./src/application/*"],
       "@infrastructure/*": ["./src/infrastructure/*"],
       "@presentation/*": ["./src/presentation/*"],
-      "@config/*": ["./src/config/*"]
+      "@config/*": ["./src/config/*"],
+      "@shared/*": ["./src/shared/*"]
     },
-
+     
    
     "skipLibCheck": true,
   },
