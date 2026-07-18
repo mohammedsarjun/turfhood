@@ -1,4 +1,5 @@
 import { inject, injectable } from 'tsyringe';
+import { SendOtpUseCase } from '@application/otp/use-cases/SendOtpUseCase';
 import { User } from '@domain/user/entities/User';
 import { DuplicateEmailError } from '@domain/user/errors/DuplicateEmailError';
 import { DuplicatePhoneError } from '@domain/user/errors/DuplicatePhoneError';
@@ -9,19 +10,20 @@ import { Email } from '@domain/user/value-objects/Email';
 import { Password } from '@domain/user/value-objects/Password';
 import { Phone } from '@domain/user/value-objects/Phone';
 
+import type { SignUpResponseDTO } from '../dtos/SignUpResponseDTO.js';
 import type { SignUpUserRequestDTO } from '../dtos/SignUpUserRequestDTO.js';
-import type { UserResponseDTO } from '../dtos/UserResponseDTO.js';
 import { toUserResponseDTO } from '../mappers/toUserResponseDTO.js';
 
-/** Orchestrates new-user registration: validates invariants, hashes the password, persists the user. */
+/** Orchestrates new-user registration: validates invariants, hashes the password, persists the user, and sends the signup OTP. */
 @injectable()
 export class SignUpUserUseCase {
   constructor(
     @inject(USER_TOKENS.UserRepository) private readonly userRepository: IUserRepository,
     @inject(USER_TOKENS.PasswordHasher) private readonly passwordHasher: IPasswordHasher,
+    @inject(SendOtpUseCase) private readonly sendOtpUseCase: SendOtpUseCase,
   ) {}
 
-  async execute(request: SignUpUserRequestDTO): Promise<UserResponseDTO> {
+  async execute(request: SignUpUserRequestDTO): Promise<SignUpResponseDTO> {
     const email = Email.create(request.email);
     const phone = Phone.create(request.phone);
     const password = Password.create(request.password);
@@ -40,6 +42,11 @@ export class SignUpUserUseCase {
     const newUser = User.register({ name: request.name.trim(), email, phone, passwordHash });
     const createdUser = await this.userRepository.create(newUser);
 
-    return toUserResponseDTO(createdUser);
+    const { expiresInSeconds } = await this.sendOtpUseCase.execute({
+      email: email.toString(),
+      purpose: 'signup',
+    });
+
+    return { user: toUserResponseDTO(createdUser), expiresInSeconds };
   }
 }

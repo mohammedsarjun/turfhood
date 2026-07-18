@@ -2,6 +2,7 @@
 export interface ApiErrorResponse {
   message: string;
   errors?: Record<string, string[]>;
+  code?: string;
 }
 
 /**
@@ -15,11 +16,13 @@ export type ApiResponse<T> = T;
 export class ApiError extends Error {
   readonly statusCode: number;
   readonly errors?: Record<string, string[]>;
+  readonly code?: string;
 
-  constructor(message: string, statusCode: number, errors?: Record<string, string[]>) {
+  constructor(message: string, statusCode: number, errors?: Record<string, string[]>, code?: string) {
     super(message);
     this.name = 'ApiError';
     this.statusCode = statusCode;
     this.errors = errors;
+    this.code = code;
   }
 }

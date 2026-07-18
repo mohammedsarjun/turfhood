@@ -47,7 +47,7 @@ export function OtpForm({ email, purpose, initialExpiresInSeconds }: OtpFormProp
 
   return (
     
-    <div className=''>
+    <div className='' style={{marginTop:"20px",marginBottom:"20px"}}>
       <div className=" mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-success">
         <ShieldCheck className="h-5 w-5 text-success-foreground" />
       </div>

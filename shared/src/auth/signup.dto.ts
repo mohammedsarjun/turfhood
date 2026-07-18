@@ -9,4 +9,5 @@ export interface SignUpRequest {
 
 export interface SignUpResponse {
   user: PublicUser;
+  expiresInSeconds: number;
 }

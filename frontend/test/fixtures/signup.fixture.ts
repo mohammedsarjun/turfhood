@@ -19,4 +19,5 @@ export const validSignUpApiResponse: SignUpResponse = {
     status: 'active',
     createdAt: new Date('2026-01-01').toISOString(),
   },
+  expiresInSeconds: 60,
 };

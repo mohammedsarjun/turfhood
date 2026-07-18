@@ -40,7 +40,9 @@ export default async function OtpPage({ searchParams }: OtpPageProps) {
         </BrandPanel>
       }
     >
+     
       <OtpForm email={email} purpose={purpose} initialExpiresInSeconds={initialExpiresInSeconds} />
+     
     </AuthLayout>
   );
 }

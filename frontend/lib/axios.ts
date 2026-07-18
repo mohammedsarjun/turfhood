@@ -24,9 +24,14 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ApiErrorResponse>) => {
     if (error.response) {
-      const { message, errors } = error.response.data;
+      const { message, errors, code } = error.response.data;
       return Promise.reject(
-        new ApiError(message ?? 'Something went wrong. Please try again later.', error.response.status, errors)
+        new ApiError(
+          message ?? 'Something went wrong. Please try again later.',
+          error.response.status,
+          errors,
+          code,
+        )
       );
     }
 

@@ -47,8 +47,10 @@ describe('SignUpForm', () => {
     await waitFor(() => {
       expect(signUpMock).toHaveBeenCalledWith(validSignUpFormValues);
     });
-    // After a successful signup, the form should redirect to the login page.
-    expect(push).toHaveBeenCalledWith('/login?signupSuccess=true');
+    // After a successful signup, the form should redirect to the OTP verification page.
+    expect(push).toHaveBeenCalledWith(
+      `/otp?email=${encodeURIComponent(validSignUpFormValues.email)}&purpose=signup&expiresInSeconds=${validSignUpApiResponse.expiresInSeconds}`,
+    );
   });
 
   // INTERACTION TEST (error case): tries to submit without agreeing to the
