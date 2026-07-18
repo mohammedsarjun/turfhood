@@ -1,13 +1,16 @@
 import type { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'tsyringe';
-import { RequestPasswordResetUseCase } from '@application/passwordReset/use-cases/RequestPasswordResetUseCase';
-import { ResetPasswordUseCase } from '@application/passwordReset/use-cases/ResetPasswordUseCase';
+import type { IRequestPasswordResetUseCase } from '@application/passwordReset/use-cases/IRequestPasswordResetUseCase';
+import type { IResetPasswordUseCase } from '@application/passwordReset/use-cases/IResetPasswordUseCase';
+import { PASSWORD_RESET_TOKENS } from '@domain/passwordReset/tokens';
 
 @injectable()
 export class PasswordResetController {
   constructor(
-    @inject(RequestPasswordResetUseCase) private readonly requestPasswordResetUseCase: RequestPasswordResetUseCase,
-    @inject(ResetPasswordUseCase) private readonly resetPasswordUseCase: ResetPasswordUseCase,
+    @inject(PASSWORD_RESET_TOKENS.RequestPasswordResetUseCase)
+    private readonly requestPasswordResetUseCase: IRequestPasswordResetUseCase,
+    @inject(PASSWORD_RESET_TOKENS.ResetPasswordUseCase)
+    private readonly resetPasswordUseCase: IResetPasswordUseCase,
   ) {}
 
   requestReset = async (req: Request, res: Response, next: NextFunction): Promise<void> => {

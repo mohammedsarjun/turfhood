@@ -3,4 +3,6 @@ export const USER_TOKENS = {
   UserRepository: Symbol('IUserRepository'),
   PasswordHasher: Symbol('IPasswordHasher'),
   TokenService: Symbol('ITokenService'),
+  SignUpUserUseCase: Symbol('ISignUpUserUseCase'),
+  LoginUserUseCase: Symbol('ILoginUserUseCase'),
 } as const;

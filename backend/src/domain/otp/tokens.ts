@@ -3,4 +3,6 @@ export const OTP_TOKENS = {
   OtpRepository: Symbol('IOtpRepository'),
   OtpService: Symbol('IOtpService'),
   EmailService: Symbol('IEmailService'),
+  SendOtpUseCase: Symbol('ISendOtpUseCase'),
+  VerifyOtpUseCase: Symbol('IVerifyOtpUseCase'),
 } as const;

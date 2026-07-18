@@ -1,4 +1,5 @@
 import { randomBytes, createHash } from 'node:crypto';
+
 import { injectable } from 'tsyringe';
 import type { IPasswordResetTokenService } from '@domain/passwordReset/services/IPasswordResetTokenService';
 

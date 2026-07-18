@@ -1,10 +1,13 @@
 import type { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'tsyringe';
-import { LoginUserUseCase } from '@application/user/use-cases/LoginUserUseCase';
+import type { ILoginUserUseCase } from '@application/user/use-cases/ILoginUserUseCase';
+import { USER_TOKENS } from '@domain/user/tokens';
 
 @injectable()
 export class LoginController {
-  constructor(@inject(LoginUserUseCase) private readonly loginUserUseCase: LoginUserUseCase) {}
+  constructor(
+    @inject(USER_TOKENS.LoginUserUseCase) private readonly loginUserUseCase: ILoginUserUseCase,
+  ) {}
 
   handle = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {

@@ -7,6 +7,7 @@ import type { ITokenService } from '@domain/user/services/ITokenService';
 import { USER_TOKENS } from '@domain/user/tokens';
 import { Email } from '@domain/user/value-objects/Email';
 
+import type { ILoginUserUseCase } from './ILoginUserUseCase.js';
 import type { LoginResponseDTO } from '../dtos/LoginResponseDTO.js';
 import type { LoginUserRequestDTO } from '../dtos/LoginUserRequestDTO.js';
 import { toUserResponseDTO } from '../mappers/toUserResponseDTO.js';
@@ -18,7 +19,7 @@ import { toUserResponseDTO } from '../mappers/toUserResponseDTO.js';
  * keeping this use case a pure "can this user log in?" decision.
  */
 @injectable()
-export class LoginUserUseCase {
+export class LoginUserUseCase implements ILoginUserUseCase {
   constructor(
     @inject(USER_TOKENS.UserRepository) private readonly userRepository: IUserRepository,
     @inject(USER_TOKENS.PasswordHasher) private readonly passwordHasher: IPasswordHasher,

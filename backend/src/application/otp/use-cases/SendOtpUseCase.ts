@@ -10,6 +10,7 @@ import { USER_TOKENS } from '@domain/user/tokens';
 import { Email } from '@domain/user/value-objects/Email';
 import { env } from '@config/env';
 
+import type { ISendOtpUseCase } from './ISendOtpUseCase.js';
 import type { SendOtpRequestDTO } from '../dtos/SendOtpRequestDTO.js';
 import type { SendOtpResponseDTO } from '../dtos/SendOtpResponseDTO.js';
 
@@ -20,7 +21,7 @@ import type { SendOtpResponseDTO } from '../dtos/SendOtpResponseDTO.js';
  * the previous OTP", so no separate resend use-case is needed.
  */
 @injectable()
-export class SendOtpUseCase {
+export class SendOtpUseCase implements ISendOtpUseCase {
   constructor(
     @inject(USER_TOKENS.UserRepository) private readonly userRepository: IUserRepository,
     @inject(OTP_TOKENS.OtpRepository) private readonly otpRepository: IOtpRepository,

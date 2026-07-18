@@ -10,6 +10,7 @@ import type { IPasswordHasher } from '@domain/user/services/IPasswordHasher';
 import { USER_TOKENS } from '@domain/user/tokens';
 import { Password } from '@domain/user/value-objects/Password';
 
+import type { IResetPasswordUseCase } from './IResetPasswordUseCase.js';
 import type { ResetPasswordRequestDTO } from '../dtos/ResetPasswordRequestDTO.js';
 import type { ResetPasswordResponseDTO } from '../dtos/ResetPasswordResponseDTO.js';
 
@@ -19,7 +20,7 @@ import type { ResetPasswordResponseDTO } from '../dtos/ResetPasswordResponseDTO.
  * that user, so a second unused link can't still be redeemed afterward).
  */
 @injectable()
-export class ResetPasswordUseCase {
+export class ResetPasswordUseCase implements IResetPasswordUseCase {
   constructor(
     @inject(PASSWORD_RESET_TOKENS.PasswordResetTokenRepository)
     private readonly passwordResetTokenRepository: IPasswordResetTokenRepository,
