@@ -12,3 +12,11 @@ export type {
   ResendOtpRequest,
   ResendOtpResponse,
 } from './otp/otp.dto.js';
+export { PasswordResetErrorCode } from './passwordReset/password-reset-error-code.js';
+export { DEFAULT_PASSWORD_RESET_EXPIRY_SECONDS } from './passwordReset/password-reset-constants.js';
+export type {
+  ForgotPasswordRequest,
+  ForgotPasswordResponse,
+  ResetPasswordRequest,
+  ResetPasswordResponse,
+} from './passwordReset/password-reset.dto.js';

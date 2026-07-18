@@ -57,6 +57,10 @@ export class UserRepository implements IUserRepository {
     await UserModel.updateOne({ email: email.toString() }, { $set: { isVerified: true } });
   }
 
+  async updatePassword(userId: string, passwordHash: string): Promise<void> {
+    await UserModel.updateOne({ _id: userId }, { $set: { passwordHash } });
+  }
+
   private toDomain(doc: UserDocument): User {
     return User.fromPersistence({
       id: doc._id.toString(),

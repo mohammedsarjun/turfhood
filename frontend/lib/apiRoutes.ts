@@ -6,5 +6,7 @@ export const API_ROUTES = {
     otpSend: '/otp/send',
     otpVerify: '/otp/verify',
     otpResend: '/otp/resend',
+    forgotPasswordRequest: '/password-reset/request',
+    resetPassword: '/password-reset/reset',
   },
 } as const;

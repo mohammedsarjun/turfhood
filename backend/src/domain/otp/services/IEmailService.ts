@@ -7,6 +7,13 @@ export interface SendOtpEmailParams {
   expiresInSeconds: number;
 }
 
+export interface SendPasswordResetEmailParams {
+  to: string;
+  resetLink: string;
+  expiresInSeconds: number;
+}
+
 export interface IEmailService {
   sendOtpEmail(params: SendOtpEmailParams): Promise<void>;
+  sendPasswordResetEmail(params: SendPasswordResetEmailParams): Promise<void>;
 }

@@ -14,6 +14,11 @@ import { OTP_TOKENS } from '@domain/otp/tokens';
 import { OtpRepository } from '@infrastructure/otp/repositories/OtpRepository';
 import { OtpService } from '@infrastructure/otp/services/OtpService';
 import { ResendEmailService } from '@infrastructure/otp/services/ResendEmailService';
+import type { IPasswordResetTokenRepository } from '@domain/passwordReset/repositories/IPasswordResetTokenRepository';
+import type { IPasswordResetTokenService } from '@domain/passwordReset/services/IPasswordResetTokenService';
+import { PASSWORD_RESET_TOKENS } from '@domain/passwordReset/tokens';
+import { PasswordResetTokenRepository } from '@infrastructure/passwordReset/repositories/PasswordResetTokenRepository';
+import { PasswordResetTokenService } from '@infrastructure/passwordReset/services/PasswordResetTokenService';
 
 /** Composition root — wires domain interfaces to their infrastructure implementations. */
 container.register<IUserRepository>(USER_TOKENS.UserRepository, { useClass: UserRepository });
@@ -22,5 +27,11 @@ container.register<ITokenService>(USER_TOKENS.TokenService, { useClass: JwtToken
 container.register<IOtpRepository>(OTP_TOKENS.OtpRepository, { useClass: OtpRepository });
 container.register<IOtpService>(OTP_TOKENS.OtpService, { useClass: OtpService });
 container.register<IEmailService>(OTP_TOKENS.EmailService, { useClass: ResendEmailService });
+container.register<IPasswordResetTokenRepository>(PASSWORD_RESET_TOKENS.PasswordResetTokenRepository, {
+  useClass: PasswordResetTokenRepository,
+});
+container.register<IPasswordResetTokenService>(PASSWORD_RESET_TOKENS.PasswordResetTokenService, {
+  useClass: PasswordResetTokenService,
+});
 
 export { container };
