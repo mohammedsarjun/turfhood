@@ -53,6 +53,10 @@ export class UserRepository implements IUserRepository {
     }
   }
 
+  async markVerified(email: Email): Promise<void> {
+    await UserModel.updateOne({ email: email.toString() }, { $set: { isVerified: true } });
+  }
+
   private toDomain(doc: UserDocument): User {
     return User.fromPersistence({
       id: doc._id.toString(),

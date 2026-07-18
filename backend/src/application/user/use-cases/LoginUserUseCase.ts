@@ -7,11 +7,16 @@ import type { ITokenService } from '@domain/user/services/ITokenService';
 import { USER_TOKENS } from '@domain/user/tokens';
 import { Email } from '@domain/user/value-objects/Email';
 
-import type { AuthResponseDTO } from '../dtos/AuthResponseDTO.js';
+import type { LoginResponseDTO } from '../dtos/LoginResponseDTO.js';
 import type { LoginUserRequestDTO } from '../dtos/LoginUserRequestDTO.js';
 import { toUserResponseDTO } from '../mappers/toUserResponseDTO.js';
 
-/** Orchestrates credential verification and access-token issuance for an existing user. */
+/**
+ * Orchestrates credential verification and access-token issuance for an existing user.
+ * Deliberately does not trigger the login OTP itself — the presentation layer
+ * (frontend) is responsible for calling /otp/send once it sees needs_verification,
+ * keeping this use case a pure "can this user log in?" decision.
+ */
 @injectable()
 export class LoginUserUseCase {
   constructor(
@@ -20,7 +25,7 @@ export class LoginUserUseCase {
     @inject(USER_TOKENS.TokenService) private readonly tokenService: ITokenService,
   ) {}
 
-  async execute(request: LoginUserRequestDTO): Promise<AuthResponseDTO> {
+  async execute(request: LoginUserRequestDTO): Promise<LoginResponseDTO> {
     const email = Email.create(request.email);
 
     const user = await this.userRepository.findByEmail(email);
@@ -40,11 +45,19 @@ export class LoginUserUseCase {
       throw new InvalidCredentialsError();
     }
 
+    if (!user.isVerified) {
+      return {
+        status: 'needs_verification',
+        email: email.toString(),
+        message: 'Please verify your email to continue.',
+      };
+    }
+
     const accessToken = this.tokenService.generateAccessToken({
       userId: user.id as string,
       roles: user.roles,
     });
 
-    return { user: toUserResponseDTO(user), accessToken };
+    return { status: 'success', user: toUserResponseDTO(user), accessToken };
   }
 }

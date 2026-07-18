@@ -1,0 +1,5 @@
+{
+  "name": "turfhood-project",
+  "private": true,
+  "workspaces": ["frontend", "backend", "shared"]
+}

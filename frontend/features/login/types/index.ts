@@ -16,7 +16,16 @@ export interface LoginUser {
   createdAt: string;
 }
 
-export interface LoginResponse {
+export interface LoginSuccessResponse {
+  status: 'success';
   user: LoginUser;
   accessToken: string;
 }
+
+export interface LoginNeedsVerificationResponse {
+  status: 'needs_verification';
+  email: string;
+  message: string;
+}
+
+export type LoginResponse = LoginSuccessResponse | LoginNeedsVerificationResponse;

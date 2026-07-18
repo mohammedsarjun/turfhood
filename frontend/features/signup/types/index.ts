@@ -21,4 +21,5 @@ export interface SignUpUser {
 
 export interface SignUpResponse {
   user: SignUpUser;
+  expiresInSeconds: number;
 }

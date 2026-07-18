@@ -1,6 +1,6 @@
 import type { UserResponseDTO } from './UserResponseDTO.js';
 
-export interface AuthResponseDTO {
+export interface SignUpResponseDTO {
   user: UserResponseDTO;
-  accessToken: string;
+  expiresInSeconds: number;
 }

@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { login } from '../actions/loginApi';
 import { loginSchema, type LoginFormValues } from '../schema/loginSchema';
+import { sendOtp } from '@/features/otp';
 import { tokenStorage } from '@/lib/tokenStorage';
 import { ApiError } from '@/types/api/response';
 
@@ -30,8 +31,15 @@ export function useLogin() {
     setFormError(null);
 
     try {
-      const { accessToken } = await login({ email, password });
-      tokenStorage.set(accessToken);
+      const result = await login({ email, password });
+      if (result.status === 'needs_verification') {
+        const { expiresInSeconds } = await sendOtp({ email: result.email, purpose: 'login' });
+        router.push(
+          `/otp?email=${encodeURIComponent(result.email)}&purpose=login&expiresInSeconds=${expiresInSeconds}`,
+        );
+        return;
+      }
+      tokenStorage.set(result.accessToken);
       router.push('/');
     } catch (error) {
       if (error instanceof ApiError) {

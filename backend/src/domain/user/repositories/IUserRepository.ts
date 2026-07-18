@@ -6,4 +6,5 @@ export interface IUserRepository {
   findByEmail(email: Email): Promise<User | null>;
   findByPhone(phone: Phone): Promise<User | null>;
   create(user: User): Promise<User>;
+  markVerified(email: Email): Promise<void>;
 }
