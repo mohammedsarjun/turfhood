@@ -1,5 +1,5 @@
 import mongoose, { Schema, model, Types, type Document, type Model } from 'mongoose';
-import type { OtpPurpose } from '@turfhub/shared';
+import type { OtpPurpose } from '@turfhood/shared';
 
 export interface OtpDocument extends Document {
   userId: Types.ObjectId;

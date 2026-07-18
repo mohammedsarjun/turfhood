@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { DEFAULT_OTP_EXPIRY_SECONDS } from '@turfhub/shared';
+import { DEFAULT_OTP_EXPIRY_SECONDS } from '@turfhood/shared';
 
 function requireEnv(key: string): string {
   const value = process.env[key];

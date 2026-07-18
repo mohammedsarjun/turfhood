@@ -1,4 +1,4 @@
-const ACCESS_TOKEN_KEY = 'turfhub_access_token';
+const ACCESS_TOKEN_KEY = 'turfhood_access_token';
 
 /**
  * Minimal localStorage-backed persistence for the JWT access token returned by login.

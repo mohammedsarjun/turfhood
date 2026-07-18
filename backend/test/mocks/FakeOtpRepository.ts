@@ -1,4 +1,4 @@
-import type { OtpPurpose } from '@turfhub/shared';
+import type { OtpPurpose } from '@turfhood/shared';
 import type { IOtpRepository } from '../../src/domain/otp/repositories/IOtpRepository.js';
 import { OtpVerification } from '../../src/domain/otp/entities/OtpVerification.js';
 import type { Email } from '../../src/domain/user/value-objects/Email.js';

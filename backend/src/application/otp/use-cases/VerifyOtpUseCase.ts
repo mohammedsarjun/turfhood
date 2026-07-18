@@ -40,7 +40,7 @@ export class VerifyOtpUseCase {
     }
 
     if (record.isExpired(new Date())) {
-      throw new OtpExpiredError();
+    throw new OtpExpiredError();
     }
 
     if (record.hasExceededMaxAttempts(env.OTP_MAX_ATTEMPTS)) {

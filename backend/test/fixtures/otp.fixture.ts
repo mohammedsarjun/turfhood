@@ -2,7 +2,7 @@ import { User } from '../../src/domain/user/entities/User.js';
 import { Email } from '../../src/domain/user/value-objects/Email.js';
 import { Phone } from '../../src/domain/user/value-objects/Phone.js';
 import { OtpVerification } from '../../src/domain/otp/entities/OtpVerification.js';
-import type { OtpPurpose } from '@turfhub/shared';
+import type { OtpPurpose } from '@turfhood/shared';
 
 export const validOtp = '123456';
 

@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe';
-import type { OtpPurpose } from '@turfhub/shared';
+import type { OtpPurpose } from '@turfhood/shared';
 import { OtpVerification } from '@domain/otp/entities/OtpVerification';
 import type { IOtpRepository } from '@domain/otp/repositories/IOtpRepository';
 import type { Email } from '@domain/user/value-objects/Email';

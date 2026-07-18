@@ -16,7 +16,7 @@ export function useOtpVerification(email: string, purpose: OtpPurpose, initialEx
   const [errorCode, setErrorCode] = useState<OtpErrorCode | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-  const countdownStorageKey = `turfhub_otp_deadline:${purpose}:${email}`;
+  const countdownStorageKey = `turfhood_otp_deadline:${purpose}:${email}`;
   // Seeded from the actual expiry the backend just issued (passed through from the
   // send response), falling back to the shared default if it wasn't provided;
   // resend() re-syncs to the backend's actual configured window from its response.

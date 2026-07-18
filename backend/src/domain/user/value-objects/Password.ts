@@ -17,8 +17,8 @@ export class Password {
     }
     return new Password(rawPassword);
   }
-
   getPlainValue(): string {
+
     return this.value;
   }
 }

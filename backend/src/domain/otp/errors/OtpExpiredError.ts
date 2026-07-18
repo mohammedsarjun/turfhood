@@ -1,4 +1,4 @@
-import { OtpErrorCode } from '@turfhub/shared';
+import { OtpErrorCode } from '@turfhood/shared';
 import { AppError } from '@shared/errors/AppError';
 
 export class OtpExpiredError extends AppError {

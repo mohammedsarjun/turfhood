@@ -1,4 +1,4 @@
-import type { OtpPurpose } from '@turfhub/shared';
+import type { OtpPurpose } from '@turfhood/shared';
 import type { Email } from '@domain/user/value-objects/Email';
 
 import type { OtpVerification } from '../entities/OtpVerification.js';

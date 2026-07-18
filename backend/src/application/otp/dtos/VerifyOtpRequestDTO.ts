@@ -1,4 +1,4 @@
-import type { OtpPurpose } from '@turfhub/shared';
+import type { OtpPurpose } from '@turfhood/shared';
 
 export interface VerifyOtpRequestDTO {
   email: string;
