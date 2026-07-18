@@ -15,6 +15,8 @@ interface FakeUserRepositoryOptions {
  * exactly what "already exists" means by passing options into the constructor.
  */
 export class FakeUserRepository implements IUserRepository {
+  public readonly updatePasswordCalls: Array<{ userId: string; passwordHash: string }> = [];
+
   constructor(private readonly options: FakeUserRepositoryOptions = {}) {}
 
   async findByEmail(): Promise<User | null> {
@@ -30,4 +32,8 @@ export class FakeUserRepository implements IUserRepository {
   }
 
   async markVerified(_email: Email): Promise<void> {}
+
+  async updatePassword(userId: string, passwordHash: string): Promise<void> {
+    this.updatePasswordCalls.push({ userId, passwordHash });
+  }
 }

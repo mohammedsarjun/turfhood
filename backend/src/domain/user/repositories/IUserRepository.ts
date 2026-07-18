@@ -7,4 +7,5 @@ export interface IUserRepository {
   findByPhone(phone: Phone): Promise<User | null>;
   create(user: User): Promise<User>;
   markVerified(email: Email): Promise<void>;
+  updatePassword(userId: string, passwordHash: string): Promise<void>;
 }

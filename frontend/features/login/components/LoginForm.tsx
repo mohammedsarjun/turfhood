@@ -121,7 +121,9 @@ export function LoginForm({ signupSuccess }: LoginFormProps) {
             />
             Remember me
           </label>
-          <span className="text-primary">Forgot password?</span>
+          <Link href="/forgot-password" className="font-medium text-primary hover:underline">
+            Forgot password?
+          </Link>
         </div>
 
         {formError && (
