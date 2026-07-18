@@ -10,13 +10,14 @@ import { Email } from '@domain/user/value-objects/Email';
 import { Password } from '@domain/user/value-objects/Password';
 import { Phone } from '@domain/user/value-objects/Phone';
 
+import type { ISignUpUserUseCase } from './ISignUpUserUseCase.js';
 import type { SignUpResponseDTO } from '../dtos/SignUpResponseDTO.js';
 import type { SignUpUserRequestDTO } from '../dtos/SignUpUserRequestDTO.js';
 import { toUserResponseDTO } from '../mappers/toUserResponseDTO.js';
 
 /** Orchestrates new-user registration: validates invariants, hashes the password, persists the user, and sends the signup OTP. */
 @injectable()
-export class SignUpUserUseCase {
+export class SignUpUserUseCase implements ISignUpUserUseCase {
   constructor(
     @inject(USER_TOKENS.UserRepository) private readonly userRepository: IUserRepository,
     @inject(USER_TOKENS.PasswordHasher) private readonly passwordHasher: IPasswordHasher,

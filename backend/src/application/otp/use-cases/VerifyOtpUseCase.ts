@@ -12,8 +12,9 @@ import type { ITokenService } from '@domain/user/services/ITokenService';
 import { USER_TOKENS } from '@domain/user/tokens';
 import { Email } from '@domain/user/value-objects/Email';
 import { env } from '@config/env';
-
 import { toUserResponseDTO } from '@application/user/mappers/toUserResponseDTO';
+
+import type { IVerifyOtpUseCase } from './IVerifyOtpUseCase.js';
 import type { VerifyOtpRequestDTO } from '../dtos/VerifyOtpRequestDTO.js';
 import type { VerifyOtpResponseDTO } from '../dtos/VerifyOtpResponseDTO.js';
 
@@ -23,7 +24,7 @@ import type { VerifyOtpResponseDTO } from '../dtos/VerifyOtpResponseDTO.js';
  * so the frontend can log the user in immediately after verification.
  */
 @injectable()
-export class VerifyOtpUseCase {
+export class VerifyOtpUseCase implements IVerifyOtpUseCase {
   constructor(
     @inject(USER_TOKENS.UserRepository) private readonly userRepository: IUserRepository,
     @inject(OTP_TOKENS.OtpRepository) private readonly otpRepository: IOtpRepository,

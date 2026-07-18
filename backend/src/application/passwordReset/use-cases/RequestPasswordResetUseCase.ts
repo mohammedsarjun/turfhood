@@ -10,6 +10,7 @@ import { USER_TOKENS } from '@domain/user/tokens';
 import { Email } from '@domain/user/value-objects/Email';
 import { env } from '@config/env';
 
+import type { IRequestPasswordResetUseCase } from './IRequestPasswordResetUseCase.js';
 import type { RequestPasswordResetRequestDTO } from '../dtos/RequestPasswordResetRequestDTO.js';
 import type { RequestPasswordResetResponseDTO } from '../dtos/RequestPasswordResetResponseDTO.js';
 
@@ -22,7 +23,7 @@ const GENERIC_MESSAGE = 'If an account exists for this email, a password reset l
  * a known one, so this endpoint can't be used to enumerate accounts.
  */
 @injectable()
-export class RequestPasswordResetUseCase {
+export class RequestPasswordResetUseCase implements IRequestPasswordResetUseCase {
   constructor(
     @inject(USER_TOKENS.UserRepository) private readonly userRepository: IUserRepository,
     @inject(PASSWORD_RESET_TOKENS.PasswordResetTokenRepository)

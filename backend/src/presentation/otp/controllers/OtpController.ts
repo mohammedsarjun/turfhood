@@ -1,13 +1,14 @@
 import type { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'tsyringe';
-import { SendOtpUseCase } from '@application/otp/use-cases/SendOtpUseCase';
-import { VerifyOtpUseCase } from '@application/otp/use-cases/VerifyOtpUseCase';
+import type { ISendOtpUseCase } from '@application/otp/use-cases/ISendOtpUseCase';
+import type { IVerifyOtpUseCase } from '@application/otp/use-cases/IVerifyOtpUseCase';
+import { OTP_TOKENS } from '@domain/otp/tokens';
 
 @injectable()
 export class OtpController {
   constructor(
-    @inject(SendOtpUseCase) private readonly sendOtpUseCase: SendOtpUseCase,
-    @inject(VerifyOtpUseCase) private readonly verifyOtpUseCase: VerifyOtpUseCase,
+    @inject(OTP_TOKENS.SendOtpUseCase) private readonly sendOtpUseCase: ISendOtpUseCase,
+    @inject(OTP_TOKENS.VerifyOtpUseCase) private readonly verifyOtpUseCase: IVerifyOtpUseCase,
   ) {}
 
   sendOtp = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
