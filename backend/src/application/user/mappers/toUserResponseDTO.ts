@@ -7,7 +7,7 @@ export function toUserResponseDTO(user: User): UserResponseDTO {
     id: user.id as string,
     name: user.name,
     email: user.email.toString(),
-    phone: user.phone.toString(),
+    ...(user.phone ? { phone: user.phone.toString() } : {}),
     roles: user.roles,
     isVerified: user.isVerified,
     status: user.status,

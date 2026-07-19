@@ -9,6 +9,8 @@ interface FakeUserRepositoryOptions {
   existingUserByEmail?: User | null;
   /** Returned by findByPhone(); set this to simulate "an account with this phone already exists". */
   existingUserByPhone?: User | null;
+  /** Returned by findByGoogleId(); set this to simulate "an account already linked to this Google id". */
+  existingUserByGoogleId?: User | null;
 }
 
 /**
@@ -19,6 +21,12 @@ interface FakeUserRepositoryOptions {
 export class FakeUserRepository implements IUserRepository {
   public readonly updatePasswordCalls: Array<{ userId: string; passwordHash: string }> = [];
   public readonly markVerifiedCalls: string[] = [];
+  public readonly linkGoogleAccountCalls: Array<{
+    userId: string;
+    googleId: string;
+    avatarUrl?: string;
+  }> = [];
+  public readonly createCalls: User[] = [];
 
   constructor(private readonly options: FakeUserRepositoryOptions = {}) {}
 
@@ -34,7 +42,12 @@ export class FakeUserRepository implements IUserRepository {
     return this.options.existingUserByPhone ?? null;
   }
 
+  async findByGoogleId(): Promise<User | null> {
+    return this.options.existingUserByGoogleId ?? null;
+  }
+
   async create(user: User): Promise<User> {
+    this.createCalls.push(user);
     return user;
   }
 
@@ -44,5 +57,9 @@ export class FakeUserRepository implements IUserRepository {
 
   async updatePassword(userId: string, passwordHash: string): Promise<void> {
     this.updatePasswordCalls.push({ userId, passwordHash });
+  }
+
+  async linkGoogleAccount(userId: string, googleId: string, avatarUrl?: string): Promise<void> {
+    this.linkGoogleAccountCalls.push({ userId, googleId, ...(avatarUrl ? { avatarUrl } : {}) });
   }
 }

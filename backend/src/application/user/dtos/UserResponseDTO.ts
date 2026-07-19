@@ -5,7 +5,7 @@ export interface UserResponseDTO {
   id: string;
   name: string;
   email: string;
-  phone: string;
+  phone?: string;
   roles: UserRole[];
   isVerified: boolean;
   status: UserStatus;

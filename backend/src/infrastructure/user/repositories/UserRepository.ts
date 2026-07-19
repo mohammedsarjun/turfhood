@@ -36,23 +36,30 @@ export class UserRepository implements IUserRepository {
     return doc ? this.toDomain(doc) : null;
   }
 
+  async findByGoogleId(googleId: string): Promise<User | null> {
+    const doc = await UserModel.findOne({ googleId }).select('+passwordHash');
+    return doc ? this.toDomain(doc) : null;
+  }
+
   async create(user: User): Promise<User> {
     try {
       const doc = await UserModel.create({
         name: user.name,
         email: user.email.toString(),
-        phone: user.phone.toString(),
+        phone: user.phone?.toString(),
         passwordHash: user.passwordHash,
         authProviders: user.authProviders,
         roles: user.roles,
         isVerified: user.isVerified,
         status: user.status,
+        googleId: user.googleId,
+        avatarUrl: user.avatarUrl,
       });
       return this.toDomain(doc);
     } catch (error) {
       if (isDuplicateKeyError(error)) {
         if (error.keyPattern && 'phone' in error.keyPattern) {
-          throw new DuplicatePhoneError(user.phone.toString());
+          throw new DuplicatePhoneError(user.phone?.toString() ?? '');
         }
         throw new DuplicateEmailError(user.email.toString());
       }
@@ -68,17 +75,29 @@ export class UserRepository implements IUserRepository {
     await UserModel.updateOne({ _id: userId }, { $set: { passwordHash } });
   }
 
+  async linkGoogleAccount(userId: string, googleId: string, avatarUrl?: string): Promise<void> {
+    await UserModel.updateOne(
+      { _id: userId },
+      {
+        $set: { googleId, ...(avatarUrl ? { avatarUrl } : {}) },
+        $addToSet: { authProviders: 'google' },
+      },
+    );
+  }
+
   private toDomain(doc: UserDocument): User {
     return User.fromPersistence({
       id: doc._id.toString(),
       name: doc.name,
       email: Email.create(doc.email as string),
-      phone: Phone.create(doc.phone as string),
+      ...(doc.phone ? { phone: Phone.create(doc.phone) } : {}),
       passwordHash: doc.passwordHash ?? '',
       authProviders: doc.authProviders,
       roles: doc.roles,
       isVerified: doc.isVerified,
       status: doc.status,
+      ...(doc.googleId ? { googleId: doc.googleId } : {}),
+      ...(doc.avatarUrl ? { avatarUrl: doc.avatarUrl } : {}),
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
     });

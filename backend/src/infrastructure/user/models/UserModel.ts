@@ -31,7 +31,7 @@ const userSchema = new Schema<UserDocument>(
       required: true,
       default: [],
     },
-    googleId: { type: String },
+    googleId: { type: String, unique: true, sparse: true },
     roles: {
       type: [String],
       enum: ['customer', 'admin', 'turf_owner'],
