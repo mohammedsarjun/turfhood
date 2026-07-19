@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Check, Eye, EyeOff, Lock, Mail, Phone, User } from 'lucide-react';
 import { Button, Input } from '@/components/ui';
+import { GoogleAuthSection, useGoogleAuth } from '@/features/google-auth';
 import { useSignUp } from '../hooks/useSignUp';
 
 const PASSWORD_RULES = [
@@ -20,6 +21,7 @@ export function SignUpForm() {
   const { register, onSubmit, errors, isSubmitting, formError, watch } = useSignUp();
   const [showPassword, setShowPassword] = useState(false);
   const passwordValue = watch('password');
+  const googleAuth = useGoogleAuth();
 
   return (
     <div style={{ marginTop: 24, marginBottom: 24 }}>
@@ -28,12 +30,13 @@ export function SignUpForm() {
         Create your account to start booking professional turfs in your hood.
       </p>
 
-      <form
-        onSubmit={onSubmit}
-        noValidate
-        className="flex flex-col"
-        style={{ marginTop: 24, gap: 16 }}
-      >
+      <GoogleAuthSection
+        onClick={() => googleAuth.trigger()}
+        loading={googleAuth.isLoading}
+        error={googleAuth.error}
+      />
+
+      <form onSubmit={onSubmit} noValidate className="flex flex-col" style={{ gap: 16 }}>
         <div>
           <label htmlFor="name" className={fieldLabelClass} style={fieldLabelStyle}>
             Full Name

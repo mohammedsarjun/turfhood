@@ -3,6 +3,7 @@ export const API_ROUTES = {
   auth: {
     signUp: '/users/signup',
     login: '/users/login',
+    google: '/users/google',
     otpSend: '/otp/send',
     otpVerify: '/otp/verify',
     otpResend: '/otp/resend',
