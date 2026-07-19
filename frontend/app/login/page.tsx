@@ -7,6 +7,11 @@ export const metadata: Metadata = {
   description: 'Log in to your Turfhood account',
 };
 
+// Forces a fresh server render (and middleware auth check) on every visit — including
+// browser back/forward — instead of letting Next.js serve this from the client router
+// cache, which would bypass the "already logged in" redirect.
+export const dynamic = 'force-dynamic';
+
 interface LoginPageProps {
   searchParams: Promise<{ signupSuccess?: string }>;
 }

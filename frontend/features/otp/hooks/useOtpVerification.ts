@@ -28,7 +28,8 @@ export function useOtpVerification(purpose: OtpPurpose, initialExpiresAt: number
       const otp = buildOtpFromDigits(digits);
       await verifyOtp({ otp });
       setIsVerified(true);
-      router.push('/');
+      // replace (not push): once verified, /otp must not remain a back-button target.
+      router.replace('/');
     } catch (error) {
       if (error instanceof ApiError) {
         setFormError(error.message);

@@ -36,7 +36,8 @@ export function useLogin() {
         router.push('/otp');
         return;
       }
-      router.push('/');
+      // replace (not push): once logged in, /login must not remain a back-button target.
+      router.replace('/');
     } catch (error) {
       if (error instanceof ApiError) {
         for (const [field, messages] of Object.entries(error.errors ?? {})) {
