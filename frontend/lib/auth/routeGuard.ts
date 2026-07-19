@@ -1,5 +1,5 @@
 /** Paths that require a valid session; unauthenticated visitors are redirected to /login. */
-export const PROTECTED_ROUTES = ['/'];
+export const PROTECTED_ROUTES = ['/', '/profile'];
 
 /** Paths that only make sense for a logged-out visitor; authenticated users are sent home. */
 export const AUTH_ROUTES = ['/login', '/signup', '/forgot-password','/otp'];

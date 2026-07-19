@@ -6,11 +6,13 @@ import type { IPasswordHasher } from '../../src/domain/user/services/IPasswordHa
  * gets passed along as the password hash.
  */
 export class FakePasswordHasher implements IPasswordHasher {
+  constructor(private readonly compareResult: boolean = true) {}
+
   async hash(plainPassword: string): Promise<string> {
     return `hashed-${plainPassword}`;
   }
 
   async compare(): Promise<boolean> {
-    return true;
+    return this.compareResult;
   }
 }

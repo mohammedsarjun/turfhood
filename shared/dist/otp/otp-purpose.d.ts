@@ -1,1 +1,1 @@
-export type OtpPurpose = 'signup' | 'login';
+export type OtpPurpose = 'signup' | 'login' | 'email_change';

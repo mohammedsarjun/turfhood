@@ -4,6 +4,8 @@ describe('resolveGuardRedirect', () => {
   it.each([
     ['/', false, '/login'],
     ['/', true, null],
+    ['/profile', false, '/login'],
+    ['/profile', true, null],
     ['/login', true, '/'],
     ['/login', false, null],
     ['/signup', true, '/'],

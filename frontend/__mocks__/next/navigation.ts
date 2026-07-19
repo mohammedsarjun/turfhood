@@ -7,7 +7,8 @@
 //   expect(push).toHaveBeenCalledWith('/login');
 export const push = jest.fn();
 export const replace = jest.fn();
+export const refresh = jest.fn();
 
 export function useRouter() {
-  return { push, replace };
+  return { push, replace, refresh };
 }
