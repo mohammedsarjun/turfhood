@@ -21,4 +21,9 @@ export const API_ROUTES = {
     setPassword: '/users/me/password/set',
     uploadAvatar: '/users/me/avatar',
   },
+  admin: {
+    login: '/admin/login',
+    logout: '/admin/logout',
+    me: '/admin/me',
+  },
 } as const;
