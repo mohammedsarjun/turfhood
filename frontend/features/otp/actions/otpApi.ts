@@ -6,7 +6,6 @@ import type {
   SendOtpResponse,
   VerifyOtpRequest,
   VerifyOtpResponse,
-  ResendOtpRequest,
   ResendOtpResponse,
 } from '../types';
 
@@ -15,12 +14,14 @@ export async function sendOtp(payload: SendOtpRequest): Promise<ApiResponse<Send
   return response.data;
 }
 
-export async function verifyOtp(payload: VerifyOtpRequest): Promise<ApiResponse<VerifyOtpResponse>> {
+export async function verifyOtp(
+  payload: VerifyOtpRequest,
+): Promise<ApiResponse<VerifyOtpResponse>> {
   const response = await axiosInstance.post<VerifyOtpResponse>(API_ROUTES.auth.otpVerify, payload);
   return response.data;
 }
 
-export async function resendOtp(payload: ResendOtpRequest): Promise<ApiResponse<ResendOtpResponse>> {
-  const response = await axiosInstance.post<ResendOtpResponse>(API_ROUTES.auth.otpResend, payload);
+export async function resendOtp(): Promise<ApiResponse<ResendOtpResponse>> {
+  const response = await axiosInstance.post<ResendOtpResponse>(API_ROUTES.auth.otpResend);
   return response.data;
 }

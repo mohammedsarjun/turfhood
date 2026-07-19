@@ -3,6 +3,7 @@ import { OtpVerification } from '@domain/otp/entities/OtpVerification';
 import type { IOtpRepository } from '@domain/otp/repositories/IOtpRepository';
 import type { IEmailService } from '@domain/otp/services/IEmailService';
 import type { IOtpService } from '@domain/otp/services/IOtpService';
+import type { IOtpSessionTokenService } from '@domain/otp/services/IOtpSessionTokenService';
 import { OTP_TOKENS } from '@domain/otp/tokens';
 import { UserNotFoundError } from '@domain/user/errors/UserNotFoundError';
 import type { IUserRepository } from '@domain/user/repositories/IUserRepository';
@@ -10,9 +11,10 @@ import { USER_TOKENS } from '@domain/user/tokens';
 import { Email } from '@domain/user/value-objects/Email';
 import { env } from '@config/env';
 
-import type { ISendOtpUseCase } from './ISendOtpUseCase.js';
 import type { SendOtpRequestDTO } from '../dtos/SendOtpRequestDTO.js';
 import type { SendOtpResponseDTO } from '../dtos/SendOtpResponseDTO.js';
+
+import type { ISendOtpUseCase } from './ISendOtpUseCase.js';
 
 /**
  * Issues a fresh OTP for a user and emails it.
@@ -27,6 +29,8 @@ export class SendOtpUseCase implements ISendOtpUseCase {
     @inject(OTP_TOKENS.OtpRepository) private readonly otpRepository: IOtpRepository,
     @inject(OTP_TOKENS.OtpService) private readonly otpService: IOtpService,
     @inject(OTP_TOKENS.EmailService) private readonly emailService: IEmailService,
+    @inject(OTP_TOKENS.OtpSessionTokenService)
+    private readonly otpSessionTokenService: IOtpSessionTokenService,
   ) {}
 
   async execute(request: SendOtpRequestDTO): Promise<SendOtpResponseDTO> {
@@ -59,6 +63,15 @@ export class SendOtpUseCase implements ISendOtpUseCase {
       expiresInSeconds: env.OTP_EXPIRY_SECONDS,
     });
 
-    return { message: 'Verification code sent.', expiresInSeconds: env.OTP_EXPIRY_SECONDS };
+    const otpSessionToken = this.otpSessionTokenService.generate(
+      { email: email.toString(), purpose: request.purpose, codeExpiresAt: expiresAt.getTime() },
+      env.OTP_SESSION_EXPIRY_SECONDS,
+    );
+
+    return {
+      message: 'Verification code sent.',
+      expiresInSeconds: env.OTP_EXPIRY_SECONDS,
+      otpSessionToken,
+    };
   }
 }

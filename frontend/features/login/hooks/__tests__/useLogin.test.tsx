@@ -1,20 +1,15 @@
 import userEvent from '@testing-library/user-event';
 import { push } from '@/__mocks__/next/navigation';
 import { render, screen, waitFor } from '@/test/test-utils';
-import { tokenStorage } from '../../../../lib/tokenStorage';
 import { login } from '../../actions/loginApi';
 import { sendOtp } from '../../../otp/actions/otpApi';
 import { useLogin } from '../useLogin';
 
 jest.mock('../../actions/loginApi');
 jest.mock('../../../otp/actions/otpApi');
-jest.mock('../../../../lib/tokenStorage', () => ({
-  tokenStorage: { set: jest.fn(), get: jest.fn(), clear: jest.fn() },
-}));
 
 const loginMock = jest.mocked(login);
 const sendOtpMock = jest.mocked(sendOtp);
-const tokenStorageSetMock = jest.mocked(tokenStorage.set);
 
 // Minimal harness rendering just enough of a form to drive useLogin() without
 // depending on LoginForm's markup — this test targets the hook's branching
@@ -43,10 +38,9 @@ describe('useLogin', () => {
     push.mockClear();
     loginMock.mockClear();
     sendOtpMock.mockClear();
-    tokenStorageSetMock.mockClear();
   });
 
-  it("sends an OTP and redirects to /otp when the response is needs_verification", async () => {
+  it('sends an OTP and redirects to /otp when the response is needs_verification', async () => {
     loginMock.mockResolvedValueOnce({
       status: 'needs_verification',
       email: 'jordan@example.com',
@@ -59,11 +53,10 @@ describe('useLogin', () => {
     await waitFor(() => {
       expect(sendOtpMock).toHaveBeenCalledWith({ email: 'jordan@example.com', purpose: 'login' });
     });
-    expect(push).toHaveBeenCalledWith('/otp?email=jordan%40example.com&purpose=login&expiresInSeconds=60');
-    expect(tokenStorageSetMock).not.toHaveBeenCalled();
+    expect(push).toHaveBeenCalledWith('/otp');
   });
 
-  it('stores the access token and redirects home on a successful login', async () => {
+  it('redirects home on a successful login', async () => {
     loginMock.mockResolvedValueOnce({
       status: 'success',
       user: {
@@ -81,9 +74,8 @@ describe('useLogin', () => {
     await submitLogin('jordan@example.com', 'password1');
 
     await waitFor(() => {
-      expect(tokenStorageSetMock).toHaveBeenCalledWith('token_123');
+      expect(push).toHaveBeenCalledWith('/');
     });
-    expect(push).toHaveBeenCalledWith('/');
     expect(sendOtpMock).not.toHaveBeenCalled();
   });
 });

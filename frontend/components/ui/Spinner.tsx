@@ -16,8 +16,7 @@ const spinnerVariants = cva('animate-spin rounded-full border-current border-t-t
 });
 
 export interface SpinnerProps
-  extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof spinnerVariants> {
+  extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof spinnerVariants> {
   /** Accessible label announced to screen readers. */
   label?: string;
 }

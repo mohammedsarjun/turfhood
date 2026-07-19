@@ -5,4 +5,5 @@ export const USER_TOKENS = {
   TokenService: Symbol('ITokenService'),
   SignUpUserUseCase: Symbol('ISignUpUserUseCase'),
   LoginUserUseCase: Symbol('ILoginUserUseCase'),
+  GetCurrentUserUseCase: Symbol('IGetCurrentUserUseCase'),
 } as const;

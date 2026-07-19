@@ -4,7 +4,10 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { requestPasswordReset } from '../actions/forgotPasswordApi';
-import { forgotPasswordSchema, type ForgotPasswordFormValues } from '../schema/forgotPasswordSchema';
+import {
+  forgotPasswordSchema,
+  type ForgotPasswordFormValues,
+} from '../schema/forgotPasswordSchema';
 import { ApiError } from '@/types/api/response';
 
 const isFormField = (field: string): field is keyof ForgotPasswordFormValues => field === 'email';

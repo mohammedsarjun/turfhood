@@ -1,4 +1,3 @@
-
 import { expect } from 'chai';
 import request from 'supertest';
 import mongoose from 'mongoose';
@@ -11,22 +10,18 @@ describe('POST /api/users/signup (integration)', () => {
   let app: Express;
 
   before(async function () {
-
     this.timeout(20000);
-
 
     process.env.MONGODB_URI = TEST_MONGODB_URI;
     process.env.JWT_SECRET = 'test-only-secret';
 
     await mongoose.connect(TEST_MONGODB_URI);
 
-
     await import('../../src/config/container.js');
     app = (await import('../../src/app.js')).default;
   });
 
   after(async () => {
-
     await mongoose.connection.dropDatabase();
     await mongoose.disconnect();
   });
@@ -37,7 +32,6 @@ describe('POST /api/users/signup (integration)', () => {
     await Promise.all(Object.values(collections).map((collection) => collection.deleteMany({})));
   });
 
-  
   // HAPPY PATH: a real HTTP POST, through real validation, into a real database.
   it('creates a new user and responds 201 with the saved user', async () => {
     const response = await request(app).post('/api/users/signup').send({

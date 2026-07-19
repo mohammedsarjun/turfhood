@@ -7,6 +7,7 @@ import { FakeUserRepository } from '../../mocks/FakeUserRepository.js';
 import { FakeOtpRepository } from '../../mocks/FakeOtpRepository.js';
 import { FakeOtpService } from '../../mocks/FakeOtpService.js';
 import { FakeEmailService } from '../../mocks/FakeEmailService.js';
+import { FakeOtpSessionTokenService } from '../../mocks/FakeOtpSessionTokenService.js';
 import { buildUnverifiedUser, validOtp } from '../../fixtures/otp.fixture.js';
 
 describe('SendOtpUseCase', () => {
@@ -18,15 +19,26 @@ describe('SendOtpUseCase', () => {
     const otpRepository = new FakeOtpRepository();
     const otpService = new FakeOtpService(validOtp);
     const emailService = new FakeEmailService();
-    const useCase = new SendOtpUseCase(userRepository, otpRepository, otpService, emailService);
+    const useCase = new SendOtpUseCase(
+      userRepository,
+      otpRepository,
+      otpService,
+      emailService,
+      new FakeOtpSessionTokenService(),
+    );
 
     const before = Date.now();
     const result = await useCase.execute({ email: 'jordan@example.com', purpose: 'signup' });
     const after = Date.now();
 
-    expect(result).to.deep.equal({ message: 'Verification code sent.', expiresInSeconds: 60 });
+    expect(result.message).to.equal('Verification code sent.');
+    expect(result.expiresInSeconds).to.equal(60);
+    expect(result.otpSessionToken).to.be.a('string').that.is.not.empty;
 
-    const record = await otpRepository.findLatestActiveByEmail(Email.create('jordan@example.com'), 'signup');
+    const record = await otpRepository.findLatestActiveByEmail(
+      Email.create('jordan@example.com'),
+      'signup',
+    );
     expect(record).to.not.be.null;
     const expiresAtMs = (record as OtpVerification).expiresAt.getTime();
     expect(expiresAtMs).to.be.at.least(before + 60_000);
@@ -47,14 +59,23 @@ describe('SendOtpUseCase', () => {
     const otpRepository = new FakeOtpRepository();
     const otpService = new FakeOtpService(validOtp);
     const emailService = new FakeEmailService();
-    const useCase = new SendOtpUseCase(userRepository, otpRepository, otpService, emailService);
+    const useCase = new SendOtpUseCase(
+      userRepository,
+      otpRepository,
+      otpService,
+      emailService,
+      new FakeOtpSessionTokenService(),
+    );
 
     await useCase.execute({ email: 'jordan@example.com', purpose: 'login' });
     await useCase.execute({ email: 'jordan@example.com', purpose: 'login' });
 
     expect(otpRepository.invalidateAllForEmailCalls).to.have.length(2);
     // Only the latest issued code should still be "active" (findLatestActiveByEmail returns exactly one).
-    const active = await otpRepository.findLatestActiveByEmail(Email.create('jordan@example.com'), 'login');
+    const active = await otpRepository.findLatestActiveByEmail(
+      Email.create('jordan@example.com'),
+      'login',
+    );
     expect(active).to.not.be.null;
   });
 
@@ -66,6 +87,7 @@ describe('SendOtpUseCase', () => {
       new FakeOtpRepository(),
       new FakeOtpService(validOtp),
       new FakeEmailService(),
+      new FakeOtpSessionTokenService(),
     );
 
     try {

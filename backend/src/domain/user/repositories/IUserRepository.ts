@@ -3,6 +3,7 @@ import type { Email } from '../value-objects/Email.js';
 import type { Phone } from '../value-objects/Phone.js';
 
 export interface IUserRepository {
+  findById(id: string): Promise<User | null>;
   findByEmail(email: Email): Promise<User | null>;
   findByPhone(phone: Phone): Promise<User | null>;
   create(user: User): Promise<User>;

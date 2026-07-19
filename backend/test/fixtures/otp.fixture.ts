@@ -7,7 +7,9 @@ import type { OtpPurpose } from '@turfhood/shared';
 export const validOtp = '123456';
 
 /** A persisted user (has an id) with isVerified: false, ready to be OTP-verified. */
-export function buildUnverifiedUser(overrides: { email?: string; phone?: string; id?: string } = {}): User {
+export function buildUnverifiedUser(
+  overrides: { email?: string; phone?: string; id?: string } = {},
+): User {
   return User.fromPersistence({
     id: overrides.id ?? 'user_1',
     name: 'Jordan Lee',
@@ -24,7 +26,9 @@ export function buildUnverifiedUser(overrides: { email?: string; phone?: string;
 }
 
 /** A persisted, already-verified user — used for LoginUserUseCase's success-path tests. */
-export function buildVerifiedUser(overrides: { email?: string; phone?: string; id?: string } = {}): User {
+export function buildVerifiedUser(
+  overrides: { email?: string; phone?: string; id?: string } = {},
+): User {
   return User.fromPersistence({
     id: overrides.id ?? 'user_1',
     name: 'Jordan Lee',

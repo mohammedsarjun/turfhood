@@ -29,7 +29,9 @@ export class FakePasswordResetTokenRepository implements IPasswordResetTokenRepo
   async invalidateAllForUser(userId: string): Promise<void> {
     this.invalidateAllForUserCalls.push(userId);
     this.records = this.records.map((record) =>
-      record.userId === userId && !record.isConsumed() ? this.clone(record, { consumedAt: new Date() }) : record,
+      record.userId === userId && !record.isConsumed()
+        ? this.clone(record, { consumedAt: new Date() })
+        : record,
     );
   }
 

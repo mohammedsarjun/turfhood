@@ -1,6 +1,5 @@
 import type { SignUpResponse } from '@/features/signup/types';
 
-
 export const validSignUpFormValues = {
   name: 'Jordan Lee',
   email: 'jordan@example.com',

@@ -1,10 +1,8 @@
-import type { UserRole } from '../entities/User.js';
+import type { AuthTokenPayload } from '@turfhood/shared';
 
-export interface AuthTokenPayload {
-  userId: string;
-  roles: UserRole[];
-}
+export type { AuthTokenPayload };
 
 export interface ITokenService {
   generateAccessToken(payload: AuthTokenPayload): string;
+  verifyAccessToken(token: string): AuthTokenPayload;
 }

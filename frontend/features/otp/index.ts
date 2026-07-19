@@ -11,7 +11,6 @@ export type {
   SendOtpResponse,
   VerifyOtpRequest,
   VerifyOtpResponse,
-  ResendOtpRequest,
   ResendOtpResponse,
 } from './types';
 export { OtpErrorCode } from './types';

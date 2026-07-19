@@ -10,9 +10,10 @@ import { USER_TOKENS } from '@domain/user/tokens';
 import { Email } from '@domain/user/value-objects/Email';
 import { env } from '@config/env';
 
-import type { IRequestPasswordResetUseCase } from './IRequestPasswordResetUseCase.js';
 import type { RequestPasswordResetRequestDTO } from '../dtos/RequestPasswordResetRequestDTO.js';
 import type { RequestPasswordResetResponseDTO } from '../dtos/RequestPasswordResetResponseDTO.js';
+
+import type { IRequestPasswordResetUseCase } from './IRequestPasswordResetUseCase.js';
 
 const GENERIC_MESSAGE = 'If an account exists for this email, a password reset link has been sent.';
 

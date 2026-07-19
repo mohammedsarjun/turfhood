@@ -10,7 +10,9 @@ function ControlledOtpDigitInput({ hasError = false }: { hasError?: boolean }) {
 }
 
 function getBoxes() {
-  return Array.from({ length: OTP_LENGTH }, (_, index) => screen.getByLabelText(`Digit ${index + 1}`));
+  return Array.from({ length: OTP_LENGTH }, (_, index) =>
+    screen.getByLabelText(`Digit ${index + 1}`),
+  );
 }
 
 describe('OtpDigitInput', () => {

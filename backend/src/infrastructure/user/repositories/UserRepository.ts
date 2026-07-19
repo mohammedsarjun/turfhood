@@ -8,7 +8,9 @@ import { Phone } from '@domain/user/value-objects/Phone';
 
 import { UserModel, type UserDocument } from '../models/UserModel.js';
 
-function isDuplicateKeyError(error: unknown): error is { code: number; keyPattern?: Record<string, unknown> } {
+function isDuplicateKeyError(
+  error: unknown,
+): error is { code: number; keyPattern?: Record<string, unknown> } {
   return (
     typeof error === 'object' &&
     error !== null &&
@@ -19,6 +21,11 @@ function isDuplicateKeyError(error: unknown): error is { code: number; keyPatter
 
 @injectable()
 export class UserRepository implements IUserRepository {
+  async findById(id: string): Promise<User | null> {
+    const doc = await UserModel.findById(id).select('+passwordHash');
+    return doc ? this.toDomain(doc) : null;
+  }
+
   async findByEmail(email: Email): Promise<User | null> {
     const doc = await UserModel.findOne({ email: email.toString() }).select('+passwordHash');
     return doc ? this.toDomain(doc) : null;

@@ -51,7 +51,13 @@ export function LoginForm({ signupSuccess }: LoginFormProps) {
         <p
           role="status"
           className="rounded-md bg-primary/10 text-sm text-primary"
-          style={{ marginTop: 16, paddingLeft: 12, paddingRight: 12, paddingTop: 8, paddingBottom: 8 }}
+          style={{
+            marginTop: 16,
+            paddingLeft: 12,
+            paddingRight: 12,
+            paddingTop: 8,
+            paddingBottom: 8,
+          }}
         >
           Account created successfully — please log in.
         </p>

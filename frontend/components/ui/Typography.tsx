@@ -24,8 +24,7 @@ const headingTag: Record<HeadingVariant, ElementType> = {
 };
 
 export interface HeadingProps
-  extends HTMLAttributes<HTMLHeadingElement>,
-    VariantProps<typeof headingVariants> {
+  extends HTMLAttributes<HTMLHeadingElement>, VariantProps<typeof headingVariants> {
   /** Overrides the rendered element (defaults based on `variant`). */
   as?: ElementType;
 }
@@ -41,7 +40,7 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
     const variant = variantProp ?? 'h1';
     const Comp = as ?? headingTag[variant];
     return <Comp ref={ref} className={cn(headingVariants({ variant }), className)} {...props} />;
-  }
+  },
 );
 Heading.displayName = 'Heading';
 
@@ -80,6 +79,6 @@ export const Text = forwardRef<HTMLElement, TextProps>(
     const variant = variantProp ?? 'body';
     const Comp = as ?? textTag[variant];
     return <Comp ref={ref} className={cn(textVariants({ variant }), className)} {...props} />;
-  }
+  },
 );
 Text.displayName = 'Text';

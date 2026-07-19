@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import type { OtpSessionResponse } from '@turfhood/shared';
 import { AuthLayout, BrandPanel, BrandStat } from '@/components/shared';
 import { OtpForm } from '@/features/otp';
 
@@ -8,21 +10,25 @@ export const metadata: Metadata = {
   description: 'Verify your email address',
 };
 
-interface OtpPageProps {
-  searchParams: Promise<{ email?: string; purpose?: string; expiresInSeconds?: string }>;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:4000/api';
+
+async function fetchOtpSession(): Promise<OtpSessionResponse | null> {
+  const cookieStore = await cookies();
+  const response = await fetch(`${API_BASE_URL}/otp/session`, {
+    headers: { Cookie: cookieStore.toString() },
+    cache: 'no-store',
+  });
+
+  if (!response.ok) return null;
+  return (await response.json()) as OtpSessionResponse;
 }
 
-export default async function OtpPage({ searchParams }: OtpPageProps) {
-  const { email, purpose, expiresInSeconds } = await searchParams;
+export default async function OtpPage() {
+  const session = await fetchOtpSession();
 
-  if (!email || (purpose !== 'signup' && purpose !== 'login')) {
+  if (!session) {
     redirect('/login');
   }
-
-  const parsedExpiresInSeconds = Number(expiresInSeconds);
-  const initialExpiresInSeconds = Number.isFinite(parsedExpiresInSeconds) && parsedExpiresInSeconds > 0
-    ? parsedExpiresInSeconds
-    : undefined;
 
   return (
     <AuthLayout
@@ -40,9 +46,11 @@ export default async function OtpPage({ searchParams }: OtpPageProps) {
         </BrandPanel>
       }
     >
-     
-      <OtpForm email={email} purpose={purpose} initialExpiresInSeconds={initialExpiresInSeconds} />
-     
+      <OtpForm
+        maskedEmail={session.maskedEmail}
+        purpose={session.purpose}
+        expiresAt={session.expiresAt}
+      />
     </AuthLayout>
   );
 }

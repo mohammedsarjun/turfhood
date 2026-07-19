@@ -10,7 +10,13 @@ interface BrandPanelProps {
 }
 
 /** Dark green hero panel used on auth pages: logo, headline, and a slot for a checklist or stats. */
-export function BrandPanel({ headingLine1, headingLine2, description, footerNote, children }: BrandPanelProps) {
+export function BrandPanel({
+  headingLine1,
+  headingLine2,
+  description,
+  footerNote,
+  children,
+}: BrandPanelProps) {
   return (
     <div
       className="relative flex h-full min-h-[560px] flex-col justify-between overflow-hidden bg-[#0b1f17] text-white"

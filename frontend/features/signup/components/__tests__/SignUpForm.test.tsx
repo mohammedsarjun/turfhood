@@ -1,4 +1,3 @@
-
 import userEvent from '@testing-library/user-event';
 import { push } from '@/__mocks__/next/navigation';
 import { render, screen, waitFor } from '@/test/test-utils';
@@ -6,17 +5,14 @@ import { validSignUpApiResponse, validSignUpFormValues } from '@/test/fixtures/s
 import { signUp } from '../../actions/signUpApi';
 import { SignUpForm } from '../SignUpForm';
 
-
 jest.mock('../../actions/signUpApi');
 const signUpMock = jest.mocked(signUp);
 
 describe('SignUpForm', () => {
   beforeEach(() => {
-
     push.mockClear();
     signUpMock.mockClear();
   });
-
 
   it('renders the heading and every expected field', () => {
     render(<SignUpForm />);
@@ -48,9 +44,7 @@ describe('SignUpForm', () => {
       expect(signUpMock).toHaveBeenCalledWith(validSignUpFormValues);
     });
     // After a successful signup, the form should redirect to the OTP verification page.
-    expect(push).toHaveBeenCalledWith(
-      `/otp?email=${encodeURIComponent(validSignUpFormValues.email)}&purpose=signup&expiresInSeconds=${validSignUpApiResponse.expiresInSeconds}`,
-    );
+    expect(push).toHaveBeenCalledWith('/otp');
   });
 
   // INTERACTION TEST (error case): tries to submit without agreeing to the
@@ -67,9 +61,7 @@ describe('SignUpForm', () => {
     // Note: terms checkbox is intentionally left unchecked.
     await user.click(screen.getByRole('button', { name: /create my account/i }));
 
-    expect(
-      await screen.findByText(/you must agree to the terms of service/i),
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/you must agree to the terms of service/i)).toBeInTheDocument();
     expect(signUpMock).not.toHaveBeenCalled();
   });
 });

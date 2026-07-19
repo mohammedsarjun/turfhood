@@ -17,12 +17,11 @@ const textareaVariants = cva(
     defaultVariants: {
       error: false,
     },
-  }
+  },
 );
 
 export interface TextareaProps
-  extends TextareaHTMLAttributes<HTMLTextAreaElement>,
-    VariantProps<typeof textareaVariants> {
+  extends TextareaHTMLAttributes<HTMLTextAreaElement>, VariantProps<typeof textareaVariants> {
   /** Error message; also switches the field into its error styling. */
   errorMessage?: string;
 }
@@ -51,7 +50,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 Textarea.displayName = 'Textarea';

@@ -2,7 +2,10 @@ import { injectable } from 'tsyringe';
 import { PasswordResetToken } from '@domain/passwordReset/entities/PasswordResetToken';
 import type { IPasswordResetTokenRepository } from '@domain/passwordReset/repositories/IPasswordResetTokenRepository';
 
-import { PasswordResetTokenModel, type PasswordResetTokenDocument } from '../models/PasswordResetTokenModel.js';
+import {
+  PasswordResetTokenModel,
+  type PasswordResetTokenDocument,
+} from '../models/PasswordResetTokenModel.js';
 
 @injectable()
 export class PasswordResetTokenRepository implements IPasswordResetTokenRepository {

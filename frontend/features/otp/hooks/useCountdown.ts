@@ -1,75 +1,45 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface UseCountdownResult {
   secondsLeft: number;
   isExpired: boolean;
-  reset: (seconds?: number) => void;
+}
+
+function computeSecondsLeft(expiresAt: number): number {
+  return Math.max(0, Math.ceil((expiresAt - Date.now()) / 1000));
 }
 
 /**
- * Reads a persisted deadline verbatim — including one already in the past.
- * Returns null only when nothing has been stored yet, so a genuinely expired
- * deadline is preserved (not mistaken for "no deadline yet" and replaced
- * with a fresh one) across refreshes.
- */
-function readStoredDeadline(storageKey: string): number | null {
-  if (typeof window === 'undefined') return null;
-  const raw = window.sessionStorage.getItem(storageKey);
-  if (raw === null) return null;
-  const parsed = Number(raw);
-  return Number.isNaN(parsed) ? null : parsed;
-}
-
-/**
- * Tracks seconds remaining until a deadline computed from Date.now(), rather
- * than naively decrementing a counter on each tick — keeps the displayed
- * value accurate even if the tab was backgrounded and timers were throttled.
+ * Tracks seconds remaining until an absolute `expiresAt` deadline (ms since epoch), rather
+ * than naively decrementing a counter on each tick — keeps the displayed value accurate even
+ * if the tab was backgrounded and timers were throttled.
  *
- * When `storageKey` is given, the deadline is persisted to sessionStorage so
- * a browser refresh resumes the same countdown — or the same expired state —
- * instead of restarting it. Read lazily in an effect (not the initial state)
- * so the server-rendered and first-client-render output still match and
- * hydration stays clean.
+ * `expiresAt` is expected to come from the backend (initial page load, or a resend response),
+ * so a browser refresh — which re-fetches the OTP session — naturally resumes with the true
+ * remaining time instead of a client-trusted one.
+ *
+ * The first render (both the SSR pass and the client's pre-hydration pass) must produce
+ * identical output, but `computeSecondsLeft` depends on `Date.now()`, which necessarily differs
+ * between the server's render time and the client's — computing it eagerly here would trigger a
+ * hydration mismatch. So the real value is only computed inside `useEffect`, which runs exclusively
+ * on the client after hydration; both passes render the `null`-derived default beforehand.
  */
-export function useCountdown(initialSeconds: number, storageKey?: string): UseCountdownResult {
-  const [deadline, setDeadline] = useState(() => Date.now() + initialSeconds * 1000);
-  const [secondsLeft, setSecondsLeft] = useState(initialSeconds);
+export function useCountdown(expiresAt: number): UseCountdownResult {
+  const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!storageKey) return;
-    const stored = readStoredDeadline(storageKey);
-    if (stored !== null) {
-      // Adopt the stored deadline as-is, even if it's already in the past —
-      // that's a genuinely expired OTP and must stay expired until resend().
-      setDeadline(stored);
-    } else {
-      window.sessionStorage.setItem(storageKey, String(deadline));
-    }
-    // Only re-run when the storage key itself changes (e.g. a different email/purpose).
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storageKey]);
-
-  useEffect(() => {
-    const tick = () => {
-      setSecondsLeft(Math.max(0, Math.ceil((deadline - Date.now()) / 1000)));
-    };
+    const tick = () => setSecondsLeft(computeSecondsLeft(expiresAt));
     tick();
     const intervalId = setInterval(tick, 250);
     return () => clearInterval(intervalId);
-  }, [deadline]);
+  }, [expiresAt]);
 
-  const reset = useCallback(
-    (seconds: number = initialSeconds) => {
-      const newDeadline = Date.now() + seconds * 1000;
-      setDeadline(newDeadline);
-      if (storageKey && typeof window !== 'undefined') {
-        window.sessionStorage.setItem(storageKey, String(newDeadline));
-      }
-    },
-    [initialSeconds, storageKey]
-  );
-
-  return { secondsLeft, isExpired: secondsLeft <= 0, reset };
+  return {
+    secondsLeft: secondsLeft ?? 0,
+    // Stays false until mounted, so the "Resend Code" button never flashes on
+    // first paint before the real countdown has had a chance to compute.
+    isExpired: secondsLeft !== null && secondsLeft <= 0,
+  };
 }

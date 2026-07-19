@@ -9,18 +9,12 @@ export interface SendOtpResponse {
     expiresInSeconds: number;
 }
 export interface VerifyOtpRequest {
-    email: string;
     otp: string;
-    purpose: OtpPurpose;
 }
 export interface VerifyOtpResponse {
     message: string;
     isVerified: true;
     user: PublicUser;
     accessToken: string;
-}
-export interface ResendOtpRequest {
-    email: string;
-    purpose: OtpPurpose;
 }
 export type ResendOtpResponse = SendOtpResponse;

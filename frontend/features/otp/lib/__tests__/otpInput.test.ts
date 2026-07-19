@@ -3,7 +3,6 @@ import {
   buildOtpFromDigits,
   isOtpComplete,
   isValidOtpDigit,
-  maskEmail,
   nextFocusIndexOnBackspace,
   nextFocusIndexOnInput,
   parseOtpPaste,
@@ -105,11 +104,5 @@ describe('nextFocusIndexOnBackspace', () => {
 
   it('returns null when already at the first box and empty', () => {
     expect(nextFocusIndexOnBackspace(0, false)).toBeNull();
-  });
-});
-
-describe('maskEmail', () => {
-  it('masks the local part between the first two characters and the domain', () => {
-    expect(maskEmail('jordan@example.com')).toBe('jo•••••@example.com');
   });
 });

@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { login } from '../actions/loginApi';
 import { loginSchema, type LoginFormValues } from '../schema/loginSchema';
 import { sendOtp } from '@/features/otp';
-import { tokenStorage } from '@/lib/tokenStorage';
 import { ApiError } from '@/types/api/response';
 
 const isFormField = (field: string): field is keyof LoginFormValues =>
@@ -33,13 +32,10 @@ export function useLogin() {
     try {
       const result = await login({ email, password });
       if (result.status === 'needs_verification') {
-        const { expiresInSeconds } = await sendOtp({ email: result.email, purpose: 'login' });
-        router.push(
-          `/otp?email=${encodeURIComponent(result.email)}&purpose=login&expiresInSeconds=${expiresInSeconds}`,
-        );
+        await sendOtp({ email: result.email, purpose: 'login' });
+        router.push('/otp');
         return;
       }
-      tokenStorage.set(result.accessToken);
       router.push('/');
     } catch (error) {
       if (error instanceof ApiError) {

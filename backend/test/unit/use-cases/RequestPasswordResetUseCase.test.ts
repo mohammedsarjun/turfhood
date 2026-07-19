@@ -34,7 +34,9 @@ describe('RequestPasswordResetUseCase', () => {
     });
     expect(emailService.sentPasswordResetEmails).to.have.length(1);
     expect(emailService.sentPasswordResetEmails[0]?.to).to.equal('jordan@example.com');
-    expect(emailService.sentPasswordResetEmails[0]?.resetLink).to.include('/change-password?token=');
+    expect(emailService.sentPasswordResetEmails[0]?.resetLink).to.include(
+      '/change-password?token=',
+    );
   });
 
   // BRANCH UNDER TEST: no user enumeration — an unknown email must not create

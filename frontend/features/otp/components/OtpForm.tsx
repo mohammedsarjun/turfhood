@@ -5,17 +5,18 @@ import { Button } from '@/components/ui';
 import { useOtpVerification } from '../hooks/useOtpVerification';
 import { OtpDigitInput } from './OtpDigitInput';
 import { ResendControl } from './ResendControl';
-import { isOtpComplete, maskEmail } from '../lib/otpInput';
+import { isOtpComplete } from '../lib/otpInput';
 import { OtpErrorCode, type OtpPurpose } from '../types';
 
 interface OtpFormProps {
-  email: string;
+  /** Masked email rendered by the backend — the real address never reaches the client. */
+  maskedEmail: string;
   purpose: OtpPurpose;
-  /** Actual expiry window returned by the backend's send response, when known — falls back to the shared default. */
-  initialExpiresInSeconds?: number;
+  /** Absolute deadline (ms since epoch) from the backend's otp session. */
+  expiresAt: number;
 }
 
-export function OtpForm({ email, purpose, initialExpiresInSeconds }: OtpFormProps) {
+export function OtpForm({ maskedEmail, purpose, expiresAt }: OtpFormProps) {
   const {
     digits,
     setDigits,
@@ -27,7 +28,7 @@ export function OtpForm({ email, purpose, initialExpiresInSeconds }: OtpFormProp
     isVerified,
     secondsLeft,
     isExpired,
-  } = useOtpVerification(email, purpose, initialExpiresInSeconds);
+  } = useOtpVerification(purpose, expiresAt);
 
   const isExpiredError = errorCode === OtpErrorCode.OTP_EXPIRED;
 
@@ -46,16 +47,16 @@ export function OtpForm({ email, purpose, initialExpiresInSeconds }: OtpFormProp
   }
 
   return (
-    
-    <div className='' style={{marginTop:"20px",marginBottom:"20px"}}>
+    <div className="" style={{ marginTop: '20px', marginBottom: '20px' }}>
       <div className=" mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-success">
         <ShieldCheck className="h-5 w-5 text-success-foreground" />
       </div>
 
       <h1 className="text-2xl font-medium text-foreground">Enter verification code</h1>
       <p className="text-sm text-muted-foreground" style={{ marginTop: 4 }}>
-        We sent a 6-digit code to <span className="font-medium text-foreground">{maskEmail(email)}</span>. Enter it
-        below to continue.
+        We sent a 6-digit code to{' '}
+        <span className="font-medium text-foreground">{maskedEmail}</span>. Enter it below to
+        continue.
       </p>
 
       <form
@@ -67,7 +68,12 @@ export function OtpForm({ email, purpose, initialExpiresInSeconds }: OtpFormProp
         className="flex flex-col"
         style={{ gap: 16, marginTop: 24 }}
       >
-        <OtpDigitInput digits={digits} onChange={setDigits} hasError={Boolean(formError)} disabled={isSubmitting} />
+        <OtpDigitInput
+          digits={digits}
+          onChange={setDigits}
+          hasError={Boolean(formError)}
+          disabled={isSubmitting}
+        />
 
         {formError && (
           <p
@@ -83,11 +89,20 @@ export function OtpForm({ email, purpose, initialExpiresInSeconds }: OtpFormProp
           </p>
         )}
 
-        <Button type="submit" loading={isSubmitting} disabled={!isOtpComplete(digits)} className="w-full">
+        <Button
+          type="submit"
+          loading={isSubmitting}
+          disabled={!isOtpComplete(digits)}
+          className="w-full"
+        >
           Verify Code
         </Button>
 
-        <ResendControl secondsLeft={secondsLeft} isExpired={isExpired} onResend={() => void resend()} />
+        <ResendControl
+          secondsLeft={secondsLeft}
+          isExpired={isExpired}
+          onResend={() => void resend()}
+        />
       </form>
     </div>
   );

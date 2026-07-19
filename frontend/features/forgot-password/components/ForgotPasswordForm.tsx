@@ -16,8 +16,8 @@ export function ForgotPasswordForm() {
       <div>
         <h1 className="text-2xl font-medium text-foreground">Check your email</h1>
         <p className="text-sm text-muted-foreground" style={{ marginTop: 4 }}>
-          If an account exists for that email, we&apos;ve sent a link to reset your password. The link expires in
-          30 minutes.
+          If an account exists for that email, we&apos;ve sent a link to reset your password. The
+          link expires in 30 minutes.
         </p>
         <p className="text-center text-sm text-muted-foreground" style={{ marginTop: 24 }}>
           <Link href="/login" className="font-medium text-primary hover:underline">
@@ -32,10 +32,16 @@ export function ForgotPasswordForm() {
     <div>
       <h1 className="text-2xl font-medium text-foreground">Forgot Password</h1>
       <p className="text-sm text-muted-foreground" style={{ marginTop: 4 }}>
-        Enter the email address linked to your Turfhood account and we&apos;ll send you a password reset link.
+        Enter the email address linked to your Turfhood account and we&apos;ll send you a password
+        reset link.
       </p>
 
-      <form onSubmit={onSubmit} noValidate className="flex flex-col" style={{ gap: 16, marginTop: 24 }}>
+      <form
+        onSubmit={onSubmit}
+        noValidate
+        className="flex flex-col"
+        style={{ gap: 16, marginTop: 24 }}
+      >
         <div>
           <label htmlFor="email" className={fieldLabelClass} style={fieldLabelStyle}>
             Email Address

@@ -8,7 +8,11 @@ import { PasswordResetTokenService } from '../../../src/infrastructure/passwordR
 import { FakeUserRepository } from '../../mocks/FakeUserRepository.js';
 import { FakePasswordResetTokenRepository } from '../../mocks/FakePasswordResetTokenRepository.js';
 import { FakePasswordHasher } from '../../mocks/FakePasswordHasher.js';
-import { buildPasswordResetToken, validRawToken, validTokenHash } from '../../fixtures/passwordReset.fixture.js';
+import {
+  buildPasswordResetToken,
+  validRawToken,
+  validTokenHash,
+} from '../../fixtures/passwordReset.fixture.js';
 
 function buildTokenService(): PasswordResetTokenService {
   return new PasswordResetTokenService();
@@ -19,7 +23,9 @@ describe('ResetPasswordUseCase', () => {
   // updates the user's password and consumes the token (and any siblings).
   it('updates the password, consumes the token, and invalidates other tokens for the user', async () => {
     const tokenRepository = new FakePasswordResetTokenRepository();
-    tokenRepository.seed(buildPasswordResetToken({ id: 'reset_1', userId: 'user_1', tokenHash: validTokenHash }));
+    tokenRepository.seed(
+      buildPasswordResetToken({ id: 'reset_1', userId: 'user_1', tokenHash: validTokenHash }),
+    );
     const userRepository = new FakeUserRepository();
     const useCase = new ResetPasswordUseCase(
       tokenRepository,
@@ -81,7 +87,10 @@ describe('ResetPasswordUseCase', () => {
   it('throws ResetTokenExpiredError once now is past expiresAt', async () => {
     const tokenRepository = new FakePasswordResetTokenRepository();
     tokenRepository.seed(
-      buildPasswordResetToken({ tokenHash: validTokenHash, expiresAt: new Date(Date.now() - 1000) }),
+      buildPasswordResetToken({
+        tokenHash: validTokenHash,
+        expiresAt: new Date(Date.now() - 1000),
+      }),
     );
     const useCase = new ResetPasswordUseCase(
       tokenRepository,

@@ -5,3 +5,8 @@ export interface VerifyOtpRequestDTO {
   otp: string;
   purpose: OtpPurpose;
 }
+
+/** Body shape actually accepted from the client — email/purpose come from the verified otpSession cookie instead. */
+export interface VerifyOtpBodyDTO {
+  otp: string;
+}

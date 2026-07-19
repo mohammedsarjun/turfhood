@@ -19,7 +19,10 @@ export class FakeOtpRepository implements IOtpRepository {
     return stored;
   }
 
-  async findLatestActiveByEmail(email: Email, purpose: OtpPurpose): Promise<OtpVerification | null> {
+  async findLatestActiveByEmail(
+    email: Email,
+    purpose: OtpPurpose,
+  ): Promise<OtpVerification | null> {
     const active = this.records
       .filter((r) => r.email === email.toString() && r.purpose === purpose && !r.isConsumed())
       .sort((a, b) => (b.createdAt?.getTime() ?? 0) - (a.createdAt?.getTime() ?? 0));
