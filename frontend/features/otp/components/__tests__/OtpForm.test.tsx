@@ -21,6 +21,8 @@ const validVerifyResponse = {
     isVerified: true,
     status: 'active' as const,
     createdAt: new Date('2026-01-01').toISOString(),
+    hasPassword: true,
+    authProviders: ['email' as const],
   },
   accessToken: 'token_123',
 };

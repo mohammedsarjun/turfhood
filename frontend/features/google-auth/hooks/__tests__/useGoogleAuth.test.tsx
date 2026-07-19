@@ -31,6 +31,8 @@ describe('useGoogleAuth', () => {
         isVerified: true,
         status: 'active',
         createdAt: new Date('2026-01-01').toISOString(),
+        hasPassword: false,
+        authProviders: ['google'],
       },
       accessToken: 'token_123',
     });

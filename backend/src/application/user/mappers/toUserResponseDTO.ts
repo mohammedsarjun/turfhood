@@ -12,5 +12,8 @@ export function toUserResponseDTO(user: User): UserResponseDTO {
     isVerified: user.isVerified,
     status: user.status,
     createdAt: user.createdAt as Date,
+    ...(user.avatarUrl ? { avatarUrl: user.avatarUrl } : {}),
+    hasPassword: user.passwordHash !== '',
+    authProviders: user.authProviders,
   };
 }

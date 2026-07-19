@@ -85,6 +85,43 @@ export class UserRepository implements IUserRepository {
     );
   }
 
+  async updateName(userId: string, name: string): Promise<void> {
+    await UserModel.updateOne({ _id: userId }, { $set: { name } });
+  }
+
+  async updatePhone(userId: string, phone: Phone): Promise<void> {
+    try {
+      await UserModel.updateOne({ _id: userId }, { $set: { phone: phone.toString() } });
+    } catch (error) {
+      if (isDuplicateKeyError(error)) {
+        throw new DuplicatePhoneError(phone.toString());
+      }
+      throw error;
+    }
+  }
+
+  async updateEmail(userId: string, email: Email): Promise<void> {
+    try {
+      await UserModel.updateOne({ _id: userId }, { $set: { email: email.toString() } });
+    } catch (error) {
+      if (isDuplicateKeyError(error)) {
+        throw new DuplicateEmailError(email.toString());
+      }
+      throw error;
+    }
+  }
+
+  async updateAvatarUrl(userId: string, avatarUrl: string): Promise<void> {
+    await UserModel.updateOne({ _id: userId }, { $set: { avatarUrl } });
+  }
+
+  async addPasswordAuth(userId: string, passwordHash: string): Promise<void> {
+    await UserModel.updateOne(
+      { _id: userId },
+      { $set: { passwordHash }, $addToSet: { authProviders: 'email' } },
+    );
+  }
+
   private toDomain(doc: UserDocument): User {
     return User.fromPersistence({
       id: doc._id.toString(),

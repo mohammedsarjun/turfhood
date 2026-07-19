@@ -1,4 +1,19 @@
-export type { UserRole, UserStatus, PublicUser } from './user/types.js';
+export type { UserRole, UserStatus, AuthProvider, PublicUser } from './user/types.js';
+export type {
+  UpdateNameRequest,
+  UpdateNameResponse,
+  UpdatePhoneRequest,
+  UpdatePhoneResponse,
+  RequestEmailChangeRequest,
+  RequestEmailChangeResponse,
+  ConfirmEmailChangeRequest,
+  ConfirmEmailChangeResponse,
+  ChangePasswordRequest,
+  ChangePasswordResponse,
+  SetPasswordRequest,
+  SetPasswordResponse,
+  AvatarUploadResponse,
+} from './user/profile.dto.js';
 export type { AuthTokenPayload } from './auth/token.dto.js';
 export { AuthErrorCode } from './auth/auth-error-code.js';
 export type { LoginRequest, LoginSuccessResponse, LoginNeedsVerificationResponse, LoginResponse } from './auth/login.dto.js';

@@ -1,4 +1,4 @@
-import { Schema, model, type Document, type Model } from 'mongoose';
+import mongoose, { Schema, model, type Document, type Model } from 'mongoose';
 import type { AuthProvider, UserRole, UserStatus } from '@domain/user/entities/User';
 
 export interface UserDocument extends Document {
@@ -51,4 +51,5 @@ const userSchema = new Schema<UserDocument>(
   { timestamps: true },
 );
 
-export const UserModel: Model<UserDocument> = model<UserDocument>('User', userSchema);
+export const UserModel: Model<UserDocument> =
+  (mongoose.models.User as Model<UserDocument> | undefined) ?? model<UserDocument>('User', userSchema);

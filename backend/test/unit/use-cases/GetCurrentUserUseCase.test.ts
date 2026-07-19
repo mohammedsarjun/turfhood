@@ -22,6 +22,8 @@ describe('GetCurrentUserUseCase', () => {
       isVerified: true,
       status: 'active',
       createdAt: user.createdAt,
+      hasPassword: true,
+      authProviders: ['email'],
     });
   });
 

@@ -16,7 +16,7 @@ const otpSchema = new Schema<OtpDocument>(
   {
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     email: { type: String, required: true, lowercase: true, trim: true },
-    purpose: { type: String, enum: ['signup', 'login'], required: true },
+    purpose: { type: String, enum: ['signup', 'login', 'email_change'], required: true },
     otpHash: { type: String, required: true },
     expiresAt: { type: Date, required: true },
     consumedAt: { type: Date },

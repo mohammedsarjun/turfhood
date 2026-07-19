@@ -1,6 +1,7 @@
 import type { IUserRepository } from '../../src/domain/user/repositories/IUserRepository.js';
 import type { User } from '../../src/domain/user/entities/User.js';
 import type { Email } from '../../src/domain/user/value-objects/Email.js';
+import type { Phone } from '../../src/domain/user/value-objects/Phone.js';
 
 interface FakeUserRepositoryOptions {
   /** Returned by findById(); set this to simulate "a user with this id exists". */
@@ -27,6 +28,11 @@ export class FakeUserRepository implements IUserRepository {
     avatarUrl?: string;
   }> = [];
   public readonly createCalls: User[] = [];
+  public readonly updateNameCalls: Array<{ userId: string; name: string }> = [];
+  public readonly updatePhoneCalls: Array<{ userId: string; phone: string }> = [];
+  public readonly updateEmailCalls: Array<{ userId: string; email: string }> = [];
+  public readonly updateAvatarUrlCalls: Array<{ userId: string; avatarUrl: string }> = [];
+  public readonly addPasswordAuthCalls: Array<{ userId: string; passwordHash: string }> = [];
 
   constructor(private readonly options: FakeUserRepositoryOptions = {}) {}
 
@@ -61,5 +67,25 @@ export class FakeUserRepository implements IUserRepository {
 
   async linkGoogleAccount(userId: string, googleId: string, avatarUrl?: string): Promise<void> {
     this.linkGoogleAccountCalls.push({ userId, googleId, ...(avatarUrl ? { avatarUrl } : {}) });
+  }
+
+  async updateName(userId: string, name: string): Promise<void> {
+    this.updateNameCalls.push({ userId, name });
+  }
+
+  async updatePhone(userId: string, phone: Phone): Promise<void> {
+    this.updatePhoneCalls.push({ userId, phone: phone.toString() });
+  }
+
+  async updateEmail(userId: string, email: Email): Promise<void> {
+    this.updateEmailCalls.push({ userId, email: email.toString() });
+  }
+
+  async updateAvatarUrl(userId: string, avatarUrl: string): Promise<void> {
+    this.updateAvatarUrlCalls.push({ userId, avatarUrl });
+  }
+
+  async addPasswordAuth(userId: string, passwordHash: string): Promise<void> {
+    this.addPasswordAuthCalls.push({ userId, passwordHash });
   }
 }

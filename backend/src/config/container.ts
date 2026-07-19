@@ -4,11 +4,13 @@ import type { IUserRepository } from '@domain/user/repositories/IUserRepository'
 import type { IPasswordHasher } from '@domain/user/services/IPasswordHasher';
 import type { ITokenService } from '@domain/user/services/ITokenService';
 import type { IGoogleAuthService } from '@domain/user/services/IGoogleAuthService';
+import type { IFileStorageService } from '@domain/user/services/IFileStorageService';
 import { USER_TOKENS } from '@domain/user/tokens';
 import { UserRepository } from '@infrastructure/user/repositories/UserRepository';
 import { BcryptPasswordHasher } from '@infrastructure/user/services/BcryptPasswordHasher';
 import { JwtTokenService } from '@infrastructure/user/services/JwtTokenService';
 import { GoogleAuthService } from '@infrastructure/user/services/GoogleAuthService';
+import { CloudinaryFileStorageService } from '@infrastructure/user/services/CloudinaryFileStorageService';
 import type { ISignUpUserUseCase } from '@application/user/use-cases/ISignUpUserUseCase';
 import { SignUpUserUseCase } from '@application/user/use-cases/SignUpUserUseCase';
 import type { ILoginUserUseCase } from '@application/user/use-cases/ILoginUserUseCase';
@@ -17,6 +19,20 @@ import type { IGetCurrentUserUseCase } from '@application/user/use-cases/IGetCur
 import { GetCurrentUserUseCase } from '@application/user/use-cases/GetCurrentUserUseCase';
 import type { ILoginWithGoogleUseCase } from '@application/user/use-cases/ILoginWithGoogleUseCase';
 import { LoginWithGoogleUseCase } from '@application/user/use-cases/LoginWithGoogleUseCase';
+import type { IUpdateNameUseCase } from '@application/user/use-cases/IUpdateNameUseCase';
+import { UpdateNameUseCase } from '@application/user/use-cases/UpdateNameUseCase';
+import type { IUpdatePhoneUseCase } from '@application/user/use-cases/IUpdatePhoneUseCase';
+import { UpdatePhoneUseCase } from '@application/user/use-cases/UpdatePhoneUseCase';
+import type { IRequestEmailChangeUseCase } from '@application/user/use-cases/IRequestEmailChangeUseCase';
+import { RequestEmailChangeUseCase } from '@application/user/use-cases/RequestEmailChangeUseCase';
+import type { IConfirmEmailChangeUseCase } from '@application/user/use-cases/IConfirmEmailChangeUseCase';
+import { ConfirmEmailChangeUseCase } from '@application/user/use-cases/ConfirmEmailChangeUseCase';
+import type { IChangePasswordUseCase } from '@application/user/use-cases/IChangePasswordUseCase';
+import { ChangePasswordUseCase } from '@application/user/use-cases/ChangePasswordUseCase';
+import type { ISetPasswordUseCase } from '@application/user/use-cases/ISetPasswordUseCase';
+import { SetPasswordUseCase } from '@application/user/use-cases/SetPasswordUseCase';
+import type { IUpdateAvatarUseCase } from '@application/user/use-cases/IUpdateAvatarUseCase';
+import { UpdateAvatarUseCase } from '@application/user/use-cases/UpdateAvatarUseCase';
 import type { IOtpRepository } from '@domain/otp/repositories/IOtpRepository';
 import type { IOtpService } from '@domain/otp/services/IOtpService';
 import type { IEmailService } from '@domain/otp/services/IEmailService';
@@ -49,6 +65,9 @@ container.register<ITokenService>(USER_TOKENS.TokenService, { useClass: JwtToken
 container.register<IGoogleAuthService>(USER_TOKENS.GoogleAuthService, {
   useClass: GoogleAuthService,
 });
+container.register<IFileStorageService>(USER_TOKENS.FileStorageService, {
+  useClass: CloudinaryFileStorageService,
+});
 container.register<ISignUpUserUseCase>(USER_TOKENS.SignUpUserUseCase, {
   useClass: SignUpUserUseCase,
 });
@@ -58,6 +77,27 @@ container.register<IGetCurrentUserUseCase>(USER_TOKENS.GetCurrentUserUseCase, {
 });
 container.register<ILoginWithGoogleUseCase>(USER_TOKENS.LoginWithGoogleUseCase, {
   useClass: LoginWithGoogleUseCase,
+});
+container.register<IUpdateNameUseCase>(USER_TOKENS.UpdateNameUseCase, {
+  useClass: UpdateNameUseCase,
+});
+container.register<IUpdatePhoneUseCase>(USER_TOKENS.UpdatePhoneUseCase, {
+  useClass: UpdatePhoneUseCase,
+});
+container.register<IRequestEmailChangeUseCase>(USER_TOKENS.RequestEmailChangeUseCase, {
+  useClass: RequestEmailChangeUseCase,
+});
+container.register<IConfirmEmailChangeUseCase>(USER_TOKENS.ConfirmEmailChangeUseCase, {
+  useClass: ConfirmEmailChangeUseCase,
+});
+container.register<IChangePasswordUseCase>(USER_TOKENS.ChangePasswordUseCase, {
+  useClass: ChangePasswordUseCase,
+});
+container.register<ISetPasswordUseCase>(USER_TOKENS.SetPasswordUseCase, {
+  useClass: SetPasswordUseCase,
+});
+container.register<IUpdateAvatarUseCase>(USER_TOKENS.UpdateAvatarUseCase, {
+  useClass: UpdateAvatarUseCase,
 });
 container.register<IOtpRepository>(OTP_TOKENS.OtpRepository, { useClass: OtpRepository });
 container.register<IOtpService>(OTP_TOKENS.OtpService, { useClass: OtpService });
