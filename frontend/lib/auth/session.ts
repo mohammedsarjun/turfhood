@@ -35,3 +35,24 @@ export async function verifyOtpSessionToken(
     return null;
   }
 }
+
+/**
+ * Verifies the adminAccessToken cookie — a separate cookie from the regular accessToken, so
+ * a regular user's session is never even inspected here. Also requires the 'admin' role claim,
+ * matching the backend's adminOnly middleware, so a non-admin token never satisfies this check.
+ */
+export async function verifyAdminAccessToken(
+  token: string | undefined,
+): Promise<AuthTokenPayload | null> {
+  if (!token) return null;
+
+  try {
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    const { payload } = await jwtVerify(token, secret);
+    const authPayload = payload as unknown as AuthTokenPayload;
+    if (!authPayload.roles?.includes('admin')) return null;
+    return authPayload;
+  } catch {
+    return null;
+  }
+}

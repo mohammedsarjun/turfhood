@@ -25,3 +25,26 @@ export function resolveOtpGuardRedirect(pathname: string, hasOtpSession: boolean
   }
   return null;
 }
+
+const ADMIN_ROUTES_PREFIX = '/admin';
+export const ADMIN_LOGIN_ROUTE = '/admin/login';
+export const ADMIN_LANDING_ROUTE = '/admin/dashboard';
+
+/**
+ * Pure route-guard decision for the admin area. `isAdminAuthenticated` reflects a valid
+ * `adminAccessToken` cookie specifically — a regular (non-admin) user's session never
+ * satisfies this, so they're redirected exactly like an unauthenticated visitor, straight to
+ * /admin/login rather than /login, per the full-separation decision.
+ */
+export function resolveAdminGuardRedirect(
+  pathname: string,
+  isAdminAuthenticated: boolean,
+): string | null {
+  if (!pathname.startsWith(ADMIN_ROUTES_PREFIX)) {
+    return null;
+  }
+  if (pathname === ADMIN_LOGIN_ROUTE) {
+    return isAdminAuthenticated ? ADMIN_LANDING_ROUTE : null;
+  }
+  return isAdminAuthenticated ? null : ADMIN_LOGIN_ROUTE;
+}
