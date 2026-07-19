@@ -46,14 +46,22 @@ describe('useChangePassword', () => {
     await submitChangePassword('newPassword1', 'newPassword1');
 
     await waitFor(() => {
-      expect(changePasswordMock).toHaveBeenCalledWith({ token: 'raw-token', newPassword: 'newPassword1' });
+      expect(changePasswordMock).toHaveBeenCalledWith({
+        token: 'raw-token',
+        newPassword: 'newPassword1',
+      });
     });
     expect(push).toHaveBeenCalledWith('/login');
   });
 
   it('sets a distinct tokenError (not formError) for a RESET_TOKEN_EXPIRED response', async () => {
     changePasswordMock.mockRejectedValueOnce(
-      new ApiError('This password reset link has expired.', 400, undefined, PasswordResetErrorCode.RESET_TOKEN_EXPIRED),
+      new ApiError(
+        'This password reset link has expired.',
+        400,
+        undefined,
+        PasswordResetErrorCode.RESET_TOKEN_EXPIRED,
+      ),
     );
 
     await submitChangePassword('newPassword1', 'newPassword1');

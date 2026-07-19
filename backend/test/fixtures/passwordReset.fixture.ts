@@ -13,7 +13,9 @@ interface BuildPasswordResetTokenOverrides {
 }
 
 /** Builds an active (unconsumed) reset-token record. expiresAt defaults to 30 minutes in the future. */
-export function buildPasswordResetToken(overrides: BuildPasswordResetTokenOverrides = {}): PasswordResetToken {
+export function buildPasswordResetToken(
+  overrides: BuildPasswordResetTokenOverrides = {},
+): PasswordResetToken {
   return PasswordResetToken.fromPersistence({
     id: overrides.id ?? 'reset_1',
     userId: overrides.userId ?? 'user_1',

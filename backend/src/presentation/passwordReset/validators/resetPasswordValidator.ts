@@ -6,7 +6,11 @@ export const resetPasswordSchema = z.object({
   newPassword: z.string().min(1, 'A new password is required.'),
 });
 
-export function validateResetPasswordRequest(req: Request, res: Response, next: NextFunction): void {
+export function validateResetPasswordRequest(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void {
   const result = resetPasswordSchema.safeParse(req.body);
   if (!result.success) {
     res.status(400).json({

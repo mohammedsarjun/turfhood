@@ -36,7 +36,10 @@ describe('ChangePasswordForm', () => {
     await user.click(screen.getByRole('button', { name: /change password/i }));
 
     await waitFor(() => {
-      expect(changePasswordMock).toHaveBeenCalledWith({ token: 'raw-token', newPassword: 'newPassword1' });
+      expect(changePasswordMock).toHaveBeenCalledWith({
+        token: 'raw-token',
+        newPassword: 'newPassword1',
+      });
     });
     expect(push).toHaveBeenCalledWith('/login');
   });
@@ -75,7 +78,9 @@ describe('ChangePasswordForm', () => {
     await user.type(screen.getByLabelText(/confirm new password/i), 'newPassword1');
     await user.click(screen.getByRole('button', { name: /change password/i }));
 
-    expect(await screen.findByRole('heading', { name: /link no longer valid/i })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', { name: /link no longer valid/i }),
+    ).toBeInTheDocument();
     expect(screen.getByText(/this password reset link has expired/i)).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /change password/i })).not.toBeInTheDocument();
   });

@@ -35,7 +35,11 @@ describe('LoginUserUseCase', () => {
   it("returns status:'success' with an access token for a verified user", async () => {
     const user = buildVerifiedUser({ email: 'jordan@example.com' });
     const userRepository = new FakeUserRepository({ existingUserByEmail: user });
-    const useCase = new LoginUserUseCase(userRepository, new FakePasswordHasher(), buildTokenService());
+    const useCase = new LoginUserUseCase(
+      userRepository,
+      new FakePasswordHasher(),
+      buildTokenService(),
+    );
 
     const result = await useCase.execute({ email: 'jordan@example.com', password: 'password1' });
 
@@ -51,7 +55,11 @@ describe('LoginUserUseCase', () => {
   it("returns status:'needs_verification' (no token) for an unverified user with correct credentials", async () => {
     const user = buildUnverifiedUser({ email: 'jordan@example.com' });
     const userRepository = new FakeUserRepository({ existingUserByEmail: user });
-    const useCase = new LoginUserUseCase(userRepository, new FakePasswordHasher(), buildTokenService());
+    const useCase = new LoginUserUseCase(
+      userRepository,
+      new FakePasswordHasher(),
+      buildTokenService(),
+    );
 
     const result = await useCase.execute({ email: 'jordan@example.com', password: 'password1' });
 
@@ -82,7 +90,11 @@ describe('LoginUserUseCase', () => {
   it('still throws AccountSuspendedError for a suspended user regardless of isVerified', async () => {
     const user = buildUserWithStatus('suspended');
     const userRepository = new FakeUserRepository({ existingUserByEmail: user });
-    const useCase = new LoginUserUseCase(userRepository, new FakePasswordHasher(), buildTokenService());
+    const useCase = new LoginUserUseCase(
+      userRepository,
+      new FakePasswordHasher(),
+      buildTokenService(),
+    );
 
     try {
       await useCase.execute({ email: 'jordan@example.com', password: 'password1' });

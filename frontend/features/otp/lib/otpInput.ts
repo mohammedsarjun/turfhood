@@ -29,7 +29,7 @@ export function parseOtpPaste(clipboardText: string, length: number = OTP_LENGTH
 export function nextFocusIndexOnInput(
   currentIndex: number,
   digit: string,
-  length: number = OTP_LENGTH
+  length: number = OTP_LENGTH,
 ): number | null {
   if (!digit) return null;
   return currentIndex < length - 1 ? currentIndex + 1 : null;
@@ -39,9 +39,4 @@ export function nextFocusIndexOnInput(
 export function nextFocusIndexOnBackspace(currentIndex: number, hadValue: boolean): number | null {
   if (hadValue) return null;
   return currentIndex > 0 ? currentIndex - 1 : null;
-}
-
-/** Masks an email for display, e.g. "jo•••••@example.com". */
-export function maskEmail(email: string): string {
-  return email.replace(/^(..).*(@.*)$/, '$1•••••$2');
 }

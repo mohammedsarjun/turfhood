@@ -4,7 +4,6 @@ const MIN_LENGTH = 8;
 const HAS_LETTER = /[A-Za-z]/;
 const HAS_NUMBER = /[0-9]/;
 
-
 export class Password {
   private constructor(private readonly value: string) {}
 
@@ -18,7 +17,6 @@ export class Password {
     return new Password(rawPassword);
   }
   getPlainValue(): string {
-
     return this.value;
   }
 }

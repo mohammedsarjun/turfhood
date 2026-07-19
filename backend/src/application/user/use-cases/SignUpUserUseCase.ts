@@ -10,10 +10,11 @@ import { Email } from '@domain/user/value-objects/Email';
 import { Password } from '@domain/user/value-objects/Password';
 import { Phone } from '@domain/user/value-objects/Phone';
 
-import type { ISignUpUserUseCase } from './ISignUpUserUseCase.js';
 import type { SignUpResponseDTO } from '../dtos/SignUpResponseDTO.js';
 import type { SignUpUserRequestDTO } from '../dtos/SignUpUserRequestDTO.js';
 import { toUserResponseDTO } from '../mappers/toUserResponseDTO.js';
+
+import type { ISignUpUserUseCase } from './ISignUpUserUseCase.js';
 
 /** Orchestrates new-user registration: validates invariants, hashes the password, persists the user, and sends the signup OTP. */
 @injectable()
@@ -43,11 +44,11 @@ export class SignUpUserUseCase implements ISignUpUserUseCase {
     const newUser = User.register({ name: request.name.trim(), email, phone, passwordHash });
     const createdUser = await this.userRepository.create(newUser);
 
-    const { expiresInSeconds } = await this.sendOtpUseCase.execute({
+    const { expiresInSeconds, otpSessionToken } = await this.sendOtpUseCase.execute({
       email: email.toString(),
       purpose: 'signup',
     });
 
-    return { user: toUserResponseDTO(createdUser), expiresInSeconds };
+    return { user: toUserResponseDTO(createdUser), expiresInSeconds, otpSessionToken };
   }
 }

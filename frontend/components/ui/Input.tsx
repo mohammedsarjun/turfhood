@@ -17,12 +17,11 @@ const inputVariants = cva(
     defaultVariants: {
       error: false,
     },
-  }
+  },
 );
 
 export interface InputProps
-  extends InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof inputVariants> {
+  extends InputHTMLAttributes<HTMLInputElement>, VariantProps<typeof inputVariants> {
   /** Error message; also switches the field into its error styling. */
   errorMessage?: string;
   /** Icon rendered inside the field's left edge. */
@@ -30,7 +29,6 @@ export interface InputProps
   /** Content rendered inside the field's right edge (e.g. a password-visibility toggle). */
   rightSlot?: ReactNode;
 }
-
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, error, errorMessage, id, icon, rightSlot, style, ...props }, ref) => {
@@ -76,7 +74,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = 'Input';

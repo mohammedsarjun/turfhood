@@ -24,7 +24,11 @@ export class ResendEmailService implements IEmailService {
     }
   }
 
-  async sendPasswordResetEmail({ to, resetLink, expiresInSeconds }: SendPasswordResetEmailParams): Promise<void> {
+  async sendPasswordResetEmail({
+    to,
+    resetLink,
+    expiresInSeconds,
+  }: SendPasswordResetEmailParams): Promise<void> {
     const expiresInMinutes = Math.round(expiresInSeconds / 60);
     const { error } = await this.resend.emails.send({
       from: env.RESEND_FROM_EMAIL,

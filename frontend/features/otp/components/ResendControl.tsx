@@ -13,7 +13,11 @@ export function ResendControl({ secondsLeft, isExpired, onResend }: ResendContro
       <p className="text-center text-sm text-muted-foreground">
         Didn&apos;t receive the code? Resend in{' '}
         <span
-          className={urgent ? 'font-medium tabular-nums text-warning-foreground' : 'font-medium tabular-nums text-primary'}
+          className={
+            urgent
+              ? 'font-medium tabular-nums text-warning-foreground'
+              : 'font-medium tabular-nums text-primary'
+          }
         >
           0:{String(secondsLeft).padStart(2, '0')}
         </span>

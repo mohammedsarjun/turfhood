@@ -18,7 +18,12 @@ export class ApiError extends Error {
   readonly errors?: Record<string, string[]>;
   readonly code?: string;
 
-  constructor(message: string, statusCode: number, errors?: Record<string, string[]>, code?: string) {
+  constructor(
+    message: string,
+    statusCode: number,
+    errors?: Record<string, string[]>,
+    code?: string,
+  ) {
     super(message);
     this.name = 'ApiError';
     this.statusCode = statusCode;

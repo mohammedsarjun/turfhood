@@ -3,6 +3,8 @@ import type { User } from '../../src/domain/user/entities/User.js';
 import type { Email } from '../../src/domain/user/value-objects/Email.js';
 
 interface FakeUserRepositoryOptions {
+  /** Returned by findById(); set this to simulate "a user with this id exists". */
+  existingUserById?: User | null;
   /** Returned by findByEmail(); set this to simulate "an account with this email already exists". */
   existingUserByEmail?: User | null;
   /** Returned by findByPhone(); set this to simulate "an account with this phone already exists". */
@@ -16,8 +18,13 @@ interface FakeUserRepositoryOptions {
  */
 export class FakeUserRepository implements IUserRepository {
   public readonly updatePasswordCalls: Array<{ userId: string; passwordHash: string }> = [];
+  public readonly markVerifiedCalls: string[] = [];
 
   constructor(private readonly options: FakeUserRepositoryOptions = {}) {}
+
+  async findById(): Promise<User | null> {
+    return this.options.existingUserById ?? null;
+  }
 
   async findByEmail(): Promise<User | null> {
     return this.options.existingUserByEmail ?? null;
@@ -31,7 +38,9 @@ export class FakeUserRepository implements IUserRepository {
     return user;
   }
 
-  async markVerified(_email: Email): Promise<void> {}
+  async markVerified(email: Email): Promise<void> {
+    this.markVerifiedCalls.push(email.toString());
+  }
 
   async updatePassword(userId: string, passwordHash: string): Promise<void> {
     this.updatePasswordCalls.push({ userId, passwordHash });

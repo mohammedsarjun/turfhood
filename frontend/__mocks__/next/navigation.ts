@@ -5,7 +5,7 @@
 // `push` is exported so tests can assert on redirects, e.g.:
 //   import { push } from '@/__mocks__/next/navigation';
 //   expect(push).toHaveBeenCalledWith('/login');
-export const  push = jest.fn();
+export const push = jest.fn();
 
 export function useRouter() {
   return { push };

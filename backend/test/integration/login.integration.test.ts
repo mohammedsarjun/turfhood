@@ -65,10 +65,11 @@ describe('POST /api/users/login (integration)', () => {
   // HAPPY PATH: once verified (via /api/otp/verify), the same credentials log in successfully.
   it('responds 200 with status:success and an access token once the user is verified', async () => {
     await request(app).post('/api/users/signup').send(payload);
-    await request(app).post('/api/otp/send').send({ email: payload.email, purpose: 'signup' });
+    const agent = request.agent(app);
+    await agent.post('/api/otp/send').send({ email: payload.email, purpose: 'signup' });
 
     const otp = testEmailService.sentEmails[testEmailService.sentEmails.length - 1]?.otp as string;
-    await request(app).post('/api/otp/verify').send({ email: payload.email, otp, purpose: 'signup' });
+    await agent.post('/api/otp/verify').send({ otp });
 
     const response = await request(app)
       .post('/api/users/login')

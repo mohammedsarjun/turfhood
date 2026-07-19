@@ -5,7 +5,11 @@ export const requestPasswordResetSchema = z.object({
   email: z.string().trim().email('Enter a valid email address.'),
 });
 
-export function validateRequestPasswordResetRequest(req: Request, res: Response, next: NextFunction): void {
+export function validateRequestPasswordResetRequest(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void {
   const result = requestPasswordResetSchema.safeParse(req.body);
   if (!result.success) {
     res.status(400).json({

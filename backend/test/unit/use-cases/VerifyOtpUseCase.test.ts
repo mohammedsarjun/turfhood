@@ -33,7 +33,11 @@ describe('VerifyOtpUseCase', () => {
       buildTokenService(),
     );
 
-    const result = await useCase.execute({ email: 'jordan@example.com', otp: validOtp, purpose: 'login' });
+    const result = await useCase.execute({
+      email: 'jordan@example.com',
+      otp: validOtp,
+      purpose: 'login',
+    });
 
     expect(result.isVerified).to.equal(true);
     expect(result.accessToken).to.be.a('string').that.is.not.empty;
@@ -46,7 +50,9 @@ describe('VerifyOtpUseCase', () => {
     const user = buildUnverifiedUser({ email: 'jordan@example.com' });
     const userRepository = new FakeUserRepository({ existingUserByEmail: user });
     const otpRepository = new FakeOtpRepository();
-    otpRepository.seed(buildOtpRecord({ id: 'otp_1', email: 'jordan@example.com', purpose: 'login' }));
+    otpRepository.seed(
+      buildOtpRecord({ id: 'otp_1', email: 'jordan@example.com', purpose: 'login' }),
+    );
     const useCase = new VerifyOtpUseCase(
       userRepository,
       otpRepository,
@@ -61,7 +67,10 @@ describe('VerifyOtpUseCase', () => {
       expect(error).to.be.instanceOf(OtpInvalidError);
     }
 
-    const record = await otpRepository.findLatestActiveByEmail(Email.create('jordan@example.com'), 'login');
+    const record = await otpRepository.findLatestActiveByEmail(
+      Email.create('jordan@example.com'),
+      'login',
+    );
     expect(record?.attemptCount).to.equal(1);
   });
 
@@ -111,7 +120,11 @@ describe('VerifyOtpUseCase', () => {
       buildTokenService(),
     );
 
-    const result = await useCase.execute({ email: 'jordan@example.com', otp: validOtp, purpose: 'login' });
+    const result = await useCase.execute({
+      email: 'jordan@example.com',
+      otp: validOtp,
+      purpose: 'login',
+    });
     expect(result.isVerified).to.equal(true);
   });
 
@@ -120,7 +133,9 @@ describe('VerifyOtpUseCase', () => {
     const user = buildUnverifiedUser({ email: 'jordan@example.com' });
     const userRepository = new FakeUserRepository({ existingUserByEmail: user });
     const otpRepository = new FakeOtpRepository();
-    otpRepository.seed(buildOtpRecord({ email: 'jordan@example.com', purpose: 'login', attemptCount: 5 }));
+    otpRepository.seed(
+      buildOtpRecord({ email: 'jordan@example.com', purpose: 'login', attemptCount: 5 }),
+    );
     const useCase = new VerifyOtpUseCase(
       userRepository,
       otpRepository,

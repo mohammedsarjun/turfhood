@@ -41,5 +41,5 @@ export default tseslint.config(
   eslintConfigPrettier,
   {
     ignores: ['dist/**', 'node_modules/**'],
-  }
+  },
 );

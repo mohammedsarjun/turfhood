@@ -10,14 +10,18 @@ describe('useCountdown', () => {
     jest.useRealTimers();
   });
 
-  it('starts at the given number of seconds', () => {
-    const { result } = renderHook(() => useCountdown(60));
+  it('starts at the seconds remaining until the given deadline', () => {
+    const { result } = renderHook(({ expiresAt }) => useCountdown(expiresAt), {
+      initialProps: { expiresAt: Date.now() + 60_000 },
+    });
     expect(result.current.secondsLeft).toBe(60);
     expect(result.current.isExpired).toBe(false);
   });
 
   it('ticks down as time passes', () => {
-    const { result } = renderHook(() => useCountdown(60));
+    const { result } = renderHook(({ expiresAt }) => useCountdown(expiresAt), {
+      initialProps: { expiresAt: Date.now() + 60_000 },
+    });
 
     act(() => {
       jest.advanceTimersByTime(5000);
@@ -27,7 +31,9 @@ describe('useCountdown', () => {
   });
 
   it('marks isExpired true once the countdown reaches zero', () => {
-    const { result } = renderHook(() => useCountdown(2));
+    const { result } = renderHook(({ expiresAt }) => useCountdown(expiresAt), {
+      initialProps: { expiresAt: Date.now() + 2000 },
+    });
 
     act(() => {
       jest.advanceTimersByTime(3000);
@@ -37,20 +43,17 @@ describe('useCountdown', () => {
     expect(result.current.isExpired).toBe(true);
   });
 
-  it('reset() restores the countdown to a fresh window', () => {
-    const { result } = renderHook(() => useCountdown(2));
+  it('re-syncs to a fresh deadline when expiresAt changes', () => {
+    const { result, rerender } = renderHook(({ expiresAt }) => useCountdown(expiresAt), {
+      initialProps: { expiresAt: Date.now() + 2000 },
+    });
 
     act(() => {
       jest.advanceTimersByTime(3000);
     });
     expect(result.current.isExpired).toBe(true);
 
-    act(() => {
-      result.current.reset(60);
-    });
-    act(() => {
-      jest.advanceTimersByTime(0);
-    });
+    rerender({ expiresAt: Date.now() + 60_000 });
 
     expect(result.current.isExpired).toBe(false);
     expect(result.current.secondsLeft).toBe(60);

@@ -4,10 +4,7 @@ import { z } from 'zod';
 // agreeToTerms is a client-only gate and is never sent to the API.
 export const signUpSchema = z.object({
   name: z.string().trim().min(2, 'Name must be at least 2 characters long.'),
-  email: z
-    .string()
-    .trim()
-    .pipe(z.email('Enter a valid email address.')),
+  email: z.string().trim().pipe(z.email('Enter a valid email address.')),
   phone: z
     .string()
     .trim()
@@ -19,7 +16,10 @@ export const signUpSchema = z.object({
     .regex(/[0-9]/, 'Password must contain at least one number.'),
   agreeToTerms: z
     .boolean()
-    .refine((value) => value === true, 'You must agree to the Terms of Service and Privacy Policy.'),
+    .refine(
+      (value) => value === true,
+      'You must agree to the Terms of Service and Privacy Policy.',
+    ),
 });
 
 export type SignUpFormValues = z.infer<typeof signUpSchema>;

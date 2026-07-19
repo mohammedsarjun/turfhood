@@ -1,0 +1,5 @@
+export declare enum AuthErrorCode {
+    TOKEN_MISSING = "TOKEN_MISSING",
+    TOKEN_INVALID = "TOKEN_INVALID",
+    TOKEN_EXPIRED = "TOKEN_EXPIRED"
+}

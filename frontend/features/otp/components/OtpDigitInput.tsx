@@ -17,7 +17,12 @@ interface OtpDigitInputProps {
   disabled?: boolean;
 }
 
-export function OtpDigitInput({ digits, onChange, hasError = false, disabled = false }: OtpDigitInputProps) {
+export function OtpDigitInput({
+  digits,
+  onChange,
+  hasError = false,
+  disabled = false,
+}: OtpDigitInputProps) {
   const refs = useRef<Array<HTMLInputElement | null>>([]);
 
   const focusAt = (index: number) => {
@@ -93,7 +98,7 @@ export function OtpDigitInput({ digits, onChange, hasError = false, disabled = f
             'text-base font-medium text-foreground sm:text-lg',
             'transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
             'focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-            hasError ? 'border-destructive focus-visible:ring-destructive' : 'border-input'
+            hasError ? 'border-destructive focus-visible:ring-destructive' : 'border-input',
           )}
         />
       ))}

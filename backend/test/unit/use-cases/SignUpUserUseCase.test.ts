@@ -7,6 +7,7 @@ import { FakePasswordHasher } from '../../mocks/FakePasswordHasher.js';
 import { FakeOtpRepository } from '../../mocks/FakeOtpRepository.js';
 import { FakeOtpService } from '../../mocks/FakeOtpService.js';
 import { FakeEmailService } from '../../mocks/FakeEmailService.js';
+import { FakeOtpSessionTokenService } from '../../mocks/FakeOtpSessionTokenService.js';
 import { validSignUpRequest, buildExistingUser } from '../../fixtures/users.fixture.js';
 
 /**
@@ -15,8 +16,16 @@ import { validSignUpRequest, buildExistingUser } from '../../fixtures/users.fixt
  * repository SignUpUserUseCase uses for its own duplicate-email/-phone checks.
  */
 function buildSendOtpUseCase(emailService: FakeEmailService): SendOtpUseCase {
-  const otpUserRepository = new FakeUserRepository({ existingUserByEmail: buildExistingUser({ email: validSignUpRequest.email }) });
-  return new SendOtpUseCase(otpUserRepository, new FakeOtpRepository(), new FakeOtpService(), emailService);
+  const otpUserRepository = new FakeUserRepository({
+    existingUserByEmail: buildExistingUser({ email: validSignUpRequest.email }),
+  });
+  return new SendOtpUseCase(
+    otpUserRepository,
+    new FakeOtpRepository(),
+    new FakeOtpService(),
+    emailService,
+    new FakeOtpSessionTokenService(),
+  );
 }
 
 describe('SignUpUserUseCase', () => {
@@ -50,7 +59,11 @@ describe('SignUpUserUseCase', () => {
     );
 
     try {
-      await useCase.execute({ ...validSignUpRequest, email: 'taken@example.com', phone: '9111111111' });
+      await useCase.execute({
+        ...validSignUpRequest,
+        email: 'taken@example.com',
+        phone: '9111111111',
+      });
       // If execute() didn't throw, the test should fail explicitly.
       expect.fail('Expected execute() to throw DuplicateEmailError, but it did not throw.');
     } catch (error) {

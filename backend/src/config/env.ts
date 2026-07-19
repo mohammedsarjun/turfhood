@@ -1,5 +1,8 @@
 import 'dotenv/config';
-import { DEFAULT_OTP_EXPIRY_SECONDS, DEFAULT_PASSWORD_RESET_EXPIRY_SECONDS } from '@turfhood/shared';
+import {
+  DEFAULT_OTP_EXPIRY_SECONDS,
+  DEFAULT_PASSWORD_RESET_EXPIRY_SECONDS,
+} from '@turfhood/shared';
 
 function requireEnv(key: string): string {
   const value = process.env[key];
@@ -22,5 +25,4 @@ export const env = {
   PASSWORD_RESET_TOKEN_EXPIRY_SECONDS: Number(
     process.env.PASSWORD_RESET_TOKEN_EXPIRY_SECONDS ?? DEFAULT_PASSWORD_RESET_EXPIRY_SECONDS,
   ),
-
-}
+};

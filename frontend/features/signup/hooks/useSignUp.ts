@@ -30,10 +30,8 @@ export function useSignUp() {
     setFormError(null);
 
     try {
-      const { expiresInSeconds } = await signUp({ name, email, phone, password });
-      router.push(
-        `/otp?email=${encodeURIComponent(email)}&purpose=signup&expiresInSeconds=${expiresInSeconds}`,
-      );
+      await signUp({ name, email, phone, password });
+      router.push('/otp');
     } catch (error) {
       if (error instanceof ApiError) {
         // Field-level errors (e.g. zod validation failures echoed back by the backend).

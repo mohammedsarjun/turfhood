@@ -4,7 +4,6 @@ export type {
   SendOtpResponse,
   VerifyOtpRequest,
   VerifyOtpResponse,
-  ResendOtpRequest,
   ResendOtpResponse,
 } from '@turfhood/shared';
-export { OtpErrorCode, DEFAULT_OTP_EXPIRY_SECONDS } from '@turfhood/shared';
+export { OtpErrorCode } from '@turfhood/shared';

@@ -103,10 +103,7 @@ export function SignUpForm() {
             {...register('password')}
           />
 
-          <ul
-            className="flex flex-wrap"
-            style={{ marginTop: 8, columnGap: 16, rowGap: 4 }}
-          >
+          <ul className="flex flex-wrap" style={{ marginTop: 8, columnGap: 16, rowGap: 4 }}>
             {PASSWORD_RULES.map((rule) => {
               const met = rule.test(passwordValue ?? '');
               return (
@@ -132,7 +129,8 @@ export function SignUpForm() {
               {...register('agreeToTerms')}
             />
             <span>
-              By creating an account, I agree to the <span className="text-primary">Terms of Service</span> and{' '}
+              By creating an account, I agree to the{' '}
+              <span className="text-primary">Terms of Service</span> and{' '}
               <span className="text-primary">Privacy Policy</span>.
             </span>
           </label>

@@ -12,11 +12,10 @@ export function AuthLayout({ panel, children }: AuthLayoutProps) {
     <main className="flex min-h-screen items-center justify-center bg-muted px-4 py-8">
       <div className="grid w-full min-w-0 max-w-5xl overflow-hidden rounded-2xl shadow-xl md:grid-cols-2 ml-2.5">
         <div className="hidden min-w-0 md:block">{panel}</div>
-   <div className="flex min-w-0 items-center justify-center bg-card p-6 sm:p-12 ">
-  <div className="w-full max-w-sm">{children}</div>
-</div>
+        <div className="flex min-w-0 items-center justify-center bg-card p-6 sm:p-12 ">
+          <div className="w-full max-w-sm">{children}</div>
+        </div>
       </div>
-   
     </main>
   );
 }

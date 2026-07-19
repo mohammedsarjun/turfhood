@@ -7,10 +7,11 @@ import type { ITokenService } from '@domain/user/services/ITokenService';
 import { USER_TOKENS } from '@domain/user/tokens';
 import { Email } from '@domain/user/value-objects/Email';
 
-import type { ILoginUserUseCase } from './ILoginUserUseCase.js';
 import type { LoginResponseDTO } from '../dtos/LoginResponseDTO.js';
 import type { LoginUserRequestDTO } from '../dtos/LoginUserRequestDTO.js';
 import { toUserResponseDTO } from '../mappers/toUserResponseDTO.js';
+
+import type { ILoginUserUseCase } from './ILoginUserUseCase.js';
 
 /**
  * Orchestrates credential verification and access-token issuance for an existing user.

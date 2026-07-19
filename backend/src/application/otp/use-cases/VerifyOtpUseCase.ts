@@ -14,9 +14,10 @@ import { Email } from '@domain/user/value-objects/Email';
 import { env } from '@config/env';
 import { toUserResponseDTO } from '@application/user/mappers/toUserResponseDTO';
 
-import type { IVerifyOtpUseCase } from './IVerifyOtpUseCase.js';
 import type { VerifyOtpRequestDTO } from '../dtos/VerifyOtpRequestDTO.js';
 import type { VerifyOtpResponseDTO } from '../dtos/VerifyOtpResponseDTO.js';
+
+import type { IVerifyOtpUseCase } from './IVerifyOtpUseCase.js';
 
 /**
  * Validates a submitted OTP and, on success, marks the user verified and
@@ -41,7 +42,7 @@ export class VerifyOtpUseCase implements IVerifyOtpUseCase {
     }
 
     if (record.isExpired(new Date())) {
-    throw new OtpExpiredError();
+      throw new OtpExpiredError();
     }
 
     if (record.hasExceededMaxAttempts(env.OTP_MAX_ATTEMPTS)) {

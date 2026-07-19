@@ -12,8 +12,6 @@ declare global {
   var __turfhoodTestEmailService: FakeEmailService | undefined;
 }
 
-
-
 export const testEmailService = globalThis.__turfhoodTestEmailService ?? new FakeEmailService();
 globalThis.__turfhoodTestEmailService = testEmailService;
 

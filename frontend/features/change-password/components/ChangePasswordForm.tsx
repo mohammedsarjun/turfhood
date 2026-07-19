@@ -19,12 +19,16 @@ const TOKEN_ERROR_MESSAGES: Record<PasswordResetErrorCode, string> = {
   [PasswordResetErrorCode.RESET_TOKEN_INVALID]: 'This password reset link is invalid.',
   [PasswordResetErrorCode.RESET_TOKEN_EXPIRED]:
     'This password reset link has expired. Please request a new one.',
-  [PasswordResetErrorCode.RESET_TOKEN_ALREADY_USED]: 'This password reset link has already been used.',
+  [PasswordResetErrorCode.RESET_TOKEN_ALREADY_USED]:
+    'This password reset link has already been used.',
 };
 
 function Requirement({ met, label }: { met: boolean; label: string }) {
   return (
-    <li className="flex items-center text-xs" style={{ gap: 6, color: met ? undefined : undefined }}>
+    <li
+      className="flex items-center text-xs"
+      style={{ gap: 6, color: met ? undefined : undefined }}
+    >
       <span
         className={
           met
@@ -40,7 +44,8 @@ function Requirement({ met, label }: { met: boolean; label: string }) {
 }
 
 export function ChangePasswordForm({ token }: ChangePasswordFormProps) {
-  const { register, onSubmit, errors, isSubmitting, formError, tokenError, watch } = useChangePassword(token);
+  const { register, onSubmit, errors, isSubmitting, formError, tokenError, watch } =
+    useChangePassword(token);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -70,7 +75,12 @@ export function ChangePasswordForm({ token }: ChangePasswordFormProps) {
         Your new password must be different from your previous password.
       </p>
 
-      <form onSubmit={onSubmit} noValidate className="flex flex-col" style={{ gap: 16, marginTop: 24 }}>
+      <form
+        onSubmit={onSubmit}
+        noValidate
+        className="flex flex-col"
+        style={{ gap: 16, marginTop: 24 }}
+      >
         <div>
           <label htmlFor="new-password" className={fieldLabelClass} style={fieldLabelStyle}>
             New Password

@@ -20,7 +20,10 @@ export class OtpRepository implements IOtpRepository {
     return this.toDomain(doc);
   }
 
-  async findLatestActiveByEmail(email: Email, purpose: OtpPurpose): Promise<OtpVerification | null> {
+  async findLatestActiveByEmail(
+    email: Email,
+    purpose: OtpPurpose,
+  ): Promise<OtpVerification | null> {
     const doc = await OtpModel.findOne({ email: email.toString(), purpose, consumedAt: null })
       .sort({ createdAt: -1 })
       .exec();

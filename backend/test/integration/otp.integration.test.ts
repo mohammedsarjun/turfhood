@@ -54,20 +54,20 @@ describe('POST /api/otp/* (integration)', () => {
 
   it('sends a code and later verifies it, marking the user verified', async () => {
     await signUp('jordan@example.com');
+    const agent = request.agent(app);
 
-    const sendResponse = await request(app)
+    const sendResponse = await agent
       .post('/api/otp/send')
       .send({ email: 'jordan@example.com', purpose: 'signup' });
 
     expect(sendResponse.status).to.equal(200);
     expect(sendResponse.body.expiresInSeconds).to.equal(60);
+    expect(sendResponse.body.otpSessionToken).to.be.undefined;
     expect(testEmailService.sentEmails).to.have.length(1);
 
     const otp = testEmailService.sentEmails[0]?.otp as string;
 
-    const verifyResponse = await request(app)
-      .post('/api/otp/verify')
-      .send({ email: 'jordan@example.com', otp, purpose: 'signup' });
+    const verifyResponse = await agent.post('/api/otp/verify').send({ otp });
 
     expect(verifyResponse.status).to.equal(200);
     expect(verifyResponse.body.isVerified).to.equal(true);
@@ -75,13 +75,19 @@ describe('POST /api/otp/* (integration)', () => {
     expect(verifyResponse.body.accessToken).to.be.a('string');
   });
 
+  it('responds 401 when verifying without a pending otp session', async () => {
+    const response = await request(app).post('/api/otp/verify').send({ otp: '123456' });
+
+    expect(response.status).to.equal(401);
+    expect(response.body.code).to.equal('OTP_SESSION_INVALID');
+  });
+
   it('responds 400 with an OTP_INVALID code for a wrong OTP', async () => {
     await signUp('jordan@example.com');
-    await request(app).post('/api/otp/send').send({ email: 'jordan@example.com', purpose: 'signup' });
+    const agent = request.agent(app);
+    await agent.post('/api/otp/send').send({ email: 'jordan@example.com', purpose: 'signup' });
 
-    const response = await request(app)
-      .post('/api/otp/verify')
-      .send({ email: 'jordan@example.com', otp: '000000', purpose: 'signup' });
+    const response = await agent.post('/api/otp/verify').send({ otp: '000000' });
 
     expect(response.status).to.equal(400);
     expect(response.body.code).to.equal('OTP_INVALID');
@@ -89,16 +95,15 @@ describe('POST /api/otp/* (integration)', () => {
 
   it('responds 400 with an OTP_EXPIRED code once the 60s window has passed', async () => {
     await signUp('jordan@example.com');
-    await request(app).post('/api/otp/send').send({ email: 'jordan@example.com', purpose: 'signup' });
+    const agent = request.agent(app);
+    await agent.post('/api/otp/send').send({ email: 'jordan@example.com', purpose: 'signup' });
     const otp = testEmailService.sentEmails[0]?.otp as string;
 
     // Directly age the persisted record instead of a real 60s sleep.
     const { OtpModel } = await import('../../src/infrastructure/otp/models/OtpModel.js');
     await OtpModel.updateMany({}, { $set: { expiresAt: new Date(Date.now() - 1) } });
 
-    const response = await request(app)
-      .post('/api/otp/verify')
-      .send({ email: 'jordan@example.com', otp, purpose: 'signup' });
+    const response = await agent.post('/api/otp/verify').send({ otp });
 
     expect(response.status).to.equal(400);
     expect(response.body.code).to.equal('OTP_EXPIRED');
@@ -106,23 +111,37 @@ describe('POST /api/otp/* (integration)', () => {
 
   it('resend invalidates the previous code and issues a new one', async () => {
     await signUp('jordan@example.com');
-    await request(app).post('/api/otp/send').send({ email: 'jordan@example.com', purpose: 'signup' });
+    const agent = request.agent(app);
+    await agent.post('/api/otp/send').send({ email: 'jordan@example.com', purpose: 'signup' });
     const firstOtp = testEmailService.sentEmails[0]?.otp as string;
 
-    const resendResponse = await request(app)
-      .post('/api/otp/resend')
-      .send({ email: 'jordan@example.com', purpose: 'signup' });
+    const resendResponse = await agent.post('/api/otp/resend').send();
     expect(resendResponse.status).to.equal(200);
     const secondOtp = testEmailService.sentEmails[1]?.otp as string;
 
-    const verifyOldResponse = await request(app)
-      .post('/api/otp/verify')
-      .send({ email: 'jordan@example.com', otp: firstOtp, purpose: 'signup' });
+    const verifyOldResponse = await agent.post('/api/otp/verify').send({ otp: firstOtp });
     expect(verifyOldResponse.status).to.equal(400);
 
-    const verifyNewResponse = await request(app)
-      .post('/api/otp/verify')
-      .send({ email: 'jordan@example.com', otp: secondOtp, purpose: 'signup' });
+    const verifyNewResponse = await agent.post('/api/otp/verify').send({ otp: secondOtp });
     expect(verifyNewResponse.status).to.equal(200);
+  });
+
+  it('GET /session returns the masked email and purpose for a pending otp session', async () => {
+    await signUp('jordan@example.com');
+    const agent = request.agent(app);
+    await agent.post('/api/otp/send').send({ email: 'jordan@example.com', purpose: 'signup' });
+
+    const response = await agent.get('/api/otp/session');
+
+    expect(response.status).to.equal(200);
+    expect(response.body.maskedEmail).to.equal('jo•••••@example.com');
+    expect(response.body.purpose).to.equal('signup');
+    expect(response.body.expiresAt).to.be.a('number');
+  });
+
+  it('GET /session responds 401 without a pending otp session', async () => {
+    const response = await request(app).get('/api/otp/session');
+
+    expect(response.status).to.equal(401);
   });
 });

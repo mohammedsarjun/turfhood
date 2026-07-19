@@ -5,7 +5,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { changePassword } from '../actions/changePasswordApi';
-import { changePasswordSchema, type ChangePasswordFormValues } from '../schema/changePasswordSchema';
+import {
+  changePasswordSchema,
+  type ChangePasswordFormValues,
+} from '../schema/changePasswordSchema';
 import { PasswordResetErrorCode } from '../types';
 import { ApiError } from '@/types/api/response';
 
