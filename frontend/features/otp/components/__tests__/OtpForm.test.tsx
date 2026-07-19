@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import { push } from '@/__mocks__/next/navigation';
+import { push, replace } from '@/__mocks__/next/navigation';
 import { act, render, screen, waitFor } from '@/test/test-utils';
 import { ApiError } from '@/types/api/response';
 import { verifyOtp, resendOtp } from '../../actions/otpApi';
@@ -36,6 +36,7 @@ async function typeCodeAndSubmit(code: string) {
 describe('OtpForm', () => {
   beforeEach(() => {
     push.mockClear();
+    replace.mockClear();
     verifyOtpMock.mockClear();
     resendOtpMock.mockClear();
   });
@@ -52,7 +53,7 @@ describe('OtpForm', () => {
       expect(verifyOtpMock).toHaveBeenCalledWith({ otp: '123456' });
     });
     await waitFor(() => {
-      expect(push).toHaveBeenCalledWith('/');
+      expect(replace).toHaveBeenCalledWith('/');
     });
   });
 

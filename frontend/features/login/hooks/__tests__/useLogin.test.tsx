@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import { push } from '@/__mocks__/next/navigation';
+import { push, replace } from '@/__mocks__/next/navigation';
 import { render, screen, waitFor } from '@/test/test-utils';
 import { login } from '../../actions/loginApi';
 import { sendOtp } from '../../../otp/actions/otpApi';
@@ -36,6 +36,7 @@ async function submitLogin(email: string, password: string) {
 describe('useLogin', () => {
   beforeEach(() => {
     push.mockClear();
+    replace.mockClear();
     loginMock.mockClear();
     sendOtpMock.mockClear();
   });
@@ -74,7 +75,7 @@ describe('useLogin', () => {
     await submitLogin('jordan@example.com', 'password1');
 
     await waitFor(() => {
-      expect(push).toHaveBeenCalledWith('/');
+      expect(replace).toHaveBeenCalledWith('/');
     });
     expect(sendOtpMock).not.toHaveBeenCalled();
   });

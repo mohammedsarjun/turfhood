@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description: 'Create your Turfhood account',
 };
 
+// See app/login/page.tsx — same rationale, forces a fresh auth check on back/forward.
+export const dynamic = 'force-dynamic';
+
 export default function SignUpPage() {
   return (
     <AuthLayout
