@@ -57,6 +57,11 @@ import type { IRequestPasswordResetUseCase } from '@application/passwordReset/us
 import { RequestPasswordResetUseCase } from '@application/passwordReset/use-cases/RequestPasswordResetUseCase';
 import type { IResetPasswordUseCase } from '@application/passwordReset/use-cases/IResetPasswordUseCase';
 import { ResetPasswordUseCase } from '@application/passwordReset/use-cases/ResetPasswordUseCase';
+import { ADMIN_TOKENS } from '@domain/admin/tokens';
+import type { ISeedAdminUseCase } from '@application/admin/use-cases/ISeedAdminUseCase';
+import { SeedAdminUseCase } from '@application/admin/use-cases/SeedAdminUseCase';
+import type { IAdminLoginUseCase } from '@application/admin/use-cases/IAdminLoginUseCase';
+import { AdminLoginUseCase } from '@application/admin/use-cases/AdminLoginUseCase';
 
 /** Composition root — wires domain interfaces to their infrastructure implementations. */
 container.register<IUserRepository>(USER_TOKENS.UserRepository, { useClass: UserRepository });
@@ -127,6 +132,12 @@ container.register<IRequestPasswordResetUseCase>(
 );
 container.register<IResetPasswordUseCase>(PASSWORD_RESET_TOKENS.ResetPasswordUseCase, {
   useClass: ResetPasswordUseCase,
+});
+container.register<ISeedAdminUseCase>(ADMIN_TOKENS.SeedAdminUseCase, {
+  useClass: SeedAdminUseCase,
+});
+container.register<IAdminLoginUseCase>(ADMIN_TOKENS.AdminLoginUseCase, {
+  useClass: AdminLoginUseCase,
 });
 
 export { container };

@@ -41,6 +41,22 @@ export function buildPersistedUser(
   });
 }
 
+/** A persisted admin (roles: ['admin']) — for admin-login and adminOnly middleware tests. */
+export function buildAdminUser(overrides: { id?: string; email?: string } = {}): User {
+  return User.fromPersistence({
+    id: overrides.id ?? 'admin_1',
+    name: 'Admin',
+    email: Email.create(overrides.email ?? 'admin@turfhood.com'),
+    passwordHash: 'hashed-adminPassword1',
+    authProviders: ['email'],
+    roles: ['admin'],
+    isVerified: true,
+    status: 'active',
+    createdAt: new Date('2026-01-01'),
+    updatedAt: new Date('2026-01-01'),
+  });
+}
+
 /** A persisted, Google-only user with no password on file — for set-password tests. */
 export function buildGoogleOnlyUser(overrides: { id?: string; email?: string } = {}): User {
   return User.fromPersistence({

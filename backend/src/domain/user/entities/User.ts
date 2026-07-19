@@ -63,6 +63,23 @@ export class User {
     });
   }
 
+  /**
+   * Registers the seeded admin account. No phone, pre-verified (there's no signup flow to
+   * protect), and `roles: ['admin']` — the admin scope lives entirely in this claim, checked
+   * by the `adminOnly` middleware against the JWT issued at admin login.
+   */
+  static registerAdmin(input: { name: string; email: Email; passwordHash: string }): User {
+    return new User({
+      name: input.name,
+      email: input.email,
+      passwordHash: input.passwordHash,
+      authProviders: ['email'],
+      roles: ['admin'],
+      isVerified: true,
+      status: 'active',
+    });
+  }
+
   /** Rehydrates a User entity from persisted data. */
   static fromPersistence(props: UserProps): User {
     return new User(props);

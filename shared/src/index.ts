@@ -1,4 +1,6 @@
 export type { UserRole, UserStatus, AuthProvider, PublicUser } from './user/types.js';
+export type { AdminLoginRequest, AdminLoginResponse } from './admin/admin-auth.dto.js';
+export { AdminErrorCode } from './admin/admin-error-code.js';
 export type {
   UpdateNameRequest,
   UpdateNameResponse,
