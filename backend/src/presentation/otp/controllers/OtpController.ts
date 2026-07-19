@@ -6,6 +6,7 @@ import type { IGetOtpSessionUseCase } from '@application/otp/use-cases/IGetOtpSe
 import { OTP_TOKENS } from '@domain/otp/tokens';
 import { setAuthCookie } from '@presentation/shared/utils/authCookie';
 import { setOtpSessionCookie, clearOtpSessionCookie } from '@presentation/shared/utils/otpSessionCookie';
+import { env } from '@config/env';
 
 import type { OtpSessionRequest } from '../middlewares/requireOtpSession.js';
 
@@ -21,7 +22,7 @@ export class OtpController {
   sendOtp = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const result = await this.sendOtpUseCase.execute(req.body);
-      setOtpSessionCookie(res, result.otpSessionToken, result.expiresInSeconds);
+      setOtpSessionCookie(res, result.otpSessionToken, env.OTP_SESSION_EXPIRY_SECONDS);
       res.status(200).json({ message: result.message, expiresInSeconds: result.expiresInSeconds });
     } catch (error) {
       next(error);
@@ -61,7 +62,7 @@ export class OtpController {
         email: otpSession!.email,
         purpose: otpSession!.purpose,
       });
-      setOtpSessionCookie(res, result.otpSessionToken, result.expiresInSeconds);
+      setOtpSessionCookie(res, result.otpSessionToken, env.OTP_SESSION_EXPIRY_SECONDS);
       res.status(200).json({ message: result.message, expiresInSeconds: result.expiresInSeconds });
     } catch (error) {
       next(error);

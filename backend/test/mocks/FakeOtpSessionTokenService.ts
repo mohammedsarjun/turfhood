@@ -6,9 +6,8 @@ import type {
 
 /** Deterministic stand-in for the real JWT-backed OtpSessionTokenService. */
 export class FakeOtpSessionTokenService implements IOtpSessionTokenService {
-  generate(identity: OtpSessionIdentity, expiresInSeconds: number): string {
-    const exp = Math.floor(Date.now() / 1000) + expiresInSeconds;
-    return JSON.stringify({ ...identity, exp });
+  generate(identity: OtpSessionIdentity): string {
+    return JSON.stringify(identity);
   }
 
   verify(token: string): OtpSessionClaims {

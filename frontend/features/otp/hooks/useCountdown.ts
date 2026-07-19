@@ -19,9 +19,15 @@ function computeSecondsLeft(expiresAt: number): number {
  * `expiresAt` is expected to come from the backend (initial page load, or a resend response),
  * so a browser refresh — which re-fetches the OTP session — naturally resumes with the true
  * remaining time instead of a client-trusted one.
+ *
+ * The first render (both the SSR pass and the client's pre-hydration pass) must produce
+ * identical output, but `computeSecondsLeft` depends on `Date.now()`, which necessarily differs
+ * between the server's render time and the client's — computing it eagerly here would trigger a
+ * hydration mismatch. So the real value is only computed inside `useEffect`, which runs exclusively
+ * on the client after hydration; both passes render the `null`-derived default beforehand.
  */
 export function useCountdown(expiresAt: number): UseCountdownResult {
-  const [secondsLeft, setSecondsLeft] = useState(() => computeSecondsLeft(expiresAt));
+  const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
 
   useEffect(() => {
     const tick = () => setSecondsLeft(computeSecondsLeft(expiresAt));
@@ -30,5 +36,10 @@ export function useCountdown(expiresAt: number): UseCountdownResult {
     return () => clearInterval(intervalId);
   }, [expiresAt]);
 
-  return { secondsLeft, isExpired: secondsLeft <= 0 };
+  return {
+    secondsLeft: secondsLeft ?? 0,
+    // Stays false until mounted, so the "Resend Code" button never flashes on
+    // first paint before the real countdown has had a chance to compute.
+    isExpired: secondsLeft !== null && secondsLeft <= 0,
+  };
 }

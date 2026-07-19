@@ -64,8 +64,8 @@ export class SendOtpUseCase implements ISendOtpUseCase {
     });
 
     const otpSessionToken = this.otpSessionTokenService.generate(
-      { email: email.toString(), purpose: request.purpose },
-      env.OTP_EXPIRY_SECONDS,
+      { email: email.toString(), purpose: request.purpose, codeExpiresAt: expiresAt.getTime() },
+      env.OTP_SESSION_EXPIRY_SECONDS,
     );
 
     return {

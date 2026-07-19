@@ -13,7 +13,7 @@ export class GetOtpSessionUseCase implements IGetOtpSessionUseCase {
     return {
       maskedEmail: maskEmail(session.email),
       purpose: session.purpose,
-      expiresAt: session.exp * 1000,
+      expiresAt: session.codeExpiresAt,
     };
   }
 }
