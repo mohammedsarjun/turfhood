@@ -1,3 +1,4 @@
+export { RateLimitErrorCode } from './common/rate-limit-error-code.js';
 export { AdminErrorCode } from './admin/admin-error-code.js';
 export { AuthErrorCode } from './auth/auth-error-code.js';
 export { OtpErrorCode } from './otp/otp-error-code.js';
