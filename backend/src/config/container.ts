@@ -4,13 +4,14 @@ import type { IUserRepository } from '@domain/user/repositories/IUserRepository'
 import type { IPasswordHasher } from '@domain/user/services/IPasswordHasher';
 import type { ITokenService } from '@domain/user/services/ITokenService';
 import type { IGoogleAuthService } from '@domain/user/services/IGoogleAuthService';
-import type { IFileStorageService } from '@domain/user/services/IFileStorageService';
+import type { IFileStorageService } from '@domain/shared/services/IFileStorageService';
+import { SHARED_TOKENS } from '@domain/shared/tokens';
 import { USER_TOKENS } from '@domain/user/tokens';
 import { UserRepository } from '@infrastructure/user/repositories/UserRepository';
 import { BcryptPasswordHasher } from '@infrastructure/user/services/BcryptPasswordHasher';
 import { JwtTokenService } from '@infrastructure/user/services/JwtTokenService';
 import { GoogleAuthService } from '@infrastructure/user/services/GoogleAuthService';
-import { CloudinaryFileStorageService } from '@infrastructure/user/services/CloudinaryFileStorageService';
+import { CloudinaryFileStorageService } from '@infrastructure/shared/services/CloudinaryFileStorageService';
 import type { ISignUpUserUseCase } from '@application/user/use-cases/ISignUpUserUseCase';
 import { SignUpUserUseCase } from '@application/user/use-cases/SignUpUserUseCase';
 import type { ILoginUserUseCase } from '@application/user/use-cases/ILoginUserUseCase';
@@ -62,6 +63,32 @@ import type { ISeedAdminUseCase } from '@application/admin/use-cases/ISeedAdminU
 import { SeedAdminUseCase } from '@application/admin/use-cases/SeedAdminUseCase';
 import type { IAdminLoginUseCase } from '@application/admin/use-cases/IAdminLoginUseCase';
 import { AdminLoginUseCase } from '@application/admin/use-cases/AdminLoginUseCase';
+import type { ISportsTypeRepository } from '@domain/sportsType/repositories/ISportsTypeRepository';
+import { SPORTS_TYPE_TOKENS } from '@domain/sportsType/tokens';
+import { SportsTypeRepository } from '@infrastructure/sportsType/repositories/SportsTypeRepository';
+import type { IListSportsTypesUseCase } from '@application/sportsType/use-cases/IListSportsTypesUseCase';
+import { ListSportsTypesUseCase } from '@application/sportsType/use-cases/ListSportsTypesUseCase';
+import type { ICreateSportsTypeUseCase } from '@application/sportsType/use-cases/ICreateSportsTypeUseCase';
+import { CreateSportsTypeUseCase } from '@application/sportsType/use-cases/CreateSportsTypeUseCase';
+import type { IUpdateSportsTypeUseCase } from '@application/sportsType/use-cases/IUpdateSportsTypeUseCase';
+import { UpdateSportsTypeUseCase } from '@application/sportsType/use-cases/UpdateSportsTypeUseCase';
+import type { IToggleSportsTypeListedUseCase } from '@application/sportsType/use-cases/IToggleSportsTypeListedUseCase';
+import { ToggleSportsTypeListedUseCase } from '@application/sportsType/use-cases/ToggleSportsTypeListedUseCase';
+import type { IUploadSportsTypeIconUseCase } from '@application/sportsType/use-cases/IUploadSportsTypeIconUseCase';
+import { UploadSportsTypeIconUseCase } from '@application/sportsType/use-cases/UploadSportsTypeIconUseCase';
+import type { IAmenityRepository } from '@domain/amenity/repositories/IAmenityRepository';
+import { AMENITY_TOKENS } from '@domain/amenity/tokens';
+import { AmenityRepository } from '@infrastructure/amenity/repositories/AmenityRepository';
+import type { IListAmenitiesUseCase } from '@application/amenity/use-cases/IListAmenitiesUseCase';
+import { ListAmenitiesUseCase } from '@application/amenity/use-cases/ListAmenitiesUseCase';
+import type { ICreateAmenityUseCase } from '@application/amenity/use-cases/ICreateAmenityUseCase';
+import { CreateAmenityUseCase } from '@application/amenity/use-cases/CreateAmenityUseCase';
+import type { IUpdateAmenityUseCase } from '@application/amenity/use-cases/IUpdateAmenityUseCase';
+import { UpdateAmenityUseCase } from '@application/amenity/use-cases/UpdateAmenityUseCase';
+import type { IToggleAmenityListedUseCase } from '@application/amenity/use-cases/IToggleAmenityListedUseCase';
+import { ToggleAmenityListedUseCase } from '@application/amenity/use-cases/ToggleAmenityListedUseCase';
+import type { IUploadAmenityIconUseCase } from '@application/amenity/use-cases/IUploadAmenityIconUseCase';
+import { UploadAmenityIconUseCase } from '@application/amenity/use-cases/UploadAmenityIconUseCase';
 
 /** Composition root — wires domain interfaces to their infrastructure implementations. */
 container.register<IUserRepository>(USER_TOKENS.UserRepository, { useClass: UserRepository });
@@ -70,7 +97,7 @@ container.register<ITokenService>(USER_TOKENS.TokenService, { useClass: JwtToken
 container.register<IGoogleAuthService>(USER_TOKENS.GoogleAuthService, {
   useClass: GoogleAuthService,
 });
-container.register<IFileStorageService>(USER_TOKENS.FileStorageService, {
+container.register<IFileStorageService>(SHARED_TOKENS.FileStorageService, {
   useClass: CloudinaryFileStorageService,
 });
 container.register<ISignUpUserUseCase>(USER_TOKENS.SignUpUserUseCase, {
@@ -138,6 +165,43 @@ container.register<ISeedAdminUseCase>(ADMIN_TOKENS.SeedAdminUseCase, {
 });
 container.register<IAdminLoginUseCase>(ADMIN_TOKENS.AdminLoginUseCase, {
   useClass: AdminLoginUseCase,
+});
+container.register<ISportsTypeRepository>(SPORTS_TYPE_TOKENS.SportsTypeRepository, {
+  useClass: SportsTypeRepository,
+});
+container.register<IListSportsTypesUseCase>(SPORTS_TYPE_TOKENS.ListSportsTypesUseCase, {
+  useClass: ListSportsTypesUseCase,
+});
+container.register<ICreateSportsTypeUseCase>(SPORTS_TYPE_TOKENS.CreateSportsTypeUseCase, {
+  useClass: CreateSportsTypeUseCase,
+});
+container.register<IUpdateSportsTypeUseCase>(SPORTS_TYPE_TOKENS.UpdateSportsTypeUseCase, {
+  useClass: UpdateSportsTypeUseCase,
+});
+container.register<IToggleSportsTypeListedUseCase>(
+  SPORTS_TYPE_TOKENS.ToggleSportsTypeListedUseCase,
+  { useClass: ToggleSportsTypeListedUseCase },
+);
+container.register<IUploadSportsTypeIconUseCase>(SPORTS_TYPE_TOKENS.UploadSportsTypeIconUseCase, {
+  useClass: UploadSportsTypeIconUseCase,
+});
+container.register<IAmenityRepository>(AMENITY_TOKENS.AmenityRepository, {
+  useClass: AmenityRepository,
+});
+container.register<IListAmenitiesUseCase>(AMENITY_TOKENS.ListAmenitiesUseCase, {
+  useClass: ListAmenitiesUseCase,
+});
+container.register<ICreateAmenityUseCase>(AMENITY_TOKENS.CreateAmenityUseCase, {
+  useClass: CreateAmenityUseCase,
+});
+container.register<IUpdateAmenityUseCase>(AMENITY_TOKENS.UpdateAmenityUseCase, {
+  useClass: UpdateAmenityUseCase,
+});
+container.register<IToggleAmenityListedUseCase>(AMENITY_TOKENS.ToggleAmenityListedUseCase, {
+  useClass: ToggleAmenityListedUseCase,
+});
+container.register<IUploadAmenityIconUseCase>(AMENITY_TOKENS.UploadAmenityIconUseCase, {
+  useClass: UploadAmenityIconUseCase,
 });
 
 export { container };

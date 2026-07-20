@@ -13,3 +13,6 @@ export type {
 export { Badge, type BadgeProps } from './Badge';
 export { Spinner, type SpinnerProps } from './Spinner';
 export { Heading, Text, type HeadingProps, type TextProps } from './Typography';
+export { Select, type SelectProps, type SelectOption } from './Select';
+export { Modal, type ModalProps } from './Modal';
+export { ToastProvider, useToast, type ToastVariant } from './Toast';

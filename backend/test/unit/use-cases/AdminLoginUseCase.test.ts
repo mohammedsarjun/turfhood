@@ -16,7 +16,11 @@ describe('AdminLoginUseCase', () => {
     const admin = buildAdminUser({ id: 'admin_1', email: 'admin@turfhood.com' });
     const userRepository = new FakeUserRepository({ existingUserByEmail: admin });
     const tokenService = buildTokenService();
-    const useCase = new AdminLoginUseCase(userRepository, new FakePasswordHasher(true), tokenService);
+    const useCase = new AdminLoginUseCase(
+      userRepository,
+      new FakePasswordHasher(true),
+      tokenService,
+    );
 
     const result = await useCase.execute({
       email: 'admin@turfhood.com',
@@ -40,7 +44,9 @@ describe('AdminLoginUseCase', () => {
 
     try {
       await useCase.execute({ email: 'admin@turfhood.com', password: 'wrong-password' });
-      expect.fail('Expected execute() to throw InvalidAdminCredentialsError, but it did not throw.');
+      expect.fail(
+        'Expected execute() to throw InvalidAdminCredentialsError, but it did not throw.',
+      );
     } catch (error) {
       expect(error).to.be.instanceOf(InvalidAdminCredentialsError);
     }
@@ -56,7 +62,9 @@ describe('AdminLoginUseCase', () => {
 
     try {
       await useCase.execute({ email: 'nobody@turfhood.com', password: 'adminPassword1' });
-      expect.fail('Expected execute() to throw InvalidAdminCredentialsError, but it did not throw.');
+      expect.fail(
+        'Expected execute() to throw InvalidAdminCredentialsError, but it did not throw.',
+      );
     } catch (error) {
       expect(error).to.be.instanceOf(InvalidAdminCredentialsError);
     }
@@ -73,7 +81,9 @@ describe('AdminLoginUseCase', () => {
 
     try {
       await useCase.execute({ email: 'jordan@example.com', password: 'password1' });
-      expect.fail('Expected execute() to throw InvalidAdminCredentialsError, but it did not throw.');
+      expect.fail(
+        'Expected execute() to throw InvalidAdminCredentialsError, but it did not throw.',
+      );
     } catch (error) {
       expect(error).to.be.instanceOf(InvalidAdminCredentialsError);
     }

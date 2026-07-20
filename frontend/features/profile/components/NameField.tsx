@@ -43,12 +43,7 @@ export function NameField({ profile, onUpdated }: NameFieldProps) {
   }
 
   return (
-    <form
-      onSubmit={onSubmit}
-      noValidate
-      className="flex flex-col"
-      style={{ gap: 8 }}
-    >
+    <form onSubmit={onSubmit} noValidate className="flex flex-col" style={{ gap: 8 }}>
       <label htmlFor="profile-name" className="text-sm font-medium text-foreground">
         Name
       </label>

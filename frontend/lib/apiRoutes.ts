@@ -26,4 +26,10 @@ export const API_ROUTES = {
     logout: '/admin/logout',
     me: '/admin/me',
   },
+  sports: {
+    base: '/sports',
+  },
+  amenities: {
+    base: '/amenities',
+  },
 } as const;

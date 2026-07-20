@@ -42,3 +42,11 @@ export type {
   ResetPasswordRequest,
   ResetPasswordResponse,
 } from './passwordReset/password-reset.dto.js';
+export type { PaginationParams, PaginationMeta, PaginatedResponse } from './common/pagination.js';
+export type {
+  CatalogItem,
+  CreateCatalogItemRequest,
+  UpdateCatalogItemRequest,
+  ToggleCatalogItemListedRequest,
+} from './catalog/catalog-item.dto.js';
+export { CatalogErrorCode } from './catalog/catalog-error-code.js';

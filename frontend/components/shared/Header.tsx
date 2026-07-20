@@ -99,7 +99,13 @@ export function Header({ userName, avatarUrl }: HeaderProps) {
                 role="menuitem"
                 onClick={() => setIsMenuOpen(false)}
                 className="flex items-center text-sm text-foreground hover:bg-muted"
-                style={{ gap: 8, paddingLeft: 12, paddingRight: 12, paddingTop: 8, paddingBottom: 8 }}
+                style={{
+                  gap: 8,
+                  paddingLeft: 12,
+                  paddingRight: 12,
+                  paddingTop: 8,
+                  paddingBottom: 8,
+                }}
               >
                 <UserIcon className="h-4 w-4" />
                 Profile
@@ -110,7 +116,13 @@ export function Header({ userName, avatarUrl }: HeaderProps) {
                 onClick={() => void handleLogout()}
                 disabled={isLoggingOut}
                 className="flex w-full items-center text-sm text-destructive hover:bg-muted disabled:opacity-50"
-                style={{ gap: 8, paddingLeft: 12, paddingRight: 12, paddingTop: 8, paddingBottom: 8 }}
+                style={{
+                  gap: 8,
+                  paddingLeft: 12,
+                  paddingRight: 12,
+                  paddingTop: 8,
+                  paddingBottom: 8,
+                }}
               >
                 <LogOut className="h-4 w-4" />
                 {isLoggingOut ? 'Logging out…' : 'Logout'}

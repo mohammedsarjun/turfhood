@@ -54,9 +54,8 @@ export function OtpForm({ maskedEmail, purpose, expiresAt }: OtpFormProps) {
 
       <h1 className="text-2xl font-medium text-foreground">Enter verification code</h1>
       <p className="text-sm text-muted-foreground" style={{ marginTop: 4 }}>
-        We sent a 6-digit code to{' '}
-        <span className="font-medium text-foreground">{maskedEmail}</span>. Enter it below to
-        continue.
+        We sent a 6-digit code to <span className="font-medium text-foreground">{maskedEmail}</span>
+        . Enter it below to continue.
       </p>
 
       <form

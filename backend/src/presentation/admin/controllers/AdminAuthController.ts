@@ -5,7 +5,10 @@ import type { IGetCurrentUserUseCase } from '@application/user/use-cases/IGetCur
 import { ADMIN_TOKENS } from '@domain/admin/tokens';
 import { TokenMissingError } from '@domain/user/errors/TokenMissingError';
 import { USER_TOKENS } from '@domain/user/tokens';
-import { clearAdminAuthCookie, setAdminAuthCookie } from '@presentation/admin/utils/adminAuthCookie';
+import {
+  clearAdminAuthCookie,
+  setAdminAuthCookie,
+} from '@presentation/admin/utils/adminAuthCookie';
 
 import type { AdminAuthenticatedRequest } from '../middlewares/adminOnly.js';
 

@@ -14,7 +14,10 @@ import { TokenInvalidError } from '../../../src/domain/user/errors/TokenInvalidE
 import { TokenMissingError } from '../../../src/domain/user/errors/TokenMissingError.js';
 import { env } from '../../../src/config/env.js';
 
-function buildRequest(options: { authorization?: string; cookies?: Record<string, string> }): Request {
+function buildRequest(options: {
+  authorization?: string;
+  cookies?: Record<string, string>;
+}): Request {
   return {
     headers: { authorization: options.authorization },
     cookies: options.cookies ?? {},

@@ -41,9 +41,10 @@ export function EmailChangeSection({ profile, onUpdated }: EmailChangeSectionPro
       <div className="flex flex-col" style={{ gap: 8 }}>
         <span className="text-sm font-medium text-foreground">Email</span>
         <p className="text-sm text-muted-foreground">
-          We sent a 6-digit code to <span className="font-medium text-foreground">{pendingEmail}</span>.
-          Your email stays <span className="font-medium text-foreground">{profile.email}</span> until
-          you confirm the code.
+          We sent a 6-digit code to{' '}
+          <span className="font-medium text-foreground">{pendingEmail}</span>. Your email stays{' '}
+          <span className="font-medium text-foreground">{profile.email}</span> until you confirm the
+          code.
         </p>
         <form
           onSubmit={(event) => {
@@ -73,7 +74,11 @@ export function EmailChangeSection({ profile, onUpdated }: EmailChangeSectionPro
               Cancel
             </Button>
           </div>
-          <ResendControl secondsLeft={secondsLeft} isExpired={isExpired} onResend={() => void resend()} />
+          <ResendControl
+            secondsLeft={secondsLeft}
+            isExpired={isExpired}
+            onResend={() => void resend()}
+          />
         </form>
       </div>
     );
@@ -108,8 +113,8 @@ export function EmailChangeSection({ profile, onUpdated }: EmailChangeSectionPro
         New email
       </label>
       <p className="text-xs text-muted-foreground">
-        We&apos;ll send a verification code to this address. Your current email stays active until you
-        confirm it.
+        We&apos;ll send a verification code to this address. Your current email stays active until
+        you confirm it.
       </p>
       <div className="flex items-start" style={{ gap: 8 }}>
         <Input

@@ -39,7 +39,8 @@ export class ProfileController {
     private readonly confirmEmailChangeUseCase: IConfirmEmailChangeUseCase,
     @inject(USER_TOKENS.ChangePasswordUseCase)
     private readonly changePasswordUseCase: IChangePasswordUseCase,
-    @inject(USER_TOKENS.SetPasswordUseCase) private readonly setPasswordUseCase: ISetPasswordUseCase,
+    @inject(USER_TOKENS.SetPasswordUseCase)
+    private readonly setPasswordUseCase: ISetPasswordUseCase,
     @inject(USER_TOKENS.UpdateAvatarUseCase)
     private readonly updateAvatarUseCase: IUpdateAvatarUseCase,
   ) {}

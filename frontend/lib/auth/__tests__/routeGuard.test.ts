@@ -1,4 +1,8 @@
-import { resolveAdminGuardRedirect, resolveGuardRedirect, resolveOtpGuardRedirect } from '../routeGuard';
+import {
+  resolveAdminGuardRedirect,
+  resolveGuardRedirect,
+  resolveOtpGuardRedirect,
+} from '../routeGuard';
 
 describe('resolveGuardRedirect', () => {
   it.each([

@@ -23,7 +23,13 @@ export function buildExistingUser(overrides: { email?: string; phone?: string } 
 
 /** A persisted, password-and-phone user — used for profile use-case tests (change-password, etc). */
 export function buildPersistedUser(
-  overrides: { id?: string; email?: string; phone?: string; passwordHash?: string; avatarUrl?: string } = {},
+  overrides: {
+    id?: string;
+    email?: string;
+    phone?: string;
+    passwordHash?: string;
+    avatarUrl?: string;
+  } = {},
 ): User {
   return User.fromPersistence({
     id: overrides.id ?? 'user_1',

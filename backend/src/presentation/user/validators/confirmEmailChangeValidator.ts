@@ -16,7 +16,9 @@ export function validateConfirmEmailChangeRequest(
 ): void {
   const result = confirmEmailChangeSchema.safeParse(req.body);
   if (!result.success) {
-    res.status(400).json({ message: 'Invalid request.', errors: result.error.flatten().fieldErrors });
+    res
+      .status(400)
+      .json({ message: 'Invalid request.', errors: result.error.flatten().fieldErrors });
     return;
   }
   req.body = result.data;

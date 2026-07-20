@@ -96,7 +96,11 @@ describe('OtpForm', () => {
 
     it('hides the resend action during the countdown and shows it once expired', () => {
       render(
-        <OtpForm maskedEmail="jo•••••@example.com" purpose="login" expiresAt={Date.now() + 60_000} />,
+        <OtpForm
+          maskedEmail="jo•••••@example.com"
+          purpose="login"
+          expiresAt={Date.now() + 60_000}
+        />,
       );
 
       expect(screen.queryByRole('button', { name: /resend code/i })).not.toBeInTheDocument();
@@ -114,7 +118,11 @@ describe('OtpForm', () => {
         expiresInSeconds: 60,
       });
       render(
-        <OtpForm maskedEmail="jo•••••@example.com" purpose="login" expiresAt={Date.now() + 60_000} />,
+        <OtpForm
+          maskedEmail="jo•••••@example.com"
+          purpose="login"
+          expiresAt={Date.now() + 60_000}
+        />,
       );
 
       act(() => {

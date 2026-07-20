@@ -35,7 +35,9 @@ describe('ChangePasswordUseCase', () => {
         currentPassword: 'wrong-password',
         newPassword: 'newPassword1',
       });
-      expect.fail('Expected execute() to throw CurrentPasswordIncorrectError, but it did not throw.');
+      expect.fail(
+        'Expected execute() to throw CurrentPasswordIncorrectError, but it did not throw.',
+      );
     } catch (error) {
       expect(error).to.be.instanceOf(CurrentPasswordIncorrectError);
     }
@@ -65,7 +67,11 @@ describe('ChangePasswordUseCase', () => {
     const useCase = new ChangePasswordUseCase(userRepository, new FakePasswordHasher(true));
 
     try {
-      await useCase.execute({ userId: 'user_1', currentPassword: 'password1', newPassword: 'short' });
+      await useCase.execute({
+        userId: 'user_1',
+        currentPassword: 'password1',
+        newPassword: 'short',
+      });
       expect.fail('Expected execute() to throw WeakPasswordError, but it did not throw.');
     } catch (error) {
       expect(error).to.be.instanceOf(WeakPasswordError);
