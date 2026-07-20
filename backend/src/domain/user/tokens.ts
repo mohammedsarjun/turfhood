@@ -4,7 +4,6 @@ export const USER_TOKENS = {
   PasswordHasher: Symbol('IPasswordHasher'),
   TokenService: Symbol('ITokenService'),
   GoogleAuthService: Symbol('IGoogleAuthService'),
-  FileStorageService: Symbol('IFileStorageService'),
   SignUpUserUseCase: Symbol('ISignUpUserUseCase'),
   LoginUserUseCase: Symbol('ILoginUserUseCase'),
   GetCurrentUserUseCase: Symbol('IGetCurrentUserUseCase'),

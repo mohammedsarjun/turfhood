@@ -2,7 +2,7 @@
 export const PROTECTED_ROUTES = ['/', '/profile'];
 
 /** Paths that only make sense for a logged-out visitor; authenticated users are sent home. */
-export const AUTH_ROUTES = ['/login', '/signup', '/forgot-password','/otp'];
+export const AUTH_ROUTES = ['/login', '/signup', '/forgot-password', '/otp'];
 
 /** Paths that require a valid pending-otp session; visited without one, they redirect to /login. */
 export const OTP_SESSION_ROUTES = ['/otp'];

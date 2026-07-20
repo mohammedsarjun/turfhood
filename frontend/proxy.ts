@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { verifyAccessToken, verifyAdminAccessToken, verifyOtpSessionToken } from '@/lib/auth/session';
+import {
+  verifyAccessToken,
+  verifyAdminAccessToken,
+  verifyOtpSessionToken,
+} from '@/lib/auth/session';
 import {
   resolveAdminGuardRedirect,
   resolveGuardRedirect,
@@ -11,7 +15,9 @@ export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   if (pathname.startsWith('/admin')) {
-    const adminSession = await verifyAdminAccessToken(request.cookies.get('adminAccessToken')?.value);
+    const adminSession = await verifyAdminAccessToken(
+      request.cookies.get('adminAccessToken')?.value,
+    );
     const adminRedirectTo = resolveAdminGuardRedirect(pathname, adminSession !== null);
 
     if (adminRedirectTo) {
@@ -39,13 +45,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/',
-    '/login',
-    '/signup',
-    '/forgot-password',
-    '/otp',
-    '/profile',
-    '/admin/:path*',
-  ],
+  matcher: ['/', '/login', '/signup', '/forgot-password', '/otp', '/profile', '/admin/:path*'],
 };

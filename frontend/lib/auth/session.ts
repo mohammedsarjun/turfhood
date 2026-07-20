@@ -5,7 +5,9 @@ import type { AuthTokenPayload, OtpSessionPayload } from '@turfhood/shared';
  * Verifies the accessToken cookie's signature and expiry using `jose` (Edge/Node-compatible,
  * unlike `jsonwebtoken`) so proxy.ts can do a real session check, not just a presence check.
  */
-export async function verifyAccessToken(token: string | undefined): Promise<AuthTokenPayload | null> {
+export async function verifyAccessToken(
+  token: string | undefined,
+): Promise<AuthTokenPayload | null> {
   if (!token) return null;
 
   try {

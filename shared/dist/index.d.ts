@@ -17,3 +17,6 @@ export { maskEmail } from './otp/otp.util.js';
 export { PasswordResetErrorCode } from './passwordReset/password-reset-error-code.js';
 export { DEFAULT_PASSWORD_RESET_EXPIRY_SECONDS } from './passwordReset/password-reset-constants.js';
 export type { ForgotPasswordRequest, ForgotPasswordResponse, ResetPasswordRequest, ResetPasswordResponse, } from './passwordReset/password-reset.dto.js';
+export type { PaginationParams, PaginationMeta, PaginatedResponse } from './common/pagination.js';
+export type { CatalogItem, CreateCatalogItemRequest, UpdateCatalogItemRequest, ToggleCatalogItemListedRequest, } from './catalog/catalog-item.dto.js';
+export { CatalogErrorCode } from './catalog/catalog-error-code.js';

@@ -6,7 +6,10 @@ import type { IPasswordHasher } from '@domain/user/services/IPasswordHasher';
 import { USER_TOKENS } from '@domain/user/tokens';
 import { Password } from '@domain/user/value-objects/Password';
 
-import type { SetPasswordRequestDTO, SetPasswordResponseDTO } from '../dtos/SetPasswordRequestDTO.js';
+import type {
+  SetPasswordRequestDTO,
+  SetPasswordResponseDTO,
+} from '../dtos/SetPasswordRequestDTO.js';
 import { toUserResponseDTO } from '../mappers/toUserResponseDTO.js';
 
 import type { ISetPasswordUseCase } from './ISetPasswordUseCase.js';

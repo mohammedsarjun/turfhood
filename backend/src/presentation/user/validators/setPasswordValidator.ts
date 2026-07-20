@@ -8,7 +8,9 @@ export const setPasswordSchema = z.object({
 export function validateSetPasswordRequest(req: Request, res: Response, next: NextFunction): void {
   const result = setPasswordSchema.safeParse(req.body);
   if (!result.success) {
-    res.status(400).json({ message: 'Invalid request.', errors: result.error.flatten().fieldErrors });
+    res
+      .status(400)
+      .json({ message: 'Invalid request.', errors: result.error.flatten().fieldErrors });
     return;
   }
   req.body = result.data;

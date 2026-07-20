@@ -12,7 +12,10 @@ describe('JwtTokenService', () => {
   it('generateAccessToken signs a token whose payload round-trips through verifyAccessToken', () => {
     const service = new JwtTokenService();
 
-    const token = service.generateAccessToken({ userId: payload.userId, roles: [...payload.roles] });
+    const token = service.generateAccessToken({
+      userId: payload.userId,
+      roles: [...payload.roles],
+    });
     const verified = service.verifyAccessToken(token);
 
     expect(verified.userId).to.equal(payload.userId);
@@ -25,7 +28,10 @@ describe('JwtTokenService', () => {
   // HAPPY PATH: a freshly-issued token is accepted.
   it('verifyAccessToken returns the payload for a valid token', () => {
     const service = new JwtTokenService();
-    const token = service.generateAccessToken({ userId: payload.userId, roles: [...payload.roles] });
+    const token = service.generateAccessToken({
+      userId: payload.userId,
+      roles: [...payload.roles],
+    });
 
     expect(service.verifyAccessToken(token)).to.include({ userId: payload.userId });
   });
@@ -33,9 +39,13 @@ describe('JwtTokenService', () => {
   // BRANCH UNDER TEST: an expired token must raise TokenExpiredError, not the generic invalid case.
   it('verifyAccessToken throws TokenExpiredError for an expired token', () => {
     const service = new JwtTokenService();
-    const expiredToken = jwt.sign({ userId: payload.userId, roles: payload.roles }, env.JWT_SECRET, {
-      expiresIn: -10,
-    });
+    const expiredToken = jwt.sign(
+      { userId: payload.userId, roles: payload.roles },
+      env.JWT_SECRET,
+      {
+        expiresIn: -10,
+      },
+    );
 
     try {
       service.verifyAccessToken(expiredToken);

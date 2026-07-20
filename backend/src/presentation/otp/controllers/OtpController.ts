@@ -5,7 +5,10 @@ import type { IVerifyOtpUseCase } from '@application/otp/use-cases/IVerifyOtpUse
 import type { IGetOtpSessionUseCase } from '@application/otp/use-cases/IGetOtpSessionUseCase';
 import { OTP_TOKENS } from '@domain/otp/tokens';
 import { setAuthCookie } from '@presentation/shared/utils/authCookie';
-import { setOtpSessionCookie, clearOtpSessionCookie } from '@presentation/shared/utils/otpSessionCookie';
+import {
+  setOtpSessionCookie,
+  clearOtpSessionCookie,
+} from '@presentation/shared/utils/otpSessionCookie';
 import { env } from '@config/env';
 
 import type { OtpSessionRequest } from '../middlewares/requireOtpSession.js';

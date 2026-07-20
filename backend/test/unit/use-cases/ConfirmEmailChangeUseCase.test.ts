@@ -11,13 +11,15 @@ import { OtpVerification } from '../../../src/domain/otp/entities/OtpVerificatio
 
 const validOtp = '123456';
 
-function buildEmailChangeOtpRecord(overrides: {
-  userId?: string;
-  email?: string;
-  expiresAt?: Date;
-  consumedAt?: Date;
-  attemptCount?: number;
-} = {}): OtpVerification {
+function buildEmailChangeOtpRecord(
+  overrides: {
+    userId?: string;
+    email?: string;
+    expiresAt?: Date;
+    consumedAt?: Date;
+    attemptCount?: number;
+  } = {},
+): OtpVerification {
   return OtpVerification.fromPersistence({
     id: 'otp_1',
     userId: overrides.userId ?? 'user_1',

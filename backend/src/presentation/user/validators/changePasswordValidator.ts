@@ -13,7 +13,9 @@ export function validateChangePasswordRequest(
 ): void {
   const result = changePasswordSchema.safeParse(req.body);
   if (!result.success) {
-    res.status(400).json({ message: 'Invalid request.', errors: result.error.flatten().fieldErrors });
+    res
+      .status(400)
+      .json({ message: 'Invalid request.', errors: result.error.flatten().fieldErrors });
     return;
   }
   req.body = result.data;

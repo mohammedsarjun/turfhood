@@ -1,6 +1,9 @@
 import type { NextFunction, Request, Response } from 'express';
 import { container } from 'tsyringe';
-import type { OtpSessionClaims, IOtpSessionTokenService } from '@domain/otp/services/IOtpSessionTokenService';
+import type {
+  OtpSessionClaims,
+  IOtpSessionTokenService,
+} from '@domain/otp/services/IOtpSessionTokenService';
 import { OtpSessionInvalidError } from '@domain/otp/errors/OtpSessionInvalidError';
 import { OTP_TOKENS } from '@domain/otp/tokens';
 

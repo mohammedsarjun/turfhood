@@ -52,4 +52,5 @@ const userSchema = new Schema<UserDocument>(
 );
 
 export const UserModel: Model<UserDocument> =
-  (mongoose.models.User as Model<UserDocument> | undefined) ?? model<UserDocument>('User', userSchema);
+  (mongoose.models.User as Model<UserDocument> | undefined) ??
+  model<UserDocument>('User', userSchema);

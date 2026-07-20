@@ -6,3 +6,4 @@ export { DEFAULT_OTP_EXPIRY_SECONDS, DEFAULT_OTP_SESSION_EXPIRY_SECONDS } from '
 export { maskEmail } from './otp/otp.util.js';
 export { PasswordResetErrorCode } from './passwordReset/password-reset-error-code.js';
 export { DEFAULT_PASSWORD_RESET_EXPIRY_SECONDS } from './passwordReset/password-reset-constants.js';
+export { CatalogErrorCode } from './catalog/catalog-error-code.js';

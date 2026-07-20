@@ -2,8 +2,10 @@ import { inject, injectable } from 'tsyringe';
 import { InvalidAvatarFileError } from '@domain/user/errors/InvalidAvatarFileError';
 import { UserNotFoundError } from '@domain/user/errors/UserNotFoundError';
 import type { IUserRepository } from '@domain/user/repositories/IUserRepository';
-import type { IFileStorageService } from '@domain/user/services/IFileStorageService';
 import { USER_TOKENS } from '@domain/user/tokens';
+import type { IFileStorageService } from '@domain/shared/services/IFileStorageService';
+import { SHARED_TOKENS } from '@domain/shared/tokens';
+import { env } from '@config/env';
 
 import type { UpdateAvatarRequestDTO } from '../dtos/UpdateAvatarRequestDTO.js';
 import type { UserResponseDTO } from '../dtos/UserResponseDTO.js';
@@ -23,7 +25,8 @@ const MAX_SIZE_BYTES = 5 * 1024 * 1024;
 export class UpdateAvatarUseCase implements IUpdateAvatarUseCase {
   constructor(
     @inject(USER_TOKENS.UserRepository) private readonly userRepository: IUserRepository,
-    @inject(USER_TOKENS.FileStorageService) private readonly fileStorageService: IFileStorageService,
+    @inject(SHARED_TOKENS.FileStorageService)
+    private readonly fileStorageService: IFileStorageService,
   ) {}
 
   async execute(request: UpdateAvatarRequestDTO): Promise<UserResponseDTO> {
@@ -44,6 +47,7 @@ export class UpdateAvatarUseCase implements IUpdateAvatarUseCase {
       buffer: request.buffer,
       filename: request.filename,
       mimeType: request.mimeType,
+      folder: env.CLOUDINARY_AVATAR_FOLDER,
     });
 
     await this.userRepository.updateAvatarUrl(request.userId, url);

@@ -12,3 +12,6 @@ export const refresh = jest.fn();
 export function useRouter() {
   return { push, replace, refresh };
 }
+
+// Tests set a return value with `usePathname.mockReturnValue('/admin/sports')`.
+export const usePathname = jest.fn(() => '/');

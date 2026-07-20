@@ -14,7 +14,16 @@ export { useEmailChange } from './hooks/useEmailChange';
 export { useChangePassword } from './hooks/useChangePassword';
 export { useSetPassword } from './hooks/useSetPassword';
 export { useAvatarUpload } from './hooks/useAvatarUpload';
-export { getMe, updateName, updatePhone, requestEmailChange, confirmEmailChange, changePassword, setPassword, uploadAvatar } from './actions/profileApi';
+export {
+  getMe,
+  updateName,
+  updatePhone,
+  requestEmailChange,
+  confirmEmailChange,
+  changePassword,
+  setPassword,
+  uploadAvatar,
+} from './actions/profileApi';
 export { validateAvatarFile } from './lib/validateAvatarFile';
 export type {
   PublicUser,
