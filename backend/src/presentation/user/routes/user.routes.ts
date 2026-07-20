@@ -7,6 +7,11 @@ import { GoogleAuthController } from '@presentation/user/controllers/GoogleAuthC
 import { ProfileController } from '@presentation/user/controllers/ProfileController';
 import { LogoutController } from '@presentation/user/controllers/LogoutController';
 import { authenticate } from '@presentation/shared/middlewares/authenticate';
+import {
+  authRateLimiter,
+  otpRateLimiter,
+  signupRateLimiter,
+} from '@presentation/shared/middlewares/rateLimiters';
 
 import { requireEmailChangeOtpSession } from '../middlewares/requireEmailChangeOtpSession.js';
 import { uploadAvatar } from '../middlewares/uploadAvatar.js';
@@ -28,9 +33,9 @@ const googleAuthController = container.resolve(GoogleAuthController);
 const profileController = container.resolve(ProfileController);
 const logoutController = container.resolve(LogoutController);
 
-router.post('/signup', validateSignUpRequest, signUpController.handle);
-router.post('/login', validateLoginRequest, loginController.handle);
-router.post('/google', validateGoogleAuthRequest, googleAuthController.handle);
+router.post('/signup', signupRateLimiter, validateSignUpRequest, signUpController.handle);
+router.post('/login', authRateLimiter, validateLoginRequest, loginController.handle);
+router.post('/google', authRateLimiter, validateGoogleAuthRequest, googleAuthController.handle);
 router.get('/me', authenticate, meController.handle);
 router.post('/logout', authenticate, logoutController.handle);
 
@@ -39,12 +44,14 @@ router.patch('/me/phone', authenticate, validateUpdatePhoneRequest, profileContr
 router.post(
   '/me/email/request-change',
   authenticate,
+  otpRateLimiter,
   validateRequestEmailChangeRequest,
   profileController.requestEmailChange,
 );
 router.post(
   '/me/email/confirm-change',
   authenticate,
+  otpRateLimiter,
   requireEmailChangeOtpSession,
   validateConfirmEmailChangeRequest,
   profileController.confirmEmailChange,
@@ -52,6 +59,7 @@ router.post(
 router.post(
   '/me/password/change',
   authenticate,
+  authRateLimiter,
   validateChangePasswordRequest,
   profileController.changePassword,
 );
