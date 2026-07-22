@@ -19,7 +19,12 @@ export default tseslint.config(
           'newlines-between': 'always',
         },
       ],
-      // Enforce layer isolation — domain must not import outer layers
+    },
+  },
+  {
+    // Enforce layer isolation — domain/application must not import outer layers
+    files: ['src/domain/**/*.ts', 'src/application/**/*.ts'],
+    rules: {
       'no-restricted-imports': [
         'error',
         {
@@ -36,5 +41,5 @@ export default tseslint.config(
   eslintConfigPrettier,
   {
     ignores: ['dist/**', 'node_modules/**'],
-  }
+  },
 );

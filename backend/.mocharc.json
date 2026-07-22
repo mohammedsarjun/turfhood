@@ -1,0 +1,6 @@
+{
+  "extension": ["ts"],
+  "file": ["test/setup.ts"],
+  "node-option": ["import=tsx"],
+  "timeout": 10000
+}
