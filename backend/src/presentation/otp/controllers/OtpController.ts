@@ -27,7 +27,9 @@ export class OtpController {
     try {
       const result = await this.sendOtpUseCase.execute(req.body);
       setOtpSessionCookie(res, result.otpSessionToken, env.OTP_SESSION_EXPIRY_SECONDS);
-      res.status(HttpStatus.OK).json({ message: result.message, expiresInSeconds: result.expiresInSeconds });
+      res
+        .status(HttpStatus.OK)
+        .json({ message: result.message, expiresInSeconds: result.expiresInSeconds });
     } catch (error) {
       next(error);
     }
@@ -67,7 +69,9 @@ export class OtpController {
         purpose: otpSession!.purpose,
       });
       setOtpSessionCookie(res, result.otpSessionToken, env.OTP_SESSION_EXPIRY_SECONDS);
-      res.status(HttpStatus.OK).json({ message: result.message, expiresInSeconds: result.expiresInSeconds });
+      res
+        .status(HttpStatus.OK)
+        .json({ message: result.message, expiresInSeconds: result.expiresInSeconds });
     } catch (error) {
       next(error);
     }

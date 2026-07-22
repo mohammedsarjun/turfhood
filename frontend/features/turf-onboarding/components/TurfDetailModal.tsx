@@ -25,7 +25,12 @@ export function TurfDetailModal({
   const statusCopy = TURF_APPLICATION_STATUS_COPY[application.status];
 
   return (
-    <Modal open={Boolean(application)} onClose={onClose} title={application.name} className="max-w-2xl">
+    <Modal
+      open={Boolean(application)}
+      onClose={onClose}
+      title={application.name}
+      className="max-w-2xl"
+    >
       <TurfImageGallery
         images={application.images ?? []}
         altText={application.name}
@@ -43,7 +48,9 @@ export function TurfDetailModal({
         </Text>
       )}
 
-      {application.description && <Text style={{ marginBottom: 8 }}>{application.description}</Text>}
+      {application.description && (
+        <Text style={{ marginBottom: 8 }}>{application.description}</Text>
+      )}
 
       <Text style={{ marginBottom: 4 }}>
         <strong>Address:</strong> {application.address.line1}, {application.address.city},{' '}

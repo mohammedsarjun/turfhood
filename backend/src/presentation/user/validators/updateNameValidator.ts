@@ -10,7 +10,9 @@ export const updateNameSchema = z.object({
 export function validateUpdateNameRequest(req: Request, res: Response, next: NextFunction): void {
   const result = updateNameSchema.safeParse(req.body);
   if (!result.success) {
-    res.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid name.', errors: result.error.flatten().fieldErrors });
+    res
+      .status(HttpStatus.BAD_REQUEST)
+      .json({ message: 'Invalid name.', errors: result.error.flatten().fieldErrors });
     return;
   }
   req.body = result.data;

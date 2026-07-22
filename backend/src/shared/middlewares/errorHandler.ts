@@ -16,5 +16,7 @@ export function errorHandler(
     return;
   }
   console.error(err);
-  res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Something went wrong. Please try again later.' });
+  res
+    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+    .json({ message: 'Something went wrong. Please try again later.' });
 }

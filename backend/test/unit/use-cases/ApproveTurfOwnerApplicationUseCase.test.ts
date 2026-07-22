@@ -10,7 +10,9 @@ import { buildTurfOwnerApplication } from '../../fixtures/turfOwnerApplications.
 import { buildPersistedUser } from '../../fixtures/users.fixture.js';
 
 function buildUseCase(application: ReturnType<typeof buildTurfOwnerApplication>) {
-  const applicationRepository = new FakeTurfOwnerApplicationRepository({ existingById: application });
+  const applicationRepository = new FakeTurfOwnerApplicationRepository({
+    existingById: application,
+  });
   const turfRepository = new FakeTurfRepository();
   const turfImageRepository = new FakeTurfImageRepository();
   const userRepository = new FakeUserRepository({
@@ -63,7 +65,9 @@ describe('ApproveTurfOwnerApplicationUseCase', () => {
 
     try {
       await useCase.execute({ applicationId: 'application_1', reviewedBy: 'admin_1' });
-      expect.fail('Expected execute() to throw ApplicationAlreadyReviewedError, but it did not throw.');
+      expect.fail(
+        'Expected execute() to throw ApplicationAlreadyReviewedError, but it did not throw.',
+      );
     } catch (error) {
       expect(error).to.be.instanceOf(ApplicationAlreadyReviewedError);
     }

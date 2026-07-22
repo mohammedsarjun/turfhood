@@ -1,7 +1,9 @@
 import type { TurfOwnerApplication } from '@domain/turfOwnerApplication/entities/TurfOwnerApplication';
 import type { TurfApplicationSummary } from '@turfhood/shared';
 
-export function toTurfApplicationSummaryDTO(application: TurfOwnerApplication): TurfApplicationSummary {
+export function toTurfApplicationSummaryDTO(
+  application: TurfOwnerApplication,
+): TurfApplicationSummary {
   return {
     id: application.id as string,
     name: application.name,

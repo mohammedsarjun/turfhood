@@ -50,7 +50,10 @@ export async function autocompletePlaces(
 }
 
 /** Resolves an autocomplete prediction's placeId to coordinates. */
-export async function getPlaceDetails(placeId: string, apiKey: string): Promise<GeocodeResult | null> {
+export async function getPlaceDetails(
+  placeId: string,
+  apiKey: string,
+): Promise<GeocodeResult | null> {
   const url = `https://api.olamaps.io/places/v1/details?place_id=${encodeURIComponent(placeId)}&api_key=${encodeURIComponent(apiKey)}`;
   const response = await fetch(url);
   if (!response.ok) {
@@ -68,10 +71,7 @@ export async function getPlaceDetails(placeId: string, apiKey: string): Promise<
 }
 
 /** Looks up a free-text address via Ola Maps' geocoding endpoint, returning the first match (if any). */
-export async function searchLocation(
-  query: string,
-  apiKey: string,
-): Promise<GeocodeResult | null> {
+export async function searchLocation(query: string, apiKey: string): Promise<GeocodeResult | null> {
   const url = `https://api.olamaps.io/places/v1/geocode?address=${encodeURIComponent(query)}&api_key=${encodeURIComponent(apiKey)}`;
   const response = await fetch(url);
   if (!response.ok) {

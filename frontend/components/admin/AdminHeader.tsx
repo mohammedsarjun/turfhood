@@ -38,7 +38,11 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
           <Menu className="h-5 w-5" />
         </button>
 
-        <Link href="/admin/dashboard" className="flex items-center" aria-label="Turfhood admin home">
+        <Link
+          href="/admin/dashboard"
+          className="flex items-center"
+          aria-label="Turfhood admin home"
+        >
           {/* eslint-disable-next-line @next/next/no-img-element -- static public asset, no next/image usage elsewhere in this repo */}
           <img src="/images/application-logo.png" alt="Turfhood" className="h-8 w-auto" />
         </Link>

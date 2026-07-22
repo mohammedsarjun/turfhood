@@ -15,7 +15,12 @@ export interface TurfImageProps {
 export class TurfImage {
   private constructor(private readonly props: TurfImageProps) {}
 
-  static create(input: { turfId: string; url: string; isCover: boolean; order: number }): TurfImage {
+  static create(input: {
+    turfId: string;
+    url: string;
+    isCover: boolean;
+    order: number;
+  }): TurfImage {
     return new TurfImage(input);
   }
 

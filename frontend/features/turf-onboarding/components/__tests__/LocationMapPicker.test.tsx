@@ -94,7 +94,9 @@ describe('LocationMapPicker', () => {
     await user.type(screen.getByLabelText(/search location/i), 'Nowhereville');
     await user.click(screen.getByRole('button', { name: /search/i }));
 
-    await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/no matching location/i));
+    await waitFor(() =>
+      expect(screen.getByRole('alert')).toHaveTextContent(/no matching location/i),
+    );
   });
 
   it('shows autosuggest predictions as the user types and places a marker on selection', async () => {
@@ -119,10 +121,14 @@ describe('LocationMapPicker', () => {
     await waitFor(() => expect(init).toHaveBeenCalled());
     await user.type(screen.getByLabelText(/search location/i), 'Chen');
 
-    await waitFor(() => expect(autocompletePlacesMock).toHaveBeenCalledWith('Chen', 'test-api-key'));
+    await waitFor(() =>
+      expect(autocompletePlacesMock).toHaveBeenCalledWith('Chen', 'test-api-key'),
+    );
     await user.click(await screen.findByRole('option', { name: /chennai, tamil nadu, india/i }));
 
-    await waitFor(() => expect(getPlaceDetailsMock).toHaveBeenCalledWith('place_1', 'test-api-key'));
+    await waitFor(() =>
+      expect(getPlaceDetailsMock).toHaveBeenCalledWith('place_1', 'test-api-key'),
+    );
     await waitFor(() => expect(onChange).toHaveBeenCalledWith({ lat: 13.0827, lng: 80.2707 }));
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });

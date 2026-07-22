@@ -111,24 +111,26 @@ export function LocationMapPicker({
         zoom: value ? 14 : 4,
       }),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- see above
-    ).then((map: any) => {
-      if (cancelled) return;
-      mapRef.current = map;
+    )
+      .then((map: any) => {
+        if (cancelled) return;
+        mapRef.current = map;
 
-      if (value) {
-        markerRef.current = olaMaps
-          .addMarker({ offset: [0, -10], anchor: 'bottom', color: '#22c55e' })
-          .setLngLat([value.lng, value.lat])
-          .addTo(map);
-      }
+        if (value) {
+          markerRef.current = olaMaps
+            .addMarker({ offset: [0, -10], anchor: 'bottom', color: '#22c55e' })
+            .setLngLat([value.lng, value.lat])
+            .addTo(map);
+        }
 
-      map.on('click', (event: { lngLat: { lng: number; lat: number } }) => {
-        const { lng, lat } = event.lngLat;
-        placeMarkerAt(lat, lng);
+        map.on('click', (event: { lngLat: { lng: number; lat: number } }) => {
+          const { lng, lat } = event.lngLat;
+          placeMarkerAt(lat, lng);
+        });
+      })
+      .catch(() => {
+        if (!cancelled) setError('Failed to load the map. Please try again.');
       });
-    }).catch(() => {
-      if (!cancelled) setError('Failed to load the map. Please try again.');
-    });
 
     return () => {
       cancelled = true;

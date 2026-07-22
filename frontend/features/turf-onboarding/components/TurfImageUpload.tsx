@@ -143,9 +143,7 @@ export function TurfImageUpload({ images, onChange, errorMessage }: TurfImageUpl
       )}
 
       {images.length === 0 && (
-        <div
-          className="mt-3 flex h-32 items-center justify-center rounded-md border border-dashed border-border text-muted-foreground"
-        >
+        <div className="mt-3 flex h-32 items-center justify-center rounded-md border border-dashed border-border text-muted-foreground">
           <ImageIcon className="h-6 w-6" />
         </div>
       )}

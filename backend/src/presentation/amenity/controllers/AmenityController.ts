@@ -44,7 +44,11 @@ export class AmenityController {
   /** Public, read-only catalog listing (listed items only) — consumed by e.g. the turf-owner onboarding form's amenity picker. */
   listPublic = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const result = await this.listAmenitiesUseCase.execute({ page: 1, limit: 100, isListed: true });
+      const result = await this.listAmenitiesUseCase.execute({
+        page: 1,
+        limit: 100,
+        isListed: true,
+      });
       res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);

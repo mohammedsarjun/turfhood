@@ -9,16 +9,8 @@ import { TurfApplicationsFilters } from './TurfApplicationsFilters';
 import { TurfApplicationsTable } from './TurfApplicationsTable';
 
 export function AdminTurfApplicationsPage() {
-  const {
-    items,
-    totalPages,
-    page,
-    setPage,
-    statusFilter,
-    setStatusFilter,
-    isLoading,
-    refetch,
-  } = useTurfApplicationsList();
+  const { items, totalPages, page, setPage, statusFilter, setStatusFilter, isLoading, refetch } =
+    useTurfApplicationsList();
   const [selected, setSelected] = useState<TurfApplicationSummary | null>(null);
 
   return (
