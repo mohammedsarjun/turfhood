@@ -2,16 +2,21 @@ import userEvent from '@testing-library/user-event';
 import { push, refresh } from '@/__mocks__/next/navigation';
 import { render, screen, waitFor } from '@/test/test-utils';
 import { logout } from '../../../lib/auth/logoutApi';
+import { useMyApplication } from '../../../features/turf-onboarding/hooks/useMyApplication';
+import { TurfApplicationStatus } from '@turfhood/shared';
 import { Header } from '../Header';
 
 jest.mock('../../../lib/auth/logoutApi');
+jest.mock('../../../features/turf-onboarding/hooks/useMyApplication');
 const logoutMock = jest.mocked(logout);
+const useMyApplicationMock = jest.mocked(useMyApplication);
 
 describe('Header', () => {
   beforeEach(() => {
     push.mockClear();
     refresh.mockClear();
     logoutMock.mockClear();
+    useMyApplicationMock.mockReturnValue({ application: null, isLoading: false, error: null });
   });
 
   it('renders the logo and does not show the account dropdown until opened', () => {
@@ -46,6 +51,47 @@ describe('Header', () => {
     expect(screen.getByRole('menu')).toBeInTheDocument();
     expect(screen.getByRole('menuitem', { name: /profile/i })).toHaveAttribute('href', '/profile');
     expect(screen.getByRole('menuitem', { name: /logout/i })).toBeInTheDocument();
+  });
+
+  it('shows "Become a Turf Owner" when the user has no application', async () => {
+    const user = userEvent.setup();
+    render(<Header userName="Jordan Lee" />);
+
+    await user.click(screen.getByLabelText(/account menu/i));
+
+    expect(screen.getByRole('menuitem', { name: /become a turf owner/i })).toHaveAttribute(
+      'href',
+      '/become-a-turf-owner',
+    );
+  });
+
+  it('shows "My Turfs" once the user has submitted an application', async () => {
+    useMyApplicationMock.mockReturnValue({
+      application: {
+        id: 'app-1',
+        name: 'Green Field',
+        status: TurfApplicationStatus.PENDING,
+        address: { line1: '1 Main St', city: 'Kochi', state: 'Kerala', country: 'India', pincode: '682001' },
+        location: { type: 'Point', coordinates: [0, 0] },
+        sportsOffered: [],
+        amenities: [],
+        documents: [],
+        images: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      isLoading: false,
+      error: null,
+    });
+    const user = userEvent.setup();
+    render(<Header userName="Jordan Lee" />);
+
+    await user.click(screen.getByLabelText(/account menu/i));
+
+    expect(screen.getByRole('menuitem', { name: /my turfs/i })).toHaveAttribute(
+      'href',
+      '/my-turfs',
+    );
   });
 
   it('closes the dropdown when clicking outside', async () => {

@@ -4,6 +4,7 @@ export interface UploadFileParams {
   mimeType: string;
   /** Cloudinary folder to upload into — callers decide (avatars, sports icons, amenity icons, …). */
   folder: string;
+  resourceType?: 'image' | 'raw' | 'auto';
 }
 
 export interface UploadFileResult {

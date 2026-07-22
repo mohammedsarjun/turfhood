@@ -40,6 +40,16 @@ export class AmenityController {
     }
   };
 
+  /** Public, read-only catalog listing (listed items only) — consumed by e.g. the turf-owner onboarding form's amenity picker. */
+  listPublic = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const result = await this.listAmenitiesUseCase.execute({ page: 1, limit: 100, isListed: true });
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const file = (req as Request & { file?: Express.Multer.File }).file;

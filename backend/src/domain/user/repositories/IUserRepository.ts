@@ -1,4 +1,4 @@
-import type { User } from '../entities/User.js';
+import type { User, UserRole } from '../entities/User.js';
 import type { Email } from '../value-objects/Email.js';
 import type { Phone } from '../value-objects/Phone.js';
 
@@ -17,4 +17,6 @@ export interface IUserRepository {
   updateAvatarUrl(userId: string, avatarUrl: string): Promise<void>;
   /** Sets a password on an account that previously had none (e.g. a Google-only account). */
   addPasswordAuth(userId: string, passwordHash: string): Promise<void>;
+  /** Grants an additional role (e.g. 'turf_owner') without removing existing ones. */
+  addRole(userId: string, role: UserRole): Promise<void>;
 }

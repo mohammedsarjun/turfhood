@@ -3,10 +3,11 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Bell, LogOut, User as UserIcon } from 'lucide-react';
+import { Bell, LogOut, Store, User as UserIcon } from 'lucide-react';
 import { Avatar } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { logout } from '@/lib/auth/logoutApi';
+import { useMyApplication } from '@/features/turf-onboarding/hooks/useMyApplication';
 
 export interface HeaderProps {
   userName: string;
@@ -23,6 +24,9 @@ export function Header({ userName, avatarUrl }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { application } = useMyApplication();
+  const turfOwnerLinkHref = application ? '/my-turfs' : '/become-a-turf-owner';
+  const turfOwnerLinkLabel = application ? 'My Turfs' : 'Become a Turf Owner';
 
   useEffect(() => {
     if (!isMenuOpen) return;
@@ -109,6 +113,22 @@ export function Header({ userName, avatarUrl }: HeaderProps) {
               >
                 <UserIcon className="h-4 w-4" />
                 Profile
+              </Link>
+              <Link
+                href={turfOwnerLinkHref}
+                role="menuitem"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center text-sm text-foreground hover:bg-muted"
+                style={{
+                  gap: 8,
+                  paddingLeft: 12,
+                  paddingRight: 12,
+                  paddingTop: 8,
+                  paddingBottom: 8,
+                }}
+              >
+                <Store className="h-4 w-4" />
+                {turfOwnerLinkLabel}
               </Link>
               <button
                 type="button"
