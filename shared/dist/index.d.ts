@@ -20,8 +20,7 @@ export type { ForgotPasswordRequest, ForgotPasswordResponse, ResetPasswordReques
 export type { PaginationParams, PaginationMeta, PaginatedResponse } from './common/pagination.js';
 export type { CatalogItem, CreateCatalogItemRequest, UpdateCatalogItemRequest, ToggleCatalogItemListedRequest, } from './catalog/catalog-item.dto.js';
 export { CatalogErrorCode } from './catalog/catalog-error-code.js';
-export type { LocationState, LocationCountry } from './common/locations.js';
-export { LOCATIONS, getCountries, getStates, getCities, isValidLocation, } from './common/locations.js';
+export type { LocationOption } from './location/location.dto.js';
 export type { GeoPoint } from './geo/coordinates.dto.js';
 export { TurfApplicationStatus } from './turfOnboarding/turf-onboarding-status.js';
 export { TurfOnboardingErrorCode } from './turfOnboarding/turf-onboarding-error-code.js';

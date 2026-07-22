@@ -33,7 +33,7 @@ const INITIAL_STATE: TurfOnboardingFormState = {
   name: '',
   description: '',
   line1: '',
-  location: { country: '', state: '', city: '' },
+  location: { country: null, state: null, city: null },
   pincode: '',
   coordinates: null,
   sportsOffered: [],
@@ -77,13 +77,24 @@ export function useTurfOnboardingWizard() {
   const update = (patch: Partial<TurfOnboardingFormState>) =>
     setForm((prev) => ({ ...prev, ...patch }));
 
+  const buildAddress = (state: TurfOnboardingFormState) => ({
+    line1: state.line1,
+    country: state.location.country?.name ?? '',
+    countryCode: state.location.country?.code ?? '',
+    state: state.location.state?.name ?? '',
+    stateCode: state.location.state?.code ?? '',
+    city: state.location.city?.name ?? '',
+    cityCode: state.location.city?.code ?? '',
+    pincode: state.pincode,
+  });
+
   const goNext = () => {
     setFormError(null);
     if (step === 1) {
       const result = validateTurfDetails({
         name: form.name,
         ...(form.description ? { description: form.description } : {}),
-        address: { line1: form.line1, ...form.location, pincode: form.pincode },
+        address: buildAddress(form),
       });
       setErrors(result.errors);
       if (!result.valid) return;
@@ -139,7 +150,7 @@ export function useTurfOnboardingWizard() {
       await submitApplication({
         name: form.name,
         ...(form.description ? { description: form.description } : {}),
-        address: { line1: form.line1, ...form.location, pincode: form.pincode },
+        address: buildAddress(form),
         coordinates: form.coordinates,
         sportsOffered: form.sportsOffered,
         amenities: form.amenities,

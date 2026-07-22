@@ -2,17 +2,24 @@ import { render, screen, waitFor } from '@/test/test-utils';
 import userEvent from '@testing-library/user-event';
 import { OlaMaps } from 'olamaps-web-sdk';
 import { LocationMapPicker } from '../LocationMapPicker';
-import { searchLocation } from '../../lib/searchLocation';
+import { autocompletePlaces, getPlaceDetails, searchLocation } from '../../lib/searchLocation';
 
 jest.mock('olamaps-web-sdk', () => ({
   OlaMaps: jest.fn(),
 }));
 jest.mock('../../lib/searchLocation');
 const searchLocationMock = jest.mocked(searchLocation);
+const autocompletePlacesMock = jest.mocked(autocompletePlaces);
+const getPlaceDetailsMock = jest.mocked(getPlaceDetails);
 
 type ClickHandler = (event: { lngLat: { lng: number; lat: number } }) => void;
 
 describe('LocationMapPicker', () => {
+  beforeEach(() => {
+    autocompletePlacesMock.mockResolvedValue([]);
+    getPlaceDetailsMock.mockResolvedValue(null);
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -88,5 +95,35 @@ describe('LocationMapPicker', () => {
     await user.click(screen.getByRole('button', { name: /search/i }));
 
     await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/no matching location/i));
+  });
+
+  it('shows autosuggest predictions as the user types and places a marker on selection', async () => {
+    const map = { on: jest.fn(), remove: jest.fn(), flyTo: jest.fn() };
+    const marker = { setLngLat: jest.fn().mockReturnThis(), addTo: jest.fn().mockReturnThis() };
+    const init = jest.fn().mockResolvedValue(map);
+    const addMarker = jest.fn().mockReturnValue(marker);
+    (OlaMaps as unknown as jest.Mock).mockImplementation(() => ({ init, addMarker }));
+    autocompletePlacesMock.mockResolvedValue([
+      { placeId: 'place_1', description: 'Chennai, Tamil Nadu, India' },
+    ]);
+    getPlaceDetailsMock.mockResolvedValue({
+      lat: 13.0827,
+      lng: 80.2707,
+      formattedAddress: 'Chennai, Tamil Nadu, India',
+    });
+
+    const onChange = jest.fn();
+    const user = userEvent.setup();
+    render(<LocationMapPicker value={null} onChange={onChange} apiKey="test-api-key" />);
+
+    await waitFor(() => expect(init).toHaveBeenCalled());
+    await user.type(screen.getByLabelText(/search location/i), 'Chen');
+
+    await waitFor(() => expect(autocompletePlacesMock).toHaveBeenCalledWith('Chen', 'test-api-key'));
+    await user.click(await screen.findByRole('option', { name: /chennai, tamil nadu, india/i }));
+
+    await waitFor(() => expect(getPlaceDetailsMock).toHaveBeenCalledWith('place_1', 'test-api-key'));
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith({ lat: 13.0827, lng: 80.2707 }));
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 });

@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
+import { HttpStatus } from '@shared/constants/httpStatus';
 
 export const changePasswordSchema = z.object({
   currentPassword: z.string().min(1, 'Current password is required.'),
@@ -14,7 +15,7 @@ export function validateChangePasswordRequest(
   const result = changePasswordSchema.safeParse(req.body);
   if (!result.success) {
     res
-      .status(400)
+      .status(HttpStatus.BAD_REQUEST)
       .json({ message: 'Invalid request.', errors: result.error.flatten().fieldErrors });
     return;
   }

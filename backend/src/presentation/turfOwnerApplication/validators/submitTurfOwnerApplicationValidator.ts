@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
+import { HttpStatus } from '@shared/constants/httpStatus';
 
 const nameDescriptionSchema = z.object({
   name: z.string().trim().min(2, 'Name must be at least 2 characters long.').max(100),
@@ -9,8 +10,11 @@ const nameDescriptionSchema = z.object({
 const addressSchema = z.object({
   line1: z.string().trim().min(1, 'Address line is required.'),
   city: z.string().trim().min(1, 'City is required.'),
+  cityCode: z.string().trim().min(1, 'City is required.'),
   state: z.string().trim().min(1, 'State is required.'),
+  stateCode: z.string().trim().min(1, 'State is required.'),
   country: z.string().trim().min(1, 'Country is required.'),
+  countryCode: z.string().trim().min(1, 'Country is required.'),
   pincode: z.string().trim().min(1, 'Pincode is required.'),
 });
 
@@ -46,7 +50,7 @@ export function validateSubmitTurfOwnerApplicationRequest(
   const bodyResult = nameDescriptionSchema.safeParse(req.body);
   if (!bodyResult.success) {
     res
-      .status(400)
+      .status(HttpStatus.BAD_REQUEST)
       .json({ message: 'Invalid application details.', errors: bodyResult.error.flatten().fieldErrors });
     return;
   }
@@ -80,6 +84,6 @@ export function validateSubmitTurfOwnerApplicationRequest(
     };
     next();
   } catch {
-    res.status(400).json({ message: 'Invalid application details.' });
+    res.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid application details.' });
   }
 }

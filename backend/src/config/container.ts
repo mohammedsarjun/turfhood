@@ -109,6 +109,15 @@ import type { IApproveTurfOwnerApplicationUseCase } from '@application/turfOwner
 import { ApproveTurfOwnerApplicationUseCase } from '@application/turfOwnerApplication/use-cases/ApproveTurfOwnerApplicationUseCase';
 import type { IRejectTurfOwnerApplicationUseCase } from '@application/turfOwnerApplication/use-cases/IRejectTurfOwnerApplicationUseCase';
 import { RejectTurfOwnerApplicationUseCase } from '@application/turfOwnerApplication/use-cases/RejectTurfOwnerApplicationUseCase';
+import type { ILocationLookupService } from '@domain/location/services/ILocationLookupService';
+import { LOCATION_TOKENS } from '@domain/location/tokens';
+import { CountryStateCityLocationLookupService } from '@infrastructure/location/services/CountryStateCityLocationLookupService';
+import type { IListCountriesUseCase } from '@application/location/use-cases/IListCountriesUseCase';
+import { ListCountriesUseCase } from '@application/location/use-cases/ListCountriesUseCase';
+import type { IListStatesUseCase } from '@application/location/use-cases/IListStatesUseCase';
+import { ListStatesUseCase } from '@application/location/use-cases/ListStatesUseCase';
+import type { IListCitiesUseCase } from '@application/location/use-cases/IListCitiesUseCase';
+import { ListCitiesUseCase } from '@application/location/use-cases/ListCitiesUseCase';
 
 /** Composition root — wires domain interfaces to their infrastructure implementations. */
 container.register<IUserRepository>(USER_TOKENS.UserRepository, { useClass: UserRepository });
@@ -255,5 +264,17 @@ container.register<IRejectTurfOwnerApplicationUseCase>(
   TURF_OWNER_APPLICATION_TOKENS.RejectTurfOwnerApplicationUseCase,
   { useClass: RejectTurfOwnerApplicationUseCase },
 );
+container.register<ILocationLookupService>(LOCATION_TOKENS.LocationLookupService, {
+  useClass: CountryStateCityLocationLookupService,
+});
+container.register<IListCountriesUseCase>(LOCATION_TOKENS.ListCountriesUseCase, {
+  useClass: ListCountriesUseCase,
+});
+container.register<IListStatesUseCase>(LOCATION_TOKENS.ListStatesUseCase, {
+  useClass: ListStatesUseCase,
+});
+container.register<IListCitiesUseCase>(LOCATION_TOKENS.ListCitiesUseCase, {
+  useClass: ListCitiesUseCase,
+});
 
 export { container };

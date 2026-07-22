@@ -1,9 +1,9 @@
 import { axiosInstance } from '@/lib/axios';
 import { API_ROUTES } from '@/lib/apiRoutes';
 import type { ApiResponse } from '@/types/api/response';
+import type { TurfApplicationAddress } from '@turfhood/shared';
 import type { TurfApplicationSummary } from '../types';
 import type { DocumentEntry } from '../components/DocumentUpload';
-import type { CountryStateCityValue } from '../components/CountryStateCityFields';
 import type { Coordinates } from '../components/LocationMapPicker';
 import type { TurfImageEntry } from '../components/TurfImageUpload';
 
@@ -28,7 +28,7 @@ export async function listMyApplications(): Promise<
 export interface SubmitTurfApplicationPayload {
   name: string;
   description?: string;
-  address: CountryStateCityValue & { line1: string; pincode: string };
+  address: TurfApplicationAddress;
   coordinates: Coordinates;
   sportsOffered: string[];
   amenities: string[];
@@ -44,16 +44,7 @@ export async function submitApplication(
   if (payload.description) {
     formData.append('description', payload.description);
   }
-  formData.append(
-    'address',
-    JSON.stringify({
-      line1: payload.address.line1,
-      city: payload.address.city,
-      state: payload.address.state,
-      country: payload.address.country,
-      pincode: payload.address.pincode,
-    }),
-  );
+  formData.append('address', JSON.stringify(payload.address));
   formData.append('coordinates', JSON.stringify(payload.coordinates));
   formData.append('sportsOffered', JSON.stringify(payload.sportsOffered));
   formData.append('amenities', JSON.stringify(payload.amenities));

@@ -3,7 +3,15 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { OlaMaps } from 'olamaps-web-sdk';
 import { Button, Input } from '@/components/ui';
-import { searchLocation } from '../lib/searchLocation';
+import {
+  autocompletePlaces,
+  getPlaceDetails,
+  searchLocation,
+  type PlacePrediction,
+} from '../lib/searchLocation';
+
+const AUTOCOMPLETE_DEBOUNCE_MS = 300;
+const MIN_QUERY_LENGTH = 3;
 
 export interface Coordinates {
   lat: number;
@@ -43,6 +51,49 @@ export function LocationMapPicker({
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
+  const [predictions, setPredictions] = useState<PlacePrediction[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchBoxRef = useRef<HTMLDivElement>(null);
+  const requestIdRef = useRef(0);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchBoxRef.current && !searchBoxRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    function clearPredictions() {
+      setPredictions([]);
+    }
+
+    if (!apiKey || searchQuery.trim().length < MIN_QUERY_LENGTH) {
+      clearPredictions();
+      return;
+    }
+
+    const requestId = ++requestIdRef.current;
+    const timer = setTimeout(() => {
+      async function loadPredictions() {
+        try {
+          const results = await autocompletePlaces(searchQuery.trim(), apiKey as string);
+          if (requestId === requestIdRef.current) {
+            setPredictions(results);
+            setShowSuggestions(true);
+          }
+        } catch {
+          if (requestId === requestIdRef.current) setPredictions([]);
+        }
+      }
+      void loadPredictions();
+    }, AUTOCOMPLETE_DEBOUNCE_MS);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery, apiKey]);
 
   useEffect(() => {
     if (!containerRef.current || !apiKey) return;
@@ -104,10 +155,12 @@ export function LocationMapPicker({
     onChange({ lat, lng });
   }
 
+  /** Fallback for when the user submits without picking a suggestion — one best-guess geocode. */
   async function handleSearch(event: FormEvent) {
     event.preventDefault();
     if (!apiKey || !searchQuery.trim()) return;
 
+    setShowSuggestions(false);
     setIsSearching(true);
     setSearchError(null);
     try {
@@ -124,6 +177,23 @@ export function LocationMapPicker({
     }
   }
 
+  async function handleSelectPrediction(prediction: PlacePrediction) {
+    if (!apiKey) return;
+    setShowSuggestions(false);
+    setSearchQuery(prediction.description);
+    setSearchError(null);
+    try {
+      const result = await getPlaceDetails(prediction.placeId, apiKey);
+      if (!result) {
+        setSearchError('No matching location found.');
+        return;
+      }
+      placeMarkerAt(result.lat, result.lng);
+    } catch {
+      setSearchError('Location search failed. Please try again.');
+    }
+  }
+
   if (!apiKey) {
     return (
       <p role="alert" className="text-sm text-destructive">
@@ -134,18 +204,42 @@ export function LocationMapPicker({
 
   return (
     <div>
-      <form onSubmit={(event) => void handleSearch(event)} className="mb-2 flex" style={{ gap: 8 }}>
-        <Input
-          type="text"
-          value={searchQuery}
-          onChange={(event) => setSearchQuery(event.target.value)}
-          placeholder="Search for an address or place"
-          aria-label="Search location"
-        />
-        <Button type="submit" disabled={isSearching || !searchQuery.trim()}>
-          {isSearching ? 'Searching…' : 'Search'}
-        </Button>
-      </form>
+      <div className="relative mb-2" ref={searchBoxRef}>
+        <form onSubmit={(event) => void handleSearch(event)} className="flex" style={{ gap: 8 }}>
+          <Input
+            type="text"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            onFocus={() => predictions.length > 0 && setShowSuggestions(true)}
+            placeholder="Search for an address or place"
+            aria-label="Search location"
+            autoComplete="off"
+          />
+          <Button type="submit" disabled={isSearching || !searchQuery.trim()}>
+            {isSearching ? 'Searching…' : 'Search'}
+          </Button>
+        </form>
+        {showSuggestions && predictions.length > 0 && (
+          <ul
+            role="listbox"
+            className="absolute z-10 mt-1 w-full rounded-md border border-border bg-background shadow-md"
+          >
+            {predictions.map((prediction) => (
+              <li key={prediction.placeId}>
+                <button
+                  type="button"
+                  role="option"
+                  aria-selected="false"
+                  className="w-full px-3 py-2 text-left text-sm hover:bg-muted"
+                  onClick={() => void handleSelectPrediction(prediction)}
+                >
+                  {prediction.description}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
       {searchError && (
         <p role="alert" className="mb-1.5 text-xs text-destructive">
           {searchError}

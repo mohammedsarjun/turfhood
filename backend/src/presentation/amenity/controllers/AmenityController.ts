@@ -7,6 +7,7 @@ import type { IUpdateAmenityUseCase } from '@application/amenity/use-cases/IUpda
 import type { IUploadAmenityIconUseCase } from '@application/amenity/use-cases/IUploadAmenityIconUseCase';
 import { InvalidAmenityIconFileError } from '@domain/amenity/errors/InvalidAmenityIconFileError';
 import { AMENITY_TOKENS } from '@domain/amenity/tokens';
+import { HttpStatus } from '@shared/constants/httpStatus';
 
 import type { ListAmenitiesRequest } from '../validators/listAmenitiesValidator.js';
 
@@ -34,7 +35,7 @@ export class AmenityController {
         ...(search ? { search } : {}),
         ...(isListed !== undefined ? { isListed } : {}),
       });
-      res.status(200).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }
@@ -44,7 +45,7 @@ export class AmenityController {
   listPublic = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const result = await this.listAmenitiesUseCase.execute({ page: 1, limit: 100, isListed: true });
-      res.status(200).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }
@@ -63,7 +64,7 @@ export class AmenityController {
         iconMimeType: file.mimetype,
         iconSizeBytes: file.size,
       });
-      res.status(201).json({ item });
+      res.status(HttpStatus.CREATED).json({ item });
     } catch (error) {
       next(error);
     }
@@ -75,7 +76,7 @@ export class AmenityController {
         id: req.params.id as string,
         ...req.body,
       });
-      res.status(200).json({ item });
+      res.status(HttpStatus.OK).json({ item });
     } catch (error) {
       next(error);
     }
@@ -87,7 +88,7 @@ export class AmenityController {
         id: req.params.id as string,
         isListed: req.body.isListed,
       });
-      res.status(200).json({ item });
+      res.status(HttpStatus.OK).json({ item });
     } catch (error) {
       next(error);
     }
@@ -106,7 +107,7 @@ export class AmenityController {
         mimeType: file.mimetype,
         sizeBytes: file.size,
       });
-      res.status(200).json({ item });
+      res.status(HttpStatus.OK).json({ item });
     } catch (error) {
       next(error);
     }

@@ -9,6 +9,7 @@ import {
   clearAdminAuthCookie,
   setAdminAuthCookie,
 } from '@presentation/admin/utils/adminAuthCookie';
+import { HttpStatus } from '@shared/constants/httpStatus';
 
 import type { AdminAuthenticatedRequest } from '../middlewares/adminOnly.js';
 
@@ -25,7 +26,7 @@ export class AdminAuthController {
     try {
       const result = await this.adminLoginUseCase.execute(req.body);
       setAdminAuthCookie(res, result.accessToken);
-      res.status(200).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }
@@ -33,7 +34,7 @@ export class AdminAuthController {
 
   logout = (_req: Request, res: Response): void => {
     clearAdminAuthCookie(res);
-    res.status(200).json({ message: 'Logged out successfully.' });
+    res.status(HttpStatus.OK).json({ message: 'Logged out successfully.' });
   };
 
   me = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -43,7 +44,7 @@ export class AdminAuthController {
         throw new TokenMissingError();
       }
       const result = await this.getCurrentUserUseCase.execute(adminId);
-      res.status(200).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }

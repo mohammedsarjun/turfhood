@@ -39,4 +39,10 @@ export const API_ROUTES = {
     latest: '/turf-owner-applications/me',
     mine: '/turf-owner-applications/mine',
   },
+  locations: {
+    countries: '/locations/countries',
+    states: (countryCode: string) => `/locations/countries/${countryCode}/states`,
+    cities: (countryCode: string, stateCode: string) =>
+      `/locations/countries/${countryCode}/states/${stateCode}/cities`,
+  },
 } as const;

@@ -4,6 +4,7 @@ import type { IGetCurrentUserUseCase } from '@application/user/use-cases/IGetCur
 import { TokenMissingError } from '@domain/user/errors/TokenMissingError';
 import { USER_TOKENS } from '@domain/user/tokens';
 import type { AuthenticatedRequest } from '@presentation/shared/middlewares/authenticate';
+import { HttpStatus } from '@shared/constants/httpStatus';
 
 @injectable()
 export class MeController {
@@ -19,7 +20,7 @@ export class MeController {
         throw new TokenMissingError();
       }
       const result = await this.getCurrentUserUseCase.execute(userId);
-      res.status(200).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }

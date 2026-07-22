@@ -10,8 +10,11 @@ const baseApplication: TurfApplicationSummary = {
   address: {
     line1: '1 Main St',
     city: 'Chennai',
+    cityCode: '1',
     state: 'Tamil Nadu',
+    stateCode: 'TN',
     country: 'India',
+    countryCode: 'IN',
     pincode: '600002',
   },
   location: { type: 'Point', coordinates: [80.27, 13.08] },

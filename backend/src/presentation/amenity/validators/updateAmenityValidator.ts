@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
+import { HttpStatus } from '@shared/constants/httpStatus';
 
 export const updateAmenitySchema = z
   .object({
@@ -16,7 +17,7 @@ export function validateUpdateAmenityRequest(
   const result = updateAmenitySchema.safeParse(req.body);
   if (!result.success) {
     res
-      .status(400)
+      .status(HttpStatus.BAD_REQUEST)
       .json({ message: 'Invalid amenity.', errors: result.error.flatten().fieldErrors });
     return;
   }

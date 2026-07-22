@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
+import { HttpStatus } from '@shared/constants/httpStatus';
 
 export const verifyOtpSchema = z.object({
   otp: z
@@ -12,7 +13,7 @@ export const verifyOtpSchema = z.object({
 export function validateVerifyOtpRequest(req: Request, res: Response, next: NextFunction): void {
   const result = verifyOtpSchema.safeParse(req.body);
   if (!result.success) {
-    res.status(400).json({
+    res.status(HttpStatus.BAD_REQUEST).json({
       message: 'Invalid request.',
       errors: result.error.flatten().fieldErrors,
     });

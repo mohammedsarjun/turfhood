@@ -7,6 +7,5 @@ export { maskEmail } from './otp/otp.util.js';
 export { PasswordResetErrorCode } from './passwordReset/password-reset-error-code.js';
 export { DEFAULT_PASSWORD_RESET_EXPIRY_SECONDS } from './passwordReset/password-reset-constants.js';
 export { CatalogErrorCode } from './catalog/catalog-error-code.js';
-export { LOCATIONS, getCountries, getStates, getCities, isValidLocation, } from './common/locations.js';
 export { TurfApplicationStatus } from './turfOnboarding/turf-onboarding-status.js';
 export { TurfOnboardingErrorCode } from './turfOnboarding/turf-onboarding-error-code.js';
