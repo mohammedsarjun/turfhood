@@ -7,11 +7,18 @@ import { Email } from '../../../src/domain/user/value-objects/Email.js';
 import { Phone } from '../../../src/domain/user/value-objects/Phone.js';
 import { FakeUserRepository } from '../../mocks/FakeUserRepository.js';
 import { FakePasswordHasher } from '../../mocks/FakePasswordHasher.js';
+import { FakeRefreshTokenRepository } from '../../mocks/FakeRefreshTokenRepository.js';
 import { buildUnverifiedUser, buildVerifiedUser } from '../../fixtures/otp.fixture.js';
 import { JwtTokenService } from '../../../src/infrastructure/user/services/JwtTokenService.js';
+import { JwtRefreshTokenService } from '../../../src/infrastructure/refreshToken/services/JwtRefreshTokenService.js';
 
 function buildTokenService(): JwtTokenService {
   return new JwtTokenService();
+}
+
+function buildRefreshTokenService(): JwtRefreshTokenService {
+  process.env.REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET ?? 'test-only-refresh-secret';
+  return new JwtRefreshTokenService();
 }
 
 function buildUserWithStatus(status: 'active' | 'suspended' | 'deleted'): User {
@@ -39,6 +46,8 @@ describe('LoginUserUseCase', () => {
       userRepository,
       new FakePasswordHasher(),
       buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
     );
 
     const result = await useCase.execute({ email: 'jordan@example.com', password: 'password1' });
@@ -59,6 +68,8 @@ describe('LoginUserUseCase', () => {
       userRepository,
       new FakePasswordHasher(),
       buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
     );
 
     const result = await useCase.execute({ email: 'jordan@example.com', password: 'password1' });
@@ -76,7 +87,13 @@ describe('LoginUserUseCase', () => {
     const userRepository = new FakeUserRepository({ existingUserByEmail: user });
     const passwordHasher = new FakePasswordHasher();
     passwordHasher.compare = async () => false;
-    const useCase = new LoginUserUseCase(userRepository, passwordHasher, buildTokenService());
+    const useCase = new LoginUserUseCase(
+      userRepository,
+      passwordHasher,
+      buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
+    );
 
     try {
       await useCase.execute({ email: 'jordan@example.com', password: 'wrong-password' });
@@ -94,6 +111,8 @@ describe('LoginUserUseCase', () => {
       userRepository,
       new FakePasswordHasher(),
       buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
     );
 
     try {

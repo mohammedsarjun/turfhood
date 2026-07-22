@@ -8,8 +8,10 @@ import { FakeUserRepository } from '../../mocks/FakeUserRepository.js';
 import { FakeOtpRepository } from '../../mocks/FakeOtpRepository.js';
 import { FakeOtpService } from '../../mocks/FakeOtpService.js';
 import { FakePasswordHasher } from '../../mocks/FakePasswordHasher.js';
+import { FakeRefreshTokenRepository } from '../../mocks/FakeRefreshTokenRepository.js';
 import { buildOtpRecord, buildUnverifiedUser, validOtp } from '../../fixtures/otp.fixture.js';
 import { JwtTokenService } from '../../../src/infrastructure/user/services/JwtTokenService.js';
+import { JwtRefreshTokenService } from '../../../src/infrastructure/refreshToken/services/JwtRefreshTokenService.js';
 import { Email } from '../../../src/domain/user/value-objects/Email.js';
 
 // A real JwtTokenService is used (not faked) since token generation is pure/cheap
@@ -17,6 +19,11 @@ import { Email } from '../../../src/domain/user/value-objects/Email.js';
 function buildTokenService(): JwtTokenService {
   process.env.JWT_SECRET = process.env.JWT_SECRET ?? 'test-only-secret';
   return new JwtTokenService();
+}
+
+function buildRefreshTokenService(): JwtRefreshTokenService {
+  process.env.REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET ?? 'test-only-refresh-secret';
+  return new JwtRefreshTokenService();
 }
 
 describe('VerifyOtpUseCase', () => {
@@ -31,6 +38,8 @@ describe('VerifyOtpUseCase', () => {
       otpRepository,
       new FakeOtpService(validOtp),
       buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
     );
 
     const result = await useCase.execute({
@@ -58,6 +67,8 @@ describe('VerifyOtpUseCase', () => {
       otpRepository,
       new FakeOtpService(validOtp),
       buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
     );
 
     try {
@@ -91,6 +102,8 @@ describe('VerifyOtpUseCase', () => {
       otpRepository,
       new FakeOtpService(validOtp),
       buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
     );
 
     try {
@@ -118,6 +131,8 @@ describe('VerifyOtpUseCase', () => {
       otpRepository,
       new FakeOtpService(validOtp),
       buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
     );
 
     const result = await useCase.execute({
@@ -141,6 +156,8 @@ describe('VerifyOtpUseCase', () => {
       otpRepository,
       new FakeOtpService(validOtp),
       buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
     );
 
     try {
@@ -160,6 +177,8 @@ describe('VerifyOtpUseCase', () => {
       new FakeOtpRepository(),
       new FakeOtpService(validOtp),
       buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
     );
 
     try {
@@ -183,6 +202,8 @@ describe('VerifyOtpUseCase', () => {
       otpRepository,
       new FakeOtpService(validOtp),
       buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
     );
 
     try {

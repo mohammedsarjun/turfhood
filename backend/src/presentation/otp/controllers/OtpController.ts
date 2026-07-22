@@ -4,7 +4,7 @@ import type { ISendOtpUseCase } from '@application/otp/use-cases/ISendOtpUseCase
 import type { IVerifyOtpUseCase } from '@application/otp/use-cases/IVerifyOtpUseCase';
 import type { IGetOtpSessionUseCase } from '@application/otp/use-cases/IGetOtpSessionUseCase';
 import { OTP_TOKENS } from '@domain/otp/tokens';
-import { setAuthCookie } from '@presentation/shared/utils/authCookie';
+import { setAuthCookie, setRefreshCookie } from '@presentation/shared/utils/authCookie';
 import {
   setOtpSessionCookie,
   clearOtpSessionCookie,
@@ -55,6 +55,7 @@ export class OtpController {
       });
       clearOtpSessionCookie(res);
       setAuthCookie(res, result.accessToken);
+      setRefreshCookie(res, result.refreshToken);
       res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);

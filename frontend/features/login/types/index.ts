@@ -20,6 +20,7 @@ export interface LoginSuccessResponse {
   status: 'success';
   user: LoginUser;
   accessToken: string;
+  refreshToken: string;
 }
 
 export interface LoginNeedsVerificationResponse {

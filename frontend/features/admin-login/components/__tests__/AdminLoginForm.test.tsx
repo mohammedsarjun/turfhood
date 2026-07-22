@@ -38,6 +38,7 @@ describe('AdminLoginForm', () => {
         authProviders: ['email'],
       },
       accessToken: 'admin_token_123',
+      refreshToken: 'admin_refresh_token_123',
     });
 
     render(<AdminLoginForm />);

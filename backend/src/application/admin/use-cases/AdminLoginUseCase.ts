@@ -6,6 +6,10 @@ import type { IPasswordHasher } from '@domain/user/services/IPasswordHasher';
 import type { ITokenService } from '@domain/user/services/ITokenService';
 import { USER_TOKENS } from '@domain/user/tokens';
 import { Email } from '@domain/user/value-objects/Email';
+import type { IRefreshTokenRepository } from '@domain/refreshToken/repositories/IRefreshTokenRepository';
+import type { IRefreshTokenService } from '@domain/refreshToken/services/IRefreshTokenService';
+import { REFRESH_TOKEN_TOKENS } from '@domain/refreshToken/tokens';
+import { issueRefreshToken } from '@application/refreshToken/issueRefreshToken';
 
 import type { AdminLoginRequestDTO, AdminLoginResponseDTO } from '../dtos/AdminLoginRequestDTO.js';
 
@@ -23,6 +27,10 @@ export class AdminLoginUseCase implements IAdminLoginUseCase {
     @inject(USER_TOKENS.UserRepository) private readonly userRepository: IUserRepository,
     @inject(USER_TOKENS.PasswordHasher) private readonly passwordHasher: IPasswordHasher,
     @inject(USER_TOKENS.TokenService) private readonly tokenService: ITokenService,
+    @inject(REFRESH_TOKEN_TOKENS.RefreshTokenRepository)
+    private readonly refreshTokenRepository: IRefreshTokenRepository,
+    @inject(REFRESH_TOKEN_TOKENS.RefreshTokenService)
+    private readonly refreshTokenService: IRefreshTokenService,
   ) {}
 
   async execute(request: AdminLoginRequestDTO): Promise<AdminLoginResponseDTO> {
@@ -46,7 +54,12 @@ export class AdminLoginUseCase implements IAdminLoginUseCase {
       userId: user.id as string,
       roles: user.roles,
     });
+    const refreshToken = await issueRefreshToken(
+      { id: user.id as string, roles: user.roles },
+      this.refreshTokenService,
+      this.refreshTokenRepository,
+    );
 
-    return { admin: toUserResponseDTO(user), accessToken };
+    return { admin: toUserResponseDTO(user), accessToken, refreshToken };
   }
 }

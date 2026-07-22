@@ -6,6 +6,7 @@ import { MeController } from '@presentation/user/controllers/MeController';
 import { GoogleAuthController } from '@presentation/user/controllers/GoogleAuthController';
 import { ProfileController } from '@presentation/user/controllers/ProfileController';
 import { LogoutController } from '@presentation/user/controllers/LogoutController';
+import { RefreshController } from '@presentation/user/controllers/RefreshController';
 import { authenticate } from '@presentation/shared/middlewares/authenticate';
 import {
   authRateLimiter,
@@ -32,12 +33,14 @@ const meController = container.resolve(MeController);
 const googleAuthController = container.resolve(GoogleAuthController);
 const profileController = container.resolve(ProfileController);
 const logoutController = container.resolve(LogoutController);
+const refreshController = container.resolve(RefreshController);
 
 router.post('/signup', signupRateLimiter, validateSignUpRequest, signUpController.handle);
 router.post('/login', authRateLimiter, validateLoginRequest, loginController.handle);
 router.post('/google', authRateLimiter, validateGoogleAuthRequest, googleAuthController.handle);
 router.get('/me', authenticate, meController.handle);
 router.post('/logout', authenticate, logoutController.handle);
+router.post('/refresh', authRateLimiter, refreshController.handle);
 
 router.patch('/me/name', authenticate, validateUpdateNameRequest, profileController.updateName);
 router.patch('/me/phone', authenticate, validateUpdatePhoneRequest, profileController.updatePhone);

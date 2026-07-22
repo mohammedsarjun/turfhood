@@ -11,6 +11,7 @@ const adminAuthController = container.resolve(AdminAuthController);
 
 router.post('/login', adminAuthRateLimiter, validateAdminLoginRequest, adminAuthController.login);
 router.post('/logout', adminOnly, adminAuthController.logout);
+router.post('/refresh', adminAuthRateLimiter, adminAuthController.refresh);
 router.get('/me', adminOnly, adminAuthController.me);
 
 export default router;

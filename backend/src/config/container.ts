@@ -118,6 +118,15 @@ import type { IListStatesUseCase } from '@application/location/use-cases/IListSt
 import { ListStatesUseCase } from '@application/location/use-cases/ListStatesUseCase';
 import type { IListCitiesUseCase } from '@application/location/use-cases/IListCitiesUseCase';
 import { ListCitiesUseCase } from '@application/location/use-cases/ListCitiesUseCase';
+import type { IRefreshTokenRepository } from '@domain/refreshToken/repositories/IRefreshTokenRepository';
+import type { IRefreshTokenService } from '@domain/refreshToken/services/IRefreshTokenService';
+import { REFRESH_TOKEN_TOKENS } from '@domain/refreshToken/tokens';
+import { RefreshTokenRepository } from '@infrastructure/refreshToken/repositories/RefreshTokenRepository';
+import { JwtRefreshTokenService } from '@infrastructure/refreshToken/services/JwtRefreshTokenService';
+import type { IRefreshAccessTokenUseCase } from '@application/refreshToken/use-cases/IRefreshAccessTokenUseCase';
+import { RefreshAccessTokenUseCase } from '@application/refreshToken/use-cases/RefreshAccessTokenUseCase';
+import type { IRevokeRefreshTokenUseCase } from '@application/refreshToken/use-cases/IRevokeRefreshTokenUseCase';
+import { RevokeRefreshTokenUseCase } from '@application/refreshToken/use-cases/RevokeRefreshTokenUseCase';
 
 /** Composition root — wires domain interfaces to their infrastructure implementations. */
 container.register<IUserRepository>(USER_TOKENS.UserRepository, { useClass: UserRepository });
@@ -275,6 +284,18 @@ container.register<IListStatesUseCase>(LOCATION_TOKENS.ListStatesUseCase, {
 });
 container.register<IListCitiesUseCase>(LOCATION_TOKENS.ListCitiesUseCase, {
   useClass: ListCitiesUseCase,
+});
+container.register<IRefreshTokenRepository>(REFRESH_TOKEN_TOKENS.RefreshTokenRepository, {
+  useClass: RefreshTokenRepository,
+});
+container.register<IRefreshTokenService>(REFRESH_TOKEN_TOKENS.RefreshTokenService, {
+  useClass: JwtRefreshTokenService,
+});
+container.register<IRefreshAccessTokenUseCase>(REFRESH_TOKEN_TOKENS.RefreshAccessTokenUseCase, {
+  useClass: RefreshAccessTokenUseCase,
+});
+container.register<IRevokeRefreshTokenUseCase>(REFRESH_TOKEN_TOKENS.RevokeRefreshTokenUseCase, {
+  useClass: RevokeRefreshTokenUseCase,
 });
 
 export { container };

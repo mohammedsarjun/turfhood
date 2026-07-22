@@ -7,6 +7,7 @@ export interface LoginSuccessResponse {
     status: 'success';
     user: PublicUser;
     accessToken: string;
+    refreshToken: string;
 }
 export interface LoginNeedsVerificationResponse {
     status: 'needs_verification';

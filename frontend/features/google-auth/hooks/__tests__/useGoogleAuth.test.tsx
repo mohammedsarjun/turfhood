@@ -35,6 +35,7 @@ describe('useGoogleAuth', () => {
         authProviders: ['google'],
       },
       accessToken: 'token_123',
+      refreshToken: 'refresh_token_123',
     });
 
     const { result } = renderHook(() => useGoogleAuth());

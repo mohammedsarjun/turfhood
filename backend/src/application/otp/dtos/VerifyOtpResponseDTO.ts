@@ -5,4 +5,5 @@ export interface VerifyOtpResponseDTO {
   isVerified: true;
   user: UserResponseDTO;
   accessToken: string;
+  refreshToken: string;
 }

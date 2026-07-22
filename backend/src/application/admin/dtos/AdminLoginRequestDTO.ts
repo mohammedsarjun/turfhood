@@ -8,4 +8,5 @@ export interface AdminLoginRequestDTO {
 export interface AdminLoginResponseDTO {
   admin: UserResponseDTO;
   accessToken: string;
+  refreshToken: string;
 }

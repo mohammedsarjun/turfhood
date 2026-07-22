@@ -8,4 +8,5 @@ export interface GoogleAuthRequest {
 export interface GoogleAuthResponse {
   user: PublicUser;
   accessToken: string;
+  refreshToken: string;
 }
