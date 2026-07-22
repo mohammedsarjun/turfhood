@@ -12,6 +12,7 @@ import { validateUpdateSportsTypeRequest } from '../validators/updateSportsTypeV
 const router = Router();
 const sportsTypeController = container.resolve(SportsTypeController);
 
+router.get('/public', sportsTypeController.listPublic);
 router.get('/', adminOnly, validateListSportsTypesRequest, sportsTypeController.list);
 router.post(
   '/',

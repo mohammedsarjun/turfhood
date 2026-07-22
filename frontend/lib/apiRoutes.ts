@@ -28,8 +28,15 @@ export const API_ROUTES = {
   },
   sports: {
     base: '/sports',
+    public: '/sports/public',
   },
   amenities: {
     base: '/amenities',
+    public: '/amenities/public',
+  },
+  turfOwnerApplications: {
+    base: '/turf-owner-applications',
+    latest: '/turf-owner-applications/me',
+    mine: '/turf-owner-applications/mine',
   },
 } as const;

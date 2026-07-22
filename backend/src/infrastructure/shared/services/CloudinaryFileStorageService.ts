@@ -22,11 +22,11 @@ function publicIdFromUrl(url: string): string | null {
 
 @injectable()
 export class CloudinaryFileStorageService implements IFileStorageService {
-  async upload({ buffer, mimeType, folder }: UploadFileParams): Promise<UploadFileResult> {
+  async upload({ buffer, mimeType, folder, resourceType }: UploadFileParams): Promise<UploadFileResult> {
     const dataUri = `data:${mimeType};base64,${buffer.toString('base64')}`;
     const result = await cloudinary.uploader.upload(dataUri, {
       folder,
-      resource_type: 'image',
+      resource_type: resourceType ?? 'image',
     });
     return { url: result.secure_url };
   }

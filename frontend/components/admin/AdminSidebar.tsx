@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Trophy, Sparkles, X, type LucideIcon } from 'lucide-react';
+import { FileCheck, LayoutDashboard, Trophy, Sparkles, X, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface AdminNavItem {
@@ -15,6 +15,7 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
   { label: 'Sports', href: '/admin/sports', icon: Trophy },
   { label: 'Amenities', href: '/admin/amenities', icon: Sparkles },
+  { label: 'Turf Applications', href: '/admin/turf-owner-applications', icon: FileCheck },
 ];
 
 export interface AdminSidebarProps {

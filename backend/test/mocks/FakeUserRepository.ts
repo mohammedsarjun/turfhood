@@ -1,5 +1,5 @@
 import type { IUserRepository } from '../../src/domain/user/repositories/IUserRepository.js';
-import type { User } from '../../src/domain/user/entities/User.js';
+import type { User, UserRole } from '../../src/domain/user/entities/User.js';
 import type { Email } from '../../src/domain/user/value-objects/Email.js';
 import type { Phone } from '../../src/domain/user/value-objects/Phone.js';
 
@@ -33,6 +33,7 @@ export class FakeUserRepository implements IUserRepository {
   public readonly updateEmailCalls: Array<{ userId: string; email: string }> = [];
   public readonly updateAvatarUrlCalls: Array<{ userId: string; avatarUrl: string }> = [];
   public readonly addPasswordAuthCalls: Array<{ userId: string; passwordHash: string }> = [];
+  public readonly addRoleCalls: Array<{ userId: string; role: UserRole }> = [];
 
   constructor(private readonly options: FakeUserRepositoryOptions = {}) {}
 
@@ -87,5 +88,9 @@ export class FakeUserRepository implements IUserRepository {
 
   async addPasswordAuth(userId: string, passwordHash: string): Promise<void> {
     this.addPasswordAuthCalls.push({ userId, passwordHash });
+  }
+
+  async addRole(userId: string, role: UserRole): Promise<void> {
+    this.addRoleCalls.push({ userId, role });
   }
 }

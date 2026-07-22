@@ -12,6 +12,7 @@ import { validateUpdateAmenityRequest } from '../validators/updateAmenityValidat
 const router = Router();
 const amenityController = container.resolve(AmenityController);
 
+router.get('/public', amenityController.listPublic);
 router.get('/', adminOnly, validateListAmenitiesRequest, amenityController.list);
 router.post(
   '/',

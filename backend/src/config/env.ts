@@ -36,6 +36,10 @@ export const env = {
     process.env.CLOUDINARY_SPORTS_ICON_FOLDER ?? 'turfhood/sports-icons',
   CLOUDINARY_AMENITY_ICON_FOLDER:
     process.env.CLOUDINARY_AMENITY_ICON_FOLDER ?? 'turfhood/amenity-icons',
+  CLOUDINARY_TURF_DOCUMENT_FOLDER:
+    process.env.CLOUDINARY_TURF_DOCUMENT_FOLDER ?? 'turfhood/turf-documents',
+  CLOUDINARY_TURF_IMAGE_FOLDER:
+    process.env.CLOUDINARY_TURF_IMAGE_FOLDER ?? 'turfhood/turf-images',
   PASSWORD_RESET_TOKEN_EXPIRY_SECONDS: Number(
     process.env.PASSWORD_RESET_TOKEN_EXPIRY_SECONDS ?? DEFAULT_PASSWORD_RESET_EXPIRY_SECONDS,
   ),

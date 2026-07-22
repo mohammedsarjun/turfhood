@@ -89,6 +89,26 @@ import type { IToggleAmenityListedUseCase } from '@application/amenity/use-cases
 import { ToggleAmenityListedUseCase } from '@application/amenity/use-cases/ToggleAmenityListedUseCase';
 import type { IUploadAmenityIconUseCase } from '@application/amenity/use-cases/IUploadAmenityIconUseCase';
 import { UploadAmenityIconUseCase } from '@application/amenity/use-cases/UploadAmenityIconUseCase';
+import type { ITurfRepository } from '@domain/turf/repositories/ITurfRepository';
+import type { ITurfImageRepository } from '@domain/turf/repositories/ITurfImageRepository';
+import { TURF_TOKENS } from '@domain/turf/tokens';
+import { TurfRepository } from '@infrastructure/turf/repositories/TurfRepository';
+import { TurfImageRepository } from '@infrastructure/turf/repositories/TurfImageRepository';
+import type { ITurfOwnerApplicationRepository } from '@domain/turfOwnerApplication/repositories/ITurfOwnerApplicationRepository';
+import { TURF_OWNER_APPLICATION_TOKENS } from '@domain/turfOwnerApplication/tokens';
+import { TurfOwnerApplicationRepository } from '@infrastructure/turfOwnerApplication/repositories/TurfOwnerApplicationRepository';
+import type { ISubmitTurfOwnerApplicationUseCase } from '@application/turfOwnerApplication/use-cases/ISubmitTurfOwnerApplicationUseCase';
+import { SubmitTurfOwnerApplicationUseCase } from '@application/turfOwnerApplication/use-cases/SubmitTurfOwnerApplicationUseCase';
+import type { IGetMyTurfOwnerApplicationUseCase } from '@application/turfOwnerApplication/use-cases/IGetMyTurfOwnerApplicationUseCase';
+import { GetMyTurfOwnerApplicationUseCase } from '@application/turfOwnerApplication/use-cases/GetMyTurfOwnerApplicationUseCase';
+import type { IListMyTurfOwnerApplicationsUseCase } from '@application/turfOwnerApplication/use-cases/IListMyTurfOwnerApplicationsUseCase';
+import { ListMyTurfOwnerApplicationsUseCase } from '@application/turfOwnerApplication/use-cases/ListMyTurfOwnerApplicationsUseCase';
+import type { IListTurfOwnerApplicationsUseCase } from '@application/turfOwnerApplication/use-cases/IListTurfOwnerApplicationsUseCase';
+import { ListTurfOwnerApplicationsUseCase } from '@application/turfOwnerApplication/use-cases/ListTurfOwnerApplicationsUseCase';
+import type { IApproveTurfOwnerApplicationUseCase } from '@application/turfOwnerApplication/use-cases/IApproveTurfOwnerApplicationUseCase';
+import { ApproveTurfOwnerApplicationUseCase } from '@application/turfOwnerApplication/use-cases/ApproveTurfOwnerApplicationUseCase';
+import type { IRejectTurfOwnerApplicationUseCase } from '@application/turfOwnerApplication/use-cases/IRejectTurfOwnerApplicationUseCase';
+import { RejectTurfOwnerApplicationUseCase } from '@application/turfOwnerApplication/use-cases/RejectTurfOwnerApplicationUseCase';
 
 /** Composition root — wires domain interfaces to their infrastructure implementations. */
 container.register<IUserRepository>(USER_TOKENS.UserRepository, { useClass: UserRepository });
@@ -203,5 +223,37 @@ container.register<IToggleAmenityListedUseCase>(AMENITY_TOKENS.ToggleAmenityList
 container.register<IUploadAmenityIconUseCase>(AMENITY_TOKENS.UploadAmenityIconUseCase, {
   useClass: UploadAmenityIconUseCase,
 });
+container.register<ITurfRepository>(TURF_TOKENS.TurfRepository, { useClass: TurfRepository });
+container.register<ITurfImageRepository>(TURF_TOKENS.TurfImageRepository, {
+  useClass: TurfImageRepository,
+});
+container.register<ITurfOwnerApplicationRepository>(
+  TURF_OWNER_APPLICATION_TOKENS.TurfOwnerApplicationRepository,
+  { useClass: TurfOwnerApplicationRepository },
+);
+container.register<ISubmitTurfOwnerApplicationUseCase>(
+  TURF_OWNER_APPLICATION_TOKENS.SubmitTurfOwnerApplicationUseCase,
+  { useClass: SubmitTurfOwnerApplicationUseCase },
+);
+container.register<IGetMyTurfOwnerApplicationUseCase>(
+  TURF_OWNER_APPLICATION_TOKENS.GetMyTurfOwnerApplicationUseCase,
+  { useClass: GetMyTurfOwnerApplicationUseCase },
+);
+container.register<IListMyTurfOwnerApplicationsUseCase>(
+  TURF_OWNER_APPLICATION_TOKENS.ListMyTurfOwnerApplicationsUseCase,
+  { useClass: ListMyTurfOwnerApplicationsUseCase },
+);
+container.register<IListTurfOwnerApplicationsUseCase>(
+  TURF_OWNER_APPLICATION_TOKENS.ListTurfOwnerApplicationsUseCase,
+  { useClass: ListTurfOwnerApplicationsUseCase },
+);
+container.register<IApproveTurfOwnerApplicationUseCase>(
+  TURF_OWNER_APPLICATION_TOKENS.ApproveTurfOwnerApplicationUseCase,
+  { useClass: ApproveTurfOwnerApplicationUseCase },
+);
+container.register<IRejectTurfOwnerApplicationUseCase>(
+  TURF_OWNER_APPLICATION_TOKENS.RejectTurfOwnerApplicationUseCase,
+  { useClass: RejectTurfOwnerApplicationUseCase },
+);
 
 export { container };

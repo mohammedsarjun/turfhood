@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe';
-import { User } from '@domain/user/entities/User';
+import { User, type UserRole } from '@domain/user/entities/User';
 import { DuplicateEmailError } from '@domain/user/errors/DuplicateEmailError';
 import { DuplicatePhoneError } from '@domain/user/errors/DuplicatePhoneError';
 import type { IUserRepository } from '@domain/user/repositories/IUserRepository';
@@ -120,6 +120,10 @@ export class UserRepository implements IUserRepository {
       { _id: userId },
       { $set: { passwordHash }, $addToSet: { authProviders: 'email' } },
     );
+  }
+
+  async addRole(userId: string, role: UserRole): Promise<void> {
+    await UserModel.updateOne({ _id: userId }, { $addToSet: { roles: role } });
   }
 
   private toDomain(doc: UserDocument): User {
