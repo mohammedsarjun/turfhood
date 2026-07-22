@@ -13,6 +13,7 @@ export const API_ROUTES = {
   users: {
     me: '/users/me',
     logout: '/users/logout',
+    refresh: '/users/refresh',
     updateName: '/users/me/name',
     updatePhone: '/users/me/phone',
     requestEmailChange: '/users/me/email/request-change',
@@ -25,6 +26,7 @@ export const API_ROUTES = {
     login: '/admin/login',
     logout: '/admin/logout',
     me: '/admin/me',
+    refresh: '/admin/refresh',
   },
   sports: {
     base: '/sports',

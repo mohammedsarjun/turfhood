@@ -7,12 +7,19 @@ import { User } from '../../../src/domain/user/entities/User.js';
 import { Email } from '../../../src/domain/user/value-objects/Email.js';
 import { FakeUserRepository } from '../../mocks/FakeUserRepository.js';
 import { FakeGoogleAuthService } from '../../mocks/FakeGoogleAuthService.js';
+import { FakeRefreshTokenRepository } from '../../mocks/FakeRefreshTokenRepository.js';
 import { JwtTokenService } from '../../../src/infrastructure/user/services/JwtTokenService.js';
+import { JwtRefreshTokenService } from '../../../src/infrastructure/refreshToken/services/JwtRefreshTokenService.js';
 import type { GoogleProfile } from '../../../src/domain/user/services/IGoogleAuthService.js';
 
 function buildTokenService(): JwtTokenService {
   process.env.JWT_SECRET = process.env.JWT_SECRET ?? 'test-only-secret';
   return new JwtTokenService();
+}
+
+function buildRefreshTokenService(): JwtRefreshTokenService {
+  process.env.REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET ?? 'test-only-refresh-secret';
+  return new JwtRefreshTokenService();
 }
 
 const validProfile: GoogleProfile = {
@@ -50,6 +57,8 @@ describe('LoginWithGoogleUseCase', () => {
       userRepository,
       new FakeGoogleAuthService(validProfile),
       buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
     );
 
     const result = await useCase.execute({ code: 'auth-code' });
@@ -75,6 +84,8 @@ describe('LoginWithGoogleUseCase', () => {
       userRepository,
       new FakeGoogleAuthService(validProfile),
       buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
     );
 
     const result = await useCase.execute({ code: 'auth-code' });
@@ -94,6 +105,8 @@ describe('LoginWithGoogleUseCase', () => {
       userRepository,
       new FakeGoogleAuthService(validProfile),
       buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
     );
 
     await useCase.execute({ code: 'auth-code' });
@@ -110,6 +123,8 @@ describe('LoginWithGoogleUseCase', () => {
       userRepository,
       new FakeGoogleAuthService(validProfile),
       buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
     );
 
     try {
@@ -127,6 +142,8 @@ describe('LoginWithGoogleUseCase', () => {
       userRepository,
       new FakeGoogleAuthService(null),
       buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
     );
 
     try {
@@ -145,6 +162,8 @@ describe('LoginWithGoogleUseCase', () => {
       userRepository,
       new FakeGoogleAuthService(unverifiedProfile),
       buildTokenService(),
+      new FakeRefreshTokenRepository(),
+      buildRefreshTokenService(),
     );
 
     try {

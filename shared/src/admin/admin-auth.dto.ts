@@ -8,4 +8,5 @@ export interface AdminLoginRequest {
 export interface AdminLoginResponse {
   admin: PublicUser;
   accessToken: string;
+  refreshToken: string;
 }

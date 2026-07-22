@@ -16,5 +16,6 @@ export interface VerifyOtpResponse {
     isVerified: true;
     user: PublicUser;
     accessToken: string;
+    refreshToken: string;
 }
 export type ResendOtpResponse = SendOtpResponse;

@@ -25,6 +25,7 @@ const validVerifyResponse = {
     authProviders: ['email' as const],
   },
   accessToken: 'token_123',
+  refreshToken: 'refresh_token_123',
 };
 
 async function typeCodeAndSubmit(code: string) {

@@ -2,6 +2,7 @@ import type { Response } from 'express';
 import { env } from '@config/env';
 
 const ACCESS_TOKEN_COOKIE = 'accessToken';
+const REFRESH_TOKEN_COOKIE = 'refreshToken';
 const DEFAULT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 const UNIT_MS: Record<string, number> = { s: 1000, m: 60_000, h: 3_600_000, d: 86_400_000 };
 
@@ -25,4 +26,18 @@ export function setAuthCookie(res: Response, token: string): void {
 
 export function clearAuthCookie(res: Response): void {
   res.clearCookie(ACCESS_TOKEN_COOKIE, { path: '/' });
+}
+
+export function setRefreshCookie(res: Response, token: string): void {
+  res.cookie(REFRESH_TOKEN_COOKIE, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: parseExpiresInToMs(env.REFRESH_TOKEN_EXPIRES_IN),
+  });
+}
+
+export function clearRefreshCookie(res: Response): void {
+  res.clearCookie(REFRESH_TOKEN_COOKIE, { path: '/' });
 }

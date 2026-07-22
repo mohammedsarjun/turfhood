@@ -1,13 +1,22 @@
 import type { Request, Response } from 'express';
-import { injectable } from 'tsyringe';
-import { clearAuthCookie } from '@presentation/shared/utils/authCookie';
+import { inject, injectable } from 'tsyringe';
+import type { IRevokeRefreshTokenUseCase } from '@application/refreshToken/use-cases/IRevokeRefreshTokenUseCase';
+import { REFRESH_TOKEN_TOKENS } from '@domain/refreshToken/tokens';
+import { clearAuthCookie, clearRefreshCookie } from '@presentation/shared/utils/authCookie';
 import { HttpStatus } from '@shared/constants/httpStatus';
 
-/** No use case needed — clearing the auth cookie has no domain logic to orchestrate. */
 @injectable()
 export class LogoutController {
-  handle = (_req: Request, res: Response): void => {
+  constructor(
+    @inject(REFRESH_TOKEN_TOKENS.RevokeRefreshTokenUseCase)
+    private readonly revokeRefreshTokenUseCase: IRevokeRefreshTokenUseCase,
+  ) {}
+
+  handle = async (req: Request, res: Response): Promise<void> => {
+    const cookies = (req as Request & { cookies?: Record<string, string> }).cookies;
+    await this.revokeRefreshTokenUseCase.execute(cookies?.refreshToken);
     clearAuthCookie(res);
+    clearRefreshCookie(res);
     res.status(HttpStatus.OK).json({ message: 'Logged out successfully.' });
   };
 }

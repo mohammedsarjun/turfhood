@@ -11,6 +11,10 @@ import type { IUserRepository } from '@domain/user/repositories/IUserRepository'
 import type { ITokenService } from '@domain/user/services/ITokenService';
 import { USER_TOKENS } from '@domain/user/tokens';
 import { Email } from '@domain/user/value-objects/Email';
+import type { IRefreshTokenRepository } from '@domain/refreshToken/repositories/IRefreshTokenRepository';
+import type { IRefreshTokenService } from '@domain/refreshToken/services/IRefreshTokenService';
+import { REFRESH_TOKEN_TOKENS } from '@domain/refreshToken/tokens';
+import { issueRefreshToken } from '@application/refreshToken/issueRefreshToken';
 import { env } from '@config/env';
 import { toUserResponseDTO } from '@application/user/mappers/toUserResponseDTO';
 
@@ -31,6 +35,10 @@ export class VerifyOtpUseCase implements IVerifyOtpUseCase {
     @inject(OTP_TOKENS.OtpRepository) private readonly otpRepository: IOtpRepository,
     @inject(OTP_TOKENS.OtpService) private readonly otpService: IOtpService,
     @inject(USER_TOKENS.TokenService) private readonly tokenService: ITokenService,
+    @inject(REFRESH_TOKEN_TOKENS.RefreshTokenRepository)
+    private readonly refreshTokenRepository: IRefreshTokenRepository,
+    @inject(REFRESH_TOKEN_TOKENS.RefreshTokenService)
+    private readonly refreshTokenService: IRefreshTokenService,
   ) {}
 
   async execute(request: VerifyOtpRequestDTO): Promise<VerifyOtpResponseDTO> {
@@ -67,12 +75,18 @@ export class VerifyOtpUseCase implements IVerifyOtpUseCase {
       userId: user.id as string,
       roles: user.roles,
     });
+    const refreshToken = await issueRefreshToken(
+      { id: user.id as string, roles: user.roles },
+      this.refreshTokenService,
+      this.refreshTokenRepository,
+    );
 
     return {
       message: 'Email verified successfully.',
       isVerified: true,
       user: toUserResponseDTO(user),
       accessToken,
+      refreshToken,
     };
   }
 }

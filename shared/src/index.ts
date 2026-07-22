@@ -17,7 +17,8 @@ export type {
   SetPasswordResponse,
   AvatarUploadResponse,
 } from './user/profile.dto.js';
-export type { AuthTokenPayload } from './auth/token.dto.js';
+export type { AuthTokenPayload, RefreshTokenPayload } from './auth/token.dto.js';
+export type { RefreshResponse } from './auth/refresh.dto.js';
 export { AuthErrorCode } from './auth/auth-error-code.js';
 export type { LoginRequest, LoginSuccessResponse, LoginNeedsVerificationResponse, LoginResponse } from './auth/login.dto.js';
 export type { SignUpRequest, SignUpResponse } from './auth/signup.dto.js';

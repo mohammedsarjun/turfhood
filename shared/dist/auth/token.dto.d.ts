@@ -6,3 +6,11 @@ export interface AuthTokenPayload {
     iat?: number;
     exp?: number;
 }
+/** JWT payload shape for refresh tokens — `jti` identifies the persisted record for revocation. */
+export interface RefreshTokenPayload {
+    userId: string;
+    roles: UserRole[];
+    jti: string;
+    iat?: number;
+    exp?: number;
+}

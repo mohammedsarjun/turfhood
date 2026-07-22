@@ -3,7 +3,9 @@ import type { NextRequest } from 'next/server';
 import {
   verifyAccessToken,
   verifyAdminAccessToken,
+  verifyAdminRefreshToken,
   verifyOtpSessionToken,
+  verifyRefreshToken,
 } from '@/lib/auth/session';
 import {
   resolveAdminGuardRedirect,
@@ -18,7 +20,15 @@ export async function proxy(request: NextRequest) {
     const adminSession = await verifyAdminAccessToken(
       request.cookies.get('adminAccessToken')?.value,
     );
-    const adminRedirectTo = resolveAdminGuardRedirect(pathname, adminSession !== null);
+    // Access token may have expired (15m) while the session is still good — the axios
+    // interceptor renews it on the next API call, so a valid refresh token is enough here.
+    const hasAdminRefresh = await verifyAdminRefreshToken(
+      request.cookies.get('adminRefreshToken')?.value,
+    );
+    const adminRedirectTo = resolveAdminGuardRedirect(
+      pathname,
+      adminSession !== null || hasAdminRefresh,
+    );
 
     if (adminRedirectTo) {
       return NextResponse.redirect(new URL(adminRedirectTo, request.url));
@@ -28,7 +38,8 @@ export async function proxy(request: NextRequest) {
   }
 
   const session = await verifyAccessToken(request.cookies.get('accessToken')?.value);
-  const redirectTo = resolveGuardRedirect(pathname, session !== null);
+  const hasRefresh = await verifyRefreshToken(request.cookies.get('refreshToken')?.value);
+  const redirectTo = resolveGuardRedirect(pathname, session !== null || hasRefresh);
 
   if (redirectTo) {
     return NextResponse.redirect(new URL(redirectTo, request.url));

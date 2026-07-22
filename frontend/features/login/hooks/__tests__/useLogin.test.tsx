@@ -70,6 +70,7 @@ describe('useLogin', () => {
         createdAt: new Date('2026-01-01').toISOString(),
       },
       accessToken: 'token_123',
+      refreshToken: 'refresh_token_123',
     });
 
     await submitLogin('jordan@example.com', 'password1');
