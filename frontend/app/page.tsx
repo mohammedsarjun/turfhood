@@ -26,7 +26,7 @@ export default async function Home() {
   return (
     <>
       <Header userName={profile.name} avatarUrl={profile.avatarUrl} />
-      <main>
+      <main className='min-h-screen '>
         <h1>Turfhood</h1>
       </main>
     </>
