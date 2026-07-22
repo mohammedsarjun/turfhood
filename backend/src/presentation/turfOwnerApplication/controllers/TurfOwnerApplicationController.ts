@@ -12,6 +12,7 @@ import { TURF_OWNER_APPLICATION_TOKENS } from '@domain/turfOwnerApplication/toke
 import { TokenMissingError } from '@domain/user/errors/TokenMissingError';
 import type { AuthenticatedRequest } from '@presentation/shared/middlewares/authenticate';
 import type { AdminAuthenticatedRequest } from '@presentation/admin/middlewares/adminOnly';
+import { HttpStatus } from '@shared/constants/httpStatus';
 
 import type { ListTurfOwnerApplicationsRequest } from '../validators/listTurfOwnerApplicationsValidator.js';
 import type { SubmitTurfOwnerApplicationRequest } from '../validators/submitTurfOwnerApplicationValidator.js';
@@ -94,7 +95,7 @@ export class TurfOwnerApplicationController {
           isCover: submission.imageCoverFlags[index] as boolean,
         })),
       });
-      res.status(201).json({ application });
+      res.status(HttpStatus.CREATED).json({ application });
     } catch (error) {
       next(error);
     }
@@ -104,7 +105,7 @@ export class TurfOwnerApplicationController {
     try {
       const userId = requireUserId(req);
       const application = await this.getMineUseCase.execute(userId);
-      res.status(200).json({ application });
+      res.status(HttpStatus.OK).json({ application });
     } catch (error) {
       next(error);
     }
@@ -114,7 +115,7 @@ export class TurfOwnerApplicationController {
     try {
       const userId = requireUserId(req);
       const applications = await this.listMineUseCase.execute(userId);
-      res.status(200).json({ applications });
+      res.status(HttpStatus.OK).json({ applications });
     } catch (error) {
       next(error);
     }
@@ -128,7 +129,7 @@ export class TurfOwnerApplicationController {
         limit,
         ...(status ? { status } : {}),
       });
-      res.status(200).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }
@@ -141,7 +142,7 @@ export class TurfOwnerApplicationController {
         applicationId: req.params.id as string,
         reviewedBy: adminId,
       });
-      res.status(200).json({ application });
+      res.status(HttpStatus.OK).json({ application });
     } catch (error) {
       next(error);
     }
@@ -155,7 +156,7 @@ export class TurfOwnerApplicationController {
         reviewedBy: adminId,
         reason: req.body.reviewNotes,
       });
-      res.status(200).json({ application });
+      res.status(HttpStatus.OK).json({ application });
     } catch (error) {
       next(error);
     }

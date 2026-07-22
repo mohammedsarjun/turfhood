@@ -6,8 +6,11 @@ function buildInput(overrides: Partial<Parameters<typeof validateTurfDetails>[0]
     address: {
       line1: '12 Anna Salai',
       city: 'Chennai',
+      cityCode: '1',
       state: 'Tamil Nadu',
+      stateCode: 'TN',
       country: 'India',
+      countryCode: 'IN',
       pincode: '600002',
     },
     ...overrides,
@@ -35,9 +38,9 @@ describe('validateTurfDetails', () => {
     expect(result.errors.line1).toBeDefined();
   });
 
-  it('rejects a city that does not belong to the selected state', () => {
+  it('rejects a missing city selection', () => {
     const result = validateTurfDetails(
-      buildInput({ address: { ...buildInput().address, city: 'Nonexistent City' } }),
+      buildInput({ address: { ...buildInput().address, city: '', cityCode: '' } }),
     );
     expect(result.valid).toBe(false);
     expect(result.errors.city).toBeDefined();

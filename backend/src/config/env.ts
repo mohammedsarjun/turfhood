@@ -40,6 +40,8 @@ export const env = {
     process.env.CLOUDINARY_TURF_DOCUMENT_FOLDER ?? 'turfhood/turf-documents',
   CLOUDINARY_TURF_IMAGE_FOLDER:
     process.env.CLOUDINARY_TURF_IMAGE_FOLDER ?? 'turfhood/turf-images',
+  CSC_API_KEY: requireEnv('CSC_API_KEY'),
+  CSC_API_BASE_URL: process.env.CSC_API_BASE_URL ?? 'https://api.countrystatecity.in/v1',
   PASSWORD_RESET_TOKEN_EXPIRY_SECONDS: Number(
     process.env.PASSWORD_RESET_TOKEN_EXPIRY_SECONDS ?? DEFAULT_PASSWORD_RESET_EXPIRY_SECONDS,
   ),

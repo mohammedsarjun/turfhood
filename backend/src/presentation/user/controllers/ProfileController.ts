@@ -16,6 +16,7 @@ import {
   setEmailChangeOtpSessionCookie,
 } from '@presentation/shared/utils/emailChangeOtpSessionCookie';
 import { env } from '@config/env';
+import { HttpStatus } from '@shared/constants/httpStatus';
 
 import type { EmailChangeOtpSessionRequest } from '../middlewares/requireEmailChangeOtpSession.js';
 
@@ -49,7 +50,7 @@ export class ProfileController {
     try {
       const userId = requireUserId(req);
       const user = await this.updateNameUseCase.execute({ userId, name: req.body.name });
-      res.status(200).json({ user });
+      res.status(HttpStatus.OK).json({ user });
     } catch (error) {
       next(error);
     }
@@ -59,7 +60,7 @@ export class ProfileController {
     try {
       const userId = requireUserId(req);
       const user = await this.updatePhoneUseCase.execute({ userId, phone: req.body.phone });
-      res.status(200).json({ user });
+      res.status(HttpStatus.OK).json({ user });
     } catch (error) {
       next(error);
     }
@@ -73,7 +74,7 @@ export class ProfileController {
         newEmail: req.body.newEmail,
       });
       setEmailChangeOtpSessionCookie(res, result.otpSessionToken, env.OTP_SESSION_EXPIRY_SECONDS);
-      res.status(200).json({ message: result.message, expiresInSeconds: result.expiresInSeconds });
+      res.status(HttpStatus.OK).json({ message: result.message, expiresInSeconds: result.expiresInSeconds });
     } catch (error) {
       next(error);
     }
@@ -89,7 +90,7 @@ export class ProfileController {
         otp: req.body.otp,
       });
       clearEmailChangeOtpSessionCookie(res);
-      res.status(200).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }
@@ -103,7 +104,7 @@ export class ProfileController {
         currentPassword: req.body.currentPassword,
         newPassword: req.body.newPassword,
       });
-      res.status(200).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }
@@ -116,7 +117,7 @@ export class ProfileController {
         userId,
         newPassword: req.body.newPassword,
       });
-      res.status(200).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }
@@ -136,7 +137,7 @@ export class ProfileController {
         mimeType: file.mimetype,
         sizeBytes: file.size,
       });
-      res.status(200).json({ user });
+      res.status(HttpStatus.OK).json({ user });
     } catch (error) {
       next(error);
     }

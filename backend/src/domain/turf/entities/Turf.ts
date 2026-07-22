@@ -3,8 +3,11 @@ import type { GeoPoint } from '@turfhood/shared';
 export interface TurfAddress {
   line1: string;
   city: string;
+  cityCode: string;
   state: string;
+  stateCode: string;
   country: string;
+  countryCode: string;
   pincode: string;
 }
 

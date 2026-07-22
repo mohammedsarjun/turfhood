@@ -3,8 +3,11 @@ import type { TurfApplicationStatus } from './turf-onboarding-status.js';
 export interface TurfApplicationAddress {
     line1: string;
     city: string;
+    cityCode: string;
     state: string;
+    stateCode: string;
     country: string;
+    countryCode: string;
     pincode: string;
 }
 export interface TurfApplicationDocument {

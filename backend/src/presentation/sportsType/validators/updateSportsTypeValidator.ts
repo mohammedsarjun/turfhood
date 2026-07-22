@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
+import { HttpStatus } from '@shared/constants/httpStatus';
 
 export const updateSportsTypeSchema = z
   .object({
@@ -15,7 +16,7 @@ export function validateUpdateSportsTypeRequest(
 ): void {
   const result = updateSportsTypeSchema.safeParse(req.body);
   if (!result.success) {
-    res.status(400).json({ message: 'Invalid sport.', errors: result.error.flatten().fieldErrors });
+    res.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid sport.', errors: result.error.flatten().fieldErrors });
     return;
   }
   req.body = result.data;

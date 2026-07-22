@@ -4,6 +4,7 @@ import type { ISignUpUserUseCase } from '@application/user/use-cases/ISignUpUser
 import { USER_TOKENS } from '@domain/user/tokens';
 import { setOtpSessionCookie } from '@presentation/shared/utils/otpSessionCookie';
 import { env } from '@config/env';
+import { HttpStatus } from '@shared/constants/httpStatus';
 
 @injectable()
 export class SignUpController {
@@ -15,7 +16,7 @@ export class SignUpController {
     try {
       const result = await this.signUpUserUseCase.execute(req.body);
       setOtpSessionCookie(res, result.otpSessionToken, env.OTP_SESSION_EXPIRY_SECONDS);
-      res.status(201).json({ user: result.user, expiresInSeconds: result.expiresInSeconds });
+      res.status(HttpStatus.CREATED).json({ user: result.user, expiresInSeconds: result.expiresInSeconds });
     } catch (error) {
       next(error);
     }

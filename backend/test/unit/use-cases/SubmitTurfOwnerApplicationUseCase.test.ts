@@ -7,6 +7,7 @@ import { InvalidLocationError } from '../../../src/domain/turfOwnerApplication/e
 import { InvalidTurfImageError } from '../../../src/domain/turfOwnerApplication/errors/InvalidTurfImageError.js';
 import { FakeTurfOwnerApplicationRepository } from '../../mocks/FakeTurfOwnerApplicationRepository.js';
 import { FakeFileStorageService } from '../../mocks/FakeFileStorageService.js';
+import { FakeLocationLookupService } from '../../mocks/FakeLocationLookupService.js';
 import { buildTurfOwnerApplication } from '../../fixtures/turfOwnerApplications.fixture.js';
 
 function buildImage(overrides: { isCover?: boolean; mimeType?: string; sizeBytes?: number } = {}) {
@@ -26,8 +27,11 @@ function buildRequest(overrides: Record<string, unknown> = {}) {
     address: {
       line1: '12 Anna Salai',
       city: 'Chennai',
+      cityCode: '1',
       state: 'Tamil Nadu',
+      stateCode: 'TN',
       country: 'India',
+      countryCode: 'IN',
       pincode: '600002',
     },
     coordinates: { lat: 13.0827, lng: 80.2707 },
@@ -51,7 +55,11 @@ describe('SubmitTurfOwnerApplicationUseCase', () => {
   it('persists a valid application with pending status and uploads the document + image', async () => {
     const applicationRepository = new FakeTurfOwnerApplicationRepository();
     const fileStorageService = new FakeFileStorageService({ url: 'http://cdn.test/lease.pdf' });
-    const useCase = new SubmitTurfOwnerApplicationUseCase(applicationRepository, fileStorageService);
+    const useCase = new SubmitTurfOwnerApplicationUseCase(
+      applicationRepository,
+      fileStorageService,
+      new FakeLocationLookupService(),
+    );
 
     const result = await useCase.execute(buildRequest() as never);
 
@@ -65,7 +73,11 @@ describe('SubmitTurfOwnerApplicationUseCase', () => {
   it('rejects an invalid country/state/city combination', async () => {
     const applicationRepository = new FakeTurfOwnerApplicationRepository();
     const fileStorageService = new FakeFileStorageService();
-    const useCase = new SubmitTurfOwnerApplicationUseCase(applicationRepository, fileStorageService);
+    const useCase = new SubmitTurfOwnerApplicationUseCase(
+      applicationRepository,
+      fileStorageService,
+      new FakeLocationLookupService(),
+    );
 
     try {
       await useCase.execute(
@@ -73,8 +85,11 @@ describe('SubmitTurfOwnerApplicationUseCase', () => {
           address: {
             line1: '1 Main St',
             city: 'Nonexistent City',
+            cityCode: 'nonexistent',
             state: 'Tamil Nadu',
+            stateCode: 'TN',
             country: 'India',
+            countryCode: 'IN',
             pincode: '600002',
           },
         }) as never,
@@ -88,7 +103,11 @@ describe('SubmitTurfOwnerApplicationUseCase', () => {
   it('rejects missing/out-of-range coordinates', async () => {
     const applicationRepository = new FakeTurfOwnerApplicationRepository();
     const fileStorageService = new FakeFileStorageService();
-    const useCase = new SubmitTurfOwnerApplicationUseCase(applicationRepository, fileStorageService);
+    const useCase = new SubmitTurfOwnerApplicationUseCase(
+      applicationRepository,
+      fileStorageService,
+      new FakeLocationLookupService(),
+    );
 
     try {
       await useCase.execute(buildRequest({ coordinates: { lat: 999, lng: 80.27 } }) as never);
@@ -103,7 +122,11 @@ describe('SubmitTurfOwnerApplicationUseCase', () => {
       existingPendingByApplicant: buildTurfOwnerApplication(),
     });
     const fileStorageService = new FakeFileStorageService();
-    const useCase = new SubmitTurfOwnerApplicationUseCase(applicationRepository, fileStorageService);
+    const useCase = new SubmitTurfOwnerApplicationUseCase(
+      applicationRepository,
+      fileStorageService,
+      new FakeLocationLookupService(),
+    );
 
     try {
       await useCase.execute(buildRequest() as never);
@@ -117,7 +140,11 @@ describe('SubmitTurfOwnerApplicationUseCase', () => {
   it('rejects an invalid document file before uploading anything', async () => {
     const applicationRepository = new FakeTurfOwnerApplicationRepository();
     const fileStorageService = new FakeFileStorageService();
-    const useCase = new SubmitTurfOwnerApplicationUseCase(applicationRepository, fileStorageService);
+    const useCase = new SubmitTurfOwnerApplicationUseCase(
+      applicationRepository,
+      fileStorageService,
+      new FakeLocationLookupService(),
+    );
 
     try {
       await useCase.execute(
@@ -143,7 +170,11 @@ describe('SubmitTurfOwnerApplicationUseCase', () => {
   it('rejects zero turf images', async () => {
     const applicationRepository = new FakeTurfOwnerApplicationRepository();
     const fileStorageService = new FakeFileStorageService();
-    const useCase = new SubmitTurfOwnerApplicationUseCase(applicationRepository, fileStorageService);
+    const useCase = new SubmitTurfOwnerApplicationUseCase(
+      applicationRepository,
+      fileStorageService,
+      new FakeLocationLookupService(),
+    );
 
     try {
       await useCase.execute(buildRequest({ images: [] }) as never);
@@ -156,7 +187,11 @@ describe('SubmitTurfOwnerApplicationUseCase', () => {
   it('rejects more than 10 turf images', async () => {
     const applicationRepository = new FakeTurfOwnerApplicationRepository();
     const fileStorageService = new FakeFileStorageService();
-    const useCase = new SubmitTurfOwnerApplicationUseCase(applicationRepository, fileStorageService);
+    const useCase = new SubmitTurfOwnerApplicationUseCase(
+      applicationRepository,
+      fileStorageService,
+      new FakeLocationLookupService(),
+    );
 
     const images = Array.from({ length: 11 }, (_, index) =>
       buildImage({ isCover: index === 0 }),
@@ -173,7 +208,11 @@ describe('SubmitTurfOwnerApplicationUseCase', () => {
   it('rejects when no image (or more than one) is marked as cover', async () => {
     const applicationRepository = new FakeTurfOwnerApplicationRepository();
     const fileStorageService = new FakeFileStorageService();
-    const useCase = new SubmitTurfOwnerApplicationUseCase(applicationRepository, fileStorageService);
+    const useCase = new SubmitTurfOwnerApplicationUseCase(
+      applicationRepository,
+      fileStorageService,
+      new FakeLocationLookupService(),
+    );
 
     try {
       await useCase.execute(
@@ -199,7 +238,11 @@ describe('SubmitTurfOwnerApplicationUseCase', () => {
   it('rejects an invalid image file type', async () => {
     const applicationRepository = new FakeTurfOwnerApplicationRepository();
     const fileStorageService = new FakeFileStorageService();
-    const useCase = new SubmitTurfOwnerApplicationUseCase(applicationRepository, fileStorageService);
+    const useCase = new SubmitTurfOwnerApplicationUseCase(
+      applicationRepository,
+      fileStorageService,
+      new FakeLocationLookupService(),
+    );
 
     try {
       await useCase.execute(

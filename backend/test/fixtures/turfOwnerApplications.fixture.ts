@@ -4,8 +4,11 @@ import type { TurfAddress } from '../../src/domain/turf/entities/Turf.js';
 const DEFAULT_ADDRESS: TurfAddress = {
   line1: '12 Anna Salai',
   city: 'Chennai',
+  cityCode: '1',
   state: 'Tamil Nadu',
+  stateCode: 'TN',
   country: 'India',
+  countryCode: 'IN',
   pincode: '600002',
 };
 

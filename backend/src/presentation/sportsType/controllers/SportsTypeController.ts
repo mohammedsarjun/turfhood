@@ -7,6 +7,7 @@ import type { IUpdateSportsTypeUseCase } from '@application/sportsType/use-cases
 import type { IUploadSportsTypeIconUseCase } from '@application/sportsType/use-cases/IUploadSportsTypeIconUseCase';
 import { InvalidSportsTypeIconFileError } from '@domain/sportsType/errors/InvalidSportsTypeIconFileError';
 import { SPORTS_TYPE_TOKENS } from '@domain/sportsType/tokens';
+import { HttpStatus } from '@shared/constants/httpStatus';
 
 import type { ListSportsTypesRequest } from '../validators/listSportsTypesValidator.js';
 
@@ -34,7 +35,7 @@ export class SportsTypeController {
         ...(search ? { search } : {}),
         ...(isListed !== undefined ? { isListed } : {}),
       });
-      res.status(200).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }
@@ -44,7 +45,7 @@ export class SportsTypeController {
   listPublic = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const result = await this.listSportsTypesUseCase.execute({ page: 1, limit: 100, isListed: true });
-      res.status(200).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }
@@ -63,7 +64,7 @@ export class SportsTypeController {
         iconMimeType: file.mimetype,
         iconSizeBytes: file.size,
       });
-      res.status(201).json({ item });
+      res.status(HttpStatus.CREATED).json({ item });
     } catch (error) {
       next(error);
     }
@@ -75,7 +76,7 @@ export class SportsTypeController {
         id: req.params.id as string,
         ...req.body,
       });
-      res.status(200).json({ item });
+      res.status(HttpStatus.OK).json({ item });
     } catch (error) {
       next(error);
     }
@@ -87,7 +88,7 @@ export class SportsTypeController {
         id: req.params.id as string,
         isListed: req.body.isListed,
       });
-      res.status(200).json({ item });
+      res.status(HttpStatus.OK).json({ item });
     } catch (error) {
       next(error);
     }
@@ -106,7 +107,7 @@ export class SportsTypeController {
         mimeType: file.mimetype,
         sizeBytes: file.size,
       });
-      res.status(200).json({ item });
+      res.status(HttpStatus.OK).json({ item });
     } catch (error) {
       next(error);
     }

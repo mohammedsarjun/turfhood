@@ -9,7 +9,9 @@ import type { ITurfOwnerApplicationRepository } from '@domain/turfOwnerApplicati
 import { TURF_OWNER_APPLICATION_TOKENS } from '@domain/turfOwnerApplication/tokens';
 import type { IFileStorageService } from '@domain/shared/services/IFileStorageService';
 import { SHARED_TOKENS } from '@domain/shared/tokens';
-import { isValidLocation, type TurfApplicationSummary } from '@turfhood/shared';
+import type { ILocationLookupService } from '@domain/location/services/ILocationLookupService';
+import { LOCATION_TOKENS } from '@domain/location/tokens';
+import type { TurfApplicationSummary } from '@turfhood/shared';
 import { env } from '@config/env';
 
 import type { SubmitTurfOwnerApplicationRequestDTO } from '../dtos/SubmitTurfOwnerApplicationRequestDTO.js';
@@ -33,12 +35,22 @@ export class SubmitTurfOwnerApplicationUseCase implements ISubmitTurfOwnerApplic
     private readonly applicationRepository: ITurfOwnerApplicationRepository,
     @inject(SHARED_TOKENS.FileStorageService)
     private readonly fileStorageService: IFileStorageService,
+    @inject(LOCATION_TOKENS.LocationLookupService)
+    private readonly locationLookupService: ILocationLookupService,
   ) {}
 
   async execute(request: SubmitTurfOwnerApplicationRequestDTO): Promise<TurfApplicationSummary> {
     const { address, coordinates } = request;
 
-    if (!isValidLocation(address.country, address.state, address.city)) {
+    const states = await this.locationLookupService.getStates(address.countryCode);
+    if (!states.some((state) => state.code === address.stateCode)) {
+      throw new InvalidLocationError();
+    }
+    const cities = await this.locationLookupService.getCities(
+      address.countryCode,
+      address.stateCode,
+    );
+    if (!cities.some((city) => city.code === address.cityCode)) {
       throw new InvalidLocationError();
     }
 

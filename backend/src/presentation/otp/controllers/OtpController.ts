@@ -10,6 +10,7 @@ import {
   clearOtpSessionCookie,
 } from '@presentation/shared/utils/otpSessionCookie';
 import { env } from '@config/env';
+import { HttpStatus } from '@shared/constants/httpStatus';
 
 import type { OtpSessionRequest } from '../middlewares/requireOtpSession.js';
 
@@ -26,7 +27,7 @@ export class OtpController {
     try {
       const result = await this.sendOtpUseCase.execute(req.body);
       setOtpSessionCookie(res, result.otpSessionToken, env.OTP_SESSION_EXPIRY_SECONDS);
-      res.status(200).json({ message: result.message, expiresInSeconds: result.expiresInSeconds });
+      res.status(HttpStatus.OK).json({ message: result.message, expiresInSeconds: result.expiresInSeconds });
     } catch (error) {
       next(error);
     }
@@ -36,7 +37,7 @@ export class OtpController {
     try {
       const { otpSession } = req as OtpSessionRequest;
       const result = this.getOtpSessionUseCase.execute(otpSession!);
-      res.status(200).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }
@@ -52,7 +53,7 @@ export class OtpController {
       });
       clearOtpSessionCookie(res);
       setAuthCookie(res, result.accessToken);
-      res.status(200).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }
@@ -66,7 +67,7 @@ export class OtpController {
         purpose: otpSession!.purpose,
       });
       setOtpSessionCookie(res, result.otpSessionToken, env.OTP_SESSION_EXPIRY_SECONDS);
-      res.status(200).json({ message: result.message, expiresInSeconds: result.expiresInSeconds });
+      res.status(HttpStatus.OK).json({ message: result.message, expiresInSeconds: result.expiresInSeconds });
     } catch (error) {
       next(error);
     }

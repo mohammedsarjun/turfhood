@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 
 import { AppError } from '../errors/AppError.js';
+import { HttpStatus } from '../constants/httpStatus.js';
 
 export function errorHandler(
   err: unknown,
@@ -15,5 +16,5 @@ export function errorHandler(
     return;
   }
   console.error(err);
-  res.status(500).json({ message: 'Something went wrong. Please try again later.' });
+  res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Something went wrong. Please try again later.' });
 }

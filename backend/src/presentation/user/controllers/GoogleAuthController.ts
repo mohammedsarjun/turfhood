@@ -3,6 +3,7 @@ import { inject, injectable } from 'tsyringe';
 import type { ILoginWithGoogleUseCase } from '@application/user/use-cases/ILoginWithGoogleUseCase';
 import { USER_TOKENS } from '@domain/user/tokens';
 import { setAuthCookie } from '@presentation/shared/utils/authCookie';
+import { HttpStatus } from '@shared/constants/httpStatus';
 
 @injectable()
 export class GoogleAuthController {
@@ -15,7 +16,7 @@ export class GoogleAuthController {
     try {
       const result = await this.loginWithGoogleUseCase.execute(req.body);
       setAuthCookie(res, result.accessToken);
-      res.status(200).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }

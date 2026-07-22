@@ -1,8 +1,9 @@
 import { AppError } from '@shared/errors/AppError';
+import { HttpStatus } from '@shared/constants/httpStatus';
 import { TurfOnboardingErrorCode } from '@turfhood/shared';
 
 export class InvalidTurfImageError extends AppError {
   constructor(message: string) {
-    super(message, 400, TurfOnboardingErrorCode.INVALID_IMAGE);
+    super(message, HttpStatus.BAD_REQUEST, TurfOnboardingErrorCode.INVALID_IMAGE);
   }
 }

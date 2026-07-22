@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
+import { HttpStatus } from '@shared/constants/httpStatus';
 
 export const listTurfOwnerApplicationsQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
@@ -22,7 +23,7 @@ export function validateListTurfOwnerApplicationsRequest(
   const result = listTurfOwnerApplicationsQuerySchema.safeParse(req.query);
   if (!result.success) {
     res
-      .status(400)
+      .status(HttpStatus.BAD_REQUEST)
       .json({ message: 'Invalid list parameters.', errors: result.error.flatten().fieldErrors });
     return;
   }

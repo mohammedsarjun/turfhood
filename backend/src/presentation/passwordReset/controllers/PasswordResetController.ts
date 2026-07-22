@@ -3,6 +3,7 @@ import { inject, injectable } from 'tsyringe';
 import type { IRequestPasswordResetUseCase } from '@application/passwordReset/use-cases/IRequestPasswordResetUseCase';
 import type { IResetPasswordUseCase } from '@application/passwordReset/use-cases/IResetPasswordUseCase';
 import { PASSWORD_RESET_TOKENS } from '@domain/passwordReset/tokens';
+import { HttpStatus } from '@shared/constants/httpStatus';
 
 @injectable()
 export class PasswordResetController {
@@ -16,7 +17,7 @@ export class PasswordResetController {
   requestReset = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const result = await this.requestPasswordResetUseCase.execute(req.body);
-      res.status(200).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }
@@ -25,7 +26,7 @@ export class PasswordResetController {
   resetPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const result = await this.resetPasswordUseCase.execute(req.body);
-      res.status(200).json(result);
+      res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }

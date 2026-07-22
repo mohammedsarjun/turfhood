@@ -33,8 +33,11 @@ const turfOwnerApplicationSchema = new Schema<TurfOwnerApplicationDocument>(
     address: {
       line1: { type: String, required: true, trim: true },
       city: { type: String, required: true, trim: true },
+      cityCode: { type: String, required: true, trim: true },
       state: { type: String, required: true, trim: true },
+      stateCode: { type: String, required: true, trim: true },
       country: { type: String, required: true, trim: true },
+      countryCode: { type: String, required: true, trim: true },
       pincode: { type: String, required: true, trim: true },
     },
     location: {
