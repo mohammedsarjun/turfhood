@@ -51,7 +51,10 @@ export function validateSubmitTurfOwnerApplicationRequest(
   if (!bodyResult.success) {
     res
       .status(HttpStatus.BAD_REQUEST)
-      .json({ message: 'Invalid application details.', errors: bodyResult.error.flatten().fieldErrors });
+      .json({
+        message: 'Invalid application details.',
+        errors: bodyResult.error.flatten().fieldErrors,
+      });
     return;
   }
 

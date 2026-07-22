@@ -4,7 +4,7 @@ import { FakeTurfOwnerApplicationRepository } from '../../mocks/FakeTurfOwnerApp
 import { buildTurfOwnerApplication } from '../../fixtures/turfOwnerApplications.fixture.js';
 
 describe('ListMyTurfOwnerApplicationsUseCase', () => {
-  it("returns every application the user has submitted, regardless of status", async () => {
+  it('returns every application the user has submitted, regardless of status', async () => {
     const applications = [
       buildTurfOwnerApplication({ id: 'application_1', status: 'pending' }),
       buildTurfOwnerApplication({ id: 'application_2', status: 'approved' }),

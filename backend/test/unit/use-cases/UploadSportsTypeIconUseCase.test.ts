@@ -50,7 +50,9 @@ describe('UploadSportsTypeIconUseCase', () => {
 
     try {
       await useCase.execute(buildRequest({ mimeType: 'application/pdf' }));
-      expect.fail('Expected execute() to throw InvalidSportsTypeIconFileError, but it did not throw.');
+      expect.fail(
+        'Expected execute() to throw InvalidSportsTypeIconFileError, but it did not throw.',
+      );
     } catch (error) {
       expect(error).to.be.instanceOf(InvalidSportsTypeIconFileError);
     }
@@ -65,7 +67,9 @@ describe('UploadSportsTypeIconUseCase', () => {
 
     try {
       await useCase.execute(buildRequest({ sizeBytes: 6 * 1024 * 1024 }));
-      expect.fail('Expected execute() to throw InvalidSportsTypeIconFileError, but it did not throw.');
+      expect.fail(
+        'Expected execute() to throw InvalidSportsTypeIconFileError, but it did not throw.',
+      );
     } catch (error) {
       expect(error).to.be.instanceOf(InvalidSportsTypeIconFileError);
     }

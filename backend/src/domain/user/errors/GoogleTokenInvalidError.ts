@@ -4,6 +4,10 @@ import { HttpStatus } from '@shared/constants/httpStatus';
 
 export class GoogleTokenInvalidError extends AppError {
   constructor() {
-    super('Google sign-in failed. Please try again.', HttpStatus.UNAUTHORIZED, AuthErrorCode.GOOGLE_TOKEN_INVALID);
+    super(
+      'Google sign-in failed. Please try again.',
+      HttpStatus.UNAUTHORIZED,
+      AuthErrorCode.GOOGLE_TOKEN_INVALID,
+    );
   }
 }

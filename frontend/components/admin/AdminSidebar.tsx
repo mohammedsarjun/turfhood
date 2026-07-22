@@ -63,7 +63,13 @@ export function AdminSidebar({ open = false, onNavigate }: AdminSidebarProps) {
                 ? 'bg-sidebar-active text-sidebar-text'
                 : 'bg-transparent text-sidebar-muted hover:bg-sidebar-hover hover:text-sidebar-text',
             )}
-            style={{ gap: 12, paddingLeft: 12, paddingRight: 12, paddingTop: 10, paddingBottom: 10 }}
+            style={{
+              gap: 12,
+              paddingLeft: 12,
+              paddingRight: 12,
+              paddingTop: 10,
+              paddingBottom: 10,
+            }}
           >
             <Icon
               className="h-4 w-4"

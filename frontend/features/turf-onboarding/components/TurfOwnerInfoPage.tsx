@@ -45,8 +45,8 @@ export function TurfOwnerInfoPage() {
             Become a Turf Owner
           </Heading>
           <Text style={{ marginBottom: 28 }}>
-            List your turf on Turfhood and reach players actively looking to book. Here&apos;s
-            what you get, and what we&apos;ll need to verify your ownership.
+            List your turf on Turfhood and reach players actively looking to book. Here&apos;s what
+            you get, and what we&apos;ll need to verify your ownership.
           </Text>
           <Link
             href="/become-a-turf-owner/apply"
@@ -93,8 +93,8 @@ export function TurfOwnerInfoPage() {
             </ul>
             <Text style={{ marginTop: 12 }}>
               After you submit, an admin reviews your application and documents. Your account is
-              upgraded to a turf owner only once your application is approved — this usually
-              takes a few business days.
+              upgraded to a turf owner only once your application is approved — this usually takes a
+              few business days.
             </Text>
           </CardContent>
         </Card>

@@ -56,7 +56,10 @@ describe('cropImageToBlob', () => {
       onerror: (() => void) | null = null;
       crossOrigin = '';
       set src(_value: string) {
-        setTimeout(() => (this.onerror as (error: Error) => void)?.(new Error('failed to load')), 0);
+        setTimeout(
+          () => (this.onerror as (error: Error) => void)?.(new Error('failed to load')),
+          0,
+        );
       }
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- test stub for the DOM Image constructor

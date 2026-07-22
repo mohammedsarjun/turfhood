@@ -3,7 +3,10 @@
 import { useState } from 'react';
 import { useToast } from '@/components/ui';
 import { ApiError } from '@/types/api/response';
-import { approveTurfOwnerApplication, rejectTurfOwnerApplication } from '../actions/turfApplicationsAdminApi';
+import {
+  approveTurfOwnerApplication,
+  rejectTurfOwnerApplication,
+} from '../actions/turfApplicationsAdminApi';
 
 export function useReviewApplication(onSuccess: () => void) {
   const { showToast } = useToast();

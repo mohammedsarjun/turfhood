@@ -16,7 +16,9 @@ export class SignUpController {
     try {
       const result = await this.signUpUserUseCase.execute(req.body);
       setOtpSessionCookie(res, result.otpSessionToken, env.OTP_SESSION_EXPIRY_SECONDS);
-      res.status(HttpStatus.CREATED).json({ user: result.user, expiresInSeconds: result.expiresInSeconds });
+      res
+        .status(HttpStatus.CREATED)
+        .json({ user: result.user, expiresInSeconds: result.expiresInSeconds });
     } catch (error) {
       next(error);
     }

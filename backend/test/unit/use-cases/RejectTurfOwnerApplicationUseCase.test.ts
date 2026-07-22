@@ -34,7 +34,9 @@ describe('RejectTurfOwnerApplicationUseCase', () => {
 
     try {
       await useCase.execute({ applicationId: 'application_1', reviewedBy: 'admin_1' });
-      expect.fail('Expected execute() to throw ApplicationAlreadyReviewedError, but it did not throw.');
+      expect.fail(
+        'Expected execute() to throw ApplicationAlreadyReviewedError, but it did not throw.',
+      );
     } catch (error) {
       expect(error).to.be.instanceOf(ApplicationAlreadyReviewedError);
     }

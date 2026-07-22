@@ -66,7 +66,9 @@ describe('SubmitTurfOwnerApplicationUseCase', () => {
     expect(fileStorageService.uploadCalls).to.have.length(2);
     expect(applicationRepository.createCalls).to.have.length(1);
     expect(result.status).to.equal('pending');
-    expect(result.documents).to.deep.equal([{ type: 'lease_agreement', url: 'http://cdn.test/lease.pdf' }]);
+    expect(result.documents).to.deep.equal([
+      { type: 'lease_agreement', url: 'http://cdn.test/lease.pdf' },
+    ]);
     expect(result.images).to.deep.equal([{ url: 'http://cdn.test/lease.pdf', isCover: true }]);
   });
 
@@ -130,7 +132,9 @@ describe('SubmitTurfOwnerApplicationUseCase', () => {
 
     try {
       await useCase.execute(buildRequest() as never);
-      expect.fail('Expected execute() to throw DuplicatePendingApplicationError, but it did not throw.');
+      expect.fail(
+        'Expected execute() to throw DuplicatePendingApplicationError, but it did not throw.',
+      );
     } catch (error) {
       expect(error).to.be.instanceOf(DuplicatePendingApplicationError);
     }
@@ -193,9 +197,7 @@ describe('SubmitTurfOwnerApplicationUseCase', () => {
       new FakeLocationLookupService(),
     );
 
-    const images = Array.from({ length: 11 }, (_, index) =>
-      buildImage({ isCover: index === 0 }),
-    );
+    const images = Array.from({ length: 11 }, (_, index) => buildImage({ isCover: index === 0 }));
 
     try {
       await useCase.execute(buildRequest({ images }) as never);
@@ -215,9 +217,7 @@ describe('SubmitTurfOwnerApplicationUseCase', () => {
     );
 
     try {
-      await useCase.execute(
-        buildRequest({ images: [buildImage({ isCover: false })] }) as never,
-      );
+      await useCase.execute(buildRequest({ images: [buildImage({ isCover: false })] }) as never);
       expect.fail('Expected execute() to throw InvalidTurfImageError, but it did not throw.');
     } catch (error) {
       expect(error).to.be.instanceOf(InvalidTurfImageError);

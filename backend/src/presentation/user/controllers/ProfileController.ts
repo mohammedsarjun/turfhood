@@ -74,7 +74,9 @@ export class ProfileController {
         newEmail: req.body.newEmail,
       });
       setEmailChangeOtpSessionCookie(res, result.otpSessionToken, env.OTP_SESSION_EXPIRY_SECONDS);
-      res.status(HttpStatus.OK).json({ message: result.message, expiresInSeconds: result.expiresInSeconds });
+      res
+        .status(HttpStatus.OK)
+        .json({ message: result.message, expiresInSeconds: result.expiresInSeconds });
     } catch (error) {
       next(error);
     }

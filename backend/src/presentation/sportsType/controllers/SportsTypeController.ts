@@ -44,7 +44,11 @@ export class SportsTypeController {
   /** Public, read-only catalog listing (listed items only) — consumed by e.g. the turf-owner onboarding form's sport picker. */
   listPublic = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const result = await this.listSportsTypesUseCase.execute({ page: 1, limit: 100, isListed: true });
+      const result = await this.listSportsTypesUseCase.execute({
+        page: 1,
+        limit: 100,
+        isListed: true,
+      });
       res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);

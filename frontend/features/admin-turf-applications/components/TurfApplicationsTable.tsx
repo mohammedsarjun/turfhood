@@ -11,7 +11,10 @@ export interface TurfApplicationsTableProps {
   onReview: (application: TurfApplicationSummary) => void;
 }
 
-const STATUS_BADGE: Record<TurfApplicationSummary['status'], 'success' | 'warning' | 'destructive'> = {
+const STATUS_BADGE: Record<
+  TurfApplicationSummary['status'],
+  'success' | 'warning' | 'destructive'
+> = {
   pending: 'warning',
   approved: 'success',
   rejected: 'destructive',

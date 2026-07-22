@@ -49,7 +49,11 @@ describe('ApplicationReviewModal', () => {
 
   it('does not show the rejection reason field until Reject is clicked', () => {
     renderWithToast(
-      <ApplicationReviewModal application={pendingApplication} onClose={jest.fn()} onSuccess={jest.fn()} />,
+      <ApplicationReviewModal
+        application={pendingApplication}
+        onClose={jest.fn()}
+        onSuccess={jest.fn()}
+      />,
     );
 
     expect(screen.queryByLabelText(/rejection reason/i)).not.toBeInTheDocument();
@@ -58,12 +62,18 @@ describe('ApplicationReviewModal', () => {
   });
 
   it('approving does not require or send a rejection reason', async () => {
-    approveMock.mockResolvedValueOnce({ application: { ...pendingApplication, status: TurfApplicationStatus.APPROVED } });
+    approveMock.mockResolvedValueOnce({
+      application: { ...pendingApplication, status: TurfApplicationStatus.APPROVED },
+    });
     const user = userEvent.setup();
     const onSuccess = jest.fn();
 
     renderWithToast(
-      <ApplicationReviewModal application={pendingApplication} onClose={jest.fn()} onSuccess={onSuccess} />,
+      <ApplicationReviewModal
+        application={pendingApplication}
+        onClose={jest.fn()}
+        onSuccess={onSuccess}
+      />,
     );
 
     await user.click(screen.getByRole('button', { name: /^approve$/i }));
@@ -73,11 +83,17 @@ describe('ApplicationReviewModal', () => {
   });
 
   it('reveals the reason field only after clicking Reject, then submits it on confirm', async () => {
-    rejectMock.mockResolvedValueOnce({ application: { ...pendingApplication, status: TurfApplicationStatus.REJECTED } });
+    rejectMock.mockResolvedValueOnce({
+      application: { ...pendingApplication, status: TurfApplicationStatus.REJECTED },
+    });
     const user = userEvent.setup();
 
     renderWithToast(
-      <ApplicationReviewModal application={pendingApplication} onClose={jest.fn()} onSuccess={jest.fn()} />,
+      <ApplicationReviewModal
+        application={pendingApplication}
+        onClose={jest.fn()}
+        onSuccess={jest.fn()}
+      />,
     );
 
     await user.click(screen.getByRole('button', { name: /^reject$/i }));

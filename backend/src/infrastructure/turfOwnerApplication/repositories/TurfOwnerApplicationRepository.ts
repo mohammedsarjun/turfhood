@@ -48,10 +48,7 @@ export class TurfOwnerApplicationRepository implements ITurfOwnerApplicationRepo
 
     const skip = (params.page - 1) * params.limit;
     const [docs, total] = await Promise.all([
-      TurfOwnerApplicationModel.find(filter)
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(params.limit),
+      TurfOwnerApplicationModel.find(filter).sort({ createdAt: -1 }).skip(skip).limit(params.limit),
       TurfOwnerApplicationModel.countDocuments(filter),
     ]);
 

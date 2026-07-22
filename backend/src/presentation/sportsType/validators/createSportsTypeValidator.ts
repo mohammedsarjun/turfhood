@@ -14,7 +14,9 @@ export function validateCreateSportsTypeRequest(
 ): void {
   const result = createSportsTypeSchema.safeParse(req.body);
   if (!result.success) {
-    res.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid sport.', errors: result.error.flatten().fieldErrors });
+    res
+      .status(HttpStatus.BAD_REQUEST)
+      .json({ message: 'Invalid sport.', errors: result.error.flatten().fieldErrors });
     return;
   }
   req.body = result.data;

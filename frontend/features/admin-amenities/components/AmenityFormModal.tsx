@@ -60,7 +60,10 @@ function AmenityFormModalBody({ existing, onClose, onSuccess }: AmenityFormModal
         }}
       >
         <div style={{ marginBottom: 16 }}>
-          <label htmlFor="amenity-name" className="mb-1.5 block text-sm font-medium text-foreground">
+          <label
+            htmlFor="amenity-name"
+            className="mb-1.5 block text-sm font-medium text-foreground"
+          >
             Name
           </label>
           <Input id="amenity-name" errorMessage={errors.name?.message} {...register('name')} />

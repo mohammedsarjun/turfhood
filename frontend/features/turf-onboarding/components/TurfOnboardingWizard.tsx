@@ -8,7 +8,13 @@ import { DocumentUpload } from './DocumentUpload';
 import { LocationMapPicker } from './LocationMapPicker';
 import { TurfImageUpload } from './TurfImageUpload';
 
-const STEP_TITLES = ['Turf Details', 'Location', 'Sports & Amenities', 'Turf Photos', 'Documents & Review'];
+const STEP_TITLES = [
+  'Turf Details',
+  'Location',
+  'Sports & Amenities',
+  'Turf Photos',
+  'Documents & Review',
+];
 
 export function TurfOnboardingWizard() {
   const {

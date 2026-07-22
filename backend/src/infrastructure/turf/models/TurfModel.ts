@@ -1,6 +1,11 @@
 import mongoose, { Schema, model, type Document, type Model } from 'mongoose';
 import type { GeoPoint } from '@turfhood/shared/';
-import type { TurfAddress, TurfAmenityRef, TurfRating, TurfStatus } from '@domain/turf/entities/Turf';
+import type {
+  TurfAddress,
+  TurfAmenityRef,
+  TurfRating,
+  TurfStatus,
+} from '@domain/turf/entities/Turf';
 
 export interface TurfDocument extends Document {
   ownerId: mongoose.Types.ObjectId;

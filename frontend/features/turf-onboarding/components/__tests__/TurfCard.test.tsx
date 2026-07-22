@@ -54,7 +54,10 @@ describe('TurfCard', () => {
   });
 
   it('does not crash for a legacy application predating the images field', () => {
-    const legacyApplication = { ...baseApplication, images: undefined } as unknown as TurfApplicationSummary;
+    const legacyApplication = {
+      ...baseApplication,
+      images: undefined,
+    } as unknown as TurfApplicationSummary;
 
     render(<TurfCard application={legacyApplication} onClick={jest.fn()} />);
 
