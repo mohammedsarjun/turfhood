@@ -1,60 +1,51 @@
 # TurfHood - Architecture
 
-Monorepo with the frontend and backend in a single repository.
+TurfHood is a monorepo containing a Next.js frontend, an Express backend, and shared TypeScript DTOs.
 
+```text
+turfhood-project/
+|-- frontend/          # Next.js application
+|-- backend/           # Express API using Clean Architecture
+|-- shared/            # DTOs and types shared by frontend and backend
+|-- README.md
+`-- .github/
 ```
-turfhood/
-├── frontend/          # Next.js app
-├── backend/           # Express + Clean Architecture
-├── shared/            # Shared TypeScript types (DTOs used by both sides)
-├── README.md
-└── .github/
+
+## Backend Architecture
+
+The backend currently uses a layer-first Clean Architecture. Each business area is represented within the relevant `domain`, `application`, `infrastructure`, and `presentation` layers.
+
+```text
+backend/src/
+|-- domain/            # Entities, repository contracts, service contracts, errors
+|-- application/       # Use cases, DTOs, and mappers
+|-- infrastructure/    # Mongoose models/repositories and external services
+|-- presentation/      # Express controllers, routes, validators, and middleware
+|-- config/            # Environment and application configuration
+|-- container/         # Dependency-injection registration
+|-- shared/            # Cross-cutting backend utilities
+|-- app.ts             # Express application composition
+`-- server.ts          # Process entry point
 ```
 
+## Current Backend Modules
 
-## Backend Modules
+As of now, these are the modules implemented in the project. A dash means that the module does not own a MongoDB collection.
 
-Modules-first, clean-architecture-layers-inside-each-module (not one flat layer split across the whole app — this schema spans too many distinct domains for that).
+| Module | Responsibility | Collection owned |
+|---|---|---|
+| `admin` | Admin authentication and initial admin setup | - (uses `users`) |
+| `user` | Accounts, roles, profiles, and authentication identities | `users` |
+| `otp` | Email OTP issuance and verification | `otpverifications` |
+| `passwordReset` | Password-reset token lifecycle | `passwordresettokens` |
+| `refreshToken` | Refresh-token rotation and revocation | `refreshtokens` |
+| `amenity` | Amenity catalog management | `amenities` |
+| `sportsType` | Sports-type catalog management | `sportstypes` |
+| `location` | Country, state, and city lookup | - |
+| `turfOwnerApplication` | Turf-owner applications and review workflow | `turfownerapplications` |
+| `turf` | Approved turf records and turf images | `turfs`, `turfimages` |
 
-| Module | Collections Owned |
-|---|---|
-| `auth` | `otp_verifications` |
-| `user` | `users` |
-| `turf` | `turfs`, `turf_images` |
-| `court` | `courts`, `court_images`, `pricing_rules`, `special_date_pricing`, `availability_overrides` |
-| `catalog` | `sports_types`, `amenities` |
-| `verification` | `turf_owner_verifications` |
-| `slot` | `slots` |
-| `booking` | `bookings` |
-| `open-session` | `open_sessions`, `open_session_participants` |
-| `payment` | `payments` |
-| `refund` | `refunds` |
-| `wallet` | `wallets`, `wallet_transactions` |
-| `review` | `reviews` |
-| `favorite` | `favorites` |
-| `notification` | `notifications` + WhatsApp provider (called by other modules) |
-| `payout` | `owner_payout_accounts`, `owner_earnings`, `payouts` |
-| `admin` | `audit_logs`, user suspension, review moderation actions |
-
-## Standard Shape of Every Module
-
-```
-modules/<name>/
-├── domain/
-│   ├── entities/          # Plain TS types/classes — no framework code
-│   └── repositories/      # Interfaces only (e.g. ITurfRepository)
-├── application/
-│   ├── use-cases/         # Business logic — depends on domain interfaces
-│   └── dtos/
-├── infrastructure/
-│   ├── models/             # Mongoose schemas
-│   ├── repositories/        # Implements domain interfaces
-│   └── services/            # External integrations (Twilio, Razorpay)
-└── presentation/
-    ├── controllers/
-    ├── routes/
-    └── validators/
-```
+Collection names above follow the current Mongoose models. Features and collections planned for later phases, including courts, slots, bookings, payments, and Open Sessions, are intentionally not listed as implemented modules.
 
 ## Dependency Rule
 
@@ -62,71 +53,19 @@ modules/<name>/
 |---|---|
 | `presentation` | `application` |
 | `application` | `domain` |
-| `infrastructure` | `domain` (implements its interfaces) |
-| `domain` | Nothing — no Express, no Mongoose |
+| `infrastructure` | Domain contracts that it implements |
+| `domain` | No Express or Mongoose code |
 
-## Backend Root Structure
+## Frontend Structure
 
-```
-backend/
-├── src/
-│   ├── modules/           # see module table above
-│   ├── shared/
-│   │   ├── errors/
-│   │   ├── middlewares/    # authMiddleware, roleMiddleware, errorHandler, rateLimiter
-│   │   ├── jobs/           # scheduled job runner
-│   │   ├── utils/
-│   │   └── config/         # env.ts, database.ts
-│   ├── app.ts              # mounts all module routes
-│   └── server.ts
-├── .env.example
-├── package.json
-└── tsconfig.json
-```
-
-## Cross-Cutting Concerns
-
-| Concern | Pattern | Who calls it |
-|---|---|---|
-| Notifications | `INotificationProvider` interface in `notification` module | `booking`, `refund`, `open-session`, `verification` use cases |
-| Audit logging | `IAuditLogger` interface in `shared/`, implemented in `admin` module | Any use case performing a sensitive action (approval, refund, payout, suspension) |
-| Scheduled jobs | Live in `shared/jobs/`, call into module use cases | `slot`, `open-session`, `notification` modules |
-
-## Frontend Route Map
-
-| Route Group | Example Routes | Purpose |
-|---|---|---|
-| `(auth)` | `/login`, `/signup` | OTP authentication |
-| `(customer)` | `/home`, `/search`, `/turfs/[turfId]`, `/checkout`, `/bookings`, `/open-sessions`, `/wallet`, `/favorites`, `/profile` | Customer-facing app |
-| `(owner)` | `/my-turfs`, `/turfs/new`, `/bookings`, `/slots`, `/dashboard`, `/revenue`, `/payouts/request`, `/whatsapp-settings` | Turf owner management |
-| `(admin)` | `/dashboard`, `/turfs`, `/users`, `/reviews`, `/catalog`, `/payouts` | Platform administration |
-
-## Frontend Root Structure
-
-```
-frontend/
-├── src/
-│   ├── app/                # routes — see table above
-│   ├── components/
-│   │   ├── ui/              # generic reusable (MUI + Tailwind)
-│   │   └── features/        # auth, turf, court, booking, open-session, wallet, review, whatsapp
-│   ├── lib/
-│   │   ├── api/              # one client file per backend module
-│   │   ├── auth/
-│   │   └── theme.ts           # MUI theme (shared design tokens)
-│   ├── hooks/
-│   └── types/                # mirrors shared/ DTOs
-├── tailwind.config.ts
-└── package.json
-```
+The frontend uses the Next.js App Router. Route entry points live in `frontend/app`, feature-specific UI and logic live in `frontend/features`, shared components live in `frontend/components`, API route definitions live in `frontend/lib/apiRoutes`, and reusable hooks live in `frontend/hooks`.
 
 ## Key Design Decisions
 
 | Decision | Reasoning |
 |---|---|
-| Slot lifecycle lives in `slot` module only | `booking` module calls into it rather than mutating slot state directly |
-| Open Session cost split computed once, at creation | `costPerPlayer = totalCost / maxPlayers` and `autoCancelAt` (48hr cutoff) — not recalculated elsewhere |
-| Payment, Refund, Wallet are separate modules | Lifecycles differ: one payment → many refunds; wallet balance changes only via append-only `wallet_transactions` ledger |
-| Turf visibility check lives in `turf` module | Public only when `status: approved` AND linked `turf_owner_verifications.status: approved` — not a frontend-only check |
-| Role-based middleware is shared, not duplicated | Lives in `shared/middlewares/`, applied per-route in each module |
-| WhatsApp isolated behind `INotificationProvider` | Confirmations (Phase 2), reminders (Phase 3), two-way replies (Phase 4) all extend one provider |
+| Clean Architecture boundaries | Business rules remain independent of Express, Mongoose, and third-party services |
+| Dependency injection through `tsyringe` | Infrastructure implementations can be replaced without changing use cases |
+| Shared DTO package | Frontend and backend use the same request and response contracts |
+| Separate temporary-token collections | OTP, password-reset, and refresh-token lifecycles have different expiry and revocation rules |
+| Open Sessions as a core planned domain | The booking flow will let players create public sessions that strangers can discover and join |

@@ -1,26 +1,24 @@
 # TurfHood
 
-Marketplace platform for booking sports turfs & courts, with split-cost Open Sessions and automated WhatsApp notifications.
+TurfHood is a sports turf and court platform centered on Open Sessions: players can create public game sessions that strangers can discover and join, making it easier to form a group and play together.
 
 ## Docs
 
 | Doc | Purpose |
 |---|---|
-| [PROJECT_BRIEF.md](./PROJECT-BRIEF.md) | What we're building, for whom, and the roadmap |
-| [TECH_STACK.md](./TECH-STACK.md) | Stack choices and why |
-| [ARCHITECTURE.md](./ARCHITECTURE.md) | Folder structure, module design, data model mapping |
+| [Project brief](./PROJECT-BRIEF.md) | Product problem, users, features, and roadmap |
+| [Tech stack](./TECH-STACK.md) | Current technologies and integrations |
+| [Architecture](./ARCHITECTURE.md) | Repository structure, backend modules, and collections |
 
-
-
-## Stack at a glance
+## Stack at a Glance
 
 | Layer | Choice |
 |---|---|
-| Frontend | Next.js (App Router), TypeScript, Material UI, Tailwind CSS |
-| Backend | Node.js, Express, TypeScript, Clean Architecture, Monolith |
+| Frontend | Next.js App Router, React, TypeScript, Tailwind CSS |
+| Backend | Node.js, Express, TypeScript, Clean Architecture |
 | Database | MongoDB + Mongoose |
-| Payments | Razorpay + internal Wallet |
-| Notifications | WhatsApp Business API (Twilio) |
+| Authentication | Email OTP through Resend, Google OAuth, JWT |
+| Media | Cloudinary |
 
 ## Getting Started
 
@@ -28,9 +26,11 @@ Marketplace platform for booking sports turfs & courts, with split-cost Open Ses
 
 | Requirement | Version |
 |---|---|
-| Node.js | 20.x or later |
-| MongoDB | Local instance or Atlas connection string |
-| npm | 10.x or later |
+| Node.js | 20.9.0 or later |
+| npm | 10 or later |
+| MongoDB | Local deployment or MongoDB Atlas connection string |
+
+Next.js 16.2.10 requires Node.js 20.9.0 or later. npm 10 or later is the supported baseline for this npm-workspaces monorepo.
 
 ### Installation
 
@@ -42,22 +42,28 @@ npm install
 
 ### Environment Variables
 
-Copy `.env.example` to `.env.local` (frontend) and `.env` (backend), then fill in the values.
+Copy the provided environment examples to the frontend and backend environment files, then supply the required values.
 
-### Run locally
+### Run Locally
+
+Start the backend and frontend in separate terminals:
 
 ```bash
-npm run dev
+npm run dev --workspace backend
+```
+
+```bash
+npm run dev --workspace frontend
 ```
 
 ## Project Status
 
 | Phase | Focus | Status |
 |---|---|---|
-| Phase 1 | Foundation, Auth, Turf/Court Setup | 🚧 In Progress |
-| Phase 2 | Slot Engine, Booking Flow, Payments | 🔲 Not started |
-| Phase 3 | Open Sessions, Owner Ops, Turf Approval | 🔲 Not started |
-| Phase 4 | Admin Tools, Polish, Hardening | 🔲 Not started |
+| Phase 1 | Foundation, authentication, turf-owner application, and turf setup | Completed |
+| Phase 2 | Slot engine, booking flow, and payments | In progress |
+| Phase 3 | Open Sessions, owner operations, and turf approval | Planned |
+| Phase 4 | Admin tools, notifications, polish, and hardening | Planned |
 
 ## License
 
