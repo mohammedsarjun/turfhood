@@ -5,9 +5,11 @@ import { useRouter } from 'next/navigation';
 import { useGoogleLogin } from '@react-oauth/google';
 import { googleAuth } from '../actions/googleAuthApi';
 import { ApiError } from '@/types/api/response';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 
 export function useGoogleAuth() {
   const router = useRouter();
+  const { setUser } = useCurrentUser();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,7 +19,8 @@ export function useGoogleAuth() {
       setError(null);
       setIsLoading(true);
       try {
-        await googleAuth({ code: codeResponse.code });
+        const result = await googleAuth({ code: codeResponse.code });
+        setUser(result.user);
         // replace (not push): once authenticated, /login or /signup must not
         // remain a back-button target — same pattern as regular login/OTP success.
         router.replace('/');

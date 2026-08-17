@@ -1,4 +1,7 @@
 import {
+  isAuthRoute,
+  isAdminRoute,
+  isProtectedRoute,
   resolveAdminGuardRedirect,
   resolveGuardRedirect,
   resolveOtpGuardRedirect,
@@ -10,6 +13,9 @@ describe('resolveGuardRedirect', () => {
     ['/', true, null],
     ['/profile', false, '/login'],
     ['/profile', true, null],
+    ['/my-turfs', false, '/login'],
+    ['/become-a-turf-owner', false, '/login'],
+    ['/become-a-turf-owner/apply', false, '/login'],
     ['/login', true, '/'],
     ['/login', false, null],
     ['/signup', true, '/'],
@@ -18,6 +24,13 @@ describe('resolveGuardRedirect', () => {
     ['/some-other-page', true, null],
   ])('resolveGuardRedirect(%p, %p) -> %p', (pathname, isAuthenticated, expected) => {
     expect(resolveGuardRedirect(pathname, isAuthenticated)).toBe(expected);
+  });
+
+  it('classifies protected and logged-out-only routes', () => {
+    expect(isProtectedRoute('/my-turfs')).toBe(true);
+    expect(isProtectedRoute('/login')).toBe(false);
+    expect(isAuthRoute('/login')).toBe(true);
+    expect(isAuthRoute('/profile')).toBe(false);
   });
 });
 
@@ -34,6 +47,8 @@ describe('resolveOtpGuardRedirect', () => {
 
 describe('resolveAdminGuardRedirect', () => {
   it.each([
+    ['/admin', false, '/admin/login'],
+    ['/admin', true, '/admin/dashboard'],
     // Unauthenticated visitor hitting an admin route (other than the login page itself).
     ['/admin/dashboard', false, '/admin/login'],
     // A non-admin session is indistinguishable from unauthenticated here — full separation.
@@ -49,5 +64,14 @@ describe('resolveAdminGuardRedirect', () => {
     ['/', true, null],
   ])('resolveAdminGuardRedirect(%p, %p) -> %p', (pathname, isAdminAuthenticated, expected) => {
     expect(resolveAdminGuardRedirect(pathname, isAdminAuthenticated)).toBe(expected);
+  });
+
+  it.each([
+    ['/admin', true],
+    ['/admin/dashboard', true],
+    ['/administrator', false],
+    ['/profile', false],
+  ])('isAdminRoute(%p) -> %p', (pathname, expected) => {
+    expect(isAdminRoute(pathname)).toBe(expected);
   });
 });

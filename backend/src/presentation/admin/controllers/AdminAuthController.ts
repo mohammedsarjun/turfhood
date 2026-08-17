@@ -74,6 +74,8 @@ export class AdminAuthController {
       setAdminRefreshCookie(res, result.refreshToken);
       res.status(HttpStatus.OK).json({ accessToken: result.accessToken });
     } catch (error) {
+      clearAdminAuthCookie(res);
+      clearAdminRefreshCookie(res);
       next(error);
     }
   };
