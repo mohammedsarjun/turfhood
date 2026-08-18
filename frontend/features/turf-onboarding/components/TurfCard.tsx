@@ -44,7 +44,7 @@ export function TurfCard({ application, onClick }: TurfCardProps) {
         </p>
         {application.status === TurfApplicationStatus.APPROVED && (
           <Link
-            href={`/turf-portal/${application.id}/dashboard`}
+            href={`/turf-portal/${application.turfId ?? application.id}/dashboard`}
             onClick={(event) => event.stopPropagation()}
             className="mt-4 inline-flex h-9 w-full items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >

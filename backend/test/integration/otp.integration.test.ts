@@ -44,12 +44,16 @@ describe('POST /api/otp/* (integration)', () => {
   });
 
   async function signUp(email: string) {
-    return request(app).post('/api/users/signup').send({
+    const response = await request(app).post('/api/users/signup').send({
       name: 'Jordan Lee',
       email,
       phone: '9123456780',
       password: 'password1',
     });
+    // Signup sends its own OTP. This suite exercises the explicit /otp endpoints,
+    // so begin each scenario with an empty fake mailbox.
+    testEmailService.sentEmails.length = 0;
+    return response;
   }
 
   it('sends a code and later verifies it, marking the user verified', async () => {

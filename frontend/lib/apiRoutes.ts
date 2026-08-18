@@ -41,6 +41,9 @@ export const API_ROUTES = {
     latest: '/turf-owner-applications/me',
     mine: '/turf-owner-applications/mine',
   },
+  courts: {
+    forTurf: (turfId: string) => `/turfs/${turfId}/courts`,
+  },
   locations: {
     countries: '/locations/countries',
     states: (countryCode: string) => `/locations/countries/${countryCode}/states`,

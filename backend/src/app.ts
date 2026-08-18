@@ -8,6 +8,7 @@ import adminRoutes from '@presentation/admin/routes/admin.routes';
 import sportsTypeRoutes from '@presentation/sportsType/routes/sportsType.routes';
 import amenityRoutes from '@presentation/amenity/routes/amenity.routes';
 import turfOwnerApplicationRoutes from '@presentation/turfOwnerApplication/routes/turfOwnerApplication.routes';
+import courtRoutes from '@presentation/court/routes/court.routes';
 import locationRoutes from '@presentation/location/routes/location.routes';
 import { errorHandler } from '@shared/middlewares/errorHandler';
 import { env } from '@config/env';
@@ -25,6 +26,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/sports', sportsTypeRoutes);
 app.use('/api/amenities', amenityRoutes);
 app.use('/api/turf-owner-applications', turfOwnerApplicationRoutes);
+app.use('/api/turfs/:turfId/courts', courtRoutes);
 app.use('/api/locations', locationRoutes);
 
 app.use(errorHandler);

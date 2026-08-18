@@ -59,6 +59,7 @@ export class ApproveTurfOwnerApplicationUseCase implements IApproveTurfOwnerAppl
       address: application.address,
       amenities: amenityRefs,
       sportsOffered: application.sportsOffered,
+      ...(application.id ? { verificationId: application.id } : {}),
     });
     const createdTurf = await this.turfRepository.create(turf);
 

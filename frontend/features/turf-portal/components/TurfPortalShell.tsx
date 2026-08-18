@@ -21,7 +21,8 @@ export function TurfPortalShell({ turfId, children }: TurfPortalShellProps) {
     () =>
       applications.find(
         (application) =>
-          application.id === turfId && application.status === TurfApplicationStatus.APPROVED,
+          (application.id === turfId || application.turfId === turfId) &&
+          application.status === TurfApplicationStatus.APPROVED,
       ),
     [applications, turfId],
   );

@@ -127,6 +127,13 @@ import type { IRefreshAccessTokenUseCase } from '@application/refreshToken/use-c
 import { RefreshAccessTokenUseCase } from '@application/refreshToken/use-cases/RefreshAccessTokenUseCase';
 import type { IRevokeRefreshTokenUseCase } from '@application/refreshToken/use-cases/IRevokeRefreshTokenUseCase';
 import { RevokeRefreshTokenUseCase } from '@application/refreshToken/use-cases/RevokeRefreshTokenUseCase';
+import type { ICourtRepository } from '@domain/court/repositories/ICourtRepository';
+import { COURT_TOKENS } from '@domain/court/tokens';
+import { CourtRepository } from '@infrastructure/court/repositories/CourtRepository';
+import type { ICreateCourtUseCase } from '@application/court/use-cases/ICreateCourtUseCase';
+import { CreateCourtUseCase } from '@application/court/use-cases/CreateCourtUseCase';
+import type { IListCourtsUseCase } from '@application/court/use-cases/IListCourtsUseCase';
+import { ListCourtsUseCase } from '@application/court/use-cases/ListCourtsUseCase';
 
 /** Composition root — wires domain interfaces to their infrastructure implementations. */
 container.register<IUserRepository>(USER_TOKENS.UserRepository, { useClass: UserRepository });
@@ -296,6 +303,13 @@ container.register<IRefreshAccessTokenUseCase>(REFRESH_TOKEN_TOKENS.RefreshAcces
 });
 container.register<IRevokeRefreshTokenUseCase>(REFRESH_TOKEN_TOKENS.RevokeRefreshTokenUseCase, {
   useClass: RevokeRefreshTokenUseCase,
+});
+container.register<ICourtRepository>(COURT_TOKENS.CourtRepository, { useClass: CourtRepository });
+container.register<ICreateCourtUseCase>(COURT_TOKENS.CreateCourtUseCase, {
+  useClass: CreateCourtUseCase,
+});
+container.register<IListCourtsUseCase>(COURT_TOKENS.ListCourtsUseCase, {
+  useClass: ListCourtsUseCase,
 });
 
 export { container };

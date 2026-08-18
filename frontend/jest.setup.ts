@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
 
 afterEach(() => {
-  window.localStorage.clear();
+  if (typeof window !== 'undefined') window.localStorage.clear();
 });
