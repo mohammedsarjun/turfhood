@@ -63,4 +63,21 @@ describe('TurfCard', () => {
 
     expect(screen.getByText('Green Turf Arena')).toBeInTheDocument();
   });
+
+  it('shows the dashboard link only for approved turfs', () => {
+    const { rerender } = render(
+      <TurfCard
+        application={{ ...baseApplication, status: TurfApplicationStatus.APPROVED }}
+        onClick={jest.fn()}
+      />,
+    );
+
+    expect(screen.getByRole('link', { name: /view dashboard/i })).toHaveAttribute(
+      'href',
+      '/turf-portal/application_1/dashboard',
+    );
+
+    rerender(<TurfCard application={baseApplication} onClick={jest.fn()} />);
+    expect(screen.queryByRole('link', { name: /view dashboard/i })).not.toBeInTheDocument();
+  });
 });

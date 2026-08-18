@@ -6,12 +6,18 @@ export const PROTECTED_ROUTES = [
   '/become-a-turf-owner',
   '/become-a-turf-owner/apply',
 ];
+const PROTECTED_ROUTE_PREFIXES = ['/turf-portal'];
 
 /** Paths that only make sense for a logged-out visitor; authenticated users are sent home. */
 export const AUTH_ROUTES = ['/login', '/signup', '/forgot-password', '/otp'];
 
 export function isProtectedRoute(pathname: string): boolean {
-  return PROTECTED_ROUTES.includes(pathname);
+  return (
+    PROTECTED_ROUTES.includes(pathname) ||
+    PROTECTED_ROUTE_PREFIXES.some(
+      (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+    )
+  );
 }
 
 export function isAuthRoute(pathname: string): boolean {
@@ -23,7 +29,7 @@ export const OTP_SESSION_ROUTES = ['/otp'];
 
 /** Pure route-guard decision: where (if anywhere) a request for `pathname` should be redirected. */
 export function resolveGuardRedirect(pathname: string, isAuthenticated: boolean): string | null {
-  if (PROTECTED_ROUTES.includes(pathname) && !isAuthenticated) {
+  if (isProtectedRoute(pathname) && !isAuthenticated) {
     return '/login';
   }
   if (AUTH_ROUTES.includes(pathname) && isAuthenticated) {

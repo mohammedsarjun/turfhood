@@ -14,6 +14,8 @@ describe('resolveGuardRedirect', () => {
     ['/profile', false, '/login'],
     ['/profile', true, null],
     ['/my-turfs', false, '/login'],
+    ['/turf-portal/application_1/dashboard', false, '/login'],
+    ['/turf-portal/application_1/dashboard', true, null],
     ['/become-a-turf-owner', false, '/login'],
     ['/become-a-turf-owner/apply', false, '/login'],
     ['/login', true, '/'],
@@ -28,6 +30,7 @@ describe('resolveGuardRedirect', () => {
 
   it('classifies protected and logged-out-only routes', () => {
     expect(isProtectedRoute('/my-turfs')).toBe(true);
+    expect(isProtectedRoute('/turf-portal/application_1/dashboard')).toBe(true);
     expect(isProtectedRoute('/login')).toBe(false);
     expect(isAuthRoute('/login')).toBe(true);
     expect(isAuthRoute('/profile')).toBe(false);

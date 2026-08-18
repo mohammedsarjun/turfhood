@@ -106,10 +106,7 @@ async function recoverSession(
   return refreshRequest;
 }
 
-function attachSessionCookies(
-  response: NextResponse,
-  result: SessionRefreshResult,
-): NextResponse {
+function attachSessionCookies(response: NextResponse, result: SessionRefreshResult): NextResponse {
   for (const cookie of result.setCookieHeaders) {
     response.headers.append('set-cookie', cookie);
   }
@@ -193,6 +190,7 @@ export const config = {
     '/otp',
     '/profile',
     '/my-turfs',
+    '/turf-portal/:path*',
     '/become-a-turf-owner',
     '/become-a-turf-owner/apply',
     '/admin',

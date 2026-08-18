@@ -73,5 +73,9 @@ describe('MyTurfsPage', () => {
       'href',
       '/become-a-turf-owner/apply',
     );
+    expect(screen.getByRole('link', { name: /view dashboard/i })).toHaveAttribute(
+      'href',
+      '/turf-portal/application_1/dashboard',
+    );
   });
 });
