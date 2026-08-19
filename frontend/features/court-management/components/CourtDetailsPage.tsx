@@ -39,8 +39,11 @@ import { CourtFormModal } from './CourtFormModal';
 import { formatTime12Hour } from '@/lib/time';
 
 const reasonLabels: Record<AvailabilityOverrideReasonType, string> = {
-  holiday: 'Holiday', maintenance: 'Maintenance', private_event: 'Private event',
-  weather: 'Weather', other: 'Other',
+  holiday: 'Holiday',
+  maintenance: 'Maintenance',
+  private_event: 'Private event',
+  weather: 'Weather',
+  other: 'Other',
 };
 
 interface Props {
@@ -90,35 +93,32 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
     };
   }, [courtId, turfId]);
 
-  const removeOverride = useCallback(
-    async () => {
-      if (!overrideToDelete) return;
-      setIsDeletingOverride(true);
-      try {
-        await deleteAvailabilityOverride(turfId, courtId, overrideToDelete.id);
-        setDetails((current) =>
-          current
-            ? {
-                ...current,
-                availabilityOverrides: current.availabilityOverrides.filter(
-                  (entry) => entry.id !== overrideToDelete.id,
-                ),
-              }
-            : current,
-        );
-        showToast('Availability override removed.', 'success');
-        setOverrideToDelete(null);
-      } catch (caught) {
-        showToast(
-          caught instanceof ApiError ? caught.message : 'Failed to remove override.',
-          'error',
-        );
-      } finally {
-        setIsDeletingOverride(false);
-      }
-    },
-    [courtId, overrideToDelete, showToast, turfId],
-  );
+  const removeOverride = useCallback(async () => {
+    if (!overrideToDelete) return;
+    setIsDeletingOverride(true);
+    try {
+      await deleteAvailabilityOverride(turfId, courtId, overrideToDelete.id);
+      setDetails((current) =>
+        current
+          ? {
+              ...current,
+              availabilityOverrides: current.availabilityOverrides.filter(
+                (entry) => entry.id !== overrideToDelete.id,
+              ),
+            }
+          : current,
+      );
+      showToast('Availability override removed.', 'success');
+      setOverrideToDelete(null);
+    } catch (caught) {
+      showToast(
+        caught instanceof ApiError ? caught.message : 'Failed to remove override.',
+        'error',
+      );
+    } finally {
+      setIsDeletingOverride(false);
+    }
+  }, [courtId, overrideToDelete, showToast, turfId]);
 
   if (loading)
     return (
@@ -156,8 +156,12 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <Badge variant={court.status === 'active' ? 'success' : 'outline'}>{court.status}</Badge>
-            <Button variant="outline" onClick={() => setEditModalOpen(true)}><Pencil size={16} /> Edit court</Button>
+            <Badge variant={court.status === 'active' ? 'success' : 'outline'}>
+              {court.status}
+            </Badge>
+            <Button variant="outline" onClick={() => setEditModalOpen(true)}>
+              <Pencil size={16} /> Edit court
+            </Button>
           </div>
         </div>
       </div>
@@ -221,7 +225,12 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
               Close or change this court&apos;s hours for a specific date.
             </p>
           </div>
-          <Button onClick={() => { setEditingOverride(null); setModalOpen(true); }}>
+          <Button
+            onClick={() => {
+              setEditingOverride(null);
+              setModalOpen(true);
+            }}
+          >
             <Plus size={16} /> Add override
           </Button>
         </CardHeader>
@@ -253,22 +262,61 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
                           })}
                         </p>
                         <Badge variant={item.isClosed ? 'destructive' : 'warning'}>
-                          {item.isClosed ? 'Closed all day' : item.customHours ? 'Custom schedule' : 'Regular hours'}
+                          {item.isClosed
+                            ? 'Closed all day'
+                            : item.customHours
+                              ? 'Custom schedule'
+                              : 'Regular hours'}
                         </Badge>
                       </div>
                       {item.isClosed ? (
-                        <p className="mt-1 text-sm text-muted-foreground">{item.closureReason ? reasonLabels[item.closureReason] : 'Court unavailable for the day'}</p>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {item.closureReason
+                            ? reasonLabels[item.closureReason]
+                            : 'Court unavailable for the day'}
+                        </p>
                       ) : (
                         <div className="mt-1 space-y-1 text-sm text-muted-foreground">
-                          <p>{item.customHours ? item.customHours.map((period) => `${formatTime12Hour(period.startTime)}–${formatTime12Hour(period.endTime)}`).join(', ') : 'Uses regular opening hours'}</p>
-                          {item.blockedPeriods.length > 0 && <p>{item.blockedPeriods.length} blocked period{item.blockedPeriods.length === 1 ? '' : 's'}</p>}
+                          <p>
+                            {item.customHours
+                              ? item.customHours
+                                  .map(
+                                    (period) =>
+                                      `${formatTime12Hour(period.startTime)}–${formatTime12Hour(period.endTime)}`,
+                                  )
+                                  .join(', ')
+                              : 'Uses regular opening hours'}
+                          </p>
+                          {item.blockedPeriods.length > 0 && (
+                            <p>
+                              {item.blockedPeriods.length} blocked period
+                              {item.blockedPeriods.length === 1 ? '' : 's'}
+                            </p>
+                          )}
                         </div>
                       )}
                     </div>
                   </div>
                   <div className="flex gap-1">
-                    <Button variant="ghost" size="sm" aria-label={`Edit override for ${item.date}`} onClick={() => { setEditingOverride(item); setModalOpen(true); }}><Pencil size={16} /></Button>
-                    <Button variant="ghost" size="sm" aria-label={`Remove override for ${item.date}`} onClick={() => setOverrideToDelete(item)}><Trash2 size={16} className="text-destructive" /></Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      aria-label={`Edit override for ${item.date}`}
+                      onClick={() => {
+                        setEditingOverride(item);
+                        setModalOpen(true);
+                      }}
+                    >
+                      <Pencil size={16} />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      aria-label={`Remove override for ${item.date}`}
+                      onClick={() => setOverrideToDelete(item)}
+                    >
+                      <Trash2 size={16} className="text-destructive" />
+                    </Button>
                   </div>
                 </div>
               ))}
@@ -300,21 +348,39 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
       />
       <Modal
         open={overrideToDelete !== null}
-        onClose={() => { if (!isDeletingOverride) setOverrideToDelete(null); }}
+        onClose={() => {
+          if (!isDeletingOverride) setOverrideToDelete(null);
+        }}
         title="Delete availability override?"
       >
         <p className="text-sm text-muted-foreground">
           This will restore the regular schedule for{' '}
           <span className="font-medium text-foreground">
             {overrideToDelete
-              ? new Date(`${overrideToDelete.date}T00:00:00`).toLocaleDateString('en-IN', { dateStyle: 'medium' })
+              ? new Date(`${overrideToDelete.date}T00:00:00`).toLocaleDateString('en-IN', {
+                  dateStyle: 'medium',
+                })
               : ''}
           </span>
           . This action cannot be undone.
         </p>
         <div className="mt-6 flex justify-end gap-2">
-          <Button type="button" variant="outline" disabled={isDeletingOverride} onClick={() => setOverrideToDelete(null)}>Cancel</Button>
-          <Button type="button" variant="destructive" loading={isDeletingOverride} onClick={() => void removeOverride()}>Delete override</Button>
+          <Button
+            type="button"
+            variant="outline"
+            disabled={isDeletingOverride}
+            onClick={() => setOverrideToDelete(null)}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="button"
+            variant="destructive"
+            loading={isDeletingOverride}
+            onClick={() => void removeOverride()}
+          >
+            Delete override
+          </Button>
         </div>
       </Modal>
       <CourtFormModal
@@ -325,7 +391,7 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
         onClose={() => setEditModalOpen(false)}
         onCreated={() => undefined}
         onUpdated={(updatedCourt) => {
-          setDetails((current) => current ? { ...current, court: updatedCourt } : current);
+          setDetails((current) => (current ? { ...current, court: updatedCourt } : current));
           setEditModalOpen(false);
         }}
       />
@@ -339,13 +405,21 @@ function CourtGallery({ court }: { court: CourtDTO }) {
   const selected = court.images.find((image) => image.id === selectedId) ?? initial;
 
   if (!selected) {
-    return <div className="flex h-64 items-center justify-center bg-muted text-muted-foreground">No court image</div>;
+    return (
+      <div className="flex h-64 items-center justify-center bg-muted text-muted-foreground">
+        No court image
+      </div>
+    );
   }
 
   return (
     <div className="p-3">
       {/* eslint-disable-next-line @next/next/no-img-element -- owner-hosted court image */}
-      <img src={selected.url} alt={`${court.name} view`} className="h-72 w-full rounded-lg object-cover" />
+      <img
+        src={selected.url}
+        alt={`${court.name} view`}
+        className="h-72 w-full rounded-lg object-cover"
+      />
       {court.images.length > 1 && (
         <div className="mt-3 flex gap-3 overflow-x-auto pb-1">
           {court.images.map((image, index) => (
@@ -405,14 +479,28 @@ function OverrideModal({
   type ScheduleMode = 'regular' | 'custom' | 'closed';
   type ClientPeriod = AvailabilityPeriodDTO & { clientId: string };
   type ClientBlockedPeriod = BlockedPeriodDTO & { clientId: string };
-  const makePeriod = (period: AvailabilityPeriodDTO = { startTime: '09:00', endTime: '18:00' }): ClientPeriod => ({ ...period, clientId: crypto.randomUUID() });
-  const makeBlockedPeriod = (period: BlockedPeriodDTO = { startTime: '12:00', endTime: '13:00' }): ClientBlockedPeriod => ({ ...period, clientId: crypto.randomUUID() });
-  const initialMode: ScheduleMode = initial?.isClosed ? 'closed' : initial?.customHours ? 'custom' : 'regular';
+  const makePeriod = (
+    period: AvailabilityPeriodDTO = { startTime: '09:00', endTime: '18:00' },
+  ): ClientPeriod => ({ ...period, clientId: crypto.randomUUID() });
+  const makeBlockedPeriod = (
+    period: BlockedPeriodDTO = { startTime: '12:00', endTime: '13:00' },
+  ): ClientBlockedPeriod => ({ ...period, clientId: crypto.randomUUID() });
+  const initialMode: ScheduleMode = initial?.isClosed
+    ? 'closed'
+    : initial?.customHours
+      ? 'custom'
+      : 'regular';
   const [mode, setMode] = useState<ScheduleMode>(initialMode);
-  const [closureReason, setClosureReason] = useState<AvailabilityOverrideReasonType>(initial?.closureReason ?? 'holiday');
+  const [closureReason, setClosureReason] = useState<AvailabilityOverrideReasonType>(
+    initial?.closureReason ?? 'holiday',
+  );
   const [date, setDate] = useState(initial?.date ?? '');
-  const [customHours, setCustomHours] = useState<ClientPeriod[]>(() => initial?.customHours?.map(makePeriod) ?? [makePeriod()]);
-  const [blockedPeriods, setBlockedPeriods] = useState<ClientBlockedPeriod[]>(() => initial?.blockedPeriods.map(makeBlockedPeriod) ?? []);
+  const [customHours, setCustomHours] = useState<ClientPeriod[]>(
+    () => initial?.customHours?.map(makePeriod) ?? [makePeriod()],
+  );
+  const [blockedPeriods, setBlockedPeriods] = useState<ClientBlockedPeriod[]>(
+    () => initial?.blockedPeriods.map(makeBlockedPeriod) ?? [],
+  );
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const { showToast } = useToast();
@@ -426,8 +514,17 @@ function OverrideModal({
       date,
       isClosed: mode === 'closed',
       ...(mode === 'closed' ? { closureReason } : {}),
-      ...(mode === 'custom' ? { customHours: customHours.map(({ startTime, endTime }) => ({ startTime, endTime })) } : {}),
-      blockedPeriods: mode === 'closed' ? [] : blockedPeriods.map(({ startTime, endTime, reason }) => ({ startTime, endTime, ...(reason?.trim() ? { reason: reason.trim() } : {}) })),
+      ...(mode === 'custom'
+        ? { customHours: customHours.map(({ startTime, endTime }) => ({ startTime, endTime })) }
+        : {}),
+      blockedPeriods:
+        mode === 'closed'
+          ? []
+          : blockedPeriods.map(({ startTime, endTime, reason }) => ({
+              startTime,
+              endTime,
+              ...(reason?.trim() ? { reason: reason.trim() } : {}),
+            })),
     };
     const result = createAvailabilityOverrideSchema.safeParse(payload);
     if (!result.success) {
@@ -449,7 +546,12 @@ function OverrideModal({
     }
   }
   return (
-    <Modal open={open} onClose={onClose} title={initial ? 'Edit daily availability' : 'Add daily availability'} className="max-h-[90vh] max-w-3xl overflow-y-auto">
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={initial ? 'Edit daily availability' : 'Add daily availability'}
+      className="max-h-[90vh] max-w-3xl overflow-y-auto"
+    >
       <form onSubmit={submit} className="space-y-4">
         <label className="block text-sm font-medium">
           Date
@@ -480,7 +582,9 @@ function OverrideModal({
             <Select
               className="mt-2"
               value={closureReason}
-              onChange={(event) => setClosureReason(event.target.value as AvailabilityOverrideReasonType)}
+              onChange={(event) =>
+                setClosureReason(event.target.value as AvailabilityOverrideReasonType)
+              }
               options={Object.entries(reasonLabels).map(([value, label]) => ({ value, label }))}
             />
           </label>
@@ -523,26 +627,89 @@ function OverrideModal({
   );
 }
 
-interface ClientTimePeriod extends AvailabilityPeriodDTO { clientId: string; reason?: string }
+interface ClientTimePeriod extends AvailabilityPeriodDTO {
+  clientId: string;
+  reason?: string;
+}
 
-function PeriodSection<T extends ClientTimePeriod>({ title, description, periods, onChange, onAdd, minimumOne = false, withReason = false }: {
-  title: string; description: string; periods: T[]; onChange: (periods: T[]) => void;
-  onAdd: () => void; minimumOne?: boolean; withReason?: boolean;
+function PeriodSection<T extends ClientTimePeriod>({
+  title,
+  description,
+  periods,
+  onChange,
+  onAdd,
+  minimumOne = false,
+  withReason = false,
+}: {
+  title: string;
+  description: string;
+  periods: T[];
+  onChange: (periods: T[]) => void;
+  onAdd: () => void;
+  minimumOne?: boolean;
+  withReason?: boolean;
 }) {
-  const update = (index: number, changes: Partial<T>) => onChange(periods.map((period, itemIndex) => itemIndex === index ? { ...period, ...changes } : period));
+  const update = (index: number, changes: Partial<T>) =>
+    onChange(
+      periods.map((period, itemIndex) =>
+        itemIndex === index ? { ...period, ...changes } : period,
+      ),
+    );
   return (
     <fieldset className="space-y-3 rounded-lg border border-border p-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div><legend className="text-sm font-medium">{title}</legend><p className="text-xs text-muted-foreground">{description}</p></div>
-        <Button type="button" variant="outline" size="sm" onClick={onAdd}><Plus size={14} /> Add period</Button>
+        <div>
+          <legend className="text-sm font-medium">{title}</legend>
+          <p className="text-xs text-muted-foreground">{description}</p>
+        </div>
+        <Button type="button" variant="outline" size="sm" onClick={onAdd}>
+          <Plus size={14} /> Add period
+        </Button>
       </div>
-      {periods.length === 0 && <p className="py-3 text-center text-sm text-muted-foreground">No blocked periods.</p>}
+      {periods.length === 0 && (
+        <p className="py-3 text-center text-sm text-muted-foreground">No blocked periods.</p>
+      )}
       {periods.map((period, index) => (
         <div key={period.clientId} className="grid gap-3 rounded-md bg-muted p-3 md:grid-cols-2">
-          <label className="text-xs font-medium">Start time<TimeInput ariaLabel={`${title} ${index + 1} start`} value={period.startTime} onChange={(startTime) => update(index, { startTime } as Partial<T>)} className="mt-2" /></label>
-          <label className="text-xs font-medium">End time<TimeInput ariaLabel={`${title} ${index + 1} end`} value={period.endTime} onChange={(endTime) => update(index, { endTime } as Partial<T>)} className="mt-2" /></label>
-          {withReason && <label className="text-xs font-medium md:col-span-2">Reason <span className="font-normal text-muted-foreground">(optional)</span><Input value={period.reason ?? ''} maxLength={200} onChange={(event) => update(index, { reason: event.target.value } as Partial<T>)} className="mt-2" /></label>}
-          <Button type="button" variant="ghost" size="sm" className="justify-self-end text-destructive md:col-span-2" disabled={minimumOne && periods.length === 1} onClick={() => onChange(periods.filter((_, itemIndex) => itemIndex !== index))}><Trash2 size={15} /> Remove</Button>
+          <label className="text-xs font-medium">
+            Start time
+            <TimeInput
+              ariaLabel={`${title} ${index + 1} start`}
+              value={period.startTime}
+              onChange={(startTime) => update(index, { startTime } as Partial<T>)}
+              className="mt-2"
+            />
+          </label>
+          <label className="text-xs font-medium">
+            End time
+            <TimeInput
+              ariaLabel={`${title} ${index + 1} end`}
+              value={period.endTime}
+              onChange={(endTime) => update(index, { endTime } as Partial<T>)}
+              className="mt-2"
+            />
+          </label>
+          {withReason && (
+            <label className="text-xs font-medium md:col-span-2">
+              Reason <span className="font-normal text-muted-foreground">(optional)</span>
+              <Input
+                value={period.reason ?? ''}
+                maxLength={200}
+                onChange={(event) => update(index, { reason: event.target.value } as Partial<T>)}
+                className="mt-2"
+              />
+            </label>
+          )}
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="justify-self-end text-destructive md:col-span-2"
+            disabled={minimumOne && periods.length === 1}
+            onClick={() => onChange(periods.filter((_, itemIndex) => itemIndex !== index))}
+          >
+            <Trash2 size={15} /> Remove
+          </Button>
         </div>
       ))}
     </fieldset>

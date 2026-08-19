@@ -1,6 +1,13 @@
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
-import { createAvailabilityOverrideSchema, createCourtSchema, updateCourtSchema, type CreateAvailabilityOverrideRequest, type CreateCourtFields, type UpdateCourtFields } from '@turfhood/shared';
+import {
+  createAvailabilityOverrideSchema,
+  createCourtSchema,
+  updateCourtSchema,
+  type CreateAvailabilityOverrideRequest,
+  type CreateCourtFields,
+  type UpdateCourtFields,
+} from '@turfhood/shared';
 import { HttpStatus } from '@shared/constants/httpStatus';
 
 export type ValidatedCourtRequest = Request & {
@@ -52,12 +59,23 @@ export function validateListCourts(req: Request, res: Response, next: NextFuncti
   next();
 }
 
-export type ValidatedAvailabilityOverrideRequest = Request & { validatedOverride?: CreateAvailabilityOverrideRequest };
+export type ValidatedAvailabilityOverrideRequest = Request & {
+  validatedOverride?: CreateAvailabilityOverrideRequest;
+};
 
-export function validateAvailabilityOverride(req: Request, res: Response, next: NextFunction): void {
+export function validateAvailabilityOverride(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void {
   const result = createAvailabilityOverrideSchema.safeParse(req.body);
   if (!result.success) {
-    res.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid availability override.', errors: result.error.flatten().fieldErrors });
+    res
+      .status(HttpStatus.BAD_REQUEST)
+      .json({
+        message: 'Invalid availability override.',
+        errors: result.error.flatten().fieldErrors,
+      });
     return;
   }
   (req as ValidatedAvailabilityOverrideRequest).validatedOverride = {
@@ -79,7 +97,9 @@ export type ValidatedCourtUpdateRequest = Request & { validatedCourtUpdate?: Upd
 export function validateUpdateCourt(req: Request, res: Response, next: NextFunction): void {
   const result = updateCourtSchema.safeParse(req.body);
   if (!result.success) {
-    res.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid court details.', errors: result.error.flatten().fieldErrors });
+    res
+      .status(HttpStatus.BAD_REQUEST)
+      .json({ message: 'Invalid court details.', errors: result.error.flatten().fieldErrors });
     return;
   }
   (req as ValidatedCourtUpdateRequest).validatedCourtUpdate = result.data;

@@ -1,6 +1,11 @@
 import { injectable } from 'tsyringe';
 import mongoose from 'mongoose';
-import type { AvailabilityOverrideDTO, CourtDTO, CreateAvailabilityOverrideRequest, UpdateCourtFields } from '@turfhood/shared';
+import type {
+  AvailabilityOverrideDTO,
+  CourtDTO,
+  CreateAvailabilityOverrideRequest,
+  UpdateCourtFields,
+} from '@turfhood/shared';
 import type {
   ICourtRepository,
   ICreateCourtPersistenceInput,
@@ -10,7 +15,10 @@ import { DuplicateCourtNameError } from '@domain/court/errors/DuplicateCourtName
 import { CourtModel, type CourtDocument } from '../models/CourtModel.js';
 import { CourtImageModel } from '../models/CourtImageModel.js';
 import { PricingRuleModel } from '../models/PricingRuleModel.js';
-import { AvailabilityOverrideModel, type AvailabilityOverrideDocument } from '../models/AvailabilityOverrideModel.js';
+import {
+  AvailabilityOverrideModel,
+  type AvailabilityOverrideDocument,
+} from '../models/AvailabilityOverrideModel.js';
 
 @injectable()
 export class CourtRepository implements ICourtRepository {
@@ -105,19 +113,29 @@ export class CourtRepository implements ICourtRepository {
     return docs.map((doc) => this.overrideToDTO(doc));
   }
 
-  async createOverride(input: CreateAvailabilityOverrideRequest & { turfId: string; courtId: string }): Promise<AvailabilityOverrideDTO> {
+  async createOverride(
+    input: CreateAvailabilityOverrideRequest & { turfId: string; courtId: string },
+  ): Promise<AvailabilityOverrideDTO> {
     const doc = await AvailabilityOverrideModel.create(input);
     return this.overrideToDTO(doc);
   }
 
-  async updateOverride(overrideId: string, courtId: string, input: CreateAvailabilityOverrideRequest): Promise<AvailabilityOverrideDTO | null> {
+  async updateOverride(
+    overrideId: string,
+    courtId: string,
+    input: CreateAvailabilityOverrideRequest,
+  ): Promise<AvailabilityOverrideDTO | null> {
     if (!mongoose.isValidObjectId(overrideId)) return null;
     const doc = await AvailabilityOverrideModel.findOneAndUpdate(
       { _id: overrideId, courtId },
       {
         $set: input,
         $unset: {
-          type: 1, reasonType: 1, customOpen: 1, customClose: 1, reason: 1,
+          type: 1,
+          reasonType: 1,
+          customOpen: 1,
+          customClose: 1,
+          reason: 1,
           ...(!input.customHours ? { customHours: 1 } : {}),
           ...(!input.closureReason ? { closureReason: 1 } : {}),
         },
@@ -162,7 +180,12 @@ export class CourtRepository implements ICourtRepository {
         );
       });
     } catch (error) {
-      if (typeof error === 'object' && error !== null && 'code' in error && (error as { code: unknown }).code === 11000) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        (error as { code: unknown }).code === 11000
+      ) {
         throw new DuplicateCourtNameError(input.name);
       }
       throw error;
@@ -175,28 +198,41 @@ export class CourtRepository implements ICourtRepository {
 
   private overrideToDTO(doc: AvailabilityOverrideDocument): AvailabilityOverrideDTO {
     const storedType = String(doc.type);
-    const legacyClosureReason = storedType === 'holiday_closed'
-      ? 'holiday'
-      : storedType === 'blocked'
-        ? 'other'
-        : undefined;
+    const legacyClosureReason =
+      storedType === 'holiday_closed' ? 'holiday' : storedType === 'blocked' ? 'other' : undefined;
     const closureReason = doc.closureReason ?? doc.reasonType ?? legacyClosureReason;
     const isLegacyClosed = ['holiday_closed', 'blocked', 'closed'].includes(storedType);
-    const customHours = doc.customHours ?? (storedType === 'custom_hours' && doc.customOpen && doc.customClose
-      ? [{ startTime: doc.customOpen, endTime: doc.customClose }]
-      : undefined);
+    const customHours =
+      doc.customHours ??
+      (storedType === 'custom_hours' && doc.customOpen && doc.customClose
+        ? [{ startTime: doc.customOpen, endTime: doc.customClose }]
+        : undefined);
     const blockedPeriods = doc.blockedPeriods?.length
       ? doc.blockedPeriods
       : storedType === 'blocked_period' && doc.customOpen && doc.customClose
-        ? [{ startTime: doc.customOpen, endTime: doc.customClose, ...(doc.reason ? { reason: doc.reason } : {}) }]
+        ? [
+            {
+              startTime: doc.customOpen,
+              endTime: doc.customClose,
+              ...(doc.reason ? { reason: doc.reason } : {}),
+            },
+          ]
         : [];
     return {
-      id: doc._id.toString(), turfId: doc.turfId.toString(), courtId: doc.courtId.toString(),
+      id: doc._id.toString(),
+      turfId: doc.turfId.toString(),
+      courtId: doc.courtId.toString(),
       date: doc.date,
       isClosed: doc.isClosed ?? isLegacyClosed,
       ...(closureReason ? { closureReason } : {}),
-      ...(customHours ? { customHours: customHours.map(({ startTime, endTime }) => ({ startTime, endTime })) } : {}),
-      blockedPeriods: blockedPeriods.map(({ startTime, endTime, reason }) => ({ startTime, endTime, ...(reason ? { reason } : {}) })),
+      ...(customHours
+        ? { customHours: customHours.map(({ startTime, endTime }) => ({ startTime, endTime })) }
+        : {}),
+      blockedPeriods: blockedPeriods.map(({ startTime, endTime, reason }) => ({
+        startTime,
+        endTime,
+        ...(reason ? { reason } : {}),
+      })),
       createdAt: doc.createdAt.toISOString(),
       updatedAt: doc.updatedAt.toISOString(),
     };

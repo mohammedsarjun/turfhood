@@ -25,11 +25,7 @@ export function ProfileContent({ initialProfile }: ProfileContentProps) {
 
   return (
     <>
-      <Header
-        userName={profile.name}
-        avatarUrl={profile.avatarUrl}
-        onLoggedOut={clearUser}
-      />
+      <Header userName={profile.name} avatarUrl={profile.avatarUrl} onLoggedOut={clearUser} />
       <div className="mx-auto flex max-w-2xl flex-col" style={{ gap: 24, padding: 24 }}>
         <ProfileHeader profile={profile} onUpdated={handleUpdated} />
 

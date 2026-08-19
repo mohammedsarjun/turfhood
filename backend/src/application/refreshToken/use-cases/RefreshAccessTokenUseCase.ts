@@ -54,14 +54,21 @@ export class RefreshAccessTokenUseCase implements IRefreshAccessTokenUseCase {
       throw new RefreshTokenInvalidError();
     }
 
-    const issued = this.refreshTokenService.generate({ userId: user.id as string, roles: user.roles });
+    const issued = this.refreshTokenService.generate({
+      userId: user.id as string,
+      roles: user.roles,
+    });
     // A parallel request may arrive just after this token was rotated. During the short grace
     // window it receives its own child token without extending the original token's lifetime.
     if (!existing.isRevoked()) {
       await this.refreshTokenRepository.revoke(payload.jti, issued.jti);
     }
     await this.refreshTokenRepository.create(
-      RefreshToken.issue({ userId: user.id as string, jti: issued.jti, expiresAt: issued.expiresAt }),
+      RefreshToken.issue({
+        userId: user.id as string,
+        jti: issued.jti,
+        expiresAt: issued.expiresAt,
+      }),
     );
 
     const accessToken = this.tokenService.generateAccessToken({
