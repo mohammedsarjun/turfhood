@@ -10,8 +10,9 @@ import { logout } from '@/lib/auth/logoutApi';
 import { useMyApplication } from '@/features/turf-onboarding/hooks/useMyApplication';
 
 export interface HeaderProps {
-  userName: string;
+  userName?: string;
   avatarUrl?: string;
+  onLoggedOut?: () => void;
 }
 
 /**
@@ -19,7 +20,7 @@ export interface HeaderProps {
  * dropdown (Profile / Logout) opens on click rather than pure CSS hover — hover has no
  * equivalent on touch devices, so click-to-toggle is what actually works on mobile too.
  */
-export function Header({ userName, avatarUrl }: HeaderProps) {
+export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -53,6 +54,7 @@ export function Header({ userName, avatarUrl }: HeaderProps) {
     try {
       await logout();
     } finally {
+      onLoggedOut?.();
       setIsMenuOpen(false);
       router.push('/login');
       router.refresh();
@@ -95,9 +97,11 @@ export function Header({ userName, avatarUrl }: HeaderProps) {
               )}
               style={{ paddingTop: 4, paddingBottom: 4 }}
             >
-              <div className="border-b border-border px-3 py-2 text-sm font-medium text-foreground">
-                {userName}
-              </div>
+              {userName && (
+                <div className="border-b border-border px-3 py-2 text-sm font-medium text-foreground">
+                  {userName}
+                </div>
+              )}
               <Link
                 href="/profile"
                 role="menuitem"

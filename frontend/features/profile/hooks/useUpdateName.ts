@@ -7,8 +7,10 @@ import { updateName } from '../actions/profileApi';
 import { updateNameSchema, type UpdateNameFormValues } from '../schema/updateNameSchema';
 import type { PublicUser } from '../types';
 import { ApiError } from '@/types/api/response';
+import { useToast } from '@/components/ui';
 
 export function useUpdateName(currentName: string, onSuccess: (user: PublicUser) => void) {
+  const { showToast } = useToast();
   const [formError, setFormError] = useState<string | null>(null);
 
   const {
@@ -27,6 +29,7 @@ export function useUpdateName(currentName: string, onSuccess: (user: PublicUser)
     try {
       const { user } = await updateName({ name });
       onSuccess(user);
+      showToast('Name updated successfully.');
     } catch (error) {
       if (error instanceof ApiError) {
         if (error.errors?.name?.[0]) {

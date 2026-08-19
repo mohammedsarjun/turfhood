@@ -1,5 +1,5 @@
-import type { GeoPoint } from '../geo/coordinates.dto.js';
-import type { TurfApplicationStatus } from './turf-onboarding-status.js';
+import type { GeoPoint } from "../geo/coordinates.dto.js";
+import type { TurfApplicationStatus } from "./turf-onboarding-status.js";
 export interface TurfApplicationAddress {
     line1: string;
     city: string;
@@ -20,6 +20,7 @@ export interface TurfApplicationImage {
 }
 export interface TurfApplicationSummary {
     id: string;
+    turfId?: string;
     name: string;
     description?: string;
     address: TurfApplicationAddress;

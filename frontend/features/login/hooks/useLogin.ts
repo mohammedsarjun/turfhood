@@ -8,12 +8,14 @@ import { login } from '../actions/loginApi';
 import { loginSchema, type LoginFormValues } from '../schema/loginSchema';
 import { sendOtp } from '@/features/otp';
 import { ApiError } from '@/types/api/response';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 
 const isFormField = (field: string): field is keyof LoginFormValues =>
   field === 'email' || field === 'password';
 
 export function useLogin() {
   const router = useRouter();
+  const { setUser } = useCurrentUser();
   const [formError, setFormError] = useState<string | null>(null);
 
   const {
@@ -36,6 +38,7 @@ export function useLogin() {
         router.push('/otp');
         return;
       }
+      setUser(result.user);
       // replace (not push): once logged in, /login must not remain a back-button target.
       router.replace('/');
     } catch (error) {

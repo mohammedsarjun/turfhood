@@ -7,8 +7,10 @@ import { updatePhone } from '../actions/profileApi';
 import { updatePhoneSchema, type UpdatePhoneFormValues } from '../schema/updatePhoneSchema';
 import type { PublicUser } from '../types';
 import { ApiError } from '@/types/api/response';
+import { useToast } from '@/components/ui';
 
 export function useUpdatePhone(currentPhone: string, onSuccess: (user: PublicUser) => void) {
+  const { showToast } = useToast();
   const [formError, setFormError] = useState<string | null>(null);
 
   const {
@@ -27,6 +29,7 @@ export function useUpdatePhone(currentPhone: string, onSuccess: (user: PublicUse
     try {
       const { user } = await updatePhone({ phone });
       onSuccess(user);
+      showToast('Phone number updated successfully.');
     } catch (error) {
       if (error instanceof ApiError) {
         if (error.errors?.phone?.[0]) {

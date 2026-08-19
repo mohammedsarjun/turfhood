@@ -6,15 +6,7 @@ export interface LoginRequest {
 export type UserRole = 'customer' | 'admin' | 'turf_owner';
 export type UserStatus = 'active' | 'suspended' | 'deleted';
 
-export interface LoginUser {
-  id: string;
-  name: string;
-  email: string;
-  roles: UserRole[];
-  isVerified: boolean;
-  status: UserStatus;
-  createdAt: string;
-}
+export type LoginUser = import('@turfhood/shared').PublicUser;
 
 export interface LoginSuccessResponse {
   status: 'success';

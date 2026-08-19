@@ -114,6 +114,63 @@ describe('RefreshAccessTokenUseCase', () => {
     expect(refreshTokenRepository.revokeAllForUserCalls).to.deep.equal(['user_1']);
   });
 
+  it('allows a concurrent refresh during the rotation grace period', async () => {
+    const user = buildPersistedUser({ id: 'user_1' });
+    const refreshTokenRepository = new FakeRefreshTokenRepository();
+    const refreshTokenService = buildRefreshTokenService();
+    const issued = refreshTokenService.generate({ userId: 'user_1', roles: ['customer'] });
+    refreshTokenRepository.seed(
+      RefreshToken.fromPersistence({
+        userId: 'user_1',
+        jti: issued.jti,
+        expiresAt: issued.expiresAt,
+        revokedAt: new Date(),
+        replacedByJti: 'first-replacement-jti',
+      }),
+    );
+    const useCase = new RefreshAccessTokenUseCase(
+      refreshTokenRepository,
+      refreshTokenService,
+      new FakeUserRepository({ existingUserById: user }),
+      buildTokenService(),
+    );
+
+    const result = await useCase.execute(issued.token);
+
+    expect(result.refreshToken).to.be.a('string').that.is.not.empty;
+    expect(refreshTokenRepository.revokeCalls).to.have.length(0);
+    expect(refreshTokenRepository.revokeAllForUserCalls).to.have.length(0);
+  });
+
+  it('rejects reuse after the rotation grace period', async () => {
+    const refreshTokenRepository = new FakeRefreshTokenRepository();
+    const refreshTokenService = buildRefreshTokenService();
+    const issued = refreshTokenService.generate({ userId: 'user_1', roles: ['customer'] });
+    refreshTokenRepository.seed(
+      RefreshToken.fromPersistence({
+        userId: 'user_1',
+        jti: issued.jti,
+        expiresAt: issued.expiresAt,
+        revokedAt: new Date(Date.now() - 6_000),
+        replacedByJti: 'old-replacement-jti',
+      }),
+    );
+    const useCase = new RefreshAccessTokenUseCase(
+      refreshTokenRepository,
+      refreshTokenService,
+      new FakeUserRepository(),
+      buildTokenService(),
+    );
+
+    try {
+      await useCase.execute(issued.token);
+      expect.fail('Expected execute() to reject refresh-token reuse outside the grace period.');
+    } catch (error) {
+      expect(error).to.be.instanceOf(RefreshTokenInvalidError);
+    }
+    expect(refreshTokenRepository.revokeAllForUserCalls).to.deep.equal(['user_1']);
+  });
+
   // ERROR CASE: the JWT itself is expired.
   it('throws RefreshTokenExpiredError for an expired refresh token', async () => {
     process.env.REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET ?? 'test-only-refresh-secret';

@@ -13,20 +13,23 @@ interface AvatarUploadProps {
 
 export function AvatarUpload({ profile, onUpdated }: AvatarUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { previewUrl, isUploading, error, handleFileChange } = useAvatarUpload(onUpdated);
-
-  const displayUrl = previewUrl ?? profile.avatarUrl;
+  const { isUploading, error, handleFileChange } = useAvatarUpload(onUpdated);
 
   return (
     <div className="flex flex-col items-center" style={{ gap: 8 }}>
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
+        disabled={isUploading}
         className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-muted"
         aria-label="Change profile picture"
       >
-        <Avatar src={displayUrl} iconClassName="h-10 w-10" />
-        <span className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity hover:opacity-100">
+        <Avatar src={profile.avatarUrl} iconClassName="h-10 w-10" />
+        <span
+          className={`absolute inset-0 flex items-center justify-center bg-black/40 transition-opacity ${
+            isUploading ? 'opacity-100' : 'opacity-0 hover:opacity-100'
+          }`}
+        >
           {isUploading ? (
             <Spinner size="sm" className="text-white" />
           ) : (
@@ -38,6 +41,7 @@ export function AvatarUpload({ profile, onUpdated }: AvatarUploadProps) {
         ref={inputRef}
         type="file"
         accept="image/jpeg,image/png,image/webp"
+        disabled={isUploading}
         className="hidden"
         onChange={(event) => void handleFileChange(event)}
       />

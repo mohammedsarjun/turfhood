@@ -4,46 +4,49 @@
 
 | Layer | Choice | Why |
 |---|---|---|
-| Framework | Next.js (App Router) | SSR/SEO for public turf listings, file-based routing fits distinct user areas |
-| Language | TypeScript | Type safety across a schema this large (20+ collections) |
-| Component library | Material UI (MUI) | Fast, accessible, pre-built complex components (data tables, date pickers, modals) |
-| Styling utility | Tailwind CSS | Rapid custom layout/spacing for one-off needs |
+| Framework | Next.js (App Router) | Server rendering, routing, and React application structure |
+| Language | TypeScript | Shared, type-safe contracts across the application |
+| Styling | Tailwind CSS | Utility-first styling without a separate component framework |
+| Forms and validation | React Hook Form + Zod | Typed form state and validation |
 
 ## Backend
 
 | Layer | Choice | Why |
 |---|---|---|
-| Runtime | Node.js | Matches team's JS/TS skillset, non-blocking I/O suits job-heavy domain |
-| Framework | Express | Minimal, well-understood, rich middleware ecosystem |
-| Language | TypeScript | Heavy referential integrity across this schema needs strict typing |
-| Architecture | Clean Architecture (monolith) | Separates business rules from framework/DB details without microservices overhead |
-| Deployment shape | Monolith | Single team, single deploy cadence |
+| Runtime | Node.js | Uses the same TypeScript ecosystem as the frontend |
+| Framework | Express | Lightweight HTTP routing and middleware |
+| Language | TypeScript | Type-safe domain and application boundaries |
+| Architecture | Clean Architecture monolith | Separates business rules from frameworks and infrastructure |
+| Dependency injection | tsyringe | Connects use cases to repository and service implementations |
 
-## Database
+## Database and Storage
 
 | Layer | Choice | Why |
 |---|---|---|
-| Database | MongoDB | Fits the referenced-not-embedded design already decided in the schema |
-| ODM | Mongoose | Schema validation + TypeScript types across 20+ collections |
+| Database | MongoDB | Document storage for application data |
+| ODM | Mongoose | Schema validation, indexes, and typed persistence models |
+| Media storage | Cloudinary | Hosted image uploads and delivery |
 
-## Auth & Integrations
+## Authentication and Integrations
 
 | Integration | Purpose |
 |---|---|
-| Twilio (OTP) | Phone-based signup/login verification |
-| JWT | Access token issuance + role claims (customer/turf_owner/admin) |
-| Razorpay | Primary payment gateway |
-| Internal Wallet | Alternate payment source, append-only transaction ledger |
-| WhatsApp Business API (Twilio) | Booking confirmations, cancellations/refunds, reminders, two-way replies |
+| Resend | Sends email-based OTP messages |
+| Google OAuth | Google account authentication |
+| JWT | Access, refresh, and temporary session tokens |
+| Razorpay | Planned payment gateway for the booking phase |
 
-## Scheduled Jobs
+Authentication currently uses email OTP through Resend and Google OAuth. Phone-based OTP is not part of the current implementation.
 
-| Job | Trigger | What it does |
-|---|---|---|
-| Nightly slot generation | Cron, nightly | Reads `pricing_rules` + `availability_overrides` per court, generates `slots` for a rolling 14–30 day window |
-| Open Session auto-cancel | Cron, periodic | Checks `autoCancelAt` (48hrs before slot start), cancels unfilled sessions, releases slot, triggers refunds/notifications |
-| Booking reminders | Cron, before slot start | Sends WhatsApp reminder ahead of a customer's booked slot |
+## Testing and Quality
 
-## Note on Monolith vs Future Extraction
+| Area | Choice |
+|---|---|
+| Frontend tests | Jest + Testing Library |
+| Backend tests | Mocha + Chai + Supertest |
+| Linting | ESLint |
+| Formatting | Prettier |
 
-Clean Architecture inside a monolith keeps deployment simple now (one repo, one process, one team) while keeping domain logic (bookings, slots, payments, open sessions) decoupled from Express and Mongoose. If a module later needs to become its own service, the domain layer moves with minimal rewrite because it never depended on Express or Mongoose directly.
+## Deployment Shape
+
+TurfHood remains a monolith while the product and domain are evolving. Clean Architecture keeps domain logic isolated so individual capabilities can be extracted later if operational needs justify it.

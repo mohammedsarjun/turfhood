@@ -3,6 +3,7 @@ import { Turf } from '@domain/turf/entities/Turf';
 import type { ITurfRepository } from '@domain/turf/repositories/ITurfRepository';
 
 import { TurfModel, type TurfDocument } from '../models/TurfModel.js';
+import { TurfOwnerApplicationModel } from '../../turfOwnerApplication/models/TurfOwnerApplicationModel.js';
 
 @injectable()
 export class TurfRepository implements ITurfRepository {
@@ -21,6 +22,32 @@ export class TurfRepository implements ITurfRepository {
       isDeleted: turf.isDeleted,
     });
     return this.toDomain(doc);
+  }
+
+  async findOwnedByIdOrVerificationId(id: string, ownerId: string): Promise<Turf | null> {
+    let doc = await TurfModel.findOne({
+      ownerId,
+      isDeleted: false,
+      status: 'approved',
+      $or: [{ _id: id }, { verificationId: id }],
+    });
+    if (!doc) {
+      const application = await TurfOwnerApplicationModel.findOne({
+        _id: id,
+        applicantUserId: ownerId,
+        status: 'approved',
+        turfId: { $exists: true },
+      }).select('turfId');
+      if (application?.turfId) {
+        doc = await TurfModel.findOne({
+          _id: application.turfId,
+          ownerId,
+          isDeleted: false,
+          status: 'approved',
+        });
+      }
+    }
+    return doc ? this.toDomain(doc) : null;
   }
 
   private toDomain(doc: TurfDocument): Turf {

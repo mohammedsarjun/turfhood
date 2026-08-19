@@ -39,6 +39,7 @@ export class LoginWithGoogleUseCase implements ILoginWithGoogleUseCase {
   ) {}
 
   async execute(request: GoogleAuthRequestDTO): Promise<GoogleAuthResponseDTO> {
+
     const profile = await this.googleAuthService.verifyAndGetProfile(request.code);
     if (!profile.emailVerified) {
       throw new GoogleEmailNotVerifiedError();
