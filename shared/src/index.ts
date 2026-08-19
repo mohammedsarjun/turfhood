@@ -99,10 +99,24 @@ export type {
   PricingRuleDTO,
   CourtDTO,
   CreateCourtFields,
+  UpdateCourtFields,
   ListCourtsResponse,
+  AvailabilityOverrideReasonType,
+  AvailabilityOverrideDTO,
+  AvailabilityPeriodDTO,
+  BlockedPeriodDTO,
+  CreateAvailabilityOverrideRequest,
+  CourtDetailsResponse,
 } from "./court/court.dto.js";
 export {
   createCourtSchema,
   pricingRuleSchema,
   getOverlappingPricingBandIndexes,
+  createAvailabilityOverrideSchema,
+  updateCourtSchema,
 } from "./court/court.schema.js";
+export {
+  ALLOWED_SLOT_DURATIONS,
+  SLOT_DURATION_ERROR_MESSAGE,
+  RAILWAY_TIME_PATTERN,
+} from "./court/court.constants.js";

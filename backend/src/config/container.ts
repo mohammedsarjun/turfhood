@@ -134,6 +134,8 @@ import type { ICreateCourtUseCase } from '@application/court/use-cases/ICreateCo
 import { CreateCourtUseCase } from '@application/court/use-cases/CreateCourtUseCase';
 import type { IListCourtsUseCase } from '@application/court/use-cases/IListCourtsUseCase';
 import { ListCourtsUseCase } from '@application/court/use-cases/ListCourtsUseCase';
+import type { IManageCourtDetailsUseCase } from '@application/court/use-cases/IManageCourtDetailsUseCase';
+import { ManageCourtDetailsUseCase } from '@application/court/use-cases/ManageCourtDetailsUseCase';
 
 /** Composition root — wires domain interfaces to their infrastructure implementations. */
 container.register<IUserRepository>(USER_TOKENS.UserRepository, { useClass: UserRepository });
@@ -310,6 +312,9 @@ container.register<ICreateCourtUseCase>(COURT_TOKENS.CreateCourtUseCase, {
 });
 container.register<IListCourtsUseCase>(COURT_TOKENS.ListCourtsUseCase, {
   useClass: ListCourtsUseCase,
+});
+container.register<IManageCourtDetailsUseCase>(COURT_TOKENS.ManageCourtDetailsUseCase, {
+  useClass: ManageCourtDetailsUseCase,
 });
 
 export { container };

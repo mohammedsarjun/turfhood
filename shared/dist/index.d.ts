@@ -26,5 +26,6 @@ export type { GeoPoint } from "./geo/coordinates.dto.js";
 export { TurfApplicationStatus } from "./turfOnboarding/turf-onboarding-status.js";
 export { TurfOnboardingErrorCode } from "./turfOnboarding/turf-onboarding-error-code.js";
 export type { TurfApplicationAddress, TurfApplicationDocument, TurfApplicationImage, TurfApplicationSummary, SubmitTurfApplicationResponse, RejectTurfApplicationRequest, } from "./turfOnboarding/turf-application.dto.js";
-export type { CourtStatus, PricingDayType, CourtImageDTO, PricingRuleDTO, CourtDTO, CreateCourtFields, ListCourtsResponse, } from "./court/court.dto.js";
-export { createCourtSchema, pricingRuleSchema, getOverlappingPricingBandIndexes, } from "./court/court.schema.js";
+export type { CourtStatus, PricingDayType, CourtImageDTO, PricingRuleDTO, CourtDTO, CreateCourtFields, UpdateCourtFields, ListCourtsResponse, AvailabilityOverrideReasonType, AvailabilityOverrideDTO, AvailabilityPeriodDTO, BlockedPeriodDTO, CreateAvailabilityOverrideRequest, CourtDetailsResponse, } from "./court/court.dto.js";
+export { createCourtSchema, pricingRuleSchema, getOverlappingPricingBandIndexes, createAvailabilityOverrideSchema, updateCourtSchema, } from "./court/court.schema.js";
+export { ALLOWED_SLOT_DURATIONS, SLOT_DURATION_ERROR_MESSAGE, RAILWAY_TIME_PATTERN, } from "./court/court.constants.js";

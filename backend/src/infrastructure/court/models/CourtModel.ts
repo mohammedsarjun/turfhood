@@ -1,5 +1,5 @@
 import mongoose, { Schema, model, type Document, type Model } from 'mongoose';
-import type { CourtStatus } from '@turfhood/shared';
+import { ALLOWED_SLOT_DURATIONS, type CourtStatus } from '@turfhood/shared';
 
 export interface CourtDocument extends Document {
   turfId: mongoose.Types.ObjectId;
@@ -26,7 +26,11 @@ const courtSchema = new Schema<CourtDocument>(
     status: { type: String, enum: ['active', 'inactive', 'maintenance'], required: true },
     allowOpenSessions: { type: Boolean, required: true },
     minPlayersForOpenSession: { type: Number, required: true, min: 1 },
-    slotDurationMinutes: { type: Number, required: true, min: 1 },
+    slotDurationMinutes: {
+      type: Number,
+      required: true,
+      enum: ALLOWED_SLOT_DURATIONS,
+    },
     isDeleted: { type: Boolean, required: true, default: false },
   },
   { timestamps: true },

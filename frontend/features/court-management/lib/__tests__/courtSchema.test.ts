@@ -1,4 +1,4 @@
-import { createCourtSchema, getOverlappingPricingBandIndexes } from '@turfhood/shared';
+import { createAvailabilityOverrideSchema, createCourtSchema, getOverlappingPricingBandIndexes } from '@turfhood/shared';
 
 const validCourt = {
   name: 'Court A',
@@ -45,6 +45,11 @@ describe('createCourtSchema', () => {
     expect(createCourtSchema.safeParse({ ...validCourt, pricingRules: rules }).success).toBe(false);
   });
 
+  it('only accepts configured slot durations', () => {
+    expect(createCourtSchema.safeParse({ ...validCourt, slotDurationMinutes: 45 }).success).toBe(true);
+    expect(createCourtSchema.safeParse({ ...validCourt, slotDurationMinutes: 35 }).success).toBe(false);
+  });
+
   it('rejects a slot price above ₹20,000', () => {
     const result = createCourtSchema.safeParse({
       ...validCourt,
@@ -55,5 +60,44 @@ describe('createCourtSchema', () => {
     if (!result.success) {
       expect(result.error.flatten().fieldErrors.pricingRules?.[0]).toContain('₹20,000');
     }
+  });
+});
+
+describe('createAvailabilityOverrideSchema', () => {
+  it('requires a reason category for a full-day closure', () => {
+    expect(createAvailabilityOverrideSchema.safeParse({ date: '2026-08-20', isClosed: true, blockedPeriods: [] }).success).toBe(false);
+    expect(createAvailabilityOverrideSchema.safeParse({ date: '2026-08-20', isClosed: true, closureReason: 'holiday', blockedPeriods: [] }).success).toBe(true);
+  });
+
+  it('accepts multiple non-overlapping custom and blocked periods', () => {
+    const result = createAvailabilityOverrideSchema.safeParse({
+      date: '2026-08-20', isClosed: false,
+      customHours: [{ startTime: '08:00', endTime: '12:00' }, { startTime: '16:00', endTime: '20:00' }],
+      blockedPeriods: [{ startTime: '17:00', endTime: '18:00', reason: 'Maintenance' }],
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a regular-hours override without blocked periods', () => {
+    const result = createAvailabilityOverrideSchema.safeParse({
+      date: '2026-08-20',
+      isClosed: false,
+      blockedPeriods: [],
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.blockedPeriods?.[0]).toContain(
+        'Add at least one blocked period',
+      );
+    }
+  });
+
+  it('rejects overlapping custom periods', () => {
+    const result = createAvailabilityOverrideSchema.safeParse({
+      date: '2026-08-20', isClosed: false,
+      customHours: [{ startTime: '08:00', endTime: '12:00' }, { startTime: '11:00', endTime: '14:00' }],
+      blockedPeriods: [],
+    });
+    expect(result.success).toBe(false);
   });
 });

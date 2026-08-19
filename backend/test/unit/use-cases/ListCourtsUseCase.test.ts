@@ -40,6 +40,12 @@ describe('ListCourtsUseCase', () => {
         receivedSearch = input.search;
         return { items: [], total: 21 };
       },
+      findByIdAndTurf: async () => null,
+      listOverrides: async () => [],
+      createOverride: async () => { throw new Error('Not used'); },
+      updateOverride: async () => null,
+      deleteOverride: async () => false,
+      update: async () => null,
     };
     const turfs: ITurfRepository = {
       create: async (input) => input,
@@ -66,6 +72,12 @@ describe('ListCourtsUseCase', () => {
         throw new Error('Not used');
       },
       list: async () => ({ items: [], total: 0 }),
+      findByIdAndTurf: async () => null,
+      listOverrides: async () => [],
+      createOverride: async () => { throw new Error('Not used'); },
+      updateOverride: async () => null,
+      deleteOverride: async () => false,
+      update: async () => null,
     };
     const turfs: ITurfRepository = {
       create: async (input) => input,

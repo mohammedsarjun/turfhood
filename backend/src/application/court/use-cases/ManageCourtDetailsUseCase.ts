@@ -1,0 +1,81 @@
+import { inject, injectable } from 'tsyringe';
+import type { ITurfRepository } from '@domain/turf/repositories/ITurfRepository';
+import { TURF_TOKENS } from '@domain/turf/tokens';
+import type { ICourtRepository } from '@domain/court/repositories/ICourtRepository';
+import { COURT_TOKENS } from '@domain/court/tokens';
+import { CourtAccessError } from '@domain/court/errors/CourtAccessError';
+import { AvailabilityOverrideNotFoundError, DuplicateAvailabilityOverrideError } from '@domain/court/errors/AvailabilityOverrideError';
+import { DuplicateCourtNameError } from '@domain/court/errors/DuplicateCourtNameError';
+import type { CourtAccessInput, IManageCourtDetailsUseCase } from './IManageCourtDetailsUseCase.js';
+
+@injectable()
+export class ManageCourtDetailsUseCase implements IManageCourtDetailsUseCase {
+  constructor(
+    @inject(COURT_TOKENS.CourtRepository) private readonly courts: ICourtRepository,
+    @inject(TURF_TOKENS.TurfRepository) private readonly turfs: ITurfRepository,
+  ) {}
+
+  private async resolve(input: CourtAccessInput) {
+    const turf = await this.turfs.findOwnedByIdOrVerificationId(input.portalTurfId, input.ownerId);
+    if (!turf?.id) throw new CourtAccessError();
+    const court = await this.courts.findByIdAndTurf(input.courtId, turf.id);
+    if (!court) throw new CourtAccessError('The requested court was not found.');
+    return { turf, court };
+  }
+
+  async get(input: CourtAccessInput) {
+    const { court } = await this.resolve(input);
+    return { court, availabilityOverrides: await this.courts.listOverrides(court.id) };
+  }
+
+  async createOverride(input: Parameters<IManageCourtDetailsUseCase['createOverride']>[0]) {
+    const { turf, court } = await this.resolve(input);
+    try {
+      return await this.courts.createOverride({
+        turfId: turf.id!, courtId: court.id, date: input.date, isClosed: input.isClosed,
+        ...(input.closureReason ? { closureReason: input.closureReason } : {}),
+        ...(input.customHours ? { customHours: input.customHours } : {}),
+        blockedPeriods: input.blockedPeriods,
+      });
+    } catch (error) {
+      if (typeof error === 'object' && error !== null && 'code' in error && (error as { code: unknown }).code === 11000) throw new DuplicateAvailabilityOverrideError();
+      throw error;
+    }
+  }
+
+  async updateOverride(input: Parameters<IManageCourtDetailsUseCase['updateOverride']>[0]) {
+    const { court } = await this.resolve(input);
+    const updated = await this.courts.updateOverride(input.overrideId, court.id, {
+      date: input.date, isClosed: input.isClosed,
+      ...(input.closureReason ? { closureReason: input.closureReason } : {}),
+      ...(input.customHours ? { customHours: input.customHours } : {}),
+      blockedPeriods: input.blockedPeriods,
+    });
+    if (!updated) throw new AvailabilityOverrideNotFoundError();
+    return updated;
+  }
+
+  async deleteOverride(input: Parameters<IManageCourtDetailsUseCase['deleteOverride']>[0]) {
+    const { court } = await this.resolve(input);
+    if (!(await this.courts.deleteOverride(input.overrideId, court.id))) throw new AvailabilityOverrideNotFoundError();
+  }
+
+  async update(input: Parameters<IManageCourtDetailsUseCase['update']>[0]) {
+    const { turf, court } = await this.resolve(input);
+    if (await this.courts.existsByName(turf.id!, input.name, court.id)) {
+      throw new DuplicateCourtNameError(input.name);
+    }
+    const updated = await this.courts.update(court.id, {
+      name: input.name,
+      sportTypeIds: input.sportTypeIds,
+      capacity: input.capacity,
+      status: input.status,
+      allowOpenSessions: input.allowOpenSessions,
+      minPlayersForOpenSession: input.minPlayersForOpenSession,
+      slotDurationMinutes: input.slotDurationMinutes,
+      pricingRules: input.pricingRules,
+    });
+    if (!updated) throw new CourtAccessError('The requested court was not found.');
+    return updated;
+  }
+}

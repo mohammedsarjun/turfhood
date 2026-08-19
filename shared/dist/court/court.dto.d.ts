@@ -1,6 +1,7 @@
 import type { PaginatedResponse } from "../common/pagination.js";
 export type CourtStatus = "active" | "inactive" | "maintenance";
 export type PricingDayType = "weekday" | "weekend";
+export type AvailabilityOverrideReasonType = "holiday" | "maintenance" | "private_event" | "weather" | "other";
 export interface CourtImageDTO {
     id: string;
     url: string;
@@ -45,4 +46,35 @@ export interface CreateCourtFields {
         pricePerSlot: number;
     }>;
 }
+export type UpdateCourtFields = Omit<CreateCourtFields, "imageCoverFlags">;
 export type ListCourtsResponse = PaginatedResponse<CourtDTO>;
+export interface AvailabilityOverrideDTO {
+    id: string;
+    turfId: string;
+    courtId: string;
+    date: string;
+    isClosed: boolean;
+    closureReason?: AvailabilityOverrideReasonType;
+    customHours?: AvailabilityPeriodDTO[];
+    blockedPeriods: BlockedPeriodDTO[];
+    createdAt: string;
+    updatedAt: string;
+}
+export interface AvailabilityPeriodDTO {
+    startTime: string;
+    endTime: string;
+}
+export interface BlockedPeriodDTO extends AvailabilityPeriodDTO {
+    reason?: string;
+}
+export interface CreateAvailabilityOverrideRequest {
+    date: string;
+    isClosed: boolean;
+    closureReason?: AvailabilityOverrideReasonType;
+    customHours?: AvailabilityPeriodDTO[];
+    blockedPeriods: BlockedPeriodDTO[];
+}
+export interface CourtDetailsResponse {
+    court: CourtDTO;
+    availabilityOverrides: AvailabilityOverrideDTO[];
+}

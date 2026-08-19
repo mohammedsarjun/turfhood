@@ -4,16 +4,20 @@ import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react
 import { FiPlus, FiTrash2 } from 'react-icons/fi';
 import {
   createCourtSchema,
+  ALLOWED_SLOT_DURATIONS,
+  updateCourtSchema,
   getOverlappingPricingBandIndexes,
   type CatalogItem,
   type CourtStatus,
   type CreateCourtFields,
+  type CourtDTO,
+  type UpdateCourtFields,
 } from '@turfhood/shared';
 import { ApiError } from '@/types/api/response';
-import { Button, Input, Modal, Select, useToast } from '@/components/ui';
+import { Button, Input, Modal, Select, TimeInput, useToast } from '@/components/ui';
 import { TurfImageUpload, type TurfImageEntry } from '@/features/turf-onboarding';
 import { listPublicSportsTypes } from '@/features/turf-onboarding/actions/catalogApi';
-import { createCourt } from '../actions/courtApi';
+import { createCourt, updateCourt } from '../actions/courtApi';
 import { cn } from '@/lib/utils';
 
 interface CourtFormModalProps {
@@ -21,6 +25,8 @@ interface CourtFormModalProps {
   open: boolean;
   onClose: () => void;
   onCreated: () => void;
+  court?: CourtDTO;
+  onUpdated?: (court: CourtDTO) => void;
 }
 
 type PricingBand = CreateCourtFields['pricingRules'][number] & { clientId: string };
@@ -37,20 +43,23 @@ function createPricingBand(dayType: PricingBand['dayType'] = 'weekday'): Pricing
 
 type CourtFieldErrors = Partial<Record<keyof CreateCourtFields, string>>;
 
-export function CourtFormModal({ turfId, open, onClose, onCreated }: CourtFormModalProps) {
+export function CourtFormModal({ turfId, open, onClose, onCreated, court, onUpdated }: CourtFormModalProps) {
+  const isEditing = Boolean(court);
   const { showToast } = useToast();
   const [sports, setSports] = useState<CatalogItem[]>([]);
-  const [name, setName] = useState('');
-  const [sportTypeIds, setSportTypeIds] = useState<string[]>([]);
-  const [capacity, setCapacity] = useState(10);
-  const [status, setStatus] = useState<CourtStatus>('active');
-  const [allowOpenSessions, setAllowOpenSessions] = useState(false);
-  const [minPlayers, setMinPlayers] = useState(2);
-  const [slotDuration, setSlotDuration] = useState(60);
-  const [pricingRules, setPricingRules] = useState<PricingBand[]>(() => [
-    createPricingBand('weekday'),
-    createPricingBand('weekend'),
-  ]);
+  const [name, setName] = useState(court?.name ?? '');
+  const [sportTypeIds, setSportTypeIds] = useState<string[]>(court?.sportTypeIds ?? []);
+  const [capacity, setCapacity] = useState(court?.capacity ?? 10);
+  const [status, setStatus] = useState<CourtStatus>(court?.status ?? 'active');
+  const [allowOpenSessions, setAllowOpenSessions] = useState(court?.allowOpenSessions ?? false);
+  const [minPlayers, setMinPlayers] = useState(court?.minPlayersForOpenSession ?? 2);
+  const [slotDuration, setSlotDuration] = useState(court?.slotDurationMinutes ?? 60);
+  const [pricingRules, setPricingRules] = useState<PricingBand[]>(() =>
+    court?.pricingRules.map((rule) => ({ ...rule, clientId: rule.id })) ?? [
+      createPricingBand('weekday'),
+      createPricingBand('weekend'),
+    ],
+  );
   const [images, setImages] = useState<TurfImageEntry[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -86,7 +95,7 @@ export function CourtFormModal({ turfId, open, onClose, onCreated }: CourtFormMo
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
-    const payload: CreateCourtFields = {
+    const editableFields: UpdateCourtFields = {
       name: name.trim(),
       sportTypeIds,
       capacity,
@@ -94,7 +103,6 @@ export function CourtFormModal({ turfId, open, onClose, onCreated }: CourtFormMo
       allowOpenSessions,
       minPlayersForOpenSession: allowOpenSessions ? minPlayers : 1,
       slotDurationMinutes: slotDuration,
-      imageCoverFlags: images.map((image) => image.isCover),
       pricingRules: pricingRules.map(({ dayType, startTime, endTime, pricePerSlot }) => ({
         dayType,
         startTime,
@@ -102,7 +110,8 @@ export function CourtFormModal({ turfId, open, onClose, onCreated }: CourtFormMo
         pricePerSlot,
       })),
     };
-    const validation = createCourtSchema.safeParse(payload);
+    const payload: CreateCourtFields = { ...editableFields, imageCoverFlags: images.map((image) => image.isCover) };
+    const validation = isEditing ? updateCourtSchema.safeParse(editableFields) : createCourtSchema.safeParse(payload);
     if (!validation.success) {
       const errors: CourtFieldErrors = {};
       validation.error.issues.forEach((issue) => {
@@ -117,17 +126,19 @@ export function CourtFormModal({ turfId, open, onClose, onCreated }: CourtFormMo
     setError(null);
     setFieldErrors({});
     try {
-      await createCourt(
-        turfId,
-        validation.data,
-        images.map((image) => image.file),
-      );
-      images.forEach((image) => URL.revokeObjectURL(image.previewUrl));
-      setImages([]);
-      setName('');
-      setSportTypeIds([]);
-      showToast('Court created successfully.', 'success');
-      onCreated();
+      if (isEditing && court) {
+        const updated = await updateCourt(turfId, court.id, validation.data as UpdateCourtFields);
+        showToast('Court updated successfully.', 'success');
+        onUpdated?.(updated);
+      } else {
+        await createCourt(turfId, validation.data as CreateCourtFields, images.map((image) => image.file));
+        images.forEach((image) => URL.revokeObjectURL(image.previewUrl));
+        setImages([]);
+        setName('');
+        setSportTypeIds([]);
+        showToast('Court created successfully.', 'success');
+        onCreated();
+      }
       onClose();
     } catch (caught) {
       setError(caught instanceof ApiError ? caught.message : 'Failed to create court.');
@@ -140,7 +151,7 @@ export function CourtFormModal({ turfId, open, onClose, onCreated }: CourtFormMo
     <Modal
       open={open}
       onClose={onClose}
-      title="Add Court"
+      title={isEditing ? 'Edit Court' : 'Add Court'}
       className="max-h-[90vh] max-w-3xl overflow-y-auto"
     >
       <form noValidate onSubmit={(event) => void submit(event)} className="space-y-5">
@@ -188,16 +199,16 @@ export function CourtFormModal({ turfId, open, onClose, onCreated }: CourtFormMo
           </label>
           <label className="text-sm font-medium">
             <span className="mb-2 block">Slot duration (minutes)</span>
-            <Input
-              type="number"
-              min={15}
-              max={240}
-              step={15}
-              value={slotDuration}
+            <Select
+              value={String(slotDuration)}
               onChange={(event) => {
                 setSlotDuration(Number(event.target.value));
                 clearFieldError('slotDurationMinutes');
               }}
+              options={ALLOWED_SLOT_DURATIONS.map((duration) => ({
+                label: `${duration} minutes`,
+                value: String(duration),
+              }))}
               errorMessage={fieldErrors.slotDurationMinutes}
             />
           </label>
@@ -278,7 +289,7 @@ export function CourtFormModal({ turfId, open, onClose, onCreated }: CourtFormMo
             <div
               key={rule.clientId}
               className={cn(
-                'grid gap-3 rounded-md border p-3 sm:grid-cols-[1fr_1fr_1fr_1fr_auto]',
+                'grid gap-4 rounded-md border p-4 sm:grid-cols-2',
                 overlappingBandIndexes.has(index) ? 'border-destructive' : 'border-border',
               )}
             >
@@ -305,36 +316,32 @@ export function CourtFormModal({ turfId, open, onClose, onCreated }: CourtFormMo
               </label>
               <label className="text-xs font-medium text-muted-foreground">
                 <span className="mb-2 block">Start time</span>
-                <Input
-                  aria-label={`${rule.dayType} start time`}
-                  type="time"
+                <TimeInput
+                  ariaLabel={`${rule.dayType} start time`}
                   value={rule.startTime}
-                  onChange={(event) => {
+                  onChange={(startTime) => {
                     setPricingRules((current) =>
                       current.map((item, itemIndex) =>
-                        itemIndex === index ? { ...item, startTime: event.target.value } : item,
+                        itemIndex === index ? { ...item, startTime } : item,
                       ),
                     );
                     clearFieldError('pricingRules');
                   }}
-                  required
                 />
               </label>
               <label className="text-xs font-medium text-muted-foreground">
                 <span className="mb-2 block">End time</span>
-                <Input
-                  aria-label={`${rule.dayType} end time`}
-                  type="time"
+                <TimeInput
+                  ariaLabel={`${rule.dayType} end time`}
                   value={rule.endTime}
-                  onChange={(event) => {
+                  onChange={(endTime) => {
                     setPricingRules((current) =>
                       current.map((item, itemIndex) =>
-                        itemIndex === index ? { ...item, endTime: event.target.value } : item,
+                        itemIndex === index ? { ...item, endTime } : item,
                       ),
                     );
                     clearFieldError('pricingRules');
                   }}
-                  required
                 />
               </label>
               <label className="text-xs font-medium text-muted-foreground">
@@ -364,7 +371,7 @@ export function CourtFormModal({ turfId, open, onClose, onCreated }: CourtFormMo
                 variant="ghost"
                 size="sm"
                 aria-label={`Remove pricing band ${index + 1}`}
-                className="self-end text-destructive"
+                className="self-end justify-self-end text-destructive sm:col-span-2"
                 disabled={pricingRules.length === 1}
                 onClick={() => {
                   setPricingRules((current) =>
@@ -384,7 +391,7 @@ export function CourtFormModal({ turfId, open, onClose, onCreated }: CourtFormMo
           )}
         </fieldset>
 
-        <div>
+        {!isEditing && <div>
           <p className="mb-2 text-sm font-medium">Court images (up to 5)</p>
           <TurfImageUpload
             images={images}
@@ -395,7 +402,7 @@ export function CourtFormModal({ turfId, open, onClose, onCreated }: CourtFormMo
             maxImages={5}
             errorMessage={fieldErrors.imageCoverFlags}
           />
-        </div>
+        </div>}
 
         {error && (
           <p role="alert" className="text-sm text-destructive">
@@ -407,7 +414,7 @@ export function CourtFormModal({ turfId, open, onClose, onCreated }: CourtFormMo
             Cancel
           </Button>
           <Button type="submit" loading={isSubmitting}>
-            Create Court
+            {isEditing ? 'Save Changes' : 'Create Court'}
           </Button>
         </div>
       </form>

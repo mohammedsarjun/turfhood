@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
-import { createCourtSchema, type CreateCourtFields } from '@turfhood/shared';
+import { createAvailabilityOverrideSchema, createCourtSchema, updateCourtSchema, type CreateAvailabilityOverrideRequest, type CreateCourtFields, type UpdateCourtFields } from '@turfhood/shared';
 import { HttpStatus } from '@shared/constants/httpStatus';
 
 export type ValidatedCourtRequest = Request & {
@@ -49,5 +49,39 @@ export function validateListCourts(req: Request, res: Response, next: NextFuncti
     return;
   }
   (req as ValidatedCourtListRequest).validatedQuery = result.data;
+  next();
+}
+
+export type ValidatedAvailabilityOverrideRequest = Request & { validatedOverride?: CreateAvailabilityOverrideRequest };
+
+export function validateAvailabilityOverride(req: Request, res: Response, next: NextFunction): void {
+  const result = createAvailabilityOverrideSchema.safeParse(req.body);
+  if (!result.success) {
+    res.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid availability override.', errors: result.error.flatten().fieldErrors });
+    return;
+  }
+  (req as ValidatedAvailabilityOverrideRequest).validatedOverride = {
+    date: result.data.date,
+    isClosed: result.data.isClosed,
+    ...(result.data.closureReason ? { closureReason: result.data.closureReason } : {}),
+    ...(result.data.customHours ? { customHours: result.data.customHours } : {}),
+    blockedPeriods: result.data.blockedPeriods.map(({ startTime, endTime, reason }) => ({
+      startTime,
+      endTime,
+      ...(reason ? { reason } : {}),
+    })),
+  };
+  next();
+}
+
+export type ValidatedCourtUpdateRequest = Request & { validatedCourtUpdate?: UpdateCourtFields };
+
+export function validateUpdateCourt(req: Request, res: Response, next: NextFunction): void {
+  const result = updateCourtSchema.safeParse(req.body);
+  if (!result.success) {
+    res.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid court details.', errors: result.error.flatten().fieldErrors });
+    return;
+  }
+  (req as ValidatedCourtUpdateRequest).validatedCourtUpdate = result.data;
   next();
 }

@@ -45,6 +45,7 @@ export function CourtManagementPage({ turfId }: { turfId: string }) {
         </p>
       )}
       <CourtsTable
+        turfId={turfId}
         courts={items}
         sportNames={sportNames}
         isLoading={isLoading}

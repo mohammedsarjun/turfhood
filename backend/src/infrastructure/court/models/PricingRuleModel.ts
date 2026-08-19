@@ -1,5 +1,5 @@
 import mongoose, { Schema, model, type Document, type Model } from 'mongoose';
-import type { PricingDayType } from '@turfhood/shared';
+import { RAILWAY_TIME_PATTERN, type PricingDayType } from '@turfhood/shared';
 
 export interface PricingRuleDocument extends Document {
   courtId: mongoose.Types.ObjectId;
@@ -15,8 +15,8 @@ const schema = new Schema<PricingRuleDocument>(
   {
     courtId: { type: Schema.Types.ObjectId, ref: 'Court', required: true, index: true },
     dayType: { type: String, enum: ['weekday', 'weekend'], required: true },
-    startTime: { type: String, required: true },
-    endTime: { type: String, required: true },
+    startTime: { type: String, required: true, match: RAILWAY_TIME_PATTERN },
+    endTime: { type: String, required: true, match: RAILWAY_TIME_PATTERN },
     pricePerSlot: { type: Number, required: true, min: 0 },
   },
   { timestamps: true },
