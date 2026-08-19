@@ -4,7 +4,10 @@ import { TURF_TOKENS } from '@domain/turf/tokens';
 import type { ICourtRepository } from '@domain/court/repositories/ICourtRepository';
 import { COURT_TOKENS } from '@domain/court/tokens';
 import { CourtAccessError } from '@domain/court/errors/CourtAccessError';
-import { AvailabilityOverrideNotFoundError, DuplicateAvailabilityOverrideError } from '@domain/court/errors/AvailabilityOverrideError';
+import {
+  AvailabilityOverrideNotFoundError,
+  DuplicateAvailabilityOverrideError,
+} from '@domain/court/errors/AvailabilityOverrideError';
 import { DuplicateCourtNameError } from '@domain/court/errors/DuplicateCourtNameError';
 import type { CourtAccessInput, IManageCourtDetailsUseCase } from './IManageCourtDetailsUseCase.js';
 
@@ -32,13 +35,22 @@ export class ManageCourtDetailsUseCase implements IManageCourtDetailsUseCase {
     const { turf, court } = await this.resolve(input);
     try {
       return await this.courts.createOverride({
-        turfId: turf.id!, courtId: court.id, date: input.date, isClosed: input.isClosed,
+        turfId: turf.id!,
+        courtId: court.id,
+        date: input.date,
+        isClosed: input.isClosed,
         ...(input.closureReason ? { closureReason: input.closureReason } : {}),
         ...(input.customHours ? { customHours: input.customHours } : {}),
         blockedPeriods: input.blockedPeriods,
       });
     } catch (error) {
-      if (typeof error === 'object' && error !== null && 'code' in error && (error as { code: unknown }).code === 11000) throw new DuplicateAvailabilityOverrideError();
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        (error as { code: unknown }).code === 11000
+      )
+        throw new DuplicateAvailabilityOverrideError();
       throw error;
     }
   }
@@ -46,7 +58,8 @@ export class ManageCourtDetailsUseCase implements IManageCourtDetailsUseCase {
   async updateOverride(input: Parameters<IManageCourtDetailsUseCase['updateOverride']>[0]) {
     const { court } = await this.resolve(input);
     const updated = await this.courts.updateOverride(input.overrideId, court.id, {
-      date: input.date, isClosed: input.isClosed,
+      date: input.date,
+      isClosed: input.isClosed,
       ...(input.closureReason ? { closureReason: input.closureReason } : {}),
       ...(input.customHours ? { customHours: input.customHours } : {}),
       blockedPeriods: input.blockedPeriods,
@@ -57,7 +70,8 @@ export class ManageCourtDetailsUseCase implements IManageCourtDetailsUseCase {
 
   async deleteOverride(input: Parameters<IManageCourtDetailsUseCase['deleteOverride']>[0]) {
     const { court } = await this.resolve(input);
-    if (!(await this.courts.deleteOverride(input.overrideId, court.id))) throw new AvailabilityOverrideNotFoundError();
+    if (!(await this.courts.deleteOverride(input.overrideId, court.id)))
+      throw new AvailabilityOverrideNotFoundError();
   }
 
   async update(input: Parameters<IManageCourtDetailsUseCase['update']>[0]) {

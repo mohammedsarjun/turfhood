@@ -52,7 +52,7 @@ export function useAmenitiesList() {
   }, [page, debouncedSearch, isListedFilter]);
 
   useEffect(() => {
-     fetchList();
+    fetchList();
   }, [fetchList]);
 
   return {

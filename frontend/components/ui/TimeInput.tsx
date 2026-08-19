@@ -16,7 +16,14 @@ interface TimeInputProps {
 const hours = Array.from({ length: 12 }, (_, index) => index + 1);
 const minutes = Array.from({ length: 60 }, (_, index) => index);
 
-export function TimeInput({ value, onChange, ariaLabel, errorMessage, disabled, className }: TimeInputProps) {
+export function TimeInput({
+  value,
+  onChange,
+  ariaLabel,
+  errorMessage,
+  disabled,
+  className,
+}: TimeInputProps) {
   const parsed = fromRailwayTime(value);
   const hour = parsed?.hour ?? 12;
   const minute = parsed?.minute ?? 0;
@@ -53,11 +60,18 @@ export function TimeInput({ value, onChange, ariaLabel, errorMessage, disabled, 
           value={meridiem}
           disabled={disabled}
           onChange={(event) => update(hour, minute, event.target.value as Meridiem)}
-          options={[{ value: 'AM', label: 'AM' }, { value: 'PM', label: 'PM' }]}
+          options={[
+            { value: 'AM', label: 'AM' },
+            { value: 'PM', label: 'PM' },
+          ]}
           className="h-10 px-2 pr-7"
         />
       </div>
-      {errorMessage && <p role="alert" className="mt-1.5 text-xs text-destructive">{errorMessage}</p>}
+      {errorMessage && (
+        <p role="alert" className="mt-1.5 text-xs text-destructive">
+          {errorMessage}
+        </p>
+      )}
     </div>
   );
 }

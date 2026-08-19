@@ -1,4 +1,10 @@
-import type { AvailabilityOverrideDTO, CourtDTO, CreateAvailabilityOverrideRequest, CreateCourtFields, UpdateCourtFields } from '@turfhood/shared';
+import type {
+  AvailabilityOverrideDTO,
+  CourtDTO,
+  CreateAvailabilityOverrideRequest,
+  CreateCourtFields,
+  UpdateCourtFields,
+} from '@turfhood/shared';
 
 export interface CourtImageInput {
   url: string;
@@ -22,8 +28,14 @@ export interface ICourtRepository {
   }): Promise<{ items: CourtDTO[]; total: number }>;
   findByIdAndTurf(courtId: string, turfId: string): Promise<CourtDTO | null>;
   listOverrides(courtId: string): Promise<AvailabilityOverrideDTO[]>;
-  createOverride(input: CreateAvailabilityOverrideRequest & { turfId: string; courtId: string }): Promise<AvailabilityOverrideDTO>;
-  updateOverride(overrideId: string, courtId: string, input: CreateAvailabilityOverrideRequest): Promise<AvailabilityOverrideDTO | null>;
+  createOverride(
+    input: CreateAvailabilityOverrideRequest & { turfId: string; courtId: string },
+  ): Promise<AvailabilityOverrideDTO>;
+  updateOverride(
+    overrideId: string,
+    courtId: string,
+    input: CreateAvailabilityOverrideRequest,
+  ): Promise<AvailabilityOverrideDTO | null>;
   deleteOverride(overrideId: string, courtId: string): Promise<boolean>;
   update(courtId: string, input: UpdateCourtFields): Promise<CourtDTO | null>;
 }

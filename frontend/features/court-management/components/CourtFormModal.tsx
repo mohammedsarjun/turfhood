@@ -43,7 +43,14 @@ function createPricingBand(dayType: PricingBand['dayType'] = 'weekday'): Pricing
 
 type CourtFieldErrors = Partial<Record<keyof CreateCourtFields, string>>;
 
-export function CourtFormModal({ turfId, open, onClose, onCreated, court, onUpdated }: CourtFormModalProps) {
+export function CourtFormModal({
+  turfId,
+  open,
+  onClose,
+  onCreated,
+  court,
+  onUpdated,
+}: CourtFormModalProps) {
   const isEditing = Boolean(court);
   const { showToast } = useToast();
   const [sports, setSports] = useState<CatalogItem[]>([]);
@@ -54,11 +61,12 @@ export function CourtFormModal({ turfId, open, onClose, onCreated, court, onUpda
   const [allowOpenSessions, setAllowOpenSessions] = useState(court?.allowOpenSessions ?? false);
   const [minPlayers, setMinPlayers] = useState(court?.minPlayersForOpenSession ?? 2);
   const [slotDuration, setSlotDuration] = useState(court?.slotDurationMinutes ?? 60);
-  const [pricingRules, setPricingRules] = useState<PricingBand[]>(() =>
-    court?.pricingRules.map((rule) => ({ ...rule, clientId: rule.id })) ?? [
-      createPricingBand('weekday'),
-      createPricingBand('weekend'),
-    ],
+  const [pricingRules, setPricingRules] = useState<PricingBand[]>(
+    () =>
+      court?.pricingRules.map((rule) => ({ ...rule, clientId: rule.id })) ?? [
+        createPricingBand('weekday'),
+        createPricingBand('weekend'),
+      ],
   );
   const [images, setImages] = useState<TurfImageEntry[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -110,8 +118,13 @@ export function CourtFormModal({ turfId, open, onClose, onCreated, court, onUpda
         pricePerSlot,
       })),
     };
-    const payload: CreateCourtFields = { ...editableFields, imageCoverFlags: images.map((image) => image.isCover) };
-    const validation = isEditing ? updateCourtSchema.safeParse(editableFields) : createCourtSchema.safeParse(payload);
+    const payload: CreateCourtFields = {
+      ...editableFields,
+      imageCoverFlags: images.map((image) => image.isCover),
+    };
+    const validation = isEditing
+      ? updateCourtSchema.safeParse(editableFields)
+      : createCourtSchema.safeParse(payload);
     if (!validation.success) {
       const errors: CourtFieldErrors = {};
       validation.error.issues.forEach((issue) => {
@@ -131,7 +144,11 @@ export function CourtFormModal({ turfId, open, onClose, onCreated, court, onUpda
         showToast('Court updated successfully.', 'success');
         onUpdated?.(updated);
       } else {
-        await createCourt(turfId, validation.data as CreateCourtFields, images.map((image) => image.file));
+        await createCourt(
+          turfId,
+          validation.data as CreateCourtFields,
+          images.map((image) => image.file),
+        );
         images.forEach((image) => URL.revokeObjectURL(image.previewUrl));
         setImages([]);
         setName('');
@@ -391,18 +408,20 @@ export function CourtFormModal({ turfId, open, onClose, onCreated, court, onUpda
           )}
         </fieldset>
 
-        {!isEditing && <div>
-          <p className="mb-2 text-sm font-medium">Court images (up to 5)</p>
-          <TurfImageUpload
-            images={images}
-            onChange={(nextImages) => {
-              setImages(nextImages);
-              clearFieldError('imageCoverFlags');
-            }}
-            maxImages={5}
-            errorMessage={fieldErrors.imageCoverFlags}
-          />
-        </div>}
+        {!isEditing && (
+          <div>
+            <p className="mb-2 text-sm font-medium">Court images (up to 5)</p>
+            <TurfImageUpload
+              images={images}
+              onChange={(nextImages) => {
+                setImages(nextImages);
+                clearFieldError('imageCoverFlags');
+              }}
+              maxImages={5}
+              errorMessage={fieldErrors.imageCoverFlags}
+            />
+          </div>
+        )}
 
         {error && (
           <p role="alert" className="text-sm text-destructive">

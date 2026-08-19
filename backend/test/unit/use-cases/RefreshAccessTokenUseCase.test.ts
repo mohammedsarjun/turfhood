@@ -173,7 +173,8 @@ describe('RefreshAccessTokenUseCase', () => {
 
   // ERROR CASE: the JWT itself is expired.
   it('throws RefreshTokenExpiredError for an expired refresh token', async () => {
-    process.env.REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET ?? 'test-only-refresh-secret';
+    process.env.REFRESH_TOKEN_SECRET =
+      process.env.REFRESH_TOKEN_SECRET ?? 'test-only-refresh-secret';
     const refreshTokenService = buildRefreshTokenService();
     const expiredToken = jwt.sign(
       { userId: 'user_1', roles: ['customer'], jti: 'expired-jti' },

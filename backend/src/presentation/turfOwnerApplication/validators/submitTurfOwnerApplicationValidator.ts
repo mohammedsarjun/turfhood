@@ -49,12 +49,10 @@ export function validateSubmitTurfOwnerApplicationRequest(
 ): void {
   const bodyResult = nameDescriptionSchema.safeParse(req.body);
   if (!bodyResult.success) {
-    res
-      .status(HttpStatus.BAD_REQUEST)
-      .json({
-        message: 'Invalid application details.',
-        errors: bodyResult.error.flatten().fieldErrors,
-      });
+    res.status(HttpStatus.BAD_REQUEST).json({
+      message: 'Invalid application details.',
+      errors: bodyResult.error.flatten().fieldErrors,
+    });
     return;
   }
 
