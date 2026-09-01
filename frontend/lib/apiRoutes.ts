@@ -44,13 +44,21 @@ export const API_ROUTES = {
   courts: {
     forTurf: (turfId: string) => `/turfs/${turfId}/courts`,
     details: (turfId: string, courtId: string) => `/turfs/${turfId}/courts/${courtId}`,
-    overrides: (turfId: string, courtId: string) => `/turfs/${turfId}/courts/${courtId}/availability-overrides`,
-    override: (turfId: string, courtId: string, overrideId: string) => `/turfs/${turfId}/courts/${courtId}/availability-overrides/${overrideId}`,
+    overrides: (turfId: string, courtId: string) =>
+      `/turfs/${turfId}/courts/${courtId}/availability-overrides`,
+    override: (turfId: string, courtId: string, overrideId: string) =>
+      `/turfs/${turfId}/courts/${courtId}/availability-overrides/${overrideId}`,
   },
   locations: {
     countries: '/locations/countries',
     states: (countryCode: string) => `/locations/countries/${countryCode}/states`,
     cities: (countryCode: string, stateCode: string) =>
       `/locations/countries/${countryCode}/states/${stateCode}/cities`,
+  },
+  banners: { base: '/banners' },
+  turfs: {
+    nearby: '/turfs/nearby',
+    discover: '/turfs/discover',
+    details: (id: string) => `/turfs/${id}`,
   },
 } as const;

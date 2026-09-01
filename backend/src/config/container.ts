@@ -1,5 +1,10 @@
 import 'reflect-metadata';
 import { container } from 'tsyringe';
+import type { IBannerRepository } from '@domain/banner/repositories/IBannerRepository';
+import { BANNER_TOKENS } from '@domain/banner/tokens';
+import { BannerRepository } from '@infrastructure/banner/repositories/BannerRepository';
+import type { IManageBannersUseCase } from '@application/banner/use-cases/IManageBannersUseCase';
+import { ManageBannersUseCase } from '@application/banner/use-cases/ManageBannersUseCase';
 import type { IUserRepository } from '@domain/user/repositories/IUserRepository';
 import type { IPasswordHasher } from '@domain/user/services/IPasswordHasher';
 import type { ITokenService } from '@domain/user/services/ITokenService';
@@ -94,6 +99,10 @@ import type { ITurfImageRepository } from '@domain/turf/repositories/ITurfImageR
 import { TURF_TOKENS } from '@domain/turf/tokens';
 import { TurfRepository } from '@infrastructure/turf/repositories/TurfRepository';
 import { TurfImageRepository } from '@infrastructure/turf/repositories/TurfImageRepository';
+import { ListNearbyTurfsUseCase } from '@application/turf/use-cases/ListNearbyTurfsUseCase';
+import { GetTurfDetailsUseCase } from '@application/turf/use-cases/GetTurfDetailsUseCase';
+import type { IListNearbyTurfsUseCase } from '@application/turf/use-cases/IListNearbyTurfsUseCase';
+import type { IGetTurfDetailsUseCase } from '@application/turf/use-cases/IGetTurfDetailsUseCase';
 import type { ITurfOwnerApplicationRepository } from '@domain/turfOwnerApplication/repositories/ITurfOwnerApplicationRepository';
 import { TURF_OWNER_APPLICATION_TOKENS } from '@domain/turfOwnerApplication/tokens';
 import { TurfOwnerApplicationRepository } from '@infrastructure/turfOwnerApplication/repositories/TurfOwnerApplicationRepository';
@@ -254,6 +263,12 @@ container.register<ITurfRepository>(TURF_TOKENS.TurfRepository, { useClass: Turf
 container.register<ITurfImageRepository>(TURF_TOKENS.TurfImageRepository, {
   useClass: TurfImageRepository,
 });
+container.register<IListNearbyTurfsUseCase>(TURF_TOKENS.ListNearbyTurfsUseCase, {
+  useClass: ListNearbyTurfsUseCase,
+});
+container.register<IGetTurfDetailsUseCase>(TURF_TOKENS.GetTurfDetailsUseCase, {
+  useClass: GetTurfDetailsUseCase,
+});
 container.register<ITurfOwnerApplicationRepository>(
   TURF_OWNER_APPLICATION_TOKENS.TurfOwnerApplicationRepository,
   { useClass: TurfOwnerApplicationRepository },
@@ -307,6 +322,12 @@ container.register<IRevokeRefreshTokenUseCase>(REFRESH_TOKEN_TOKENS.RevokeRefres
   useClass: RevokeRefreshTokenUseCase,
 });
 container.register<ICourtRepository>(COURT_TOKENS.CourtRepository, { useClass: CourtRepository });
+container.register<IBannerRepository>(BANNER_TOKENS.BannerRepository, {
+  useClass: BannerRepository,
+});
+container.register<IManageBannersUseCase>(BANNER_TOKENS.ManageBannersUseCase, {
+  useClass: ManageBannersUseCase,
+});
 container.register<ICreateCourtUseCase>(COURT_TOKENS.CreateCourtUseCase, {
   useClass: CreateCourtUseCase,
 });

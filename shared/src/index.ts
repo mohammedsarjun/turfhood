@@ -81,6 +81,14 @@ export type {
 } from "./catalog/catalog-item.dto.js";
 export { CatalogErrorCode } from "./catalog/catalog-error-code.js";
 export type { LocationOption } from "./location/location.dto.js";
+export type {
+  BannerDTO,
+  NearbyTurfDTO,
+  TurfDiscoveryFilters,
+  PublicCourtCardDTO,
+  TurfDetailDTO,
+  TurfDetailResponse,
+} from "./home/home.dto.js";
 export type { GeoPoint } from "./geo/coordinates.dto.js";
 export { TurfApplicationStatus } from "./turfOnboarding/turf-onboarding-status.js";
 export { TurfOnboardingErrorCode } from "./turfOnboarding/turf-onboarding-error-code.js";

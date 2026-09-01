@@ -1,4 +1,10 @@
-import type { AvailabilityOverrideDTO, CourtDTO, CreateAvailabilityOverrideRequest, CreateCourtFields, UpdateCourtFields } from '@turfhood/shared';
+import type {
+  AvailabilityOverrideDTO,
+  CourtDTO,
+  CreateAvailabilityOverrideRequest,
+  CreateCourtFields,
+  UpdateCourtFields,
+} from '@turfhood/shared';
 
 export interface CourtImageInput {
   url: string;
@@ -12,6 +18,20 @@ export interface ICreateCourtPersistenceInput extends Omit<CreateCourtFields, 'i
 }
 
 export interface ICourtRepository {
+  findTurfIdsMatchingDiscoveryFilters(input: {
+    sportTypeId?: string;
+    minPrice?: number;
+    maxPrice?: number;
+  }): Promise<string[]>;
+  findDiscoveryDetails(turfIds: string[]): Promise<
+    Map<
+      string,
+      {
+        sports: string[];
+        prices: Array<{ pricePerSlot: number; slotDurationMinutes: number }>;
+      }
+    >
+  >;
   existsByName(turfId: string, name: string, excludeCourtId?: string): Promise<boolean>;
   create(input: ICreateCourtPersistenceInput): Promise<CourtDTO>;
   list(input: {
@@ -20,10 +40,21 @@ export interface ICourtRepository {
     limit: number;
     search?: string;
   }): Promise<{ items: CourtDTO[]; total: number }>;
+  listPublic(input: {
+    turfId: string;
+    page: number;
+    limit: number;
+  }): Promise<{ items: CourtDTO[]; total: number }>;
   findByIdAndTurf(courtId: string, turfId: string): Promise<CourtDTO | null>;
   listOverrides(courtId: string): Promise<AvailabilityOverrideDTO[]>;
-  createOverride(input: CreateAvailabilityOverrideRequest & { turfId: string; courtId: string }): Promise<AvailabilityOverrideDTO>;
-  updateOverride(overrideId: string, courtId: string, input: CreateAvailabilityOverrideRequest): Promise<AvailabilityOverrideDTO | null>;
+  createOverride(
+    input: CreateAvailabilityOverrideRequest & { turfId: string; courtId: string },
+  ): Promise<AvailabilityOverrideDTO>;
+  updateOverride(
+    overrideId: string,
+    courtId: string,
+    input: CreateAvailabilityOverrideRequest,
+  ): Promise<AvailabilityOverrideDTO | null>;
   deleteOverride(overrideId: string, courtId: string): Promise<boolean>;
   update(courtId: string, input: UpdateCourtFields): Promise<CourtDTO | null>;
 }
