@@ -4,9 +4,10 @@ import { TURF_TOKENS } from '@domain/turf/tokens';
 import type { ICourtRepository } from '@domain/court/repositories/ICourtRepository';
 import { COURT_TOKENS } from '@domain/court/tokens';
 import { CourtAccessError } from '@domain/court/errors/CourtAccessError';
-import { AvailabilityOverrideNotFoundError, DuplicateAvailabilityOverrideError } from '@domain/court/errors/AvailabilityOverrideError';
+import { AvailabilityOverrideNotFoundError, DuplicateAvailabilityOverrideError, InvalidBlockedSlotError } from '@domain/court/errors/AvailabilityOverrideError';
 import { DuplicateCourtNameError } from '@domain/court/errors/DuplicateCourtNameError';
 import type { CourtAccessInput, IManageCourtDetailsUseCase } from './IManageCourtDetailsUseCase.js';
+import { generateSlots } from './GetPublicCourtDetailsUseCase.js';
 
 @injectable()
 export class ManageCourtDetailsUseCase implements IManageCourtDetailsUseCase {
@@ -30,12 +31,12 @@ export class ManageCourtDetailsUseCase implements IManageCourtDetailsUseCase {
 
   async createOverride(input: Parameters<IManageCourtDetailsUseCase['createOverride']>[0]) {
     const { turf, court } = await this.resolve(input);
+    this.validateBlockedSlots(court, input.date, input.blockedSlots);
     try {
       return await this.courts.createOverride({
         turfId: turf.id!, courtId: court.id, date: input.date, isClosed: input.isClosed,
         ...(input.closureReason ? { closureReason: input.closureReason } : {}),
-        ...(input.customHours ? { customHours: input.customHours } : {}),
-        blockedPeriods: input.blockedPeriods,
+        blockedSlots: input.blockedSlots,
       });
     } catch (error) {
       if (typeof error === 'object' && error !== null && 'code' in error && (error as { code: unknown }).code === 11000) throw new DuplicateAvailabilityOverrideError();
@@ -45,11 +46,11 @@ export class ManageCourtDetailsUseCase implements IManageCourtDetailsUseCase {
 
   async updateOverride(input: Parameters<IManageCourtDetailsUseCase['updateOverride']>[0]) {
     const { court } = await this.resolve(input);
+    this.validateBlockedSlots(court, input.date, input.blockedSlots);
     const updated = await this.courts.updateOverride(input.overrideId, court.id, {
       date: input.date, isClosed: input.isClosed,
       ...(input.closureReason ? { closureReason: input.closureReason } : {}),
-      ...(input.customHours ? { customHours: input.customHours } : {}),
-      blockedPeriods: input.blockedPeriods,
+      blockedSlots: input.blockedSlots,
     });
     if (!updated) throw new AvailabilityOverrideNotFoundError();
     return updated;
@@ -77,5 +78,22 @@ export class ManageCourtDetailsUseCase implements IManageCourtDetailsUseCase {
     });
     if (!updated) throw new CourtAccessError('The requested court was not found.');
     return updated;
+  }
+
+  private validateBlockedSlots(
+    court: Awaited<ReturnType<ICourtRepository['findByIdAndTurf']>> & {},
+    date: string,
+    blockedSlots: Array<{ startTime: string; endTime: string }>,
+  ): void {
+    if (blockedSlots.length === 0) return;
+    const day = new Date(`${date}T00:00:00Z`).getUTCDay();
+    const valid = new Set(
+      generateSlots(court, date, day === 0 || day === 6 ? 'weekend' : 'weekday').map(
+        (slot) => `${slot.startTime}-${slot.endTime}`,
+      ),
+    );
+    if (blockedSlots.some((slot) => !valid.has(`${slot.startTime}-${slot.endTime}`))) {
+      throw new InvalidBlockedSlotError();
+    }
   }
 }

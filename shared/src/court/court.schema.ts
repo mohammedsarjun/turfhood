@@ -117,55 +117,25 @@ const availabilityPeriodSchema = z
     message: "End time must be after start time.",
   });
 
-const blockedPeriodSchema = availabilityPeriodSchema.and(
-  z.object({ reason: z.string().trim().max(200, "Reason cannot exceed 200 characters.").optional() }),
-);
-
-function addOverlapIssues(
-  periods: Array<{ startTime: string; endTime: string }>,
-  path: "customHours" | "blockedPeriods",
-  context: z.RefinementCtx,
-): void {
-  periods.forEach((period, index) => {
-    if (periods.some((candidate, candidateIndex) =>
-      candidateIndex !== index && period.startTime < candidate.endTime && candidate.startTime < period.endTime
-    )) {
-      context.addIssue({ code: z.ZodIssueCode.custom, path: [path, index], message: "Time periods cannot overlap." });
-    }
-  });
-}
-
 export const createAvailabilityOverrideSchema = z
   .object({
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Choose a valid date."),
     isClosed: z.boolean(),
     closureReason: z.enum(["holiday", "maintenance", "private_event", "weather", "other"]).optional(),
-    customHours: z.array(availabilityPeriodSchema).min(1, "Add at least one custom-hours period.").max(8).optional(),
-    blockedPeriods: z.array(blockedPeriodSchema).max(12).default([]),
+    blockedSlots: z.array(availabilityPeriodSchema).max(96).default([]),
   })
   .superRefine((value, context) => {
     if (value.isClosed) {
       if (!value.closureReason) context.addIssue({ code: z.ZodIssueCode.custom, path: ["closureReason"], message: "Select a closure reason." });
-      if (value.customHours || value.blockedPeriods.length > 0) context.addIssue({ code: z.ZodIssueCode.custom, path: ["isClosed"], message: "A closed day cannot contain availability periods." });
+      if (value.blockedSlots.length > 0) context.addIssue({ code: z.ZodIssueCode.custom, path: ["blockedSlots"], message: "A closed day cannot also contain blocked slots." });
       return;
     }
     if (value.closureReason) context.addIssue({ code: z.ZodIssueCode.custom, path: ["closureReason"], message: "Closure reason is only allowed for a closed day." });
-    if (!value.customHours && value.blockedPeriods.length === 0) {
-      context.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["blockedPeriods"],
-        message: "Add at least one blocked period when using regular opening hours.",
-      });
+    if (value.blockedSlots.length === 0) {
+      context.addIssue({ code: z.ZodIssueCode.custom, path: ["blockedSlots"], message: "Select at least one slot to block." });
     }
-    addOverlapIssues(value.customHours ?? [], "customHours", context);
-    addOverlapIssues(value.blockedPeriods, "blockedPeriods", context);
-    if (value.customHours) {
-      value.blockedPeriods.forEach((blocked, index) => {
-        if (!value.customHours!.some((hours) => hours.startTime <= blocked.startTime && blocked.endTime <= hours.endTime)) {
-          context.addIssue({ code: z.ZodIssueCode.custom, path: ["blockedPeriods", index], message: "Blocked periods must be inside custom hours." });
-        }
-      });
-    }
+    const uniqueSlots = new Set(value.blockedSlots.map((slot) => `${slot.startTime}-${slot.endTime}`));
+    if (uniqueSlots.size !== value.blockedSlots.length) context.addIssue({ code: z.ZodIssueCode.custom, path: ["blockedSlots"], message: "A slot can only be blocked once." });
   });
 
 export const updateCourtSchema = z

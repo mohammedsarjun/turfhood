@@ -88,6 +88,10 @@ export type {
   PublicCourtCardDTO,
   TurfDetailDTO,
   TurfDetailResponse,
+  SlotPeriod,
+  PublicCourtSlotDTO,
+  PublicCourtSlotDateDTO,
+  PublicCourtDetailsResponse,
 } from "./home/home.dto.js";
 export type { GeoPoint } from "./geo/coordinates.dto.js";
 export { TurfApplicationStatus } from "./turfOnboarding/turf-onboarding-status.js";
@@ -112,7 +116,7 @@ export type {
   AvailabilityOverrideReasonType,
   AvailabilityOverrideDTO,
   AvailabilityPeriodDTO,
-  BlockedPeriodDTO,
+  BlockedSlotDTO,
   CreateAvailabilityOverrideRequest,
   CourtDetailsResponse,
 } from "./court/court.dto.js";

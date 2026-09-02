@@ -4,6 +4,7 @@ import type {
   PaginatedResponse,
   TurfDetailResponse,
   TurfDiscoveryFilters,
+  PublicCourtDetailsResponse,
 } from '@turfhood/shared';
 import { axiosInstance } from '@/lib/axios';
 import { API_ROUTES } from '@/lib/apiRoutes';
@@ -11,6 +12,16 @@ import { API_ROUTES } from '@/lib/apiRoutes';
 export async function listBanners(): Promise<BannerDTO[]> {
   const response = await axiosInstance.get<{ items: BannerDTO[] }>(API_ROUTES.banners.base);
   return response.data.items;
+}
+
+export async function getPublicCourtDetails(
+  turfId: string,
+  courtId: string,
+): Promise<PublicCourtDetailsResponse> {
+  const response = await axiosInstance.get<PublicCourtDetailsResponse>(
+    API_ROUTES.turfs.courtDetails(turfId, courtId),
+  );
+  return response.data;
 }
 
 export async function discoverTurfs(

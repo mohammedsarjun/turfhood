@@ -65,38 +65,36 @@ describe('createCourtSchema', () => {
 
 describe('createAvailabilityOverrideSchema', () => {
   it('requires a reason category for a full-day closure', () => {
-    expect(createAvailabilityOverrideSchema.safeParse({ date: '2026-08-20', isClosed: true, blockedPeriods: [] }).success).toBe(false);
-    expect(createAvailabilityOverrideSchema.safeParse({ date: '2026-08-20', isClosed: true, closureReason: 'holiday', blockedPeriods: [] }).success).toBe(true);
+    expect(createAvailabilityOverrideSchema.safeParse({ date: '2026-08-20', isClosed: true, blockedSlots: [] }).success).toBe(false);
+    expect(createAvailabilityOverrideSchema.safeParse({ date: '2026-08-20', isClosed: true, closureReason: 'holiday', blockedSlots: [] }).success).toBe(true);
   });
 
-  it('accepts multiple non-overlapping custom and blocked periods', () => {
+  it('accepts selected generated slots', () => {
     const result = createAvailabilityOverrideSchema.safeParse({
       date: '2026-08-20', isClosed: false,
-      customHours: [{ startTime: '08:00', endTime: '12:00' }, { startTime: '16:00', endTime: '20:00' }],
-      blockedPeriods: [{ startTime: '17:00', endTime: '18:00', reason: 'Maintenance' }],
+      blockedSlots: [{ startTime: '08:00', endTime: '09:00' }, { startTime: '17:00', endTime: '18:00' }],
     });
     expect(result.success).toBe(true);
   });
 
-  it('rejects a regular-hours override without blocked periods', () => {
+  it('requires at least one selected slot for a partial override', () => {
     const result = createAvailabilityOverrideSchema.safeParse({
       date: '2026-08-20',
       isClosed: false,
-      blockedPeriods: [],
+      blockedSlots: [],
     });
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.flatten().fieldErrors.blockedPeriods?.[0]).toContain(
-        'Add at least one blocked period',
+      expect(result.error.flatten().fieldErrors.blockedSlots?.[0]).toContain(
+        'Select at least one slot',
       );
     }
   });
 
-  it('rejects overlapping custom periods', () => {
+  it('rejects duplicate selected slots', () => {
     const result = createAvailabilityOverrideSchema.safeParse({
       date: '2026-08-20', isClosed: false,
-      customHours: [{ startTime: '08:00', endTime: '12:00' }, { startTime: '11:00', endTime: '14:00' }],
-      blockedPeriods: [],
+      blockedSlots: [{ startTime: '08:00', endTime: '09:00' }, { startTime: '08:00', endTime: '09:00' }],
     });
     expect(result.success).toBe(false);
   });

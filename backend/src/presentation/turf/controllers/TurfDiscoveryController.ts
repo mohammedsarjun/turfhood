@@ -2,6 +2,8 @@ import type { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'tsyringe';
 import type { IListNearbyTurfsUseCase } from '@application/turf/use-cases/IListNearbyTurfsUseCase';
 import type { IGetTurfDetailsUseCase } from '@application/turf/use-cases/IGetTurfDetailsUseCase';
+import type { IGetPublicCourtDetailsUseCase } from '@application/court/use-cases/IGetPublicCourtDetailsUseCase';
+import { COURT_TOKENS } from '@domain/court/tokens';
 import { TURF_TOKENS } from '@domain/turf/tokens';
 import { HttpStatus } from '@shared/constants/httpStatus';
 
@@ -12,6 +14,8 @@ export class TurfDiscoveryController {
     private readonly listNearbyTurfs: IListNearbyTurfsUseCase,
     @inject(TURF_TOKENS.GetTurfDetailsUseCase)
     private readonly getTurfDetails: IGetTurfDetailsUseCase,
+    @inject(COURT_TOKENS.GetPublicCourtDetailsUseCase)
+    private readonly getPublicCourtDetails: IGetPublicCourtDetailsUseCase,
   ) {}
   nearby = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -79,6 +83,19 @@ export class TurfDiscoveryController {
       res
         .status(HttpStatus.OK)
         .json(await this.getTurfDetails.execute(String(req.params.id), page, limit));
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  courtDetails = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      res.status(HttpStatus.OK).json(
+        await this.getPublicCourtDetails.execute(
+          String(req.params.id),
+          String(req.params.courtId),
+        ),
+      );
     } catch (error) {
       next(error);
     }

@@ -8,3 +8,7 @@ export class AvailabilityOverrideNotFoundError extends AppError {
 export class DuplicateAvailabilityOverrideError extends AppError {
   constructor() { super('An availability override already exists for this date.', HttpStatus.CONFLICT, 'AVAILABILITY_OVERRIDE_EXISTS'); }
 }
+
+export class InvalidBlockedSlotError extends AppError {
+  constructor() { super('One or more selected slots are not part of this court schedule.', HttpStatus.BAD_REQUEST, 'INVALID_BLOCKED_SLOT'); }
+}

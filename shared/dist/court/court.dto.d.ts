@@ -55,8 +55,7 @@ export interface AvailabilityOverrideDTO {
     date: string;
     isClosed: boolean;
     closureReason?: AvailabilityOverrideReasonType;
-    customHours?: AvailabilityPeriodDTO[];
-    blockedPeriods: BlockedPeriodDTO[];
+    blockedSlots: BlockedSlotDTO[];
     createdAt: string;
     updatedAt: string;
 }
@@ -64,15 +63,12 @@ export interface AvailabilityPeriodDTO {
     startTime: string;
     endTime: string;
 }
-export interface BlockedPeriodDTO extends AvailabilityPeriodDTO {
-    reason?: string;
-}
+export type BlockedSlotDTO = AvailabilityPeriodDTO;
 export interface CreateAvailabilityOverrideRequest {
     date: string;
     isClosed: boolean;
     closureReason?: AvailabilityOverrideReasonType;
-    customHours?: AvailabilityPeriodDTO[];
-    blockedPeriods: BlockedPeriodDTO[];
+    blockedSlots: BlockedSlotDTO[];
 }
 export interface CourtDetailsResponse {
     court: CourtDTO;

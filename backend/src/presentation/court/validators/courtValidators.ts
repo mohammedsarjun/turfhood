@@ -64,12 +64,7 @@ export function validateAvailabilityOverride(req: Request, res: Response, next: 
     date: result.data.date,
     isClosed: result.data.isClosed,
     ...(result.data.closureReason ? { closureReason: result.data.closureReason } : {}),
-    ...(result.data.customHours ? { customHours: result.data.customHours } : {}),
-    blockedPeriods: result.data.blockedPeriods.map(({ startTime, endTime, reason }) => ({
-      startTime,
-      endTime,
-      ...(reason ? { reason } : {}),
-    })),
+    blockedSlots: result.data.blockedSlots,
   };
   next();
 }

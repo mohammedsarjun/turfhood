@@ -3,4 +3,5 @@ export const COURT_TOKENS = {
   CreateCourtUseCase: Symbol.for('CreateCourtUseCase'),
   ListCourtsUseCase: Symbol.for('ListCourtsUseCase'),
   ManageCourtDetailsUseCase: Symbol.for('ManageCourtDetailsUseCase'),
+  GetPublicCourtDetailsUseCase: Symbol.for('GetPublicCourtDetailsUseCase'),
 } as const;

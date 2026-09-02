@@ -61,3 +61,26 @@ export interface TurfDetailResponse {
     turf: TurfDetailDTO;
     courts: import("../common/pagination.js").PaginatedResponse<PublicCourtCardDTO>;
 }
+export type SlotPeriod = "morning" | "afternoon" | "evening" | "night";
+export interface PublicCourtSlotDTO {
+    id: string;
+    startTime: string;
+    endTime: string;
+    price: number;
+    period: SlotPeriod;
+}
+export interface PublicCourtSlotDateDTO {
+    date: string;
+    isClosed: boolean;
+    slots: PublicCourtSlotDTO[];
+}
+export interface PublicCourtDetailsResponse {
+    turf: {
+        id: string;
+        name: string;
+    };
+    court: PublicCourtCardDTO & {
+        allowOpenSessions: boolean;
+    };
+    dates: PublicCourtSlotDateDTO[];
+}

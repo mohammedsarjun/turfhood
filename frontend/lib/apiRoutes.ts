@@ -60,5 +60,7 @@ export const API_ROUTES = {
     nearby: '/turfs/nearby',
     discover: '/turfs/discover',
     details: (id: string) => `/turfs/${id}`,
+    courtDetails: (turfId: string, courtId: string) =>
+      `/turfs/${turfId}/courts/${courtId}/availability`,
   },
 } as const;

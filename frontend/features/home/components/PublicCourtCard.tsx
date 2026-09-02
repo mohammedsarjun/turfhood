@@ -1,16 +1,30 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { ChevronLeft, ChevronRight, ImageIcon, Users } from 'lucide-react';
 import type { PublicCourtCardDTO } from '@turfhood/shared';
 
-export function PublicCourtCard({ court }: { court: PublicCourtCardDTO }) {
+export function PublicCourtCard({ court, turfId }: { court: PublicCourtCardDTO; turfId: string }) {
+  const router = useRouter();
   const [index, setIndex] = useState(0);
   const image = court.images[index];
   const move = (step: number) =>
     setIndex((current) => (current + step + court.images.length) % court.images.length);
   return (
-    <article className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+    <article
+      role="link"
+      tabIndex={0}
+      aria-label={`View ${court.name} availability`}
+      onClick={() => router.push(`/turfs/${turfId}/courts/${court.id}`)}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          router.push(`/turfs/${turfId}/courts/${court.id}`);
+        }
+      }}
+      className="cursor-pointer overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary"
+    >
       <div className="relative h-48 bg-muted">
         {image ? (
           <>
@@ -27,7 +41,7 @@ export function PublicCourtCard({ court }: { court: PublicCourtCardDTO }) {
             <button
               type="button"
               aria-label="Previous court image"
-              onClick={() => move(-1)}
+              onClick={(event) => { event.stopPropagation(); move(-1); }}
               className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white"
             >
               <ChevronLeft />
@@ -35,7 +49,7 @@ export function PublicCourtCard({ court }: { court: PublicCourtCardDTO }) {
             <button
               type="button"
               aria-label="Next court image"
-              onClick={() => move(1)}
+              onClick={(event) => { event.stopPropagation(); move(1); }}
               className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white"
             >
               <ChevronRight />

@@ -212,7 +212,9 @@ export class CourtRepository implements ICourtRepository {
           customOpen: 1,
           customClose: 1,
           reason: 1,
-          ...(!input.customHours ? { customHours: 1 } : {}),
+          customHours: 1,
+          pricingRules: 1,
+          blockedPeriods: 1,
           ...(!input.closureReason ? { closureReason: 1 } : {}),
         },
       },
@@ -273,41 +275,16 @@ export class CourtRepository implements ICourtRepository {
   }
 
   private overrideToDTO(doc: AvailabilityOverrideDocument): AvailabilityOverrideDTO {
-    const storedType = String(doc.type);
-    const legacyClosureReason =
-      storedType === 'holiday_closed' ? 'holiday' : storedType === 'blocked' ? 'other' : undefined;
-    const closureReason = doc.closureReason ?? doc.reasonType ?? legacyClosureReason;
-    const isLegacyClosed = ['holiday_closed', 'blocked', 'closed'].includes(storedType);
-    const customHours =
-      doc.customHours ??
-      (storedType === 'custom_hours' && doc.customOpen && doc.customClose
-        ? [{ startTime: doc.customOpen, endTime: doc.customClose }]
-        : undefined);
-    const blockedPeriods = doc.blockedPeriods?.length
-      ? doc.blockedPeriods
-      : storedType === 'blocked_period' && doc.customOpen && doc.customClose
-        ? [
-            {
-              startTime: doc.customOpen,
-              endTime: doc.customClose,
-              ...(doc.reason ? { reason: doc.reason } : {}),
-            },
-          ]
-        : [];
     return {
       id: doc._id.toString(),
       turfId: doc.turfId.toString(),
       courtId: doc.courtId.toString(),
       date: doc.date,
-      isClosed: doc.isClosed ?? isLegacyClosed,
-      ...(closureReason ? { closureReason } : {}),
-      ...(customHours
-        ? { customHours: customHours.map(({ startTime, endTime }) => ({ startTime, endTime })) }
-        : {}),
-      blockedPeriods: blockedPeriods.map(({ startTime, endTime, reason }) => ({
+      isClosed: doc.isClosed,
+      ...(doc.closureReason ? { closureReason: doc.closureReason } : {}),
+      blockedSlots: doc.blockedSlots.map(({ startTime, endTime }) => ({
         startTime,
         endTime,
-        ...(reason ? { reason } : {}),
       })),
       createdAt: doc.createdAt.toISOString(),
       updatedAt: doc.updatedAt.toISOString(),
