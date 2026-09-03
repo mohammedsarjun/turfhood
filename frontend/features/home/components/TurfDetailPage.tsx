@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, MapPin, Star } from 'lucide-react';
-import type { TurfDetailResponse } from '@turfhood/shared';
+import type { ReviewListResponse, TurfDetailResponse } from '@turfhood/shared';
 import { Header } from '@/components/shared';
 import { Pagination } from '@/components/table';
 import { Spinner } from '@/components/ui';
@@ -11,6 +11,8 @@ import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { getPublicTurfDetails } from '../actions/homeApi';
 import { PublicCourtCard } from './PublicCourtCard';
 import { TurfLocationMap } from './TurfLocationMap';
+import { listTurfReviews } from '@/features/reviews/actions/reviewApi';
+import { ReviewList } from '@/features/reviews';
 
 export function TurfDetailPage({ turfId }: { turfId: string }) {
   const { user, clearUser } = useCurrentUser();
@@ -18,6 +20,7 @@ export function TurfDetailPage({ turfId }: { turfId: string }) {
   const [mainImage, setMainImage] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [reviews, setReviews] = useState<ReviewListResponse | null>(null);
   const load = async (page: number) => {
     setLoading(true);
     try {
@@ -31,10 +34,11 @@ export function TurfDetailPage({ turfId }: { turfId: string }) {
     }
   };
   useEffect(() => {
-    void getPublicTurfDetails(turfId, 1)
-      .then((result) => {
-        setDetails(result);
-        setMainImage(result.turf.images[0] || '');
+    void Promise.all([getPublicTurfDetails(turfId, 1), listTurfReviews(turfId)])
+      .then(([detailResult, reviewResult]) => {
+        setDetails(detailResult);
+        setReviews(reviewResult);
+        setMainImage(detailResult.turf.images[0] || '');
       })
       .catch(() => setError('Unable to load this turf.'))
       .finally(() => setLoading(false));
@@ -140,6 +144,10 @@ export function TurfDetailPage({ turfId }: { turfId: string }) {
                 latitude={details.turf.location.latitude}
                 longitude={details.turf.location.longitude}
               />
+            </section>
+            <section className="mt-12 border-t border-border pt-10">
+              <h2 className="mb-5 text-2xl font-semibold">Customer reviews</h2>
+              {reviews && <ReviewList items={reviews.items} summary={reviews.summary} />}
             </section>
           </>
         )}

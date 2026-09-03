@@ -16,4 +16,14 @@ export interface SendPasswordResetEmailParams {
 export interface IEmailService {
   sendOtpEmail(params: SendOtpEmailParams): Promise<void>;
   sendPasswordResetEmail(params: SendPasswordResetEmailParams): Promise<void>;
+  sendBookingConfirmationEmail(params: {
+    to: string;
+    reference: string;
+    turfName: string;
+    courtName: string;
+    date: string;
+    times: string;
+    amount: string;
+    address: string;
+  }): Promise<void>;
 }

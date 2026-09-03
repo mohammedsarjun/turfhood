@@ -49,4 +49,9 @@ export const env = {
   ADMIN_NAME: process.env.ADMIN_NAME ?? 'Admin',
   ADMIN_EMAIL: requireEnv('ADMIN_EMAIL'),
   ADMIN_PASSWORD: requireEnv('ADMIN_PASSWORD'),
+  PAYU_MERCHANT_KEY: requireEnv('PAYU_MERCHANT_KEY'),
+  PAYU_MERCHANT_SALT: requireEnv('PAYU_MERCHANT_SALT'),
+  PAYU_PAYMENT_URL: process.env.PAYU_PAYMENT_URL ?? 'https://test.payu.in/_payment',
+  PAYU_API_URL: process.env.PAYU_API_URL ?? 'https://test.payu.in/merchant/postservice.php?form=2',
+  BACKEND_PUBLIC_URL: process.env.BACKEND_PUBLIC_URL ?? 'http://localhost:4000',
 };

@@ -40,4 +40,29 @@ export class ResendEmailService implements IEmailService {
       throw new Error(`Failed to send password reset email: ${error.message}`);
     }
   }
+
+  async sendBookingConfirmationEmail(params: {
+    to: string;
+    reference: string;
+    turfName: string;
+    courtName: string;
+    date: string;
+    times: string;
+    amount: string;
+    address: string;
+  }): Promise<void> {
+    const escape = (value: string) =>
+      value
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;');
+    const { error } = await this.resend.emails.send({
+      from: env.RESEND_FROM_EMAIL,
+      to: params.to,
+      subject: `Booking confirmed - ${params.reference}`,
+      html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto"><h1 style="color:#15803d">Your turf is booked!</h1><p>Booking <strong>${escape(params.reference)}</strong> is confirmed.</p><div style="background:#f1f5f9;padding:20px;border-radius:12px"><h2>${escape(params.turfName)} - ${escape(params.courtName)}</h2><p><strong>Date:</strong> ${escape(params.date)}</p><p><strong>Time:</strong> ${escape(params.times)}</p><p><strong>Amount paid:</strong> ${escape(params.amount)}</p><p><strong>Address:</strong> ${escape(params.address)}</p></div><p>Please arrive a few minutes early. Have a great game!</p></div>`,
+    });
+    if (error) throw new Error(`Failed to send booking confirmation email: ${error.message}`);
+  }
 }

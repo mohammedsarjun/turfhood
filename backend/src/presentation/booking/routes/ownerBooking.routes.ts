@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { container } from 'tsyringe';
+import { authenticate } from '@presentation/shared/middlewares/authenticate';
+import { BookingController } from '../controllers/BookingController.js';
+const router = Router({ mergeParams: true });
+const controller = container.resolve(BookingController);
+router.use(authenticate);
+router.get('/', controller.ownerList);
+router.post('/:id/cancel', controller.ownerCancel);
+export default router;

@@ -40,12 +40,24 @@ describe('generateSlots', () => {
     const slots = generateSlots(court, '2026-09-02', 'weekday');
 
     expect(slots).to.have.length(8);
-    expect(slots[0]).to.include({ startTime: '08:00', endTime: '09:00', price: 500, period: 'morning' });
-    expect(slots[4]).to.include({ startTime: '17:00', endTime: '18:00', price: 800, period: 'evening' });
+    expect(slots[0]).to.include({
+      startTime: '08:00',
+      endTime: '09:00',
+      price: 500,
+      period: 'morning',
+    });
+    expect(slots[4]).to.include({
+      startTime: '17:00',
+      endTime: '18:00',
+      price: 800,
+      period: 'evening',
+    });
   });
 
   it('returns no slots when the date override closes the court', () => {
-    expect(generateSlots(court, '2026-09-02', 'weekday', override({ isClosed: true }))).to.deep.equal([]);
+    expect(
+      generateSlots(court, '2026-09-02', 'weekday', override({ isClosed: true })),
+    ).to.deep.equal([]);
   });
 
   it('removes the exact slots selected by the owner', () => {
@@ -54,15 +66,24 @@ describe('generateSlots', () => {
       '2026-09-02',
       'weekday',
       override({
-        blockedSlots: [{ startTime: '10:00', endTime: '11:00' }, { startTime: '18:00', endTime: '19:00' }],
+        blockedSlots: [
+          { startTime: '10:00', endTime: '11:00' },
+          { startTime: '18:00', endTime: '19:00' },
+        ],
       }),
     );
 
-    expect(slots.map((slot) => slot.startTime)).to.deep.equal(['08:00', '09:00', '11:00', '17:00', '19:00', '20:00']);
+    expect(slots.map((slot) => slot.startTime)).to.deep.equal([
+      '08:00',
+      '09:00',
+      '11:00',
+      '17:00',
+      '19:00',
+      '20:00',
+    ]);
   });
 
   it('does not use weekday price bands on a weekend', () => {
     expect(generateSlots(court, '2026-09-05', 'weekend')).to.deep.equal([]);
   });
-
 });

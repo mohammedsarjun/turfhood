@@ -61,7 +61,10 @@ export const CourtsTable = memo(function CourtsTable({
       {
         header: 'Actions',
         accessor: (court) => (
-          <Link href={`/turf-portal/${turfId}/courts/${court.id}`} className="inline-flex h-8 items-center rounded-md border border-border px-3 text-xs font-medium hover:bg-muted">
+          <Link
+            href={`/turf-portal/${turfId}/courts/${court.id}`}
+            className="inline-flex h-8 items-center rounded-md border border-border px-3 text-xs font-medium hover:bg-muted"
+          >
             View
           </Link>
         ),

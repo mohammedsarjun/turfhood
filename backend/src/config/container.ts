@@ -147,6 +147,28 @@ import type { IManageCourtDetailsUseCase } from '@application/court/use-cases/IM
 import { ManageCourtDetailsUseCase } from '@application/court/use-cases/ManageCourtDetailsUseCase';
 import type { IGetPublicCourtDetailsUseCase } from '@application/court/use-cases/IGetPublicCourtDetailsUseCase';
 import { GetPublicCourtDetailsUseCase } from '@application/court/use-cases/GetPublicCourtDetailsUseCase';
+import type { ICommissionSettingRepository } from '@domain/commission/repositories/ICommissionSettingRepository';
+import { COMMISSION_TOKENS } from '@domain/commission/tokens';
+import { CommissionSettingRepository } from '@infrastructure/commission/repositories/CommissionSettingRepository';
+import type { IManageCommissionSettingUseCase } from '@application/commission/use-cases/IManageCommissionSettingUseCase';
+import { ManageCommissionSettingUseCase } from '@application/commission/use-cases/ManageCommissionSettingUseCase';
+import type { IBookingRepository } from '@domain/booking/repositories/IBookingRepository';
+import type { IPaymentService } from '@domain/booking/services/IPaymentService';
+import { BOOKING_TOKENS } from '@domain/booking/tokens';
+import { BookingRepository } from '@infrastructure/booking/repositories/BookingRepository';
+import { PayUPaymentService } from '@infrastructure/booking/services/PayUPaymentService';
+import type { IManageBookingsUseCase } from '@application/booking/use-cases/IManageBookingsUseCase';
+import { ManageBookingsUseCase } from '@application/booking/use-cases/ManageBookingsUseCase';
+import type { IReviewRepository } from '@domain/review/repositories/IReviewRepository';
+import { REVIEW_TOKENS } from '@domain/review/tokens';
+import { ReviewRepository } from '@infrastructure/review/repositories/ReviewRepository';
+import type { IManageReviewsUseCase } from '@application/review/use-cases/IManageReviewsUseCase';
+import { ManageReviewsUseCase } from '@application/review/use-cases/ManageReviewsUseCase';
+import type { IFavoriteRepository } from '@domain/favorite/repositories/IFavoriteRepository';
+import { FAVORITE_TOKENS } from '@domain/favorite/tokens';
+import { FavoriteRepository } from '@infrastructure/favorite/repositories/FavoriteRepository';
+import type { IManageFavoritesUseCase } from '@application/favorite/use-cases/IManageFavoritesUseCase';
+import { ManageFavoritesUseCase } from '@application/favorite/use-cases/ManageFavoritesUseCase';
 
 /** Composition root — wires domain interfaces to their infrastructure implementations. */
 container.register<IUserRepository>(USER_TOKENS.UserRepository, { useClass: UserRepository });
@@ -341,6 +363,27 @@ container.register<IManageCourtDetailsUseCase>(COURT_TOKENS.ManageCourtDetailsUs
 });
 container.register<IGetPublicCourtDetailsUseCase>(COURT_TOKENS.GetPublicCourtDetailsUseCase, {
   useClass: GetPublicCourtDetailsUseCase,
+});
+container.register<ICommissionSettingRepository>(COMMISSION_TOKENS.Repository, {
+  useClass: CommissionSettingRepository,
+});
+container.register<IManageCommissionSettingUseCase>(COMMISSION_TOKENS.UseCase, {
+  useClass: ManageCommissionSettingUseCase,
+});
+container.register<IBookingRepository>(BOOKING_TOKENS.Repository, { useClass: BookingRepository });
+container.register<IPaymentService>(BOOKING_TOKENS.Payment, { useClass: PayUPaymentService });
+container.register<IManageBookingsUseCase>(BOOKING_TOKENS.UseCase, {
+  useClass: ManageBookingsUseCase,
+});
+container.register<IReviewRepository>(REVIEW_TOKENS.Repository, { useClass: ReviewRepository });
+container.register<IManageReviewsUseCase>(REVIEW_TOKENS.UseCase, {
+  useClass: ManageReviewsUseCase,
+});
+container.register<IFavoriteRepository>(FAVORITE_TOKENS.Repository, {
+  useClass: FavoriteRepository,
+});
+container.register<IManageFavoritesUseCase>(FAVORITE_TOKENS.UseCase, {
+  useClass: ManageFavoritesUseCase,
 });
 
 export { container };

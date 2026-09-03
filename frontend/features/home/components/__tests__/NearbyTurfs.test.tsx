@@ -2,6 +2,12 @@ import { render, screen } from '@/test/test-utils';
 import userEvent from '@testing-library/user-event';
 import { NearbyTurfs } from '../NearbyTurfs';
 
+jest.mock('../../../favorites/actions/favoriteApi', () => ({
+  listFavoriteIds: jest.fn().mockResolvedValue([]),
+  addFavorite: jest.fn().mockResolvedValue(undefined),
+  removeFavorite: jest.fn().mockResolvedValue(undefined),
+}));
+
 describe('NearbyTurfs', () => {
   it('shows guidance before a location is selected', () => {
     render(<NearbyTurfs location={null} turfs={[]} loading={false} />);

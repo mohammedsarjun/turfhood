@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { OlaMaps } from 'olamaps-web-sdk';
-
-const MAP_STYLE = 'https://api.olamaps.io/tiles/vector/v1/styles/default-light-standard/style.json';
+import { isUnavailable3dLayerError, OLA_MAPS_STYLE_URL } from '@/lib/olaMapStyle';
 
 export function TurfLocationMap({ latitude, longitude }: { latitude: number; longitude: number }) {
   const container = useRef<HTMLDivElement>(null);
@@ -15,7 +14,7 @@ export function TurfLocationMap({ latitude, longitude }: { latitude: number; lon
     const ola = new OlaMaps({ apiKey });
     void Promise.resolve(
       ola.init({
-        style: MAP_STYLE,
+        style: OLA_MAPS_STYLE_URL,
         container: container.current,
         center: [longitude, latitude],
         zoom: 15,
@@ -24,6 +23,9 @@ export function TurfLocationMap({ latitude, longitude }: { latitude: number; lon
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SDK map types are incomplete
       .then((createdMap: any) => {
         map = createdMap;
+        createdMap.on?.('error', (event: unknown) => {
+          if (!isUnavailable3dLayerError(event)) setError('Unable to load part of the map.');
+        });
         ola
           .addMarker({ color: '#22c55e', anchor: 'bottom' })
           .setLngLat([longitude, latitude])

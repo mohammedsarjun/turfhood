@@ -73,6 +73,10 @@ export class ListNearbyTurfsUseCase implements IListNearbyTurfsUseCase {
     };
   }
 
+  async byIds(ids: string[]): Promise<NearbyTurfDTO[]> {
+    return this.enrich(await this.turfs.findApprovedByIds(ids), new Map());
+  }
+
   private async enrich(turfs: Turf[], distances: Map<string, number>): Promise<NearbyTurfDTO[]> {
     const turfIds = turfs.flatMap((turf) => (turf.id ? [turf.id] : []));
     const [imageUrls, courtDetails, sportResult] = await Promise.all([

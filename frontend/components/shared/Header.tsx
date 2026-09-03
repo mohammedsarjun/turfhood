@@ -3,7 +3,18 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Bell, Home, LogOut, Menu, Search, Store, User as UserIcon, X } from 'lucide-react';
+import {
+  Bell,
+  CalendarCheck,
+  Home,
+  Heart,
+  LogOut,
+  Menu,
+  Search,
+  Store,
+  User as UserIcon,
+  X,
+} from 'lucide-react';
 import { Avatar } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { logout } from '@/lib/auth/logoutApi';
@@ -120,6 +131,22 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
                   {userName}
                 </div>
               )}
+              <Link
+                href="/bookings"
+                role="menuitem"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-muted"
+              >
+                <CalendarCheck className="h-4 w-4" /> My Bookings
+              </Link>
+              <Link
+                href="/favorites"
+                role="menuitem"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-muted"
+              >
+                <Heart className="h-4 w-4" /> My Favourites
+              </Link>
               <Link
                 href="/profile"
                 role="menuitem"

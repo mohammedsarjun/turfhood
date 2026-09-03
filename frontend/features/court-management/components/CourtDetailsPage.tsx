@@ -35,10 +35,14 @@ import {
 } from '../actions/courtApi';
 import { CourtFormModal } from './CourtFormModal';
 import { formatTime12Hour } from '@/lib/time';
+import { getPublicCourtDetails } from '@/features/home/actions/homeApi';
 
 const reasonLabels: Record<AvailabilityOverrideReasonType, string> = {
-  holiday: 'Holiday', maintenance: 'Maintenance', private_event: 'Private event',
-  weather: 'Weather', other: 'Other',
+  holiday: 'Holiday',
+  maintenance: 'Maintenance',
+  private_event: 'Private event',
+  weather: 'Weather',
+  other: 'Other',
 };
 
 interface Props {
@@ -88,35 +92,32 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
     };
   }, [courtId, turfId]);
 
-  const removeOverride = useCallback(
-    async () => {
-      if (!overrideToDelete) return;
-      setIsDeletingOverride(true);
-      try {
-        await deleteAvailabilityOverride(turfId, courtId, overrideToDelete.id);
-        setDetails((current) =>
-          current
-            ? {
-                ...current,
-                availabilityOverrides: current.availabilityOverrides.filter(
-                  (entry) => entry.id !== overrideToDelete.id,
-                ),
-              }
-            : current,
-        );
-        showToast('Availability override removed.', 'success');
-        setOverrideToDelete(null);
-      } catch (caught) {
-        showToast(
-          caught instanceof ApiError ? caught.message : 'Failed to remove override.',
-          'error',
-        );
-      } finally {
-        setIsDeletingOverride(false);
-      }
-    },
-    [courtId, overrideToDelete, showToast, turfId],
-  );
+  const removeOverride = useCallback(async () => {
+    if (!overrideToDelete) return;
+    setIsDeletingOverride(true);
+    try {
+      await deleteAvailabilityOverride(turfId, courtId, overrideToDelete.id);
+      setDetails((current) =>
+        current
+          ? {
+              ...current,
+              availabilityOverrides: current.availabilityOverrides.filter(
+                (entry) => entry.id !== overrideToDelete.id,
+              ),
+            }
+          : current,
+      );
+      showToast('Availability override removed.', 'success');
+      setOverrideToDelete(null);
+    } catch (caught) {
+      showToast(
+        caught instanceof ApiError ? caught.message : 'Failed to remove override.',
+        'error',
+      );
+    } finally {
+      setIsDeletingOverride(false);
+    }
+  }, [courtId, overrideToDelete, showToast, turfId]);
 
   if (loading)
     return (
@@ -154,8 +155,12 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <Badge variant={court.status === 'active' ? 'success' : 'outline'}>{court.status}</Badge>
-            <Button variant="outline" onClick={() => setEditModalOpen(true)}><Pencil size={16} /> Edit court</Button>
+            <Badge variant={court.status === 'active' ? 'success' : 'outline'}>
+              {court.status}
+            </Badge>
+            <Button variant="outline" onClick={() => setEditModalOpen(true)}>
+              <Pencil size={16} /> Edit court
+            </Button>
           </div>
         </div>
       </div>
@@ -219,7 +224,12 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
               Close the court for a day or block individual bookable slots.
             </p>
           </div>
-          <Button onClick={() => { setEditingOverride(null); setModalOpen(true); }}>
+          <Button
+            onClick={() => {
+              setEditingOverride(null);
+              setModalOpen(true);
+            }}
+          >
             <Plus size={16} /> Add override
           </Button>
         </CardHeader>
@@ -251,19 +261,46 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
                           })}
                         </p>
                         <Badge variant={item.isClosed ? 'destructive' : 'warning'}>
-                          {item.isClosed ? 'Closed all day' : `${item.blockedSlots.length} blocked slot${item.blockedSlots.length === 1 ? '' : 's'}`}
+                          {item.isClosed
+                            ? 'Closed all day'
+                            : `${item.blockedSlots.length} blocked slot${item.blockedSlots.length === 1 ? '' : 's'}`}
                         </Badge>
                       </div>
                       {item.isClosed ? (
-                        <p className="mt-1 text-sm text-muted-foreground">{item.closureReason ? reasonLabels[item.closureReason] : 'Court unavailable for the day'}</p>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {item.closureReason
+                            ? reasonLabels[item.closureReason]
+                            : 'Court unavailable for the day'}
+                        </p>
                       ) : (
-                        <p className="mt-1 text-sm text-muted-foreground">{item.blockedSlots.map((slot) => formatTime12Hour(slot.startTime)).join(', ')}</p>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {item.blockedSlots
+                            .map((slot) => formatTime12Hour(slot.startTime))
+                            .join(', ')}
+                        </p>
                       )}
                     </div>
                   </div>
                   <div className="flex gap-1">
-                    <Button variant="ghost" size="sm" aria-label={`Edit override for ${item.date}`} onClick={() => { setEditingOverride(item); setModalOpen(true); }}><Pencil size={16} /></Button>
-                    <Button variant="ghost" size="sm" aria-label={`Remove override for ${item.date}`} onClick={() => setOverrideToDelete(item)}><Trash2 size={16} className="text-destructive" /></Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      aria-label={`Edit override for ${item.date}`}
+                      onClick={() => {
+                        setEditingOverride(item);
+                        setModalOpen(true);
+                      }}
+                    >
+                      <Pencil size={16} />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      aria-label={`Remove override for ${item.date}`}
+                      onClick={() => setOverrideToDelete(item)}
+                    >
+                      <Trash2 size={16} className="text-destructive" />
+                    </Button>
                   </div>
                 </div>
               ))}
@@ -296,21 +333,39 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
       />
       <Modal
         open={overrideToDelete !== null}
-        onClose={() => { if (!isDeletingOverride) setOverrideToDelete(null); }}
+        onClose={() => {
+          if (!isDeletingOverride) setOverrideToDelete(null);
+        }}
         title="Delete availability override?"
       >
         <p className="text-sm text-muted-foreground">
           This will restore the regular schedule for{' '}
           <span className="font-medium text-foreground">
             {overrideToDelete
-              ? new Date(`${overrideToDelete.date}T00:00:00`).toLocaleDateString('en-IN', { dateStyle: 'medium' })
+              ? new Date(`${overrideToDelete.date}T00:00:00`).toLocaleDateString('en-IN', {
+                  dateStyle: 'medium',
+                })
               : ''}
           </span>
           . This action cannot be undone.
         </p>
         <div className="mt-6 flex justify-end gap-2">
-          <Button type="button" variant="outline" disabled={isDeletingOverride} onClick={() => setOverrideToDelete(null)}>Cancel</Button>
-          <Button type="button" variant="destructive" loading={isDeletingOverride} onClick={() => void removeOverride()}>Delete override</Button>
+          <Button
+            type="button"
+            variant="outline"
+            disabled={isDeletingOverride}
+            onClick={() => setOverrideToDelete(null)}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="button"
+            variant="destructive"
+            loading={isDeletingOverride}
+            onClick={() => void removeOverride()}
+          >
+            Delete override
+          </Button>
         </div>
       </Modal>
       <CourtFormModal
@@ -321,7 +376,7 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
         onClose={() => setEditModalOpen(false)}
         onCreated={() => undefined}
         onUpdated={(updatedCourt) => {
-          setDetails((current) => current ? { ...current, court: updatedCourt } : current);
+          setDetails((current) => (current ? { ...current, court: updatedCourt } : current));
           setEditModalOpen(false);
         }}
       />
@@ -335,13 +390,21 @@ function CourtGallery({ court }: { court: CourtDTO }) {
   const selected = court.images.find((image) => image.id === selectedId) ?? initial;
 
   if (!selected) {
-    return <div className="flex h-64 items-center justify-center bg-muted text-muted-foreground">No court image</div>;
+    return (
+      <div className="flex h-64 items-center justify-center bg-muted text-muted-foreground">
+        No court image
+      </div>
+    );
   }
 
   return (
     <div className="p-3">
       {/* eslint-disable-next-line @next/next/no-img-element -- owner-hosted court image */}
-      <img src={selected.url} alt={`${court.name} view`} className="h-72 w-full rounded-lg object-cover" />
+      <img
+        src={selected.url}
+        alt={`${court.name} view`}
+        className="h-72 w-full rounded-lg object-cover"
+      />
       {court.images.length > 1 && (
         <div className="mt-3 flex gap-3 overflow-x-auto pb-1">
           {court.images.map((image, index) => (
@@ -402,23 +465,59 @@ function OverrideModal({
 }) {
   type ScheduleMode = 'slots' | 'closed';
   const [mode, setMode] = useState<ScheduleMode>(initial?.isClosed ? 'closed' : 'slots');
-  const [closureReason, setClosureReason] = useState<AvailabilityOverrideReasonType>(initial?.closureReason ?? 'holiday');
+  const [closureReason, setClosureReason] = useState<AvailabilityOverrideReasonType>(
+    initial?.closureReason ?? 'holiday',
+  );
   const [date, setDate] = useState(initial?.date ?? '');
   const [blockedSlots, setBlockedSlots] = useState<BlockedSlotDTO[]>(initial?.blockedSlots ?? []);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [occupiedSlots, setOccupiedSlots] = useState<Set<string>>(() => new Set());
   const { showToast } = useToast();
   const minDate = useMemo(() => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   }, []);
+  const maxDate = useMemo(() => {
+    const value = new Date();
+    value.setDate(value.getDate() + 13);
+    return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, '0')}-${String(value.getDate()).padStart(2, '0')}`;
+  }, []);
   const slots = useMemo(() => getCourtSlotsForDate(court, date), [court, date]);
   const selected = useMemo(() => new Set(blockedSlots.map(slotKey)), [blockedSlots]);
+  useEffect(() => {
+    if (!date) return;
+    let active = true;
+    void getPublicCourtDetails(turfId, courtId)
+      .then((details) => {
+        if (!active) return;
+        const selectedDate = details.dates.find((item) => item.date === date);
+        setOccupiedSlots(
+          new Set(
+            (selectedDate?.slots ?? [])
+              .filter(
+                (slot) =>
+                  slot.unavailableReason === 'booked' || slot.unavailableReason === 'reserved',
+              )
+              .map((slot) => slot.startTime),
+          ),
+        );
+      })
+      .catch(() => {
+        if (active) setError('Unable to check existing bookings for this date.');
+      });
+    return () => {
+      active = false;
+    };
+  }, [courtId, date, turfId]);
   const toggleSlot = (slot: OwnerSlot) => {
+    if (occupiedSlots.has(slot.startTime)) return;
     const key = slotKey(slot);
-    setBlockedSlots((current) => selected.has(key)
-      ? current.filter((item) => slotKey(item) !== key)
-      : [...current, { startTime: slot.startTime, endTime: slot.endTime }]);
+    setBlockedSlots((current) =>
+      selected.has(key)
+        ? current.filter((item) => slotKey(item) !== key)
+        : [...current, { startTime: slot.startTime, endTime: slot.endTime }],
+    );
   };
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -448,13 +547,19 @@ function OverrideModal({
     }
   }
   return (
-    <Modal open={open} onClose={onClose} title={initial ? 'Edit daily availability' : 'Add daily availability'} className="max-h-[90vh] max-w-3xl overflow-y-auto">
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={initial ? 'Edit daily availability' : 'Add daily availability'}
+      className="max-h-[90vh] max-w-3xl overflow-y-auto"
+    >
       <form onSubmit={submit} className="space-y-4">
         <label className="block text-sm font-medium">
           Date
           <Input
             type="date"
             min={minDate}
+            max={maxDate}
             value={date}
             onChange={(event) => setDate(event.target.value)}
             className="mt-2"
@@ -466,7 +571,13 @@ function OverrideModal({
             className="mt-2"
             value={mode}
             onChange={(event) => {
-              setMode(event.target.value as ScheduleMode);
+              const nextMode = event.target.value as ScheduleMode;
+              if (nextMode === 'closed' && occupiedSlots.size > 0) {
+                setError('This date has bookings. Cancel them before closing the full day.');
+                return;
+              }
+              setError('');
+              setMode(nextMode);
             }}
             options={[
               { value: 'slots', label: 'Block particular slots' },
@@ -480,7 +591,9 @@ function OverrideModal({
             <Select
               className="mt-2"
               value={closureReason}
-              onChange={(event) => setClosureReason(event.target.value as AvailabilityOverrideReasonType)}
+              onChange={(event) =>
+                setClosureReason(event.target.value as AvailabilityOverrideReasonType)
+              }
               options={Object.entries(reasonLabels).map(([value, label]) => ({ value, label }))}
             />
           </label>
@@ -488,13 +601,51 @@ function OverrideModal({
         {mode === 'slots' && date && (
           <fieldset className="rounded-xl border border-border p-4">
             <div className="flex items-center justify-between gap-3">
-              <div><legend className="font-medium">Select slots to block</legend><p className="text-xs text-muted-foreground">Selected slots will not be available to customers.</p></div>
+              <div>
+                <legend className="font-medium">Select slots to block</legend>
+                <p className="text-xs text-muted-foreground">
+                  Selected slots will not be available to customers.
+                </p>
+              </div>
               <Badge variant="warning">{blockedSlots.length} selected</Badge>
             </div>
-            {slots.length ? <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">{slots.map((slot) => {
-              const isSelected = selected.has(slotKey(slot));
-              return <button key={slotKey(slot)} type="button" aria-pressed={isSelected} onClick={() => toggleSlot(slot)} className={`rounded-xl border p-3 text-left transition ${isSelected ? 'border-destructive bg-destructive/10 ring-1 ring-destructive' : 'border-border bg-card hover:border-primary'}`}><span className="block font-semibold">{formatTime12Hour(slot.startTime)}</span><span className="text-xs text-muted-foreground">to {formatTime12Hour(slot.endTime)}</span><span className="mt-2 block text-sm font-medium">₹{slot.price.toLocaleString('en-IN')}</span></button>;
-            })}</div> : <p className="mt-4 rounded-lg bg-muted p-6 text-center text-sm text-muted-foreground">No configured slots for this date.</p>}
+            {slots.length ? (
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {slots.map((slot) => {
+                  const isSelected = selected.has(slotKey(slot));
+                  const isOccupied = occupiedSlots.has(slot.startTime);
+                  return (
+                    <button
+                      key={slotKey(slot)}
+                      type="button"
+                      aria-pressed={isSelected}
+                      disabled={isOccupied}
+                      onClick={() => toggleSlot(slot)}
+                      className={`rounded-xl border p-3 text-left transition ${isOccupied ? 'cursor-not-allowed bg-muted opacity-60' : isSelected ? 'border-destructive bg-destructive/10 ring-1 ring-destructive' : 'border-border bg-card hover:border-primary'}`}
+                    >
+                      <span className="block font-semibold">
+                        {formatTime12Hour(slot.startTime)}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        to {formatTime12Hour(slot.endTime)}
+                      </span>
+                      <span className="mt-2 block text-sm font-medium">
+                        Rs. {slot.price.toLocaleString('en-IN')}
+                      </span>
+                      {isOccupied && (
+                        <span className="mt-1 block text-xs font-semibold text-destructive">
+                          Already booked
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="mt-4 rounded-lg bg-muted p-6 text-center text-sm text-muted-foreground">
+                No configured slots for this date.
+              </p>
+            )}
           </fieldset>
         )}
         {error && (
@@ -515,24 +666,39 @@ function OverrideModal({
   );
 }
 
-interface OwnerSlot extends BlockedSlotDTO { price: number }
+interface OwnerSlot extends BlockedSlotDTO {
+  price: number;
+}
 
-function slotKey(slot: BlockedSlotDTO): string { return `${slot.startTime}-${slot.endTime}`; }
+function slotKey(slot: BlockedSlotDTO): string {
+  return `${slot.startTime}-${slot.endTime}`;
+}
 
 function getCourtSlotsForDate(court: CourtDTO, date: string): OwnerSlot[] {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return [];
   const day = new Date(`${date}T00:00:00Z`).getUTCDay();
   const dayType = day === 0 || day === 6 ? 'weekend' : 'weekday';
-  return court.pricingRules.filter((rule) => rule.dayType === dayType).flatMap((rule) => {
-    const [startHour = 0, startMinute = 0] = rule.startTime.split(':').map(Number);
-    const [endHour = 0, endMinute = 0] = rule.endTime.split(':').map(Number);
-    const start = startHour * 60 + startMinute;
-    const end = endHour * 60 + endMinute;
-    const slots: OwnerSlot[] = [];
-    for (let minute = start; minute + court.slotDurationMinutes <= end; minute += court.slotDurationMinutes) {
-      const finish = minute + court.slotDurationMinutes;
-      slots.push({ startTime: `${String(Math.floor(minute / 60)).padStart(2, '0')}:${String(minute % 60).padStart(2, '0')}`, endTime: `${String(Math.floor(finish / 60)).padStart(2, '0')}:${String(finish % 60).padStart(2, '0')}`, price: rule.pricePerSlot });
-    }
-    return slots;
-  }).sort((left, right) => left.startTime.localeCompare(right.startTime));
+  return court.pricingRules
+    .filter((rule) => rule.dayType === dayType)
+    .flatMap((rule) => {
+      const [startHour = 0, startMinute = 0] = rule.startTime.split(':').map(Number);
+      const [endHour = 0, endMinute = 0] = rule.endTime.split(':').map(Number);
+      const start = startHour * 60 + startMinute;
+      const end = endHour * 60 + endMinute;
+      const slots: OwnerSlot[] = [];
+      for (
+        let minute = start;
+        minute + court.slotDurationMinutes <= end;
+        minute += court.slotDurationMinutes
+      ) {
+        const finish = minute + court.slotDurationMinutes;
+        slots.push({
+          startTime: `${String(Math.floor(minute / 60)).padStart(2, '0')}:${String(minute % 60).padStart(2, '0')}`,
+          endTime: `${String(Math.floor(finish / 60)).padStart(2, '0')}:${String(finish % 60).padStart(2, '0')}`,
+          price: rule.pricePerSlot,
+        });
+      }
+      return slots;
+    })
+    .sort((left, right) => left.startTime.localeCompare(right.startTime));
 }

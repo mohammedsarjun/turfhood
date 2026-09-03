@@ -16,6 +16,8 @@ import type { ISportsTypeRepository } from '@domain/sportsType/repositories/ISpo
 import { SPORTS_TYPE_TOKENS } from '@domain/sportsType/tokens';
 import { AppError } from '@shared/errors/AppError';
 import { HttpStatus } from '@shared/constants/httpStatus';
+import type { IBookingRepository } from '@domain/booking/repositories/IBookingRepository';
+import { BOOKING_TOKENS } from '@domain/booking/tokens';
 
 import type { IGetPublicCourtDetailsUseCase } from './IGetPublicCourtDetailsUseCase.js';
 
@@ -70,7 +72,11 @@ export function generateSlots(
   for (const window of windows) {
     const windowStart = toMinutes(window.startTime);
     const windowEnd = toMinutes(window.endTime);
-    for (let start = windowStart; start + court.slotDurationMinutes <= windowEnd; start += court.slotDurationMinutes) {
+    for (
+      let start = windowStart;
+      start + court.slotDurationMinutes <= windowEnd;
+      start += court.slotDurationMinutes
+    ) {
       const end = start + court.slotDurationMinutes;
       if (end > MINUTES_PER_DAY) break;
       if (blocked.has(`${toTime(start)}-${toTime(end)}`)) continue;
@@ -82,6 +88,7 @@ export function generateSlots(
         endTime: toTime(end),
         price,
         period: periodFor(start),
+        available: true,
       });
     }
   }
@@ -101,9 +108,14 @@ export class GetPublicCourtDetailsUseCase implements IGetPublicCourtDetailsUseCa
     @inject(TURF_TOKENS.TurfRepository) private readonly turfs: ITurfRepository,
     @inject(COURT_TOKENS.CourtRepository) private readonly courts: ICourtRepository,
     @inject(SPORTS_TYPE_TOKENS.SportsTypeRepository) private readonly sports: ISportsTypeRepository,
+    @inject(BOOKING_TOKENS.Repository) private readonly bookings: IBookingRepository,
   ) {}
 
-  async execute(turfId: string, courtId: string, today = new Date()): Promise<PublicCourtDetailsResponse> {
+  async execute(
+    turfId: string,
+    courtId: string,
+    today = new Date(),
+  ): Promise<PublicCourtDetailsResponse> {
     const [turf, court] = await Promise.all([
       this.turfs.findApprovedById(turfId),
       this.courts.findByIdAndTurf(courtId, turfId),
@@ -111,20 +123,47 @@ export class GetPublicCourtDetailsUseCase implements IGetPublicCourtDetailsUseCa
     if (!turf || !court || court.status !== 'active') {
       throw new AppError('Court not found.', HttpStatus.NOT_FOUND);
     }
-    const [overrides, sportResult] = await Promise.all([
+    const dateValues = Array.from(
+      { length: 14 },
+      (_, offset) => new Date(today.getFullYear(), today.getMonth(), today.getDate() + offset),
+    );
+    const dateKeys = dateValues.map(localDate);
+    const [overrides, sportResult, occupied] = await Promise.all([
       this.courts.listOverrides(courtId),
       this.sports.list({ page: 1, limit: 100, isListed: true }),
+      this.bookings.occupiedStarts(courtId, dateKeys, today),
     ]);
     const sportNames = new Map(
       sportResult.items.flatMap((sport) => (sport.id ? [[sport.id, sport.name] as const] : [])),
     );
     const overridesByDate = new Map(overrides.map((override) => [override.date, override]));
-    const dates = Array.from({ length: 14 }, (_, offset) => {
-      const value = new Date(today.getFullYear(), today.getMonth(), today.getDate() + offset);
+    const dates = dateValues.map((value) => {
       const date = localDate(value);
       const override = overridesByDate.get(date);
       const day = value.getDay();
-      const slots = generateSlots(court, date, day === 0 || day === 6 ? 'weekend' : 'weekday', override);
+      const blocked = new Set(
+        (override?.blockedSlots ?? []).map((slot) => `${slot.startTime}-${slot.endTime}`),
+      );
+      const slots = generateSlots(court, date, day === 0 || day === 6 ? 'weekend' : 'weekday').map(
+        (slot) => {
+          const reason = override?.isClosed
+            ? 'closed'
+            : blocked.has(`${slot.startTime}-${slot.endTime}`)
+              ? 'blocked'
+              : occupied.get(date)?.has(slot.startTime)
+                ? 'booked'
+                : new Date(`${date}T${slot.startTime}:00+05:30`) <= today
+                  ? 'past'
+                  : undefined;
+          return {
+            ...slot,
+            available: !reason,
+            ...(reason
+              ? { unavailableReason: reason as 'booked' | 'blocked' | 'past' | 'closed' }
+              : {}),
+          };
+        },
+      );
       return { date, isClosed: override?.isClosed ?? false, slots };
     });
     const prices = court.pricingRules.map((rule: PricingRuleDTO) => rule.pricePerSlot);

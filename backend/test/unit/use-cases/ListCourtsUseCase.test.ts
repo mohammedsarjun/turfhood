@@ -42,7 +42,9 @@ describe('ListCourtsUseCase', () => {
       },
       findByIdAndTurf: async () => null,
       listOverrides: async () => [],
-      createOverride: async () => { throw new Error('Not used'); },
+      createOverride: async () => {
+        throw new Error('Not used');
+      },
       updateOverride: async () => null,
       deleteOverride: async () => false,
       update: async () => null,
@@ -74,7 +76,9 @@ describe('ListCourtsUseCase', () => {
       list: async () => ({ items: [], total: 0 }),
       findByIdAndTurf: async () => null,
       listOverrides: async () => [],
-      createOverride: async () => { throw new Error('Not used'); },
+      createOverride: async () => {
+        throw new Error('Not used');
+      },
       updateOverride: async () => null,
       deleteOverride: async () => false,
       update: async () => null,

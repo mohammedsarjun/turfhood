@@ -90,12 +90,14 @@ export class TurfDiscoveryController {
 
   courtDetails = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.status(HttpStatus.OK).json(
-        await this.getPublicCourtDetails.execute(
-          String(req.params.id),
-          String(req.params.courtId),
-        ),
-      );
+      res
+        .status(HttpStatus.OK)
+        .json(
+          await this.getPublicCourtDetails.execute(
+            String(req.params.id),
+            String(req.params.courtId),
+          ),
+        );
     } catch (error) {
       next(error);
     }

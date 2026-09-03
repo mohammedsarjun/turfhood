@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import { container } from 'tsyringe';
+import { authenticate } from '@presentation/shared/middlewares/authenticate';
+import { bookingRateLimiter } from '@presentation/shared/middlewares/rateLimiters';
+import { BookingController } from '../controllers/BookingController.js';
+const router = Router();
+const controller = container.resolve(BookingController);
+router.post('/reservations', bookingRateLimiter, authenticate, controller.reserve);
+router.get('/me', authenticate, controller.mine);
+router.get('/:id', authenticate, controller.details);
+router.post('/:id/retry', bookingRateLimiter, authenticate, controller.retry);
+router.post('/:id/cancel', authenticate, controller.cancel);
+export default router;

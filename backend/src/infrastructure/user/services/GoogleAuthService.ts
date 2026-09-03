@@ -31,7 +31,6 @@ export class GoogleAuthService implements IGoogleAuthService {
       });
       const payload = ticket.getPayload();
 
-  
       if (!payload?.sub || !payload.email) {
         throw new GoogleTokenInvalidError();
       }
@@ -43,9 +42,7 @@ export class GoogleAuthService implements IGoogleAuthService {
         ...(payload.picture ? { avatarUrl: payload.picture } : {}),
         emailVerified: payload.email_verified ?? false,
       };
-
     } catch (error) {
-  
       if (error instanceof GoogleTokenInvalidError) {
         throw error;
       }

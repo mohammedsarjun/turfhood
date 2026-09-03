@@ -10,4 +10,5 @@ export interface NearbyTurfLocationInput {
 export interface IListNearbyTurfsUseCase {
   execute(location: NearbyTurfLocationInput, limit?: number): Promise<NearbyTurfDTO[]>;
   discover(filters: TurfDiscoveryFilters): Promise<PaginatedResponse<NearbyTurfDTO>>;
+  byIds(ids: string[]): Promise<NearbyTurfDTO[]>;
 }

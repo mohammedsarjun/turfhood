@@ -41,7 +41,10 @@ export function PublicCourtCard({ court, turfId }: { court: PublicCourtCardDTO; 
             <button
               type="button"
               aria-label="Previous court image"
-              onClick={(event) => { event.stopPropagation(); move(-1); }}
+              onClick={(event) => {
+                event.stopPropagation();
+                move(-1);
+              }}
               className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white"
             >
               <ChevronLeft />
@@ -49,7 +52,10 @@ export function PublicCourtCard({ court, turfId }: { court: PublicCourtCardDTO; 
             <button
               type="button"
               aria-label="Next court image"
-              onClick={(event) => { event.stopPropagation(); move(1); }}
+              onClick={(event) => {
+                event.stopPropagation();
+                move(1);
+              }}
               className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white"
             >
               <ChevronRight />

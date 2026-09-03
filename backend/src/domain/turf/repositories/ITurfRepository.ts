@@ -17,6 +17,7 @@ export interface ITurfRepository {
   create(turf: Turf): Promise<Turf>;
   findOwnedByIdOrVerificationId(id: string, ownerId: string): Promise<Turf | null>;
   findApprovedById(id: string): Promise<Turf | null>;
+  findApprovedByIds(ids: string[]): Promise<Turf[]>;
   findApprovedByCity(
     location: { cityCode: string; cityName: string; stateCode: string; stateName: string },
     limit: number,

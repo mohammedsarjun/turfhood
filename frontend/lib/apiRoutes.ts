@@ -27,6 +27,7 @@ export const API_ROUTES = {
     logout: '/admin/logout',
     me: '/admin/me',
     refresh: '/admin/refresh',
+    commission: '/admin/commission',
   },
   sports: {
     base: '/sports',
@@ -56,6 +57,25 @@ export const API_ROUTES = {
       `/locations/countries/${countryCode}/states/${stateCode}/cities`,
   },
   banners: { base: '/banners' },
+  bookings: {
+    reservations: '/bookings/reservations',
+    mine: '/bookings/me',
+    details: (id: string) => `/bookings/${id}`,
+    cancel: (id: string) => `/bookings/${id}/cancel`,
+    retry: (id: string) => `/bookings/${id}/retry`,
+    owner: (turfId: string) => `/turf-portal/${turfId}/bookings`,
+    ownerCancel: (turfId: string, id: string) => `/turf-portal/${turfId}/bookings/${id}/cancel`,
+  },
+  reviews: {
+    forBooking: (bookingId: string) => `/bookings/${bookingId}/review`,
+    forTurf: (turfId: string) => `/turfs/${turfId}/reviews`,
+    forOwner: (turfId: string) => `/turf-portal/${turfId}/reviews`,
+  },
+  favorites: {
+    base: '/favorites',
+    ids: '/favorites/ids',
+    turf: (turfId: string) => `/favorites/${turfId}`,
+  },
   turfs: {
     nearby: '/turfs/nearby',
     discover: '/turfs/discover',

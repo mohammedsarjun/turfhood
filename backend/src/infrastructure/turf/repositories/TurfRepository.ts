@@ -17,6 +17,21 @@ export class TurfRepository implements ITurfRepository {
     return document ? this.toDomain(document) : null;
   }
 
+  async findApprovedByIds(ids: string[]): Promise<Turf[]> {
+    const validIds = ids.filter((id) => mongoose.isValidObjectId(id));
+    if (!validIds.length) return [];
+    const documents = await TurfModel.find({
+      _id: { $in: validIds },
+      status: 'approved',
+      isDeleted: false,
+    });
+    const byId = new Map(documents.map((document) => [document._id.toString(), document]));
+    return validIds.flatMap((id) => {
+      const document = byId.get(id);
+      return document ? [this.toDomain(document)] : [];
+    });
+  }
+
   async discover(input: TurfDiscoveryRepositoryInput) {
     const match: Record<string, unknown> = { status: 'approved', isDeleted: false };
     if (input.eligibleTurfIds)

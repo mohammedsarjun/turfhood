@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { ChevronLeft, ChevronRight, Heart, ImageIcon, MapPin, Star } from 'lucide-react';
 import type { NearbyTurfDTO } from '@turfhood/shared';
 import type { HomeLocationSelection } from './CitySearch';
+import { useFavoriteTurf } from '@/features/favorites/hooks/useFavoriteTurf';
 
 export function NearbyTurfs({
   location,
@@ -66,7 +67,7 @@ export function NearbyTurfs({
 export function TurfCard({ turf }: { turf: NearbyTurfDTO }) {
   const router = useRouter();
   const [imageIndex, setImageIndex] = useState(0);
-  const [favorite, setFavorite] = useState(false);
+  const { favorite, saving, toggle } = useFavoriteTurf(turf.id);
   const sports = turf.sports.slice(0, 5);
   const extraSports = turf.sports.length - sports.length;
   const imageUrl = turf.imageUrls[imageIndex];
@@ -107,11 +108,12 @@ export function TurfCard({ turf }: { turf: NearbyTurfDTO }) {
             favorite ? `Remove ${turf.name} from favorites` : `Add ${turf.name} to favorites`
           }
           aria-pressed={favorite}
+          disabled={saving}
           onClick={(event) => {
             event.stopPropagation();
-            setFavorite((value) => !value);
+            void toggle();
           }}
-          className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 text-slate-700 shadow-md backdrop-blur transition hover:scale-105 hover:text-red-500"
+          className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 text-slate-700 shadow-md backdrop-blur transition hover:scale-105 hover:text-red-500 disabled:cursor-wait disabled:opacity-70"
         >
           <Heart className={`h-5 w-5 ${favorite ? 'fill-red-500 text-red-500' : ''}`} />
         </button>

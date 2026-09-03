@@ -1,4 +1,6 @@
 import { notFound } from 'next/navigation';
+import { OwnerBookingsPage } from '@/features/bookings';
+import { OwnerReviewsPage } from '@/features/reviews';
 
 const SECTION_TITLES: Record<string, string> = {
   dashboard: 'Dashboard',
@@ -12,13 +14,15 @@ const SECTION_TITLES: Record<string, string> = {
 };
 
 interface TurfPortalSectionPageProps {
-  params: Promise<{ section: string }>;
+  params: Promise<{ turfId: string; section: string }>;
 }
 
 export default async function TurfPortalSectionPage({ params }: TurfPortalSectionPageProps) {
-  const { section } = await params;
+  const { turfId, section } = await params;
   const title = SECTION_TITLES[section];
   if (!title) notFound();
+  if (section === 'bookings') return <OwnerBookingsPage turfId={turfId} />;
+  if (section === 'reviews') return <OwnerReviewsPage turfId={turfId} />;
 
   return (
     <div>

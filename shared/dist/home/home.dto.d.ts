@@ -68,6 +68,8 @@ export interface PublicCourtSlotDTO {
     endTime: string;
     price: number;
     period: SlotPeriod;
+    available: boolean;
+    unavailableReason?: "booked" | "reserved" | "blocked" | "past" | "closed";
 }
 export interface PublicCourtSlotDateDTO {
     date: string;
