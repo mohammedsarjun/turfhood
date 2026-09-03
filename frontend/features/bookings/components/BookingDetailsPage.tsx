@@ -165,6 +165,24 @@ export function BookingDetailsPage({ id }: { id: string }) {
                 )}
               </CardContent>
             </Card>
+            <Card className="mt-6">
+              <CardHeader>
+                <CardTitle>Booking timeline</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ol className="space-y-4 border-l border-border pl-5">
+                  {(booking.timeline ?? []).map((event) => (
+                    <li key={`${event.type}-${event.occurredAt}`} className="relative">
+                      <span className="absolute -left-[25px] top-1.5 h-2.5 w-2.5 rounded-full bg-primary" />
+                      <p className="text-sm font-medium">{event.description}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {new Date(event.occurredAt).toLocaleString('en-IN')}
+                      </p>
+                    </li>
+                  ))}
+                </ol>
+              </CardContent>
+            </Card>
             {booking.status === 'completed' && (
               <Card className="mt-6">
                 <CardHeader>

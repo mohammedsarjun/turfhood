@@ -138,7 +138,7 @@ export type {
   UpdateCommissionRequest,
 } from "./commission/commission.dto.js";
 export type {
-  BookingStatus, PaymentStatus, BookingSlotDTO, BookingDTO, CreateReservationRequest,
+  BookingStatus, PaymentStatus, BookingTimelineEventType, BookingTimelineEventDTO, BookingSlotDTO, BookingDTO, CreateReservationRequest,
   CreateReservationResponse, CancelBookingRequest, BookingListResponse,
 } from "./booking/booking.dto.js";
 export type {

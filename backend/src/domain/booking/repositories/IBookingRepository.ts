@@ -1,4 +1,4 @@
-import type { BookingDTO } from '@turfhood/shared';
+import type { BookingDTO, BookingTimelineEventDTO } from '@turfhood/shared';
 export interface CreateBookingPersistenceInput extends Omit<
   BookingDTO,
   'id' | 'createdAt' | 'commissionPercentage' | 'reservationExpiresAt'
@@ -21,7 +21,11 @@ export interface IBookingRepository {
     page: number,
     limit: number,
   ): Promise<{ items: BookingDTO[]; total: number }>;
-  occupiedStarts(courtId: string, dates: string[], now: Date): Promise<Map<string, Set<string>>>;
+  occupiedStarts(
+    courtId: string,
+    dates: string[],
+    now: Date,
+  ): Promise<Map<string, Map<string, 'held' | 'confirmed'>>>;
   expirePending(now: Date): Promise<number>;
   completePast(now: Date): Promise<number>;
   confirm(
@@ -29,6 +33,7 @@ export interface IBookingRepository {
     paymentId: string,
   ): Promise<{ booking: BookingDTO; newlyConfirmed: boolean } | null>;
   fail(id: string): Promise<void>;
+  abandonPending(id: string, userId: string): Promise<void>;
   markLatePaymentForRefund(id: string, paymentId: string): Promise<BookingDTO | null>;
   cancel(
     id: string,
@@ -43,4 +48,9 @@ export interface IBookingRepository {
   markRefundChecked(id: string, failureReason?: string): Promise<void>;
   markRefundFailed(id: string, reason: string): Promise<BookingDTO | null>;
   markRefundCompleted(id: string): Promise<BookingDTO | null>;
+  recordRefundAttempt(id: string): Promise<BookingDTO | null>;
+  recordRefundFailure(id: string, reason: string, maxAttempts: number): Promise<BookingDTO | null>;
+  listEscalatedRefunds(page: number, limit: number): Promise<{ items: BookingDTO[]; total: number }>;
+  markManualRefundPending(id: string, requestId: string): Promise<BookingDTO | null>;
+  appendTimeline(id: string, event: Omit<BookingTimelineEventDTO, 'occurredAt'>): Promise<void>;
 }

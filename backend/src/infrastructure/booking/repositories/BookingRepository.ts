@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { injectable } from 'tsyringe';
-import type { BookingDTO } from '@turfhood/shared';
+import type { BookingDTO, BookingTimelineEventDTO } from '@turfhood/shared';
 import type {
   CreateBookingPersistenceInput,
   IBookingRepository,
@@ -57,7 +57,7 @@ export class BookingRepository implements IBookingRepository {
     return doc ? this.toDTO(doc) : null;
   }
   async listByUser(userId: string, page: number, limit: number) {
-    const filter = { userId };
+    const filter = { userId, status: { $nin: ['pending_payment', 'expired'] } };
     const [docs, total] = await Promise.all([
       BookingModel.find(filter)
         .sort({ createdAt: -1 })
@@ -68,7 +68,7 @@ export class BookingRepository implements IBookingRepository {
     return { items: docs.map((doc) => this.toDTO(doc)), total };
   }
   async listByTurf(turfId: string, page: number, limit: number) {
-    const filter = { turfId };
+    const filter = { turfId, status: { $nin: ['pending_payment', 'expired'] } };
     const [docs, total] = await Promise.all([
       BookingModel.find(filter)
         .sort({ bookingDate: 1 })
@@ -85,9 +85,12 @@ export class BookingRepository implements IBookingRepository {
       bookingDate: { $in: dates },
       $or: [{ state: 'confirmed' }, { state: 'held', expiresAt: { $gt: now } }],
     });
-    const map = new Map<string, Set<string>>();
-    for (const doc of docs)
-      map.set(doc.bookingDate, new Set([...(map.get(doc.bookingDate) ?? []), doc.startTime]));
+    const map = new Map<string, Map<string, 'held' | 'confirmed'>>();
+    for (const doc of docs) {
+      const slots = map.get(doc.bookingDate) ?? new Map<string, 'held' | 'confirmed'>();
+      slots.set(doc.startTime, doc.state);
+      map.set(doc.bookingDate, slots);
+    }
     return map;
   }
   async expirePending(now: Date) {
@@ -120,7 +123,17 @@ export class BookingRepository implements IBookingRepository {
       await session.withTransaction(async () => {
         const result = await BookingModel.updateMany(
           { _id: { $in: completedIds }, status: 'confirmed' },
-          { $set: { status: 'completed' } },
+          {
+            $set: { status: 'completed' },
+            $push: {
+              timeline: {
+                type: 'booking_completed',
+                description: 'Court play completed.',
+                occurredAt: now,
+                actor: 'system',
+              },
+            },
+          },
           { session },
         );
         count = result.modifiedCount;
@@ -169,7 +182,17 @@ export class BookingRepository implements IBookingRepository {
       await session.withTransaction(async () => {
         await BookingModel.updateOne(
           { _id: id, status: 'pending_payment' },
-          { $set: { status: 'payment_failed', paymentStatus: 'failed' } },
+          {
+            $set: { status: 'payment_failed', paymentStatus: 'failed' },
+            $push: {
+              timeline: {
+                type: 'payment_failed',
+                description: 'Payment failed.',
+                occurredAt: new Date(),
+                actor: 'system',
+              },
+            },
+          },
           { session },
         );
         await SlotReservationModel.deleteMany({ bookingId: id, state: 'held' }, { session });
@@ -296,12 +319,15 @@ export class BookingRepository implements IBookingRepository {
     return doc ? this.toDTO(doc) : null;
   }
   async markRefundCompleted(id: string) {
-    const existing = await BookingModel.findOne({ _id: id, paymentStatus: 'refund_pending' });
+    const existing = await BookingModel.findOne({
+      _id: id,
+      paymentStatus: { $in: ['refund_pending', 'refund_escalated'] },
+    });
     if (!existing) return null;
     const refundPaise = existing.cancellation?.refundPaise ?? existing.finalAmountPaise;
     const partial = refundPaise < existing.finalAmountPaise;
     const doc = await BookingModel.findOneAndUpdate(
-      { _id: id, paymentStatus: 'refund_pending' },
+      { _id: id, paymentStatus: { $in: ['refund_pending', 'refund_escalated'] } },
       {
         $set: {
           status: partial ? 'partially_refunded' : 'refunded',
@@ -310,15 +336,141 @@ export class BookingRepository implements IBookingRepository {
           'refund.completedAt': new Date(),
         },
         $unset: { 'refund.failureReason': 1 },
+        $push: {
+          timeline: {
+            type: 'refund_completed',
+            description: partial ? 'Partial refund completed.' : 'Full refund completed.',
+            occurredAt: new Date(),
+            actor: 'system',
+          },
+        },
       },
       { new: true },
     );
     return doc ? this.toDTO(doc) : null;
   }
+  async abandonPending(id: string, userId: string) {
+    const session = await mongoose.startSession();
+    try {
+      await session.withTransaction(async () => {
+        const result = await BookingModel.updateOne(
+          { _id: id, userId, status: 'pending_payment' },
+          {
+            $set: { status: 'expired', paymentStatus: 'failed' },
+            $unset: { reservationExpiresAt: 1 },
+            $push: {
+              timeline: {
+                type: 'payment_failed',
+                description: 'Checkout was abandoned before PayU opened.',
+                occurredAt: new Date(),
+                actor: 'system',
+              },
+            },
+          },
+          { session },
+        );
+        if (result.modifiedCount)
+          await SlotReservationModel.deleteMany({ bookingId: id, state: 'held' }, { session });
+      });
+    } finally {
+      await session.endSession();
+    }
+  }
+  async recordRefundAttempt(id: string) {
+    const doc = await BookingModel.findOneAndUpdate(
+      {
+        _id: id,
+        paymentStatus: 'refund_pending',
+        $or: [{ 'refund.attemptCount': { $exists: false } }, { 'refund.attemptCount': { $lt: 3 } }],
+      },
+      { $inc: { 'refund.attemptCount': 1 }, $set: { 'refund.lastCheckedAt': new Date() } },
+      { new: true },
+    );
+    return doc ? this.toDTO(doc) : null;
+  }
+  async recordRefundFailure(id: string, reason: string, maxAttempts: number) {
+    const existing = await BookingModel.findOne({ _id: id, paymentStatus: 'refund_pending' });
+    if (!existing) return null;
+    const attempts = existing.refund?.attemptCount ?? 0;
+    const escalated = attempts >= maxAttempts;
+    const doc = await BookingModel.findOneAndUpdate(
+      { _id: id, paymentStatus: 'refund_pending' },
+      {
+        $set: {
+          paymentStatus: escalated ? 'refund_escalated' : 'refund_pending',
+          'refund.lastCheckedAt': new Date(),
+          'refund.failureReason': reason,
+          ...(!escalated ? { 'refund.requestToken': `refund-${id.slice(-12)}-${attempts + 1}` } : {}),
+        },
+        $unset: { 'refund.payuRequestId': 1, 'refund.requestedAt': 1 },
+        $push: {
+          timeline: {
+            type: escalated ? 'refund_escalated' : 'refund_failed',
+            description: escalated
+              ? `Refund failed after ${attempts} attempts and requires admin action: ${reason}`
+              : `Refund attempt ${attempts} failed: ${reason}`,
+            occurredAt: new Date(),
+            actor: 'system',
+            attempt: attempts,
+          },
+        },
+      },
+      { new: true },
+    );
+    return doc ? this.toDTO(doc) : null;
+  }
+  async listEscalatedRefunds(page: number, limit: number) {
+    const filter = { paymentStatus: 'refund_escalated' } as const;
+    const [docs, total] = await Promise.all([
+      BookingModel.find(filter).sort({ updatedAt: -1 }).skip((page - 1) * limit).limit(limit),
+      BookingModel.countDocuments(filter),
+    ]);
+    return { items: docs.map((doc) => this.toDTO(doc)), total };
+  }
+  async markManualRefundPending(id: string, requestId: string) {
+    const doc = await BookingModel.findOneAndUpdate(
+      { _id: id, paymentStatus: 'refund_escalated' },
+      {
+        $set: {
+          paymentStatus: 'refund_pending',
+          'refund.payuRequestId': requestId,
+          'refund.requestedAt': new Date(),
+          'refund.lastCheckedAt': new Date(),
+        },
+        $unset: { 'refund.failureReason': 1 },
+        $push: {
+          timeline: {
+            type: 'refund_verified',
+            description: 'Admin submitted a PayU dashboard refund for verification.',
+            occurredAt: new Date(),
+            actor: 'admin',
+          },
+        },
+      },
+      { new: true },
+    );
+    return doc ? this.toDTO(doc) : null;
+  }
+  async appendTimeline(id: string, event: Omit<BookingTimelineEventDTO, 'occurredAt'>) {
+    await BookingModel.updateOne(
+      { _id: id },
+      { $push: { timeline: { ...event, occurredAt: new Date() } } },
+    );
+  }
   private async expirePendingInSession(now: Date, session: mongoose.ClientSession) {
     const result = await BookingModel.updateMany(
       { status: 'pending_payment', reservationExpiresAt: { $lte: now } },
-      { $set: { status: 'payment_failed', paymentStatus: 'failed' } },
+      {
+        $set: { status: 'expired', paymentStatus: 'failed' },
+        $push: {
+          timeline: {
+            type: 'payment_failed',
+            description: 'Checkout hold expired before payment completed.',
+            occurredAt: now,
+            actor: 'system',
+          },
+        },
+      },
       { session },
     );
     await SlotReservationModel.deleteMany({ state: 'held', expiresAt: { $lte: now } }, { session });
@@ -354,6 +506,13 @@ export class BookingRepository implements IBookingRepository {
       currency: 'INR',
       status: doc.status,
       paymentStatus: doc.paymentStatus,
+      timeline: (doc.timeline ?? []).map((event) => ({
+        type: event.type,
+        description: event.description,
+        occurredAt: event.occurredAt.toISOString(),
+        ...(event.actor ? { actor: event.actor } : {}),
+        ...(event.attempt ? { attempt: event.attempt } : {}),
+      })),
       ...(doc.reservationExpiresAt
         ? { reservationExpiresAt: doc.reservationExpiresAt.toISOString() }
         : {}),
@@ -373,6 +532,7 @@ export class BookingRepository implements IBookingRepository {
                 ? { completedAt: doc.refund.completedAt.toISOString() }
                 : {}),
               ...(doc.refund.failureReason ? { failureReason: doc.refund.failureReason } : {}),
+              attemptCount: doc.refund.attemptCount ?? 0,
             },
           }
         : {}),
