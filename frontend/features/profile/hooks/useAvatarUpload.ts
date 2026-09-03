@@ -5,9 +5,10 @@ import { uploadAvatar } from '../actions/profileApi';
 import { validateAvatarFile } from '../lib/validateAvatarFile';
 import type { PublicUser } from '../types';
 import { ApiError } from '@/types/api/response';
+import { useToast } from '@/components/ui';
 
 export function useAvatarUpload(onSuccess: (user: PublicUser) => void) {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const { showToast } = useToast();
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,13 +24,12 @@ export function useAvatarUpload(onSuccess: (user: PublicUser) => void) {
       return;
     }
 
-    const localPreviewUrl = URL.createObjectURL(file);
-    setPreviewUrl(localPreviewUrl);
     setIsUploading(true);
 
     try {
       const { user } = await uploadAvatar(file);
       onSuccess(user);
+      showToast('Profile picture updated successfully.');
     } catch (uploadError) {
       setError(
         uploadError instanceof ApiError
@@ -38,10 +38,8 @@ export function useAvatarUpload(onSuccess: (user: PublicUser) => void) {
       );
     } finally {
       setIsUploading(false);
-      URL.revokeObjectURL(localPreviewUrl);
-      setPreviewUrl(null);
     }
   };
 
-  return { previewUrl, isUploading, error, handleFileChange };
+  return { isUploading, error, handleFileChange };
 }

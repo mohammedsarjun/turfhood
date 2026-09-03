@@ -4,6 +4,7 @@ export { TurfOnboardingWizard } from './components/TurfOnboardingWizard';
 export { MyTurfsPage } from './components/MyTurfsPage';
 export { TurfCard } from './components/TurfCard';
 export { TurfDetailModal } from './components/TurfDetailModal';
+export { TurfImageUpload, type TurfImageEntry } from './components/TurfImageUpload';
 export { useMyApplication } from './hooks/useMyApplication';
 export { useMyApplications } from './hooks/useMyApplications';
 export { useTurfOnboardingWizard } from './hooks/useTurfOnboardingWizard';

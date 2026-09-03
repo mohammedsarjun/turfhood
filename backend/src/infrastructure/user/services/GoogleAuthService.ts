@@ -20,6 +20,7 @@ export class GoogleAuthService implements IGoogleAuthService {
   async verifyAndGetProfile(code: string): Promise<GoogleProfile> {
     try {
       const { tokens } = await this.client.getToken(code);
+
       if (!tokens.id_token) {
         throw new GoogleTokenInvalidError();
       }
@@ -29,6 +30,7 @@ export class GoogleAuthService implements IGoogleAuthService {
         audience: env.GOOGLE_CLIENT_ID,
       });
       const payload = ticket.getPayload();
+
       if (!payload?.sub || !payload.email) {
         throw new GoogleTokenInvalidError();
       }

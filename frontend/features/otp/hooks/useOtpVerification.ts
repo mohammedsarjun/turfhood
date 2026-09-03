@@ -7,9 +7,11 @@ import { OTP_LENGTH, buildOtpFromDigits, isOtpComplete } from '../lib/otpInput';
 import { useCountdown } from './useCountdown';
 import { OtpErrorCode, type OtpPurpose } from '../types';
 import { ApiError } from '@/types/api/response';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 
 export function useOtpVerification(purpose: OtpPurpose, initialExpiresAt: number) {
   const router = useRouter();
+  const { setUser } = useCurrentUser();
   const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(''));
   const [formError, setFormError] = useState<string | null>(null);
   const [errorCode, setErrorCode] = useState<OtpErrorCode | null>(null);
@@ -26,7 +28,8 @@ export function useOtpVerification(purpose: OtpPurpose, initialExpiresAt: number
 
     try {
       const otp = buildOtpFromDigits(digits);
-      await verifyOtp({ otp });
+      const result = await verifyOtp({ otp });
+      setUser(result.user);
       setIsVerified(true);
       // replace (not push): once verified, /otp must not remain a back-button target.
       router.replace('/');

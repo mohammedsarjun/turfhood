@@ -52,10 +52,7 @@ export function useAmenitiesList() {
   }, [page, debouncedSearch, isListedFilter]);
 
   useEffect(() => {
-    // Classic fetch-on-mount/deps-change effect — no data-fetching library (React Query, SWR,
-    // etc.) exists in this codebase yet, so isLoading/items are set directly from here.
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- see comment above
-    void fetchList();
+    fetchList();
   }, [fetchList]);
 
   return {

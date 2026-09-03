@@ -1,4 +1,6 @@
 import { Image as ImageIcon } from 'lucide-react';
+import Link from 'next/link';
+import { TurfApplicationStatus } from '@turfhood/shared';
 import { Badge, Card, CardContent } from '@/components/ui';
 import { TURF_APPLICATION_STATUS_COPY } from '../lib/turfApplicationStatusCopy';
 import type { TurfApplicationSummary } from '../types';
@@ -40,6 +42,15 @@ export function TurfCard({ application, onClick }: TurfCardProps) {
         <p className="truncate text-sm text-muted-foreground">
           {application.address.city}, {application.address.state}
         </p>
+        {application.status === TurfApplicationStatus.APPROVED && (
+          <Link
+            href={`/turf-portal/${application.turfId ?? application.id}/dashboard`}
+            onClick={(event) => event.stopPropagation()}
+            className="mt-4 inline-flex h-9 w-full items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            View Dashboard
+          </Link>
+        )}
       </CardContent>
     </Card>
   );

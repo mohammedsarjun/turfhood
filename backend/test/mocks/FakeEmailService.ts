@@ -11,6 +11,7 @@ import type {
 export class FakeEmailService implements IEmailService {
   public readonly sentEmails: SendOtpEmailParams[] = [];
   public readonly sentPasswordResetEmails: SendPasswordResetEmailParams[] = [];
+  public readonly sentBookingConfirmations: Array<{ to: string; reference: string }> = [];
 
   async sendOtpEmail(params: SendOtpEmailParams): Promise<void> {
     this.sentEmails.push(params);
@@ -18,5 +19,18 @@ export class FakeEmailService implements IEmailService {
 
   async sendPasswordResetEmail(params: SendPasswordResetEmailParams): Promise<void> {
     this.sentPasswordResetEmails.push(params);
+  }
+
+  async sendBookingConfirmationEmail(params: {
+    to: string;
+    reference: string;
+    turfName: string;
+    courtName: string;
+    date: string;
+    times: string;
+    amount: string;
+    address: string;
+  }): Promise<void> {
+    this.sentBookingConfirmations.push({ to: params.to, reference: params.reference });
   }
 }

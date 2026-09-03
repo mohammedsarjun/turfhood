@@ -1,4 +1,5 @@
 export { ProfileContent } from './components/ProfileContent';
+export { ProfilePageClient } from './components/ProfilePageClient';
 export { ProfileHeader } from './components/ProfileHeader';
 export { AvatarUpload } from './components/AvatarUpload';
 export { NameField } from './components/NameField';

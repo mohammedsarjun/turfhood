@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import { ChangePasswordForm } from './ChangePasswordForm';
 import { SetPasswordForm } from './SetPasswordForm';
 import type { PublicUser } from '../types';
+import { useToast } from '@/components/ui';
 
 interface PasswordSectionProps {
   profile: PublicUser;
@@ -16,7 +16,7 @@ interface PasswordSectionProps {
  * from the fetched profile, never by the (fully removable) authProviders list alone.
  */
 export function PasswordSection({ profile, onUpdated }: PasswordSectionProps) {
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   if (!profile.hasPassword) {
     return (
@@ -24,26 +24,16 @@ export function PasswordSection({ profile, onUpdated }: PasswordSectionProps) {
         <SetPasswordForm
           onSuccess={(user) => {
             onUpdated(user);
-            setSuccessMessage('Password set. You can now sign in with your email too.');
+            showToast('Password set successfully. You can now sign in with email.');
           }}
         />
-        {successMessage && (
-          <p role="status" className="text-xs text-success-foreground">
-            {successMessage}
-          </p>
-        )}
       </div>
     );
   }
 
   return (
     <div className="flex flex-col" style={{ gap: 8 }}>
-      <ChangePasswordForm onSuccess={() => setSuccessMessage('Password changed successfully.')} />
-      {successMessage && (
-        <p role="status" className="text-xs text-success-foreground">
-          {successMessage}
-        </p>
-      )}
+      <ChangePasswordForm onSuccess={() => showToast('Password changed successfully.')} />
     </div>
   );
 }

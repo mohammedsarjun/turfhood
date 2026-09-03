@@ -27,12 +27,18 @@ export interface TurfImageUploadProps {
   images: TurfImageEntry[];
   onChange: (images: TurfImageEntry[]) => void;
   errorMessage?: string;
+  maxImages?: number;
 }
 
 const ASPECT_RATIO = 16 / 9;
 
 /** Pick → crop (fixed 16:9, output 1280x720) → add to the list; one image must be marked cover. */
-export function TurfImageUpload({ images, onChange, errorMessage }: TurfImageUploadProps) {
+export function TurfImageUpload({
+  images,
+  onChange,
+  errorMessage,
+  maxImages = 10,
+}: TurfImageUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [pendingSrc, setPendingSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -94,7 +100,7 @@ export function TurfImageUpload({ images, onChange, errorMessage }: TurfImageUpl
         type="button"
         variant="outline"
         onClick={() => inputRef.current?.click()}
-        disabled={images.length >= 10}
+        disabled={images.length >= maxImages}
       >
         <Upload className="h-4 w-4" />
         Add Photo

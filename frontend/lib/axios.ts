@@ -1,6 +1,8 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
+import { AuthErrorCode } from '@turfhood/shared';
 import { ApiError, type ApiErrorResponse } from '@/types/api/response';
 import { API_ROUTES } from '@/lib/apiRoutes';
+import { isAdminRoute, isProtectedRoute } from '@/lib/auth/routeGuard';
 
 export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -28,18 +30,48 @@ const AUTH_ENDPOINTS: string[] = [
 type RetryableRequestConfig = InternalAxiosRequestConfig & { _retriedAfterRefresh?: boolean };
 
 /** Single in-flight refresh promise so concurrent 401s share one refresh call, not one each. */
-let refreshPromise: Promise<void> | null = null;
+let userRefreshPromise: Promise<void> | null = null;
+let adminRefreshPromise: Promise<void> | null = null;
 
 function refreshSessionOnce(isAdminRequest: boolean): Promise<void> {
-  if (!refreshPromise) {
-    refreshPromise = axiosInstance
-      .post(isAdminRequest ? API_ROUTES.admin.refresh : API_ROUTES.users.refresh)
-      .then(() => undefined)
-      .finally(() => {
-        refreshPromise = null;
-      });
-  }
+  const currentPromise = isAdminRequest ? adminRefreshPromise : userRefreshPromise;
+  if (currentPromise) return currentPromise;
+
+  const refreshPromise = axiosInstance
+    .post(isAdminRequest ? API_ROUTES.admin.refresh : API_ROUTES.users.refresh)
+    .then(() => undefined)
+    .finally(() => {
+      if (isAdminRequest) adminRefreshPromise = null;
+      else userRefreshPromise = null;
+    });
+
+  if (isAdminRequest) adminRefreshPromise = refreshPromise;
+  else userRefreshPromise = refreshPromise;
   return refreshPromise;
+}
+
+const ACCESS_TOKEN_ERROR_CODES = new Set<string>([
+  AuthErrorCode.TOKEN_MISSING,
+  AuthErrorCode.TOKEN_INVALID,
+  AuthErrorCode.TOKEN_EXPIRED,
+]);
+
+function redirectToLogin(isAdminRequest: boolean): void {
+  if (typeof window === 'undefined') return;
+  const loginPath = isAdminRequest ? '/admin/login' : '/login';
+  const publicUserPaths = ['/login', '/signup', '/forgot-password', '/otp'];
+  if (!isAdminRequest && publicUserPaths.includes(window.location.pathname)) return;
+  if (window.location.pathname !== loginPath) window.location.replace(loginPath);
+}
+
+function redirectAfterBackendFailure(): void {
+  if (typeof window === 'undefined') return;
+  const pathname = window.location.pathname;
+  if (isAdminRoute(pathname)) {
+    redirectToLogin(true);
+  } else if (isProtectedRoute(pathname)) {
+    redirectToLogin(false);
+  }
 }
 
 // Normalizes every failure (validation, server, or network) into a single ApiError shape.
@@ -51,18 +83,24 @@ axiosInstance.interceptors.response.use(
 
     if (
       error.response?.status === 401 &&
+      ACCESS_TOKEN_ERROR_CODES.has(error.response.data.code ?? '') &&
       originalRequest &&
       !originalRequest._retriedAfterRefresh &&
       !AUTH_ENDPOINTS.includes(originalRequest.url ?? '')
     ) {
       originalRequest._retriedAfterRefresh = true;
+      const isAdminRequest =
+        Boolean(originalRequest.url?.startsWith('/admin')) ||
+        (typeof window !== 'undefined' && isAdminRoute(window.location.pathname));
+      let sessionRefreshed = false;
       try {
-        await refreshSessionOnce(Boolean(originalRequest.url?.startsWith('/admin')));
-        return await axiosInstance(originalRequest);
+        await refreshSessionOnce(isAdminRequest);
+        sessionRefreshed = true;
       } catch {
-        // Refresh itself failed (or the retry failed again) — fall through to normal handling
-        // below, which reports the *original* error to the caller.
+        redirectToLogin(isAdminRequest);
+        // Fall through so the caller receives the original authentication error.
       }
+      if (sessionRefreshed) return axiosInstance(originalRequest);
     }
 
     if (error.response) {
@@ -78,6 +116,7 @@ axiosInstance.interceptors.response.use(
     }
 
     if (error.request) {
+      redirectAfterBackendFailure();
       return Promise.reject(
         new ApiError('Unable to reach the server. Check your connection and try again.', 0),
       );

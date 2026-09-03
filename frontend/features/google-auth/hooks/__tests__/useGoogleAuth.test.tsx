@@ -4,14 +4,18 @@ import { push, replace } from '@/__mocks__/next/navigation';
 import { ApiError } from '@/types/api/response';
 import { googleAuth } from '../../actions/googleAuthApi';
 import { useGoogleAuth } from '../useGoogleAuth';
+import { useCurrentUser } from '../../../../hooks/useCurrentUser';
 
 jest.mock('../../actions/googleAuthApi');
+jest.mock('../../../../hooks/useCurrentUser');
 jest.mock('@react-oauth/google', () => ({
   useGoogleLogin: jest.fn(),
 }));
 
 const googleAuthMock = jest.mocked(googleAuth);
 const useGoogleLoginMock = jest.mocked(useGoogleLogin);
+const useCurrentUserMock = jest.mocked(useCurrentUser);
+const setUserMock = jest.fn();
 
 describe('useGoogleAuth', () => {
   beforeEach(() => {
@@ -19,6 +23,13 @@ describe('useGoogleAuth', () => {
     replace.mockClear();
     googleAuthMock.mockClear();
     useGoogleLoginMock.mockClear();
+    setUserMock.mockClear();
+    useCurrentUserMock.mockReturnValue({
+      user: null,
+      isHydrated: true,
+      setUser: setUserMock,
+      clearUser: jest.fn(),
+    });
   });
 
   it('exchanges the code and redirects home on success', async () => {
@@ -48,6 +59,7 @@ describe('useGoogleAuth', () => {
     });
 
     expect(googleAuthMock).toHaveBeenCalledWith({ code: 'auth-code' });
+    expect(setUserMock).toHaveBeenCalledWith(expect.objectContaining({ id: 'user_1' }));
     await waitFor(() => {
       expect(replace).toHaveBeenCalledWith('/');
     });

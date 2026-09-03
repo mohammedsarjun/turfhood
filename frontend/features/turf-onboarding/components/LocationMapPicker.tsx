@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { OlaMaps } from 'olamaps-web-sdk';
 import { Button, Input } from '@/components/ui';
+import { isUnavailable3dLayerError, OLA_MAPS_STYLE_URL } from '@/lib/olaMapStyle';
 import {
   autocompletePlaces,
   getPlaceDetails,
@@ -26,9 +27,6 @@ export interface LocationMapPickerProps {
 }
 
 const DEFAULT_CENTER: [number, number] = [78.9629, 20.5937]; // India
-const OLA_MAPS_STYLE_URL =
-  'https://api.olamaps.io/tiles/vector/v1/styles/default-light-standard/style.json';
-
 /**
  * Click-to-pin location picker built on Ola Maps (olamaps-web-sdk, MapLibre GL-based) — the
  * only map library in this codebase; no existing convention to reuse. `value`/`onChange`
@@ -103,18 +101,22 @@ export function LocationMapPicker({
     olaMapsRef.current = olaMaps;
     const center: [number, number] = value ? [value.lng, value.lat] : DEFAULT_CENTER;
 
-    Promise.resolve(
+    void Promise.resolve(
       olaMaps.init({
         style: OLA_MAPS_STYLE_URL,
         container: containerRef.current,
         center,
         zoom: value ? 14 : 4,
       }),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- see above
     )
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- see above
       .then((map: any) => {
         if (cancelled) return;
         mapRef.current = map;
+        map.on('error', (event: unknown) => {
+          if (!isUnavailable3dLayerError(event))
+            setError('A map resource failed to load. Please try again.');
+        });
 
         if (value) {
           markerRef.current = olaMaps

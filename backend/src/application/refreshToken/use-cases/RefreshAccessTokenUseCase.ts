@@ -13,6 +13,8 @@ import type {
   RefreshAccessTokenResultDTO,
 } from './IRefreshAccessTokenUseCase.js';
 
+const ROTATION_GRACE_PERIOD_MS = 5_000;
+
 /**
  * Verifies + rotates a refresh token: the presented token's `jti` is revoked and a brand-new
  * refresh token (and access token) is issued in its place. If the `jti` is unknown or already
@@ -34,7 +36,14 @@ export class RefreshAccessTokenUseCase implements IRefreshAccessTokenUseCase {
     const payload = this.refreshTokenService.verify(rawRefreshToken);
 
     const existing = await this.refreshTokenRepository.findByJti(payload.jti);
-    if (!existing || existing.isRevoked() || existing.isExpired(new Date())) {
+    const now = new Date();
+    const isConcurrentRotation =
+      existing?.isRevoked() &&
+      existing.replacedByJti !== undefined &&
+      existing.revokedAt !== undefined &&
+      now.getTime() - existing.revokedAt.getTime() <= ROTATION_GRACE_PERIOD_MS;
+
+    if (!existing || existing.isExpired(now) || (existing.isRevoked() && !isConcurrentRotation)) {
       await this.refreshTokenRepository.revokeAllForUser(payload.userId);
       throw new RefreshTokenInvalidError();
     }
@@ -45,10 +54,21 @@ export class RefreshAccessTokenUseCase implements IRefreshAccessTokenUseCase {
       throw new RefreshTokenInvalidError();
     }
 
-    const issued = this.refreshTokenService.generate({ userId: user.id as string, roles: user.roles });
-    await this.refreshTokenRepository.revoke(payload.jti, issued.jti);
+    const issued = this.refreshTokenService.generate({
+      userId: user.id as string,
+      roles: user.roles,
+    });
+    // A parallel request may arrive just after this token was rotated. During the short grace
+    // window it receives its own child token without extending the original token's lifetime.
+    if (!existing.isRevoked()) {
+      await this.refreshTokenRepository.revoke(payload.jti, issued.jti);
+    }
     await this.refreshTokenRepository.create(
-      RefreshToken.issue({ userId: user.id as string, jti: issued.jti, expiresAt: issued.expiresAt }),
+      RefreshToken.issue({
+        userId: user.id as string,
+        jti: issued.jti,
+        expiresAt: issued.expiresAt,
+      }),
     );
 
     const accessToken = this.tokenService.generateAccessToken({

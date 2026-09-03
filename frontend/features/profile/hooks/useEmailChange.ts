@@ -9,6 +9,7 @@ import type { PublicUser } from '../types';
 import { OTP_LENGTH, buildOtpFromDigits, isOtpComplete } from '@/features/otp/lib/otpInput';
 import { useCountdown } from '@/features/otp';
 import { ApiError } from '@/types/api/response';
+import { useToast } from '@/components/ui';
 
 type Step = 'request' | 'verify';
 
@@ -19,6 +20,7 @@ type Step = 'request' | 'verify';
  * cookie and redirect-to-'/' — not a fit for this in-page, authenticated, dual-cookie flow.
  */
 export function useEmailChange(onSuccess: (user: PublicUser) => void) {
+  const { showToast } = useToast();
   const [step, setStep] = useState<Step>('request');
   const [pendingEmail, setPendingEmail] = useState('');
   const [expiresAt, setExpiresAt] = useState(0);
@@ -68,6 +70,7 @@ export function useEmailChange(onSuccess: (user: PublicUser) => void) {
       const otp = buildOtpFromDigits(digits);
       const result = await confirmEmailChange({ otp });
       onSuccess(result.user);
+      showToast('Email updated successfully.');
       setStep('request');
       setPendingEmail('');
     } catch (error) {

@@ -58,34 +58,3 @@ export async function verifyAdminAccessToken(
     return null;
   }
 }
-
-/**
- * Verifies the refreshToken cookie's signature and expiry only — used solely to decide whether
- * proxy.ts should still treat the visitor as logged in once the short-lived access token has
- * expired. The actual token renewal (rotation, revocation check) happens server-side via the
- * axios interceptor calling /users/refresh — this never mints a new access token itself.
- */
-export async function verifyRefreshToken(token: string | undefined): Promise<boolean> {
-  if (!token) return false;
-
-  try {
-    const secret = new TextEncoder().encode(process.env.REFRESH_TOKEN_SECRET);
-    await jwtVerify(token, secret);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-/** Same as verifyRefreshToken, but for the separate adminRefreshToken cookie/role claim. */
-export async function verifyAdminRefreshToken(token: string | undefined): Promise<boolean> {
-  if (!token) return false;
-
-  try {
-    const secret = new TextEncoder().encode(process.env.REFRESH_TOKEN_SECRET);
-    const { payload } = await jwtVerify(token, secret);
-    return Boolean((payload as unknown as AuthTokenPayload).roles?.includes('admin'));
-  } catch {
-    return false;
-  }
-}

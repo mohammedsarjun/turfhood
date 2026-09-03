@@ -6,6 +6,7 @@ export function toTurfApplicationSummaryDTO(
 ): TurfApplicationSummary {
   return {
     id: application.id as string,
+    ...(application.turfId ? { turfId: application.turfId } : {}),
     name: application.name,
     ...(application.description ? { description: application.description } : {}),
     address: application.address,
