@@ -27,6 +27,36 @@ interface OlaPlaceDetailsResponse {
   };
 }
 
+interface OlaReverseGeocodeResponse {
+  results?: Array<{
+    address_components?: Array<{ long_name?: string; types?: string[] }>;
+  }>;
+}
+
+export interface BrowserLocationAddress {
+  city: string;
+  state: string;
+}
+
+/** Resolves browser coordinates to the state and city used by the home-page location defaults. */
+export async function reverseGeocodeLocation(
+  lat: number,
+  lng: number,
+  apiKey: string,
+): Promise<BrowserLocationAddress | null> {
+  const url = `https://api.olamaps.io/places/v1/reverse-geocode?latlng=${lat},${lng}&api_key=${encodeURIComponent(apiKey)}`;
+  const response = await fetch(url);
+  if (!response.ok) return null;
+  const data = (await response.json()) as OlaReverseGeocodeResponse;
+  const components = data.results?.[0]?.address_components ?? [];
+  const find = (...types: string[]) =>
+    components.find((component) => types.some((type) => component.types?.includes(type)))
+      ?.long_name;
+  const city = find('locality', 'administrative_area_level_3', 'postal_town');
+  const state = find('administrative_area_level_1');
+  return city && state ? { city, state } : null;
+}
+
 /**
  * Live suggestions as the user types a partial address — far more accurate than a single
  * geocode guess, since the user picks the exact place instead of hoping the first match is right.

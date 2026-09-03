@@ -127,7 +127,7 @@ export declare const createAvailabilityOverrideSchema: z.ZodEffects<z.ZodObject<
     date: z.ZodString;
     isClosed: z.ZodBoolean;
     closureReason: z.ZodOptional<z.ZodEnum<["holiday", "maintenance", "private_event", "weather", "other"]>>;
-    customHours: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+    blockedSlots: z.ZodDefault<z.ZodArray<z.ZodEffects<z.ZodObject<{
         startTime: z.ZodString;
         endTime: z.ZodString;
     }, "strip", z.ZodTypeAny, {
@@ -143,84 +143,38 @@ export declare const createAvailabilityOverrideSchema: z.ZodEffects<z.ZodObject<
         startTime: string;
         endTime: string;
     }>, "many">>;
-    blockedPeriods: z.ZodDefault<z.ZodArray<z.ZodIntersection<z.ZodEffects<z.ZodObject<{
-        startTime: z.ZodString;
-        endTime: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        startTime: string;
-        endTime: string;
-    }, {
-        startTime: string;
-        endTime: string;
-    }>, {
-        startTime: string;
-        endTime: string;
-    }, {
-        startTime: string;
-        endTime: string;
-    }>, z.ZodObject<{
-        reason: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        reason?: string | undefined;
-    }, {
-        reason?: string | undefined;
-    }>>, "many">>;
 }, "strip", z.ZodTypeAny, {
     date: string;
-    blockedPeriods: ({
-        startTime: string;
-        endTime: string;
-    } & {
-        reason?: string | undefined;
-    })[];
     isClosed: boolean;
-    customHours?: {
+    blockedSlots: {
         startTime: string;
         endTime: string;
-    }[] | undefined;
+    }[];
     closureReason?: "maintenance" | "holiday" | "private_event" | "weather" | "other" | undefined;
 }, {
     date: string;
     isClosed: boolean;
-    customHours?: {
+    closureReason?: "maintenance" | "holiday" | "private_event" | "weather" | "other" | undefined;
+    blockedSlots?: {
         startTime: string;
         endTime: string;
     }[] | undefined;
-    blockedPeriods?: ({
-        startTime: string;
-        endTime: string;
-    } & {
-        reason?: string | undefined;
-    })[] | undefined;
-    closureReason?: "maintenance" | "holiday" | "private_event" | "weather" | "other" | undefined;
 }>, {
     date: string;
-    blockedPeriods: ({
-        startTime: string;
-        endTime: string;
-    } & {
-        reason?: string | undefined;
-    })[];
     isClosed: boolean;
-    customHours?: {
+    blockedSlots: {
         startTime: string;
         endTime: string;
-    }[] | undefined;
+    }[];
     closureReason?: "maintenance" | "holiday" | "private_event" | "weather" | "other" | undefined;
 }, {
     date: string;
     isClosed: boolean;
-    customHours?: {
+    closureReason?: "maintenance" | "holiday" | "private_event" | "weather" | "other" | undefined;
+    blockedSlots?: {
         startTime: string;
         endTime: string;
     }[] | undefined;
-    blockedPeriods?: ({
-        startTime: string;
-        endTime: string;
-    } & {
-        reason?: string | undefined;
-    })[] | undefined;
-    closureReason?: "maintenance" | "holiday" | "private_event" | "weather" | "other" | undefined;
 }>;
 export declare const updateCourtSchema: z.ZodEffects<z.ZodEffects<z.ZodEffects<z.ZodObject<{
     name: z.ZodString;

@@ -6,8 +6,7 @@ import { ArrowLeft, CalendarDays, Clock3, Pencil, Plus, Trash2, Users } from 'lu
 import type {
   AvailabilityOverrideDTO,
   AvailabilityOverrideReasonType,
-  AvailabilityPeriodDTO,
-  BlockedPeriodDTO,
+  BlockedSlotDTO,
   CourtDetailsResponse,
   CreateAvailabilityOverrideRequest,
   CourtDTO,
@@ -25,7 +24,6 @@ import {
   Modal,
   Select,
   Spinner,
-  TimeInput,
   useToast,
 } from '@/components/ui';
 import { ApiError } from '@/types/api/response';
@@ -37,6 +35,7 @@ import {
 } from '../actions/courtApi';
 import { CourtFormModal } from './CourtFormModal';
 import { formatTime12Hour } from '@/lib/time';
+import { getPublicCourtDetails } from '@/features/home/actions/homeApi';
 
 const reasonLabels: Record<AvailabilityOverrideReasonType, string> = {
   holiday: 'Holiday',
@@ -222,7 +221,7 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
           <div>
             <CardTitle>Availability overrides</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Close or change this court&apos;s hours for a specific date.
+              Close the court for a day or block individual bookable slots.
             </p>
           </div>
           <Button
@@ -238,7 +237,7 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
           {availabilityOverrides.length === 0 ? (
             <div className="rounded-lg border border-dashed border-border py-10 text-center">
               <CalendarDays className="mx-auto mb-3 text-muted-foreground" />
-              <p className="font-medium">No special availability</p>
+              <p className="font-medium">All configured slots are available</p>
               <p className="text-sm text-muted-foreground">
                 This court follows its regular schedule.
               </p>
@@ -345,6 +344,7 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
         }}
         turfId={turfId}
         courtId={courtId}
+        court={court}
       />
       <Modal
         open={overrideToDelete !== null}
@@ -467,6 +467,7 @@ function OverrideModal({
   onSaved,
   turfId,
   courtId,
+  court,
   initial,
 }: {
   open: boolean;
@@ -474,6 +475,7 @@ function OverrideModal({
   onSaved: (item: AvailabilityOverrideDTO) => void;
   turfId: string;
   courtId: string;
+  court: CourtDTO;
   initial: AvailabilityOverrideDTO | null;
 }) {
   type ScheduleMode = 'regular' | 'custom' | 'closed';
@@ -503,11 +505,53 @@ function OverrideModal({
   );
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [occupiedSlots, setOccupiedSlots] = useState<Set<string>>(() => new Set());
   const { showToast } = useToast();
   const minDate = useMemo(() => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   }, []);
+  const maxDate = useMemo(() => {
+    const value = new Date();
+    value.setDate(value.getDate() + 13);
+    return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, '0')}-${String(value.getDate()).padStart(2, '0')}`;
+  }, []);
+  const slots = useMemo(() => getCourtSlotsForDate(court, date), [court, date]);
+  const selected = useMemo(() => new Set(blockedSlots.map(slotKey)), [blockedSlots]);
+  useEffect(() => {
+    if (!date) return;
+    let active = true;
+    void getPublicCourtDetails(turfId, courtId)
+      .then((details) => {
+        if (!active) return;
+        const selectedDate = details.dates.find((item) => item.date === date);
+        setOccupiedSlots(
+          new Set(
+            (selectedDate?.slots ?? [])
+              .filter(
+                (slot) =>
+                  slot.unavailableReason === 'booked' || slot.unavailableReason === 'reserved',
+              )
+              .map((slot) => slot.startTime),
+          ),
+        );
+      })
+      .catch(() => {
+        if (active) setError('Unable to check existing bookings for this date.');
+      });
+    return () => {
+      active = false;
+    };
+  }, [courtId, date, turfId]);
+  const toggleSlot = (slot: OwnerSlot) => {
+    if (occupiedSlots.has(slot.startTime)) return;
+    const key = slotKey(slot);
+    setBlockedSlots((current) =>
+      selected.has(key)
+        ? current.filter((item) => slotKey(item) !== key)
+        : [...current, { startTime: slot.startTime, endTime: slot.endTime }],
+    );
+  };
   async function submit(event: FormEvent) {
     event.preventDefault();
     const payload: CreateAvailabilityOverrideRequest = {
@@ -558,6 +602,7 @@ function OverrideModal({
           <Input
             type="date"
             min={minDate}
+            max={maxDate}
             value={date}
             onChange={(event) => setDate(event.target.value)}
             className="mt-2"
@@ -568,10 +613,17 @@ function OverrideModal({
           <Select
             className="mt-2"
             value={mode}
-            onChange={(event) => setMode(event.target.value as ScheduleMode)}
+            onChange={(event) => {
+              const nextMode = event.target.value as ScheduleMode;
+              if (nextMode === 'closed' && occupiedSlots.size > 0) {
+                setError('This date has bookings. Cancel them before closing the full day.');
+                return;
+              }
+              setError('');
+              setMode(nextMode);
+            }}
             options={[
-              { value: 'regular', label: 'Use regular opening hours' },
-              { value: 'custom', label: 'Use custom opening hours' },
+              { value: 'slots', label: 'Block particular slots' },
               { value: 'closed', label: 'Closed for the entire day' },
             ]}
           />
@@ -589,25 +641,55 @@ function OverrideModal({
             />
           </label>
         )}
-        {mode === 'custom' && (
-          <PeriodSection
-            title="Custom opening periods"
-            description="These periods replace the regular opening hours for this date."
-            periods={customHours}
-            onChange={setCustomHours}
-            onAdd={() => setCustomHours((current) => [...current, makePeriod()])}
-            minimumOne
-          />
-        )}
-        {mode !== 'closed' && (
-          <PeriodSection
-            title="Blocked periods"
-            description="Optional periods removed from the effective opening schedule."
-            periods={blockedPeriods}
-            onChange={setBlockedPeriods}
-            onAdd={() => setBlockedPeriods((current) => [...current, makeBlockedPeriod()])}
-            withReason
-          />
+        {mode === 'slots' && date && (
+          <fieldset className="rounded-xl border border-border p-4">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <legend className="font-medium">Select slots to block</legend>
+                <p className="text-xs text-muted-foreground">
+                  Selected slots will not be available to customers.
+                </p>
+              </div>
+              <Badge variant="warning">{blockedSlots.length} selected</Badge>
+            </div>
+            {slots.length ? (
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {slots.map((slot) => {
+                  const isSelected = selected.has(slotKey(slot));
+                  const isOccupied = occupiedSlots.has(slot.startTime);
+                  return (
+                    <button
+                      key={slotKey(slot)}
+                      type="button"
+                      aria-pressed={isSelected}
+                      disabled={isOccupied}
+                      onClick={() => toggleSlot(slot)}
+                      className={`rounded-xl border p-3 text-left transition ${isOccupied ? 'cursor-not-allowed bg-muted opacity-60' : isSelected ? 'border-destructive bg-destructive/10 ring-1 ring-destructive' : 'border-border bg-card hover:border-primary'}`}
+                    >
+                      <span className="block font-semibold">
+                        {formatTime12Hour(slot.startTime)}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        to {formatTime12Hour(slot.endTime)}
+                      </span>
+                      <span className="mt-2 block text-sm font-medium">
+                        Rs. {slot.price.toLocaleString('en-IN')}
+                      </span>
+                      {isOccupied && (
+                        <span className="mt-1 block text-xs font-semibold text-destructive">
+                          Already booked
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="mt-4 rounded-lg bg-muted p-6 text-center text-sm text-muted-foreground">
+                No configured slots for this date.
+              </p>
+            )}
+          </fieldset>
         )}
         {error && (
           <p role="alert" className="text-sm text-destructive">

@@ -3,7 +3,18 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Bell, LogOut, Store, User as UserIcon } from 'lucide-react';
+import {
+  Bell,
+  CalendarCheck,
+  Home,
+  Heart,
+  LogOut,
+  Menu,
+  Search,
+  Store,
+  User as UserIcon,
+  X,
+} from 'lucide-react';
 import { Avatar } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { logout } from '@/lib/auth/logoutApi';
@@ -24,6 +35,7 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { application } = useMyApplication();
   const turfOwnerLinkHref = application ? '/my-turfs' : '/become-a-turf-owner';
@@ -62,13 +74,30 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
   };
 
   return (
-    <header className="flex items-center justify-between border-b border-border bg-card px-4 py-3 sm:px-6">
+    <header className="relative flex items-center justify-between border-b border-border bg-card px-4 py-3 sm:px-6">
       <Link href="/" className="flex items-center" aria-label="Turfhood home">
         {/* eslint-disable-next-line @next/next/no-img-element -- static public asset, no next/image usage elsewhere in this repo */}
         <img src="/images/application-logo.png" alt="Turfhood" className="h-8 w-auto" />
       </Link>
 
+      <nav className="hidden items-center gap-5 md:flex" aria-label="Main navigation">
+        <Link href="/" className="text-sm font-medium text-foreground hover:text-primary">
+          Home
+        </Link>
+        <Link href="/turfs" className="text-sm font-medium text-foreground hover:text-primary">
+          Find Turfs
+        </Link>
+      </nav>
+
       <div className="flex items-center" style={{ gap: 12 }}>
+        <button
+          type="button"
+          aria-label="Toggle navigation"
+          onClick={() => setIsMobileNavOpen((open) => !open)}
+          className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-muted md:hidden"
+        >
+          {isMobileNavOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
         <button
           type="button"
           aria-label="Notifications"
@@ -102,6 +131,22 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
                   {userName}
                 </div>
               )}
+              <Link
+                href="/bookings"
+                role="menuitem"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-muted"
+              >
+                <CalendarCheck className="h-4 w-4" /> My Bookings
+              </Link>
+              <Link
+                href="/favorites"
+                role="menuitem"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-muted"
+              >
+                <Heart className="h-4 w-4" /> My Favourites
+              </Link>
               <Link
                 href="/profile"
                 role="menuitem"
@@ -155,6 +200,29 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
           )}
         </div>
       </div>
+      {isMobileNavOpen && (
+        <nav
+          className="absolute left-0 right-0 top-full z-20 border-b border-border bg-card p-4 shadow-lg md:hidden"
+          aria-label="Mobile navigation"
+        >
+          <Link
+            href="/"
+            onClick={() => setIsMobileNavOpen(false)}
+            className="mb-3 flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted"
+          >
+            <Home className="h-4 w-4" />
+            Home
+          </Link>
+          <Link
+            href="/turfs"
+            onClick={() => setIsMobileNavOpen(false)}
+            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted"
+          >
+            <Search className="h-4 w-4" />
+            Find Turfs
+          </Link>
+        </nav>
+      )}
     </header>
   );
 }

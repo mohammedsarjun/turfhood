@@ -22,6 +22,81 @@ import {
 
 @injectable()
 export class CourtRepository implements ICourtRepository {
+  async listPublic(input: { turfId: string; page: number; limit: number }) {
+    const filter = { turfId: input.turfId, status: 'active', isDeleted: false };
+    const [documents, total] = await Promise.all([
+      CourtModel.find(filter)
+        .sort({ createdAt: -1 })
+        .skip((input.page - 1) * input.limit)
+        .limit(input.limit),
+      CourtModel.countDocuments(filter),
+    ]);
+    return { items: await Promise.all(documents.map((document) => this.toDTO(document))), total };
+  }
+
+  async findTurfIdsMatchingDiscoveryFilters(input: {
+    sportTypeId?: string;
+    minPrice?: number;
+    maxPrice?: number;
+  }): Promise<string[]> {
+    const priceFilterActive = input.minPrice !== undefined || input.maxPrice !== undefined;
+    const pricedCourtIds = priceFilterActive
+      ? await PricingRuleModel.distinct('courtId', {
+          pricePerSlot: {
+            ...(input.minPrice !== undefined ? { $gte: input.minPrice } : {}),
+            ...(input.maxPrice !== undefined ? { $lte: input.maxPrice } : {}),
+          },
+        })
+      : undefined;
+    const turfIds = await CourtModel.distinct('turfId', {
+      status: 'active',
+      isDeleted: false,
+      ...(input.sportTypeId ? { sportTypeIds: input.sportTypeId } : {}),
+      ...(pricedCourtIds ? { _id: { $in: pricedCourtIds } } : {}),
+    });
+    return turfIds.map(String);
+  }
+
+  async findDiscoveryDetails(turfIds: string[]) {
+    const courts = await CourtModel.find({
+      turfId: { $in: turfIds },
+      status: 'active',
+      isDeleted: false,
+    });
+    const sportIds = [...new Set(courts.flatMap((court) => court.sportTypeIds.map(String)))];
+    const [sports, pricingRules] = await Promise.all([
+      SportsTypeModel.find({ _id: { $in: sportIds }, isListed: true }).select('name'),
+      PricingRuleModel.find({ courtId: { $in: courts.map((court) => court._id) } }),
+    ]);
+    const sportNames = new Map(sports.map((sport) => [sport._id.toString(), sport.name]));
+    const rulesByCourt = new Map<string, number[]>();
+    for (const rule of pricingRules) {
+      const courtId = rule.courtId.toString();
+      rulesByCourt.set(courtId, [...(rulesByCourt.get(courtId) ?? []), rule.pricePerSlot]);
+    }
+    const details = new Map<
+      string,
+      { sports: string[]; prices: Array<{ pricePerSlot: number; slotDurationMinutes: number }> }
+    >();
+    for (const court of courts) {
+      const turfId = court.turfId.toString();
+      const current = details.get(turfId) ?? { sports: [], prices: [] };
+      const names = court.sportTypeIds.flatMap((id) => {
+        const name = sportNames.get(id.toString());
+        return name ? [name] : [];
+      });
+      current.sports = [...new Set([...current.sports, ...names])];
+      current.prices.push(
+        ...(rulesByCourt.get(court._id.toString()) ?? []).map((pricePerSlot) => ({
+          pricePerSlot,
+          slotDurationMinutes: court.slotDurationMinutes,
+        })),
+      );
+      details.set(turfId, current);
+    }
+    return details;
+  }
+
   async existsByName(turfId: string, name: string, excludeCourtId?: string): Promise<boolean> {
     const escapedName = name.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     return CourtModel.exists({

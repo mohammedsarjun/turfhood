@@ -11,3 +11,4 @@ export { TurfApplicationStatus } from "./turfOnboarding/turf-onboarding-status.j
 export { TurfOnboardingErrorCode } from "./turfOnboarding/turf-onboarding-error-code.js";
 export { createCourtSchema, pricingRuleSchema, getOverlappingPricingBandIndexes, createAvailabilityOverrideSchema, updateCourtSchema, } from "./court/court.schema.js";
 export { ALLOWED_SLOT_DURATIONS, SLOT_DURATION_ERROR_MESSAGE, RAILWAY_TIME_PATTERN, } from "./court/court.constants.js";
+export { updateCommissionSchema } from "./commission/commission.dto.js";

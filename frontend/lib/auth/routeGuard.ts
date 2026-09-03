@@ -2,11 +2,12 @@
 export const PROTECTED_ROUTES = [
   '/',
   '/profile',
+  '/favorites',
   '/my-turfs',
   '/become-a-turf-owner',
   '/become-a-turf-owner/apply',
 ];
-const PROTECTED_ROUTE_PREFIXES = ['/turf-portal'];
+const PROTECTED_ROUTE_PREFIXES = ['/turf-portal', '/bookings'];
 
 /** Paths that only make sense for a logged-out visitor; authenticated users are sent home. */
 export const AUTH_ROUTES = ['/login', '/signup', '/forgot-password', '/otp'];

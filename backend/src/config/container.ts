@@ -1,5 +1,10 @@
 import 'reflect-metadata';
 import { container } from 'tsyringe';
+import type { IBannerRepository } from '@domain/banner/repositories/IBannerRepository';
+import { BANNER_TOKENS } from '@domain/banner/tokens';
+import { BannerRepository } from '@infrastructure/banner/repositories/BannerRepository';
+import type { IManageBannersUseCase } from '@application/banner/use-cases/IManageBannersUseCase';
+import { ManageBannersUseCase } from '@application/banner/use-cases/ManageBannersUseCase';
 import type { IUserRepository } from '@domain/user/repositories/IUserRepository';
 import type { IPasswordHasher } from '@domain/user/services/IPasswordHasher';
 import type { ITokenService } from '@domain/user/services/ITokenService';
@@ -94,6 +99,10 @@ import type { ITurfImageRepository } from '@domain/turf/repositories/ITurfImageR
 import { TURF_TOKENS } from '@domain/turf/tokens';
 import { TurfRepository } from '@infrastructure/turf/repositories/TurfRepository';
 import { TurfImageRepository } from '@infrastructure/turf/repositories/TurfImageRepository';
+import { ListNearbyTurfsUseCase } from '@application/turf/use-cases/ListNearbyTurfsUseCase';
+import { GetTurfDetailsUseCase } from '@application/turf/use-cases/GetTurfDetailsUseCase';
+import type { IListNearbyTurfsUseCase } from '@application/turf/use-cases/IListNearbyTurfsUseCase';
+import type { IGetTurfDetailsUseCase } from '@application/turf/use-cases/IGetTurfDetailsUseCase';
 import type { ITurfOwnerApplicationRepository } from '@domain/turfOwnerApplication/repositories/ITurfOwnerApplicationRepository';
 import { TURF_OWNER_APPLICATION_TOKENS } from '@domain/turfOwnerApplication/tokens';
 import { TurfOwnerApplicationRepository } from '@infrastructure/turfOwnerApplication/repositories/TurfOwnerApplicationRepository';
@@ -136,6 +145,30 @@ import type { IListCourtsUseCase } from '@application/court/use-cases/IListCourt
 import { ListCourtsUseCase } from '@application/court/use-cases/ListCourtsUseCase';
 import type { IManageCourtDetailsUseCase } from '@application/court/use-cases/IManageCourtDetailsUseCase';
 import { ManageCourtDetailsUseCase } from '@application/court/use-cases/ManageCourtDetailsUseCase';
+import type { IGetPublicCourtDetailsUseCase } from '@application/court/use-cases/IGetPublicCourtDetailsUseCase';
+import { GetPublicCourtDetailsUseCase } from '@application/court/use-cases/GetPublicCourtDetailsUseCase';
+import type { ICommissionSettingRepository } from '@domain/commission/repositories/ICommissionSettingRepository';
+import { COMMISSION_TOKENS } from '@domain/commission/tokens';
+import { CommissionSettingRepository } from '@infrastructure/commission/repositories/CommissionSettingRepository';
+import type { IManageCommissionSettingUseCase } from '@application/commission/use-cases/IManageCommissionSettingUseCase';
+import { ManageCommissionSettingUseCase } from '@application/commission/use-cases/ManageCommissionSettingUseCase';
+import type { IBookingRepository } from '@domain/booking/repositories/IBookingRepository';
+import type { IPaymentService } from '@domain/booking/services/IPaymentService';
+import { BOOKING_TOKENS } from '@domain/booking/tokens';
+import { BookingRepository } from '@infrastructure/booking/repositories/BookingRepository';
+import { PayUPaymentService } from '@infrastructure/booking/services/PayUPaymentService';
+import type { IManageBookingsUseCase } from '@application/booking/use-cases/IManageBookingsUseCase';
+import { ManageBookingsUseCase } from '@application/booking/use-cases/ManageBookingsUseCase';
+import type { IReviewRepository } from '@domain/review/repositories/IReviewRepository';
+import { REVIEW_TOKENS } from '@domain/review/tokens';
+import { ReviewRepository } from '@infrastructure/review/repositories/ReviewRepository';
+import type { IManageReviewsUseCase } from '@application/review/use-cases/IManageReviewsUseCase';
+import { ManageReviewsUseCase } from '@application/review/use-cases/ManageReviewsUseCase';
+import type { IFavoriteRepository } from '@domain/favorite/repositories/IFavoriteRepository';
+import { FAVORITE_TOKENS } from '@domain/favorite/tokens';
+import { FavoriteRepository } from '@infrastructure/favorite/repositories/FavoriteRepository';
+import type { IManageFavoritesUseCase } from '@application/favorite/use-cases/IManageFavoritesUseCase';
+import { ManageFavoritesUseCase } from '@application/favorite/use-cases/ManageFavoritesUseCase';
 
 /** Composition root — wires domain interfaces to their infrastructure implementations. */
 container.register<IUserRepository>(USER_TOKENS.UserRepository, { useClass: UserRepository });
@@ -254,6 +287,12 @@ container.register<ITurfRepository>(TURF_TOKENS.TurfRepository, { useClass: Turf
 container.register<ITurfImageRepository>(TURF_TOKENS.TurfImageRepository, {
   useClass: TurfImageRepository,
 });
+container.register<IListNearbyTurfsUseCase>(TURF_TOKENS.ListNearbyTurfsUseCase, {
+  useClass: ListNearbyTurfsUseCase,
+});
+container.register<IGetTurfDetailsUseCase>(TURF_TOKENS.GetTurfDetailsUseCase, {
+  useClass: GetTurfDetailsUseCase,
+});
 container.register<ITurfOwnerApplicationRepository>(
   TURF_OWNER_APPLICATION_TOKENS.TurfOwnerApplicationRepository,
   { useClass: TurfOwnerApplicationRepository },
@@ -307,6 +346,12 @@ container.register<IRevokeRefreshTokenUseCase>(REFRESH_TOKEN_TOKENS.RevokeRefres
   useClass: RevokeRefreshTokenUseCase,
 });
 container.register<ICourtRepository>(COURT_TOKENS.CourtRepository, { useClass: CourtRepository });
+container.register<IBannerRepository>(BANNER_TOKENS.BannerRepository, {
+  useClass: BannerRepository,
+});
+container.register<IManageBannersUseCase>(BANNER_TOKENS.ManageBannersUseCase, {
+  useClass: ManageBannersUseCase,
+});
 container.register<ICreateCourtUseCase>(COURT_TOKENS.CreateCourtUseCase, {
   useClass: CreateCourtUseCase,
 });
@@ -315,6 +360,30 @@ container.register<IListCourtsUseCase>(COURT_TOKENS.ListCourtsUseCase, {
 });
 container.register<IManageCourtDetailsUseCase>(COURT_TOKENS.ManageCourtDetailsUseCase, {
   useClass: ManageCourtDetailsUseCase,
+});
+container.register<IGetPublicCourtDetailsUseCase>(COURT_TOKENS.GetPublicCourtDetailsUseCase, {
+  useClass: GetPublicCourtDetailsUseCase,
+});
+container.register<ICommissionSettingRepository>(COMMISSION_TOKENS.Repository, {
+  useClass: CommissionSettingRepository,
+});
+container.register<IManageCommissionSettingUseCase>(COMMISSION_TOKENS.UseCase, {
+  useClass: ManageCommissionSettingUseCase,
+});
+container.register<IBookingRepository>(BOOKING_TOKENS.Repository, { useClass: BookingRepository });
+container.register<IPaymentService>(BOOKING_TOKENS.Payment, { useClass: PayUPaymentService });
+container.register<IManageBookingsUseCase>(BOOKING_TOKENS.UseCase, {
+  useClass: ManageBookingsUseCase,
+});
+container.register<IReviewRepository>(REVIEW_TOKENS.Repository, { useClass: ReviewRepository });
+container.register<IManageReviewsUseCase>(REVIEW_TOKENS.UseCase, {
+  useClass: ManageReviewsUseCase,
+});
+container.register<IFavoriteRepository>(FAVORITE_TOKENS.Repository, {
+  useClass: FavoriteRepository,
+});
+container.register<IManageFavoritesUseCase>(FAVORITE_TOKENS.UseCase, {
+  useClass: ManageFavoritesUseCase,
 });
 
 export { container };

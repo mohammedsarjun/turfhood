@@ -67,3 +67,15 @@ export const passwordResetRateLimiter = createRateLimiter({
   limit: 5,
   message: 'Too many password reset attempts. Please try again later.',
 });
+
+export const bookingRateLimiter = createRateLimiter({
+  windowMs: 10 * MINUTE_MS,
+  limit: 10,
+  message: 'Too many booking attempts. Please wait before trying again.',
+});
+
+export const paymentCallbackRateLimiter = createRateLimiter({
+  windowMs: MINUTE_MS,
+  limit: 60,
+  message: 'Too many payment callbacks. Please try again shortly.',
+});

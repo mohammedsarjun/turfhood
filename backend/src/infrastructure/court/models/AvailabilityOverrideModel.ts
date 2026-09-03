@@ -10,15 +10,9 @@ export interface AvailabilityOverrideDocument extends Document {
   turfId: mongoose.Types.ObjectId;
   courtId: mongoose.Types.ObjectId;
   date: string;
-  isClosed?: boolean;
+  isClosed: boolean;
   closureReason?: AvailabilityOverrideReasonType;
-  customHours?: AvailabilityPeriodDTO[];
-  blockedPeriods?: BlockedPeriodDTO[];
-  type?: string;
-  reasonType?: AvailabilityOverrideReasonType;
-  customOpen?: string;
-  customClose?: string;
-  reason?: string;
+  blockedSlots: BlockedSlotDTO[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -27,7 +21,6 @@ const periodSchema = new Schema(
   {
     startTime: { type: String, required: true, match: RAILWAY_TIME_PATTERN },
     endTime: { type: String, required: true, match: RAILWAY_TIME_PATTERN },
-    reason: { type: String, trim: true, maxlength: 200 },
   },
   { _id: false },
 );

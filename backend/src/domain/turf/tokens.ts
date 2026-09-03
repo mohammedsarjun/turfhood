@@ -2,4 +2,6 @@
 export const TURF_TOKENS = {
   TurfRepository: Symbol('ITurfRepository'),
   TurfImageRepository: Symbol('ITurfImageRepository'),
+  ListNearbyTurfsUseCase: Symbol('IListNearbyTurfsUseCase'),
+  GetTurfDetailsUseCase: Symbol('IGetTurfDetailsUseCase'),
 } as const;

@@ -25,6 +25,9 @@ describe('Header', () => {
     expect(screen.getByLabelText(/turfhood home/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/notifications/i)).toBeInTheDocument();
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(screen.getAllByRole('link', { name: /home/i })).not.toHaveLength(0);
+    expect(screen.getAllByRole('link', { name: /find turfs/i })).not.toHaveLength(0);
+    expect(screen.getByRole('button', { name: /toggle navigation/i })).toBeInTheDocument();
   });
 
   it('shows an anonymous placeholder icon, not an image, when there is no avatarUrl', () => {

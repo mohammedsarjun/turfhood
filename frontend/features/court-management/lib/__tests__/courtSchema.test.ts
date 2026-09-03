@@ -90,7 +90,7 @@ describe('createAvailabilityOverrideSchema', () => {
     ).toBe(true);
   });
 
-  it('accepts multiple non-overlapping custom and blocked periods', () => {
+  it('accepts selected generated slots', () => {
     const result = createAvailabilityOverrideSchema.safeParse({
       date: '2026-08-20',
       isClosed: false,
@@ -103,21 +103,21 @@ describe('createAvailabilityOverrideSchema', () => {
     expect(result.success).toBe(true);
   });
 
-  it('rejects a regular-hours override without blocked periods', () => {
+  it('requires at least one selected slot for a partial override', () => {
     const result = createAvailabilityOverrideSchema.safeParse({
       date: '2026-08-20',
       isClosed: false,
-      blockedPeriods: [],
+      blockedSlots: [],
     });
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.flatten().fieldErrors.blockedPeriods?.[0]).toContain(
-        'Add at least one blocked period',
+      expect(result.error.flatten().fieldErrors.blockedSlots?.[0]).toContain(
+        'Select at least one slot',
       );
     }
   });
 
-  it('rejects overlapping custom periods', () => {
+  it('rejects duplicate selected slots', () => {
     const result = createAvailabilityOverrideSchema.safeParse({
       date: '2026-08-20',
       isClosed: false,
