@@ -6,12 +6,8 @@ import { COURT_TOKENS } from '@domain/court/tokens';
 import { CourtAccessError } from '@domain/court/errors/CourtAccessError';
 import {
   AvailabilityOverrideNotFoundError,
-  BookedSlotOverrideError,
   DuplicateAvailabilityOverrideError,
-  InvalidBlockedSlotError,
 } from '@domain/court/errors/AvailabilityOverrideError';
-import type { IBookingRepository } from '@domain/booking/repositories/IBookingRepository';
-import { BOOKING_TOKENS } from '@domain/booking/tokens';
 import { DuplicateCourtNameError } from '@domain/court/errors/DuplicateCourtNameError';
 import type { CourtAccessInput, IManageCourtDetailsUseCase } from './IManageCourtDetailsUseCase.js';
 import { generateSlots } from './GetPublicCourtDetailsUseCase.js';

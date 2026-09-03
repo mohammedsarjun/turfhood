@@ -2,7 +2,8 @@ import mongoose, { model, Schema, type Document, type Model } from 'mongoose';
 import {
   RAILWAY_TIME_PATTERN,
   type AvailabilityOverrideReasonType,
-  type BlockedSlotDTO,
+  type AvailabilityPeriodDTO,
+  type BlockedPeriodDTO,
 } from '@turfhood/shared';
 
 export interface AvailabilityOverrideDocument extends Document {
@@ -29,12 +30,21 @@ const schema = new Schema<AvailabilityOverrideDocument>(
     turfId: { type: Schema.Types.ObjectId, ref: 'Turf', required: true, index: true },
     courtId: { type: Schema.Types.ObjectId, ref: 'Court', required: true, index: true },
     date: { type: String, required: true },
-    isClosed: { type: Boolean, required: true, default: false },
+    isClosed: { type: Boolean },
     closureReason: {
       type: String,
       enum: ['holiday', 'maintenance', 'private_event', 'weather', 'other'],
     },
-    blockedSlots: { type: [periodSchema], default: [] },
+    customHours: { type: [periodSchema], default: undefined },
+    blockedPeriods: { type: [periodSchema], default: [] },
+    type: String,
+    reasonType: {
+      type: String,
+      enum: ['holiday', 'maintenance', 'private_event', 'weather', 'other'],
+    },
+    customOpen: { type: String, match: RAILWAY_TIME_PATTERN },
+    customClose: { type: String, match: RAILWAY_TIME_PATTERN },
+    reason: { type: String, trim: true, maxlength: 200 },
   },
   { timestamps: true, collection: 'availability_overrides' },
 );
