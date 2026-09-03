@@ -20,3 +20,23 @@ export class DuplicateAvailabilityOverrideError extends AppError {
     );
   }
 }
+
+export class InvalidBlockedSlotError extends AppError {
+  constructor() {
+    super(
+      'One or more selected slots are not part of this court schedule.',
+      HttpStatus.BAD_REQUEST,
+      'INVALID_BLOCKED_SLOT',
+    );
+  }
+}
+
+export class BookedSlotOverrideError extends AppError {
+  constructor() {
+    super(
+      'Booked or temporarily reserved slots cannot be blocked or closed.',
+      HttpStatus.CONFLICT,
+      'BOOKED_SLOT_OVERRIDE',
+    );
+  }
+}

@@ -263,9 +263,7 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
                         <Badge variant={item.isClosed ? 'destructive' : 'warning'}>
                           {item.isClosed
                             ? 'Closed all day'
-                            : item.customHours
-                              ? 'Custom schedule'
-                              : 'Regular hours'}
+                            : `${item.blockedSlots.length} blocked slot${item.blockedSlots.length === 1 ? '' : 's'}`}
                         </Badge>
                       </div>
                       {item.isClosed ? (
@@ -275,24 +273,11 @@ export function CourtDetailsPage({ turfId, courtId }: Props) {
                             : 'Court unavailable for the day'}
                         </p>
                       ) : (
-                        <div className="mt-1 space-y-1 text-sm text-muted-foreground">
-                          <p>
-                            {item.customHours
-                              ? item.customHours
-                                  .map(
-                                    (period) =>
-                                      `${formatTime12Hour(period.startTime)}–${formatTime12Hour(period.endTime)}`,
-                                  )
-                                  .join(', ')
-                              : 'Uses regular opening hours'}
-                          </p>
-                          {item.blockedPeriods.length > 0 && (
-                            <p>
-                              {item.blockedPeriods.length} blocked period
-                              {item.blockedPeriods.length === 1 ? '' : 's'}
-                            </p>
-                          )}
-                        </div>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {item.blockedSlots
+                            .map((slot) => formatTime12Hour(slot.startTime))
+                            .join(', ')}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -478,31 +463,13 @@ function OverrideModal({
   court: CourtDTO;
   initial: AvailabilityOverrideDTO | null;
 }) {
-  type ScheduleMode = 'regular' | 'custom' | 'closed';
-  type ClientPeriod = AvailabilityPeriodDTO & { clientId: string };
-  type ClientBlockedPeriod = BlockedPeriodDTO & { clientId: string };
-  const makePeriod = (
-    period: AvailabilityPeriodDTO = { startTime: '09:00', endTime: '18:00' },
-  ): ClientPeriod => ({ ...period, clientId: crypto.randomUUID() });
-  const makeBlockedPeriod = (
-    period: BlockedPeriodDTO = { startTime: '12:00', endTime: '13:00' },
-  ): ClientBlockedPeriod => ({ ...period, clientId: crypto.randomUUID() });
-  const initialMode: ScheduleMode = initial?.isClosed
-    ? 'closed'
-    : initial?.customHours
-      ? 'custom'
-      : 'regular';
-  const [mode, setMode] = useState<ScheduleMode>(initialMode);
+  type ScheduleMode = 'slots' | 'closed';
+  const [mode, setMode] = useState<ScheduleMode>(initial?.isClosed ? 'closed' : 'slots');
   const [closureReason, setClosureReason] = useState<AvailabilityOverrideReasonType>(
     initial?.closureReason ?? 'holiday',
   );
   const [date, setDate] = useState(initial?.date ?? '');
-  const [customHours, setCustomHours] = useState<ClientPeriod[]>(
-    () => initial?.customHours?.map(makePeriod) ?? [makePeriod()],
-  );
-  const [blockedPeriods, setBlockedPeriods] = useState<ClientBlockedPeriod[]>(
-    () => initial?.blockedPeriods.map(makeBlockedPeriod) ?? [],
-  );
+  const [blockedSlots, setBlockedSlots] = useState<BlockedSlotDTO[]>(initial?.blockedSlots ?? []);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const [occupiedSlots, setOccupiedSlots] = useState<Set<string>>(() => new Set());
@@ -558,17 +525,7 @@ function OverrideModal({
       date,
       isClosed: mode === 'closed',
       ...(mode === 'closed' ? { closureReason } : {}),
-      ...(mode === 'custom'
-        ? { customHours: customHours.map(({ startTime, endTime }) => ({ startTime, endTime })) }
-        : {}),
-      blockedPeriods:
-        mode === 'closed'
-          ? []
-          : blockedPeriods.map(({ startTime, endTime, reason }) => ({
-              startTime,
-              endTime,
-              ...(reason?.trim() ? { reason: reason.trim() } : {}),
-            })),
+      blockedSlots: mode === 'closed' ? [] : blockedSlots,
     };
     const result = createAvailabilityOverrideSchema.safeParse(payload);
     if (!result.success) {
@@ -709,91 +666,39 @@ function OverrideModal({
   );
 }
 
-interface ClientTimePeriod extends AvailabilityPeriodDTO {
-  clientId: string;
-  reason?: string;
+interface OwnerSlot extends BlockedSlotDTO {
+  price: number;
 }
 
-function PeriodSection<T extends ClientTimePeriod>({
-  title,
-  description,
-  periods,
-  onChange,
-  onAdd,
-  minimumOne = false,
-  withReason = false,
-}: {
-  title: string;
-  description: string;
-  periods: T[];
-  onChange: (periods: T[]) => void;
-  onAdd: () => void;
-  minimumOne?: boolean;
-  withReason?: boolean;
-}) {
-  const update = (index: number, changes: Partial<T>) =>
-    onChange(
-      periods.map((period, itemIndex) =>
-        itemIndex === index ? { ...period, ...changes } : period,
-      ),
-    );
-  return (
-    <fieldset className="space-y-3 rounded-lg border border-border p-4">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <legend className="text-sm font-medium">{title}</legend>
-          <p className="text-xs text-muted-foreground">{description}</p>
-        </div>
-        <Button type="button" variant="outline" size="sm" onClick={onAdd}>
-          <Plus size={14} /> Add period
-        </Button>
-      </div>
-      {periods.length === 0 && (
-        <p className="py-3 text-center text-sm text-muted-foreground">No blocked periods.</p>
-      )}
-      {periods.map((period, index) => (
-        <div key={period.clientId} className="grid gap-3 rounded-md bg-muted p-3 md:grid-cols-2">
-          <label className="text-xs font-medium">
-            Start time
-            <TimeInput
-              ariaLabel={`${title} ${index + 1} start`}
-              value={period.startTime}
-              onChange={(startTime) => update(index, { startTime } as Partial<T>)}
-              className="mt-2"
-            />
-          </label>
-          <label className="text-xs font-medium">
-            End time
-            <TimeInput
-              ariaLabel={`${title} ${index + 1} end`}
-              value={period.endTime}
-              onChange={(endTime) => update(index, { endTime } as Partial<T>)}
-              className="mt-2"
-            />
-          </label>
-          {withReason && (
-            <label className="text-xs font-medium md:col-span-2">
-              Reason <span className="font-normal text-muted-foreground">(optional)</span>
-              <Input
-                value={period.reason ?? ''}
-                maxLength={200}
-                onChange={(event) => update(index, { reason: event.target.value } as Partial<T>)}
-                className="mt-2"
-              />
-            </label>
-          )}
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="justify-self-end text-destructive md:col-span-2"
-            disabled={minimumOne && periods.length === 1}
-            onClick={() => onChange(periods.filter((_, itemIndex) => itemIndex !== index))}
-          >
-            <Trash2 size={15} /> Remove
-          </Button>
-        </div>
-      ))}
-    </fieldset>
-  );
+function slotKey(slot: BlockedSlotDTO): string {
+  return `${slot.startTime}-${slot.endTime}`;
+}
+
+function getCourtSlotsForDate(court: CourtDTO, date: string): OwnerSlot[] {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return [];
+  const day = new Date(`${date}T00:00:00Z`).getUTCDay();
+  const dayType = day === 0 || day === 6 ? 'weekend' : 'weekday';
+  return court.pricingRules
+    .filter((rule) => rule.dayType === dayType)
+    .flatMap((rule) => {
+      const [startHour = 0, startMinute = 0] = rule.startTime.split(':').map(Number);
+      const [endHour = 0, endMinute = 0] = rule.endTime.split(':').map(Number);
+      const start = startHour * 60 + startMinute;
+      const end = endHour * 60 + endMinute;
+      const slots: OwnerSlot[] = [];
+      for (
+        let minute = start;
+        minute + court.slotDurationMinutes <= end;
+        minute += court.slotDurationMinutes
+      ) {
+        const finish = minute + court.slotDurationMinutes;
+        slots.push({
+          startTime: `${String(Math.floor(minute / 60)).padStart(2, '0')}:${String(minute % 60).padStart(2, '0')}`,
+          endTime: `${String(Math.floor(finish / 60)).padStart(2, '0')}:${String(finish % 60).padStart(2, '0')}`,
+          price: rule.pricePerSlot,
+        });
+      }
+      return slots;
+    })
+    .sort((left, right) => left.startTime.localeCompare(right.startTime));
 }

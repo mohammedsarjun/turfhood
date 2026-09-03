@@ -77,7 +77,7 @@ describe('createAvailabilityOverrideSchema', () => {
       createAvailabilityOverrideSchema.safeParse({
         date: '2026-08-20',
         isClosed: true,
-        blockedPeriods: [],
+        blockedSlots: [],
       }).success,
     ).toBe(false);
     expect(
@@ -85,7 +85,7 @@ describe('createAvailabilityOverrideSchema', () => {
         date: '2026-08-20',
         isClosed: true,
         closureReason: 'holiday',
-        blockedPeriods: [],
+        blockedSlots: [],
       }).success,
     ).toBe(true);
   });
@@ -94,11 +94,10 @@ describe('createAvailabilityOverrideSchema', () => {
     const result = createAvailabilityOverrideSchema.safeParse({
       date: '2026-08-20',
       isClosed: false,
-      customHours: [
-        { startTime: '08:00', endTime: '12:00' },
-        { startTime: '16:00', endTime: '20:00' },
+      blockedSlots: [
+        { startTime: '08:00', endTime: '09:00' },
+        { startTime: '17:00', endTime: '18:00' },
       ],
-      blockedPeriods: [{ startTime: '17:00', endTime: '18:00', reason: 'Maintenance' }],
     });
     expect(result.success).toBe(true);
   });
@@ -121,11 +120,10 @@ describe('createAvailabilityOverrideSchema', () => {
     const result = createAvailabilityOverrideSchema.safeParse({
       date: '2026-08-20',
       isClosed: false,
-      customHours: [
-        { startTime: '08:00', endTime: '12:00' },
-        { startTime: '11:00', endTime: '14:00' },
+      blockedSlots: [
+        { startTime: '08:00', endTime: '09:00' },
+        { startTime: '08:00', endTime: '09:00' },
       ],
-      blockedPeriods: [],
     });
     expect(result.success).toBe(false);
   });
