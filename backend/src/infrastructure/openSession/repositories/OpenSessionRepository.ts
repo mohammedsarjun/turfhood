@@ -1,0 +1,225 @@
+import mongoose from 'mongoose';
+import { injectable } from 'tsyringe';
+import type { OpenSessionDTO } from '@turfhood/shared';
+import type { CreateOpenSessionPersistenceInput, IOpenSessionRepository } from '@domain/openSession/repositories/IOpenSessionRepository';
+import { SlotUnavailableError } from '@domain/booking/errors/BookingErrors';
+import { SlotReservationModel } from '@infrastructure/booking/models/SlotReservationModel';
+import { OpenSessionModel, type OpenSessionDocument } from '../models/OpenSessionModel.js';
+
+@injectable()
+export class OpenSessionRepository implements IOpenSessionRepository {
+  async create(input: CreateOpenSessionPersistenceInput) {
+    const session = await mongoose.startSession();
+    let created: OpenSessionDocument | undefined;
+    try {
+      await session.withTransaction(async () => {
+        await SlotReservationModel.deleteMany({ state: 'held', expiresAt: { $lte: new Date() } }, { session });
+        const [doc] = await OpenSessionModel.create([{
+          ...input,
+          status: 'awaiting_creator_payment',
+          location: { type: 'Point', coordinates: [input.location.longitude, input.location.latitude] },
+          participants: [{
+            userId: input.creatorId,
+            name: input.creator.name,
+            isCreator: true,
+            transactionId: input.creator.transactionId,
+            paymentStatus: 'pending',
+            joinedAt: new Date(),
+          }],
+        }], { session });
+        if (!doc) throw new Error('Open session was not created.');
+        created = doc;
+        await SlotReservationModel.create([{
+          bookingId: doc._id,
+          courtId: input.courtId,
+          bookingDate: input.bookingDate,
+          startTime: input.startTime,
+          endTime: input.endTime,
+          state: 'held',
+          expiresAt: new Date(Date.now() + 10 * 60_000),
+        }], { session });
+      });
+    } catch (error) {
+      if (typeof error === 'object' && error && 'code' in error && (error as { code: unknown }).code === 11000) throw new SlotUnavailableError();
+      throw error;
+    } finally {
+      await session.endSession();
+    }
+    return this.toDTO(created!);
+  }
+
+  async findById(id: string) {
+    if (!mongoose.isValidObjectId(id)) return null;
+    const doc = await OpenSessionModel.findById(id);
+    return doc ? this.toDTO(doc) : null;
+  }
+
+  async list(input: { page: number; limit: number; sportTypeId?: string; coordinates?: { latitude: number; longitude: number } }) {
+    const filter = {
+      status: 'open',
+      fillDeadline: { $gt: new Date() },
+      ...(input.sportTypeId && mongoose.isValidObjectId(input.sportTypeId)
+        ? { sportTypeId: new mongoose.Types.ObjectId(input.sportTypeId) }
+        : {}),
+    };
+    if (input.coordinates) {
+      const docs = await OpenSessionModel.aggregate<OpenSessionDocument>([
+        { $geoNear: { near: { type: 'Point', coordinates: [input.coordinates.longitude, input.coordinates.latitude] }, distanceField: 'distance', spherical: true, query: filter } },
+        { $skip: (input.page - 1) * input.limit },
+        { $limit: input.limit },
+      ]);
+      const total = await OpenSessionModel.countDocuments(filter);
+      return { items: docs.map((doc) => this.toDTO(doc)), total };
+    }
+    const [docs, total] = await Promise.all([
+      OpenSessionModel.find(filter).sort({ bookingDate: 1, startTime: 1 }).skip((input.page - 1) * input.limit).limit(input.limit),
+      OpenSessionModel.countDocuments(filter),
+    ]);
+    return { items: docs.map((doc) => this.toDTO(doc)), total };
+  }
+
+  async addPendingParticipant(id: string, user: { id: string; name: string }, transactionId: string) {
+    await OpenSessionModel.updateOne(
+      { _id: id },
+      {
+        $pull: {
+          participants: {
+            isCreator: false,
+            paymentStatus: 'pending',
+            joinedAt: { $lte: new Date(Date.now() - 10 * 60_000) },
+          },
+        },
+      },
+    );
+    const doc = await OpenSessionModel.findOneAndUpdate(
+      {
+        _id: id,
+        status: 'open',
+        fillDeadline: { $gt: new Date() },
+        'participants.userId': { $ne: user.id },
+        $expr: { $lt: [{ $size: { $filter: { input: '$participants', as: 'participant', cond: { $in: ['$$participant.paymentStatus', ['pending', 'paid']] } } } }, '$maximumPlayers'] },
+      },
+      { $push: { participants: { userId: user.id, name: user.name, isCreator: false, transactionId, paymentStatus: 'pending', joinedAt: new Date() } } },
+      { new: true },
+    );
+    return doc ? this.toDTO(doc) : null;
+  }
+
+  async findByTransactionId(transactionId: string) {
+    const doc = await OpenSessionModel.findOne({ 'participants.transactionId': transactionId });
+    return doc ? this.toDTO(doc) : null;
+  }
+  async findPayment(transactionId: string) {
+    const doc = await OpenSessionModel.findOne(
+      { 'participants.transactionId': transactionId },
+      { participants: { $elemMatch: { transactionId } } },
+    );
+    const participant = doc?.participants[0];
+    return participant ? { createdAt: participant.joinedAt, status: participant.paymentStatus } : null;
+  }
+
+  async confirmParticipant(transactionId: string, paymentId: string) {
+    const session = await mongoose.startSession();
+    let result: OpenSessionDocument | null = null;
+    try {
+      await session.withTransaction(async () => {
+        const doc = await OpenSessionModel.findOneAndUpdate(
+          { 'participants.transactionId': transactionId, 'participants.paymentStatus': 'pending' },
+          { $set: { 'participants.$.paymentStatus': 'paid', 'participants.$.paymentId': paymentId } },
+          { new: true, session },
+        );
+        if (!doc) return;
+        const paid = doc.participants.filter((participant) => participant.paymentStatus === 'paid').length;
+        if (doc.status === 'awaiting_creator_payment') {
+          doc.status = 'open';
+          await SlotReservationModel.updateMany(
+            { bookingId: doc._id, state: 'held' },
+            { $set: { expiresAt: doc.fillDeadline } },
+            { session },
+          );
+        }
+        if (paid >= doc.maximumPlayers) {
+          doc.status = 'full';
+          await SlotReservationModel.updateMany({ bookingId: doc._id }, { $set: { state: 'confirmed' }, $unset: { expiresAt: 1 } }, { session });
+        }
+        result = await doc.save({ session });
+      });
+    } finally {
+      await session.endSession();
+    }
+    return result ? this.toDTO(result) : this.findByTransactionId(transactionId);
+  }
+
+  async failParticipant(transactionId: string) {
+    const doc = await OpenSessionModel.findOneAndUpdate(
+      { 'participants.transactionId': transactionId, 'participants.paymentStatus': 'pending' },
+      { $set: { 'participants.$.paymentStatus': 'refund_failed' } },
+      { new: true },
+    );
+    if (doc?.status === 'awaiting_creator_payment') {
+      doc.status = 'cancelled';
+      await doc.save();
+      await SlotReservationModel.deleteMany({ bookingId: doc._id, state: 'held' });
+    }
+  }
+
+  async expireUnfilled(now: Date) {
+    const docs = await OpenSessionModel.find({
+      $or: [
+        { status: 'awaiting_creator_payment', createdAt: { $lte: new Date(now.getTime() - 10 * 60_000) } },
+        { status: 'open', fillDeadline: { $lte: now } },
+      ],
+    });
+    const results: Array<{ sessionId: string; payments: Array<{ userId: string; paymentId: string; amountPaise: number }> }> = [];
+    for (const doc of docs) {
+      doc.status = 'cancelled';
+      const paid = doc.participants.filter((participant) => participant.paymentStatus === 'paid' && participant.paymentId);
+      for (const participant of paid) participant.paymentStatus = 'refund_pending';
+      await doc.save();
+      await SlotReservationModel.deleteMany({ bookingId: doc._id, state: 'held' });
+      results.push({ sessionId: doc._id.toString(), payments: paid.map((participant) => ({ userId: participant.userId.toString(), paymentId: participant.paymentId!, amountPaise: doc.pricePerParticipantPaise })) });
+    }
+    return results;
+  }
+
+  async markParticipantRefundRequested(sessionId: string, userId: string, requestId: string) {
+    await OpenSessionModel.updateOne(
+      { _id: sessionId, 'participants.userId': userId },
+      { $set: { 'participants.$.paymentStatus': 'refund_pending', 'participants.$.refundRequestId': requestId } },
+    );
+  }
+
+  async listPendingParticipantRefunds() {
+    const docs = await OpenSessionModel.find({
+      participants: { $elemMatch: { paymentStatus: 'refund_pending', refundRequestId: { $exists: true } } },
+    });
+    return docs.flatMap((doc) =>
+      doc.participants.flatMap((participant) =>
+        participant.paymentStatus === 'refund_pending' && participant.refundRequestId
+          ? [{ sessionId: doc._id.toString(), userId: participant.userId.toString(), requestId: participant.refundRequestId }]
+          : [],
+      ),
+    );
+  }
+
+  async markParticipantRefundResult(sessionId: string, userId: string, status: 'refunded' | 'refund_failed') {
+    await OpenSessionModel.updateOne(
+      { _id: sessionId, participants: { $elemMatch: { userId, paymentStatus: 'refund_pending' } } },
+      { $set: { 'participants.$.paymentStatus': status } },
+    );
+  }
+
+  private toDTO(doc: OpenSessionDocument): OpenSessionDTO {
+    const participants = doc.participants.filter((participant) => participant.paymentStatus !== 'refund_failed' || Boolean(participant.paymentId));
+    return {
+      id: doc._id.toString(), creatorId: doc.creatorId.toString(), turfId: doc.turfId.toString(), courtId: doc.courtId.toString(),
+      turfName: doc.turfName, courtName: doc.courtName, ...(doc.courtImage ? { courtImage: doc.courtImage } : {}), address: doc.address,
+      location: { longitude: doc.location.coordinates[0], latitude: doc.location.coordinates[1] }, sportTypeId: doc.sportTypeId.toString(), sportName: doc.sportName,
+      bookingDate: doc.bookingDate, startTime: doc.startTime, endTime: doc.endTime, minimumPlayers: doc.minimumPlayers, maximumPlayers: doc.maximumPlayers,
+      joinedPlayers: participants.filter((participant) => participant.paymentStatus === 'paid').length, totalPricePaise: doc.totalPricePaise,
+      pricePerParticipantPaise: doc.pricePerParticipantPaise, status: doc.status, fillDeadline: doc.fillDeadline.toISOString(),
+      participants: participants.map((participant) => ({ userId: participant.userId.toString(), name: participant.name, isCreator: participant.isCreator, paymentStatus: participant.paymentStatus, joinedAt: participant.joinedAt.toISOString() })),
+      createdAt: doc.createdAt.toISOString(),
+    };
+  }
+}
