@@ -9,7 +9,11 @@ import { Button, Modal, Spinner, useToast } from '@/components/ui';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { formatTime12Hour } from '@/lib/time';
 import { usePublicCourtDetails } from '../hooks/usePublicCourtDetails';
-import { createReservation, submitPaymentForm } from '@/features/bookings/actions/bookingApi';
+import {
+  abandonBookingCheckout,
+  createReservation,
+  submitPaymentForm,
+} from '@/features/bookings/actions/bookingApi';
 import { ApiError } from '@/types/api/response';
 
 const PERIODS: Array<{ key: SlotPeriod; label: string }> = [
@@ -55,6 +59,7 @@ export function PublicCourtDetailsPage({ turfId, courtId }: { turfId: string; co
   const proceed = async () => {
     if (!dateAvailability || !selectedForDate.length) return;
     setReserving(true);
+    let reservationId: string | undefined;
     try {
       const result = await createReservation({
         turfId,
@@ -62,8 +67,16 @@ export function PublicCourtDetailsPage({ turfId, courtId }: { turfId: string; co
         bookingDate: dateAvailability.date,
         slots: selectedForDate.map(({ startTime, endTime }) => ({ startTime, endTime })),
       });
+      reservationId = result.booking.id;
       submitPaymentForm(result.payment);
     } catch (caught) {
+      if (reservationId) {
+        try {
+          await abandonBookingCheckout(reservationId);
+        } catch {
+          showToast('Checkout failed; the temporary slot hold will expire shortly.', 'error');
+        }
+      }
       showToast(
         caught instanceof ApiError ? caught.message : 'Unable to reserve these slots.',
         'error',
@@ -200,6 +213,8 @@ export function PublicCourtDetailsPage({ turfId, courtId }: { turfId: string; co
                                   <span className="mt-2 block text-xs font-medium capitalize text-destructive">
                                     {slot.unavailableReason === 'booked'
                                       ? 'Booked'
+                                      : slot.unavailableReason === 'reserved'
+                                        ? 'Temporarily held'
                                       : slot.unavailableReason}
                                   </span>
                                 )}

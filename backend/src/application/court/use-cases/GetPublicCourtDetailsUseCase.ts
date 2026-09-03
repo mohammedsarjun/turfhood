@@ -146,12 +146,15 @@ export class GetPublicCourtDetailsUseCase implements IGetPublicCourtDetailsUseCa
       );
       const slots = generateSlots(court, date, day === 0 || day === 6 ? 'weekend' : 'weekday').map(
         (slot) => {
+          const occupancy = occupied.get(date)?.get(slot.startTime);
           const reason = override?.isClosed
             ? 'closed'
             : blocked.has(`${slot.startTime}-${slot.endTime}`)
               ? 'blocked'
-              : occupied.get(date)?.has(slot.startTime)
-                ? 'booked'
+              : occupancy
+                ? occupancy === 'held'
+                  ? 'reserved'
+                  : 'booked'
                 : new Date(`${date}T${slot.startTime}:00+05:30`) <= today
                   ? 'past'
                   : undefined;
@@ -159,7 +162,14 @@ export class GetPublicCourtDetailsUseCase implements IGetPublicCourtDetailsUseCa
             ...slot,
             available: !reason,
             ...(reason
-              ? { unavailableReason: reason as 'booked' | 'blocked' | 'past' | 'closed' }
+              ? {
+                  unavailableReason: reason as
+                    | 'booked'
+                    | 'reserved'
+                    | 'blocked'
+                    | 'past'
+                    | 'closed',
+                }
               : {}),
           };
         },

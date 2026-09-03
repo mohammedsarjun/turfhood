@@ -9,5 +9,6 @@ router.post('/reservations', bookingRateLimiter, authenticate, controller.reserv
 router.get('/me', authenticate, controller.mine);
 router.get('/:id', authenticate, controller.details);
 router.post('/:id/retry', bookingRateLimiter, authenticate, controller.retry);
+router.post('/:id/abandon', authenticate, controller.abandon);
 router.post('/:id/cancel', authenticate, controller.cancel);
 export default router;

@@ -33,6 +33,9 @@ export async function retryBookingPayment(id: string) {
   );
   return response.data;
 }
+export async function abandonBookingCheckout(id: string) {
+  await axiosInstance.post(API_ROUTES.bookings.abandon(id));
+}
 export async function listOwnerBookings(turfId: string) {
   const response = await axiosInstance.get<BookingListResponse>(API_ROUTES.bookings.owner(turfId));
   return response.data;
@@ -45,6 +48,9 @@ export async function cancelOwnerBooking(turfId: string, id: string, reason: str
   return response.data;
 }
 export function submitPaymentForm(payment: CreateReservationResponse['payment']) {
+  if (!payment.action || !/^https:\/\//i.test(payment.action)) {
+    throw new Error('PayU payment URL is invalid.');
+  }
   const form = document.createElement('form');
   form.method = 'POST';
   form.action = payment.action;

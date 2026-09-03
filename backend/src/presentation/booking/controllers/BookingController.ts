@@ -110,4 +110,29 @@ export class BookingController {
       next(error);
     }
   };
+  abandon = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await this.bookings.abandonCheckout(userId(req), String(req.params.id));
+      res.status(HttpStatus.NO_CONTENT).send();
+    } catch (error) {
+      next(error);
+    }
+  };
+  adminEscalatedRefunds = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const page = Math.max(1, Number(req.query.page) || 1);
+      const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 20));
+      res.json(await this.bookings.listEscalatedRefunds(page, limit));
+    } catch (error) {
+      next(error);
+    }
+  };
+  adminVerifyRefund = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const requestId = typeof req.body.payuRequestId === 'string' ? req.body.payuRequestId : '';
+      res.json(await this.bookings.verifyManualRefund(String(req.params.id), requestId));
+    } catch (error) {
+      next(error);
+    }
+  };
 }

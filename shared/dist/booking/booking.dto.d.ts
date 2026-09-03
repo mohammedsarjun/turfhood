@@ -1,5 +1,13 @@
 export type BookingStatus = "pending_payment" | "confirmed" | "payment_failed" | "cancelled_by_user" | "cancelled_by_owner" | "expired" | "completed" | "refunded" | "partially_refunded";
-export type PaymentStatus = "pending" | "paid" | "failed" | "refund_pending" | "refund_failed" | "refunded" | "partially_refunded";
+export type PaymentStatus = "pending" | "paid" | "failed" | "refund_pending" | "refund_failed" | "refund_escalated" | "refunded" | "partially_refunded";
+export type BookingTimelineEventType = "booking_created" | "payment_confirmed" | "payment_failed" | "booking_completed" | "booking_cancelled" | "refund_initiated" | "refund_failed" | "refund_escalated" | "refund_completed" | "refund_verified";
+export interface BookingTimelineEventDTO {
+    type: BookingTimelineEventType;
+    description: string;
+    occurredAt: string;
+    actor?: "system" | "customer" | "owner" | "admin";
+    attempt?: number;
+}
 export interface BookingSlotDTO {
     startTime: string;
     endTime: string;
@@ -39,7 +47,9 @@ export interface BookingDTO {
         lastCheckedAt?: string;
         completedAt?: string;
         failureReason?: string;
+        attemptCount: number;
     };
+    timeline: BookingTimelineEventDTO[];
     cancellation?: {
         actor: "customer" | "owner";
         reason?: string;

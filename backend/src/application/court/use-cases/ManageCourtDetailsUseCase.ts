@@ -116,7 +116,7 @@ export class ManageCourtDetailsUseCase implements IManageCourtDetailsUseCase {
     }
     const occupied =
       (await this.bookings.occupiedStarts(court.id, [date], new Date())).get(date) ??
-      new Set<string>();
+      new Map<string, 'held' | 'confirmed'>();
     if (
       occupied.size > 0 &&
       (isClosed || blockedSlots.some((slot) => occupied.has(slot.startTime)))

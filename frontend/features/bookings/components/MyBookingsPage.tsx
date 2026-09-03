@@ -37,7 +37,7 @@ export function MyBookingsPage() {
         if (filter === 'cancelled')
           return booking.status.includes('cancelled') || booking.status.includes('refunded');
         if (filter === 'completed') return booking.status === 'completed';
-        return booking.status === 'confirmed' || booking.status === 'pending_payment';
+        return booking.status === 'confirmed';
       }),
     [filter, items],
   );
