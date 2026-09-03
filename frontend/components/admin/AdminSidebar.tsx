@@ -9,6 +9,7 @@ import {
   Trophy,
   Sparkles,
   Percent,
+  ReceiptText,
   X,
   type LucideIcon,
 } from 'lucide-react';
@@ -26,6 +27,7 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { label: 'Amenities', href: '/admin/amenities', icon: Sparkles },
   { label: 'Banners', href: '/admin/banners', icon: Images },
   { label: 'Commission', href: '/admin/commission', icon: Percent },
+  { label: 'Refunds', href: '/admin/refunds', icon: ReceiptText },
   { label: 'Turf Applications', href: '/admin/turf-owner-applications', icon: FileCheck },
 ];
 

@@ -1,5 +1,5 @@
 import mongoose, { model, Schema, type Document, type Model } from 'mongoose';
-import type { BookingStatus, PaymentStatus } from '@turfhood/shared';
+import type { BookingStatus, BookingTimelineEventType, PaymentStatus } from '@turfhood/shared';
 
 export interface BookingDocument extends Document {
   reference: string;
@@ -35,7 +35,15 @@ export interface BookingDocument extends Document {
     lastCheckedAt?: Date;
     completedAt?: Date;
     failureReason?: string;
+    attemptCount: number;
   };
+  timeline: Array<{
+    type: BookingTimelineEventType;
+    description: string;
+    occurredAt: Date;
+    actor?: 'system' | 'customer' | 'owner' | 'admin';
+    attempt?: number;
+  }>;
   confirmedAt?: Date;
   cancellation?: {
     actor: 'customer' | 'owner';
@@ -95,6 +103,7 @@ const schema = new Schema<BookingDocument>(
         'failed',
         'refund_pending',
         'refund_failed',
+        'refund_escalated',
         'refunded',
         'partially_refunded',
       ],
@@ -111,7 +120,18 @@ const schema = new Schema<BookingDocument>(
       lastCheckedAt: Date,
       completedAt: Date,
       failureReason: String,
+      attemptCount: { type: Number, default: 0, min: 0 },
     },
+    timeline: [
+      {
+        _id: false,
+        type: { type: String, required: true },
+        description: { type: String, required: true },
+        occurredAt: { type: Date, required: true },
+        actor: { type: String, enum: ['system', 'customer', 'owner', 'admin'] },
+        attempt: Number,
+      },
+    ],
     confirmedAt: Date,
     cancellation: { type: cancellationSchema, default: undefined },
     cancellationPolicy: {

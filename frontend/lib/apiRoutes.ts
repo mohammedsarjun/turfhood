@@ -28,6 +28,8 @@ export const API_ROUTES = {
     me: '/admin/me',
     refresh: '/admin/refresh',
     commission: '/admin/commission',
+    escalatedRefunds: '/admin/refunds/escalated',
+    verifyRefund: (id: string) => `/admin/refunds/${id}/verify`,
   },
   sports: {
     base: '/sports',
@@ -63,6 +65,7 @@ export const API_ROUTES = {
     details: (id: string) => `/bookings/${id}`,
     cancel: (id: string) => `/bookings/${id}/cancel`,
     retry: (id: string) => `/bookings/${id}/retry`,
+    abandon: (id: string) => `/bookings/${id}/abandon`,
     owner: (turfId: string) => `/turf-portal/${turfId}/bookings`,
     ownerCancel: (turfId: string, id: string) => `/turf-portal/${turfId}/bookings/${id}/cancel`,
   },

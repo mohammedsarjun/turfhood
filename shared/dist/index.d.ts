@@ -32,6 +32,6 @@ export { createCourtSchema, pricingRuleSchema, getOverlappingPricingBandIndexes,
 export { ALLOWED_SLOT_DURATIONS, SLOT_DURATION_ERROR_MESSAGE, RAILWAY_TIME_PATTERN, } from "./court/court.constants.js";
 export { updateCommissionSchema } from "./commission/commission.dto.js";
 export type { CommissionSettingDTO, UpdateCommissionRequest, } from "./commission/commission.dto.js";
-export type { BookingStatus, PaymentStatus, BookingSlotDTO, BookingDTO, CreateReservationRequest, CreateReservationResponse, CancelBookingRequest, BookingListResponse, } from "./booking/booking.dto.js";
+export type { BookingStatus, PaymentStatus, BookingTimelineEventType, BookingTimelineEventDTO, BookingSlotDTO, BookingDTO, CreateReservationRequest, CreateReservationResponse, CancelBookingRequest, BookingListResponse, } from "./booking/booking.dto.js";
 export type { ReviewDTO, CreateReviewRequest, ReviewSummaryDTO, ReviewListResponse, } from "./review/review.dto.js";
 export type { FavoriteIdsResponse, FavoriteTurfListResponse } from "./favorite/favorite.dto.js";

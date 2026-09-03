@@ -26,6 +26,7 @@ import type { IManageBookingsUseCase } from './IManageBookingsUseCase.js';
 import { calculateCustomerRefundPaise } from '@domain/booking/services/BookingPolicy';
 
 const HOLD_MINUTES = 10;
+const MAX_REFUND_ATTEMPTS = 3;
 const playTime = (date: string, time: string) => new Date(`${date}T${time}:00+05:30`);
 const indiaDate = (date: Date) =>
   new Intl.DateTimeFormat('en-CA', {
@@ -134,6 +135,14 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
       currency: 'INR',
       status: 'pending_payment',
       paymentStatus: 'pending',
+      timeline: [
+        {
+          type: 'booking_created',
+          description: 'Booking created and payment reservation started.',
+          occurredAt: new Date().toISOString(),
+          actor: 'customer',
+        },
+      ],
       cancellationPolicy: {
         graceMinutes: 10,
         fullRefundBeforeHours: 24,
@@ -173,6 +182,11 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
     const result = await this.bookings.confirm(booking.id, paymentId);
     if (!result) throw new BookingNotFoundError();
     if (result.newlyConfirmed) {
+      await this.bookings.appendTimeline(booking.id, {
+        type: 'payment_confirmed',
+        description: 'Payment confirmed and booking secured.',
+        actor: 'system',
+      });
       try {
         await this.emails.sendBookingConfirmationEmail({
           to: result.booking.customerEmail,
@@ -234,17 +248,41 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
     const refundToken = refundPaise ? `refund-${booking.id.slice(-16)}` : undefined;
     const cancelled = await this.bookings.cancel(id, 'customer', reason, refundPaise, refundToken);
     if (!cancelled) throw new BookingActionError('Booking can no longer be cancelled.');
+    const minutesAfterConfirmation = Math.max(
+      0,
+      Math.floor((Date.now() - new Date(booking.confirmedAt).getTime()) / 60_000),
+    );
+    const refundPercent = Math.round((refundPaise / booking.finalAmountPaise) * 100);
+    const withinGrace = Date.now() - new Date(booking.confirmedAt).getTime() <= 10 * 60_000;
+    const hoursBeforePlay =
+      (playTime(booking.bookingDate, booking.slots[0]!.startTime).getTime() - Date.now()) /
+      (60 * 60_000);
+    const policyReason = withinGrace
+      ? 'cancelled within the 10-minute grace period'
+      : hoursBeforePlay >= 24
+        ? 'cancelled at least 24 hours before play'
+        : hoursBeforePlay >= 6
+          ? 'cancelled between 6 and 24 hours before play'
+          : 'cancelled less than 6 hours before play';
+    await this.bookings.appendTimeline(cancelled.id, {
+      type: 'booking_cancelled',
+      description: refundPaise
+        ? `Booking ${policyReason} (${minutesAfterConfirmation} minute(s) after confirmation); ${refundPercent}% refund applies.`
+        : `Booking ${policyReason}; cancellation policy provides no refund.`,
+      actor: 'customer',
+    });
     if (refundPaise && booking.paymentId) {
       try {
         return await this.initiateRefund(cancelled, refundPaise);
       } catch (error) {
-        await this.bookings.markRefundChecked(
+        await this.bookings.recordRefundFailure(
           cancelled.id,
           error instanceof Error ? error.message : 'Refund initiation failed.',
+          MAX_REFUND_ATTEMPTS,
         );
       }
     }
-    return cancelled;
+    return (await this.bookings.findById(cancelled.id)) ?? cancelled;
   }
   async listForOwner(ownerId: string, portalTurfId: string, page: number, limit: number) {
     await this.bookings.completePast(new Date());
@@ -273,22 +311,27 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
       `refund-${booking.id.slice(-16)}`,
     );
     if (!cancelled) throw new BookingActionError('Booking can no longer be cancelled.');
+    await this.bookings.appendTimeline(cancelled.id, {
+      type: 'booking_cancelled',
+      description: 'Turf owner cancelled the booking; 100% refund applies.',
+      actor: 'owner',
+    });
     if (booking.paymentId) {
       try {
         return await this.initiateRefund(cancelled, booking.finalAmountPaise);
       } catch (error) {
-        await this.bookings.markRefundChecked(
+        await this.bookings.recordRefundFailure(
           cancelled.id,
           error instanceof Error ? error.message : 'Refund initiation failed.',
+          MAX_REFUND_ATTEMPTS,
         );
       }
     }
-    return cancelled;
+    return (await this.bookings.findById(cancelled.id)) ?? cancelled;
   }
 
   async reconcileRefunds(limit = 50): Promise<number> {
     const pending = await this.bookings.listPendingRefunds(limit);
-    console.log(pending)
     let completed = 0;
     for (const pendingBooking of pending) {
       try {
@@ -310,9 +353,10 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
               if (existing.status === 'success') {
                 if (await this.bookings.markRefundCompleted(booking.id)) completed += 1;
               } else if (existing.status === 'failed') {
-                await this.bookings.markRefundFailed(
+                await this.bookings.recordRefundFailure(
                   booking.id,
                   existing.reason ?? `PayU reported ${existing.providerStatus}.`,
+                  MAX_REFUND_ATTEMPTS,
                 );
               } else {
                 await this.bookings.markRefundChecked(booking.id);
@@ -328,30 +372,82 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
         if (result.status === 'success') {
           if (await this.bookings.markRefundCompleted(booking.id)) completed += 1;
         } else if (result.status === 'failed') {
-          await this.bookings.markRefundFailed(
+          await this.bookings.recordRefundFailure(
             booking.id,
             result.reason ?? `PayU reported ${result.providerStatus}.`,
+            MAX_REFUND_ATTEMPTS,
           );
         } else {
           await this.bookings.markRefundChecked(booking.id);
         }
       } catch (error) {
-        await this.bookings.markRefundChecked(
-          pendingBooking.id,
-          error instanceof Error ? error.message : 'Refund reconciliation failed.',
-        );
+        const reason = error instanceof Error ? error.message : 'Refund reconciliation failed.';
+        if (pendingBooking.refund?.payuRequestId)
+          await this.bookings.markRefundChecked(pendingBooking.id, reason);
+        else
+          await this.bookings.recordRefundFailure(
+            pendingBooking.id,
+            reason,
+            MAX_REFUND_ATTEMPTS,
+          );
       }
     }
     return completed;
+  }
+  async abandonCheckout(userId: string, bookingId: string): Promise<void> {
+    await this.bookings.abandonPending(bookingId, userId);
+  }
+
+  async listEscalatedRefunds(page: number, limit: number): Promise<BookingListResponse> {
+    const result = await this.bookings.listEscalatedRefunds(page, limit);
+    return {
+      items: result.items,
+      pagination: {
+        page,
+        limit,
+        total: result.total,
+        totalPages: Math.max(1, Math.ceil(result.total / limit)),
+      },
+    };
+  }
+
+  async verifyManualRefund(bookingId: string, payuRequestId: string): Promise<BookingDTO> {
+    const booking = await this.bookings.findById(bookingId);
+    if (!booking || booking.paymentStatus !== 'refund_escalated') throw new BookingNotFoundError();
+    if (!payuRequestId.trim()) throw new BookingActionError('PayU refund request ID is required.');
+    const result = await this.payments.checkRefund(payuRequestId.trim());
+    if (result.status === 'failed')
+      throw new BookingActionError(result.reason ?? 'PayU reports that the manual refund failed.');
+    const pending = await this.bookings.markManualRefundPending(booking.id, payuRequestId.trim());
+    if (!pending) throw new BookingActionError('Refund can no longer be verified.');
+    if (result.status === 'success') {
+      const completed = await this.bookings.markRefundCompleted(booking.id);
+      if (!completed) throw new BookingActionError('Refund status could not be updated.');
+      await this.bookings.appendTimeline(booking.id, {
+        type: 'refund_verified',
+        description: 'Admin verified the manual PayU refund successfully.',
+        actor: 'admin',
+      });
+      return (await this.bookings.findById(booking.id)) ?? completed;
+    }
+    return pending;
   }
 
   private async initiateRefund(booking: BookingDTO, amountPaise: number): Promise<BookingDTO> {
     if (!booking.paymentId || !booking.refund?.requestToken)
       throw new BookingActionError('Refund details are incomplete.');
+    const attempted = await this.bookings.recordRefundAttempt(booking.id);
+    if (!attempted) throw new BookingActionError('Refund retry limit reached.');
+    await this.bookings.appendTimeline(booking.id, {
+      type: 'refund_initiated',
+      description: `Refund attempt ${attempted.refund?.attemptCount ?? 1} initiated for INR ${(amountPaise / 100).toFixed(2)}.`,
+      actor: 'system',
+      attempt: attempted.refund?.attemptCount ?? 1,
+    });
     const result = await this.payments.refund(
       booking.paymentId,
       amountPaise,
-      booking.refund.requestToken,
+      attempted.refund?.requestToken ?? booking.refund.requestToken,
     );
     return (await this.bookings.markRefundRequested(booking.id, result.requestId)) ?? booking;
   }
