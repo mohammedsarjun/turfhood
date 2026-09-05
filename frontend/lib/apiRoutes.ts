@@ -84,11 +84,6 @@ export const API_ROUTES = {
     ids: '/favorites/ids',
     turf: (turfId: string) => `/favorites/${turfId}`,
   },
-  openSessions: {
-    base: '/open-sessions',
-    details: (id: string) => `/open-sessions/${id}`,
-    join: (id: string) => `/open-sessions/${id}/join`,
-  },
   turfs: {
     nearby: '/turfs/nearby',
     discover: '/turfs/discover',
