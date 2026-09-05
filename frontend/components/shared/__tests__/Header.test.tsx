@@ -27,6 +27,7 @@ describe('Header', () => {
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: /home/i })).not.toHaveLength(0);
     expect(screen.getAllByRole('link', { name: /find turfs/i })).not.toHaveLength(0);
+    expect(screen.getAllByRole('link', { name: /open sessions/i })).not.toHaveLength(0);
     expect(screen.getByRole('button', { name: /toggle navigation/i })).toBeInTheDocument();
   });
 

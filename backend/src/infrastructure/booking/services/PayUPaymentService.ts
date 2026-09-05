@@ -3,6 +3,7 @@ import { injectable } from 'tsyringe';
 import type { BookingDTO } from '@turfhood/shared';
 import type {
   IPaymentService,
+  OpenSessionPaymentInput,
   PaymentCallback,
   PaymentForm,
   RefundStatusResult,
@@ -58,6 +59,29 @@ export class PayUPaymentService implements IPaymentService {
     };
     fields.hash = sha512(
       `${fields.key}|${transactionId}|${amount}|${productinfo}|${fields.firstname}|${fields.email}|${fields.udf1}|${fields.udf2}|${fields.udf3}|${fields.udf4}|${fields.udf5}||||||${env.PAYU_MERCHANT_SALT}`,
+    );
+    return { action: env.PAYU_PAYMENT_URL, fields };
+  }
+  createOpenSessionForm(input: OpenSessionPaymentInput): PaymentForm {
+    const amount = (input.amountPaise / 100).toFixed(2);
+    const fields: Record<string, string> = {
+      key: env.PAYU_MERCHANT_KEY,
+      txnid: input.transactionId,
+      amount,
+      productinfo: input.description,
+      firstname: input.customerName,
+      email: input.customerEmail,
+      phone: '',
+      surl: `${env.BACKEND_PUBLIC_URL}/api/open-sessions/payu/success`,
+      furl: `${env.BACKEND_PUBLIC_URL}/api/open-sessions/payu/failure`,
+      udf1: input.sessionId,
+      udf2: '',
+      udf3: '',
+      udf4: '',
+      udf5: '',
+    };
+    fields.hash = sha512(
+      `${fields.key}|${input.transactionId}|${amount}|${fields.productinfo}|${fields.firstname}|${fields.email}|${fields.udf1}|${fields.udf2}|${fields.udf3}|${fields.udf4}|${fields.udf5}||||||${env.PAYU_MERCHANT_SALT}`,
     );
     return { action: env.PAYU_PAYMENT_URL, fields };
   }

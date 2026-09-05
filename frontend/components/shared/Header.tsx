@@ -88,7 +88,10 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
         <Link href="/turfs" className="text-sm font-medium text-foreground hover:text-primary">
           Find Turfs
         </Link>
-        <Link href="/open-sessions" className="text-sm font-medium text-foreground hover:text-primary">
+        <Link
+          href="/open-sessions"
+          className="text-sm font-medium text-foreground hover:text-primary"
+        >
           Open Sessions
         </Link>
       </nav>

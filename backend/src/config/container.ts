@@ -390,7 +390,11 @@ container.register<IFavoriteRepository>(FAVORITE_TOKENS.Repository, {
 container.register<IManageFavoritesUseCase>(FAVORITE_TOKENS.UseCase, {
   useClass: ManageFavoritesUseCase,
 });
-container.register<IOpenSessionRepository>(OPEN_SESSION_TOKENS.Repository, { useClass: OpenSessionRepository });
-container.register<IManageOpenSessionsUseCase>(OPEN_SESSION_TOKENS.UseCase, { useClass: ManageOpenSessionsUseCase });
+container.register<IOpenSessionRepository>(OPEN_SESSION_TOKENS.Repository, {
+  useClass: OpenSessionRepository,
+});
+container.register<IManageOpenSessionsUseCase>(OPEN_SESSION_TOKENS.UseCase, {
+  useClass: ManageOpenSessionsUseCase,
+});
 
 export { container };

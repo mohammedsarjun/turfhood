@@ -3,6 +3,14 @@ export interface PaymentForm {
   action: string;
   fields: Record<string, string>;
 }
+export interface OpenSessionPaymentInput {
+  transactionId: string;
+  sessionId: string;
+  amountPaise: number;
+  customerName: string;
+  customerEmail: string;
+  description: string;
+}
 export interface RefundRequestResult {
   requestId: string;
 }
@@ -29,14 +37,7 @@ export interface PaymentCallback {
 }
 export interface IPaymentService {
   createForm(booking: BookingDTO, transactionId: string): PaymentForm;
-  createOpenSessionForm(input: {
-    transactionId: string;
-    sessionId: string;
-    amountPaise: number;
-    customerName: string;
-    customerEmail: string;
-    description: string;
-  }): PaymentForm;
+  createOpenSessionForm(input: OpenSessionPaymentInput): PaymentForm;
   verifyCallback(callback: PaymentCallback): boolean;
   refund(
     paymentId: string,
