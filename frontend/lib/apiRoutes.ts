@@ -69,6 +69,11 @@ export const API_ROUTES = {
     owner: (turfId: string) => `/turf-portal/${turfId}/bookings`,
     ownerCancel: (turfId: string, id: string) => `/turf-portal/${turfId}/bookings/${id}/cancel`,
   },
+  openSessions: {
+    base: '/open-sessions',
+    details: (id: string) => `/open-sessions/${id}`,
+    join: (id: string) => `/open-sessions/${id}/join`,
+  },
   reviews: {
     forBooking: (bookingId: string) => `/bookings/${bookingId}/review`,
     forTurf: (turfId: string) => `/turfs/${turfId}/reviews`,
