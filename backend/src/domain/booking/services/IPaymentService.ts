@@ -29,6 +29,14 @@ export interface PaymentCallback {
 }
 export interface IPaymentService {
   createForm(booking: BookingDTO, transactionId: string): PaymentForm;
+  createOpenSessionForm(input: {
+    transactionId: string;
+    sessionId: string;
+    amountPaise: number;
+    customerName: string;
+    customerEmail: string;
+    description: string;
+  }): PaymentForm;
   verifyCallback(callback: PaymentCallback): boolean;
   refund(
     paymentId: string,

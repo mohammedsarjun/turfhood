@@ -192,6 +192,17 @@ export class GetPublicCourtDetailsUseCase implements IGetPublicCourtDetailsUseCa
         allowOpenSessions: court.allowOpenSessions,
         ...(prices.length ? { startingPricePerSlot: Math.min(...prices) } : {}),
       },
+      ...(court.allowOpenSessions
+        ? {
+            openSessionPolicy: {
+              minimumPlayers: court.minPlayersForOpenSession,
+              sportOptions: court.sportTypeIds.flatMap((id) => {
+                const name = sportNames.get(id);
+                return name ? [{ id, name }] : [];
+              }),
+            },
+          }
+        : {}),
       dates,
     };
   }

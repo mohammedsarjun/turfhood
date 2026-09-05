@@ -12,6 +12,31 @@ import { env } from '@config/env';
 const sha512 = (value: string) => createHash('sha512').update(value).digest('hex');
 @injectable()
 export class PayUPaymentService implements IPaymentService {
+  createOpenSessionForm(input: {
+    transactionId: string;
+    sessionId: string;
+    amountPaise: number;
+    customerName: string;
+    customerEmail: string;
+    description: string;
+  }): PaymentForm {
+    const fields: Record<string, string> = {
+      key: env.PAYU_MERCHANT_KEY,
+      txnid: input.transactionId,
+      amount: (input.amountPaise / 100).toFixed(2),
+      productinfo: input.description,
+      firstname: input.customerName,
+      email: input.customerEmail,
+      surl: `${env.BACKEND_PUBLIC_URL}/api/open-sessions/payu/success`,
+      furl: `${env.BACKEND_PUBLIC_URL}/api/open-sessions/payu/failure`,
+      udf1: input.sessionId,
+      udf2: 'open-session',
+    };
+    fields.hash = sha512(
+      `${fields.key}|${fields.txnid}|${fields.amount}|${fields.productinfo}|${fields.firstname}|${fields.email}|${fields.udf1}|${fields.udf2}|||||||||${env.PAYU_MERCHANT_SALT}`,
+    );
+    return { action: env.PAYU_PAYMENT_URL, fields };
+  }
   createForm(booking: BookingDTO, transactionId: string): PaymentForm {
     const amount = (booking.finalAmountPaise / 100).toFixed(2);
     const productinfo = `Turfhood booking ${booking.reference}`;

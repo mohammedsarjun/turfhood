@@ -84,5 +84,12 @@ export interface PublicCourtDetailsResponse {
     court: PublicCourtCardDTO & {
         allowOpenSessions: boolean;
     };
+    openSessionPolicy?: {
+        minimumPlayers: number;
+        sportOptions: Array<{
+            id: string;
+            name: string;
+        }>;
+    };
     dates: PublicCourtSlotDateDTO[];
 }

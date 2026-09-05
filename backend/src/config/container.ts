@@ -169,6 +169,11 @@ import { FAVORITE_TOKENS } from '@domain/favorite/tokens';
 import { FavoriteRepository } from '@infrastructure/favorite/repositories/FavoriteRepository';
 import type { IManageFavoritesUseCase } from '@application/favorite/use-cases/IManageFavoritesUseCase';
 import { ManageFavoritesUseCase } from '@application/favorite/use-cases/ManageFavoritesUseCase';
+import type { IOpenSessionRepository } from '@domain/openSession/repositories/IOpenSessionRepository';
+import { OPEN_SESSION_TOKENS } from '@domain/openSession/tokens';
+import { OpenSessionRepository } from '@infrastructure/openSession/repositories/OpenSessionRepository';
+import type { IManageOpenSessionsUseCase } from '@application/openSession/use-cases/IManageOpenSessionsUseCase';
+import { ManageOpenSessionsUseCase } from '@application/openSession/use-cases/ManageOpenSessionsUseCase';
 
 /** Composition root — wires domain interfaces to their infrastructure implementations. */
 container.register<IUserRepository>(USER_TOKENS.UserRepository, { useClass: UserRepository });
@@ -385,5 +390,7 @@ container.register<IFavoriteRepository>(FAVORITE_TOKENS.Repository, {
 container.register<IManageFavoritesUseCase>(FAVORITE_TOKENS.UseCase, {
   useClass: ManageFavoritesUseCase,
 });
+container.register<IOpenSessionRepository>(OPEN_SESSION_TOKENS.Repository, { useClass: OpenSessionRepository });
+container.register<IManageOpenSessionsUseCase>(OPEN_SESSION_TOKENS.UseCase, { useClass: ManageOpenSessionsUseCase });
 
 export { container };

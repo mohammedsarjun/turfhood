@@ -20,6 +20,7 @@ import reviewRoutes from '@presentation/review/routes/review.routes';
 import favoriteRoutes from '@presentation/favorite/routes/favorite.routes';
 import { errorHandler } from '@shared/middlewares/errorHandler';
 import { env } from '@config/env';
+import openSessionRoutes from '@presentation/openSession/routes/openSession.routes';
 
 const app: Express = express();
 
@@ -34,6 +35,7 @@ app.use('/api/password-reset', passwordResetRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/admin/commission', commissionRoutes);
 app.use('/api/bookings', bookingRoutes);
+app.use('/api/open-sessions', openSessionRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/turf-portal/:turfId/bookings', ownerBookingRoutes);
 app.use('/api', reviewRoutes);
