@@ -37,9 +37,19 @@ jobs:
   unit-and-integration-check:
     name: Unit and Integration Tests
     runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:8
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 }).ok'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
       NODE_ENV: test
-      MONGODB_URI: ${{ secrets.MONGO_URI }}
+      MONGODB_URI: mongodb://localhost:27017/turfhood_test
       JWT_SECRET: test-only-jwt-secret
       REFRESH_TOKEN_SECRET: test-only-refresh-secret
       RESEND_API_KEY: test-placeholder
