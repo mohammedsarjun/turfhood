@@ -16,9 +16,7 @@ export async function createBanner(
   data.append('title', title);
   data.append('description', description);
   data.append('image', image);
-  const response = await axiosInstance.post<{ item: BannerDTO }>(API_ROUTES.banners.base, data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
+  const response = await axiosInstance.post<{ item: BannerDTO }>(API_ROUTES.banners.base, data);
   return response.data.item;
 }
 

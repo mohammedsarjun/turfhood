@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
 import type { LocationOption } from '@turfhood/shared';
-import { Button, Input, Select } from '@/components/ui';
+import { Button, Select } from '@/components/ui';
 import { listCities, listStates } from '@/features/turf-onboarding/actions/locationApi';
 import { reverseGeocodeLocation } from '@/features/turf-onboarding/lib/searchLocation';
 
@@ -14,11 +14,22 @@ export interface HomeLocationSelection {
   city: LocationOption;
 }
 
-export function CitySearch({ onSearch }: { onSearch: (location: HomeLocationSelection) => void }) {
+interface CitySearchProps {
+  onSearch: (location: HomeLocationSelection) => Promise<void>;
+}
+
+const normalizeLocationName = (name: string) =>
+  name
+    .normalize('NFKD')
+    .toLowerCase()
+    .replace(/\b(district|division)\b/g, '')
+    .replace(/[^a-z0-9]/g, '');
+
+export function CitySearch({ onSearch }: CitySearchProps) {
   const [states, setStates] = useState<LocationOption[]>([]);
   const [cities, setCities] = useState<LocationOption[]>([]);
   const [stateCode, setStateCode] = useState('');
-  const [cityName, setCityName] = useState('');
+  const [cityCode, setCityCode] = useState('');
 
   useEffect(() => {
     let cancelled = false;
@@ -27,18 +38,22 @@ export function CitySearch({ onSearch }: { onSearch: (location: HomeLocationSele
       setStates(response.items);
       const saved = window.localStorage.getItem(SAVED_LOCATION_KEY);
       if (saved) {
-        const location = JSON.parse(saved) as HomeLocationSelection;
-        const state = response.items.find((item) => item.code === location.state.code);
-        if (state) {
-          const cityResponse = await listCities('IN', state.code);
-          const city = cityResponse.items.find((item) => item.code === location.city.code);
-          if (!cancelled && city) {
-            setStateCode(state.code);
-            setCities(cityResponse.items);
-            setCityName(city.name);
-            onSearch({ state, city });
-            return;
+        try {
+          const location = JSON.parse(saved) as HomeLocationSelection;
+          const state = response.items.find((item) => item.code === location.state.code);
+          if (state) {
+            const cityResponse = await listCities('IN', state.code);
+            const city = cityResponse.items.find((item) => item.code === location.city.code);
+            if (!cancelled && city) {
+              setStateCode(state.code);
+              setCities(cityResponse.items);
+              setCityCode(city.code);
+              await onSearch({ state, city });
+              return;
+            }
           }
+        } catch {
+          window.localStorage.removeItem(SAVED_LOCATION_KEY);
         }
       }
       const apiKey = process.env.NEXT_PUBLIC_OLA_MAPS_API_KEY;
@@ -55,14 +70,15 @@ export function CitySearch({ onSearch }: { onSearch: (location: HomeLocationSele
           );
           if (!state) return;
           const cityResponse = await listCities('IN', state.code);
-          const city = cityResponse.items.find(
-            (item) => item.name.toLowerCase() === address.city.toLowerCase(),
+          const candidateNames = new Set(address.cityCandidates.map(normalizeLocationName));
+          const city = cityResponse.items.find((item) =>
+            candidateNames.has(normalizeLocationName(item.name)),
           );
           if (!city || cancelled) return;
           setStateCode(state.code);
           setCities(cityResponse.items);
-          setCityName(city.name);
-          onSearch({ state, city });
+          setCityCode(city.code);
+          await onSearch({ state, city });
         });
       });
     });
@@ -73,20 +89,20 @@ export function CitySearch({ onSearch }: { onSearch: (location: HomeLocationSele
 
   const changeState = (code: string) => {
     setStateCode(code);
-    setCityName('');
+    setCityCode('');
     setCities([]);
     if (code) void listCities('IN', code).then((response) => setCities(response.items));
   };
   const selectedCity = useMemo(
-    () => cities.find((city) => city.name.toLowerCase() === cityName.trim().toLowerCase()),
-    [cities, cityName],
+    () => cities.find((city) => city.code === cityCode),
+    [cities, cityCode],
   );
   const selectedState = states.find((state) => state.code === stateCode);
-  const search = () => {
+  const search = async () => {
     if (!selectedState || !selectedCity) return;
     const location = { state: selectedState, city: selectedCity };
     window.localStorage.setItem(SAVED_LOCATION_KEY, JSON.stringify(location));
-    onSearch(location);
+    await onSearch(location);
   };
 
   return (
@@ -100,22 +116,22 @@ export function CitySearch({ onSearch }: { onSearch: (location: HomeLocationSele
           ...states.map((state) => ({ label: state.name, value: state.code })),
         ]}
       />
-      <div className="w-full">
-        <Input
-          aria-label="Search city"
-          list="indian-city-options"
-          value={cityName}
-          onChange={(event) => setCityName(event.target.value)}
-          placeholder="Search city"
-          disabled={!stateCode}
-        />
-        <datalist id="indian-city-options">
-          {cities.map((city) => (
-            <option key={city.code} value={city.name} />
-          ))}
-        </datalist>
-      </div>
-      <Button type="button" disabled={!selectedCity} onClick={search} className="h-11">
+      <Select
+        aria-label="District"
+        value={cityCode}
+        onChange={(event) => setCityCode(event.target.value)}
+        disabled={!stateCode || !cities.length}
+        options={[
+          { label: stateCode ? 'Select district' : 'Select state first', value: '' },
+          ...cities.map((city) => ({ label: city.name, value: city.code })),
+        ]}
+      />
+      <Button
+        type="button"
+        disabled={!selectedCity}
+        onClick={() => void search()}
+        className="h-11"
+      >
         <Search className="h-4 w-4" />
         Search
       </Button>
