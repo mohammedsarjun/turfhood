@@ -1,13 +1,30 @@
-import type { CreateOpenSessionRequest, OpenSessionDTO, OpenSessionFilters, OpenSessionListResponse, OpenSessionPaymentResponse } from '@turfhood/shared';
+import type {
+  CreateOpenSessionRequest,
+  OpenSessionDTO,
+  OpenSessionFilters,
+  OpenSessionListResponse,
+  OpenSessionPaymentResponse,
+} from '@turfhood/shared';
 import { axiosInstance } from '@/lib/axios';
 import { API_ROUTES } from '@/lib/apiRoutes';
 
 export async function createOpenSession(input: CreateOpenSessionRequest) {
-  const response = await axiosInstance.post<OpenSessionPaymentResponse>(API_ROUTES.openSessions.base, input);
+  const response = await axiosInstance.post<OpenSessionPaymentResponse>(
+    API_ROUTES.openSessions.base,
+    input,
+  );
   return response.data;
 }
 export async function listOpenSessions(filters: OpenSessionFilters) {
-  const response = await axiosInstance.get<OpenSessionListResponse>(API_ROUTES.openSessions.base, { params: filters });
+  const response = await axiosInstance.get<OpenSessionListResponse>(API_ROUTES.openSessions.base, {
+    params: filters,
+  });
+  return response.data;
+}
+export async function listMyOpenSessions(page = 1) {
+  const response = await axiosInstance.get<OpenSessionListResponse>(API_ROUTES.openSessions.mine, {
+    params: { page, limit: 10 },
+  });
   return response.data;
 }
 export async function getOpenSession(id: string) {
@@ -15,6 +32,8 @@ export async function getOpenSession(id: string) {
   return response.data;
 }
 export async function joinOpenSession(id: string) {
-  const response = await axiosInstance.post<OpenSessionPaymentResponse>(API_ROUTES.openSessions.join(id));
+  const response = await axiosInstance.post<OpenSessionPaymentResponse>(
+    API_ROUTES.openSessions.join(id),
+  );
   return response.data;
 }

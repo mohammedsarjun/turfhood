@@ -107,7 +107,10 @@ export function PublicCourtDetailsPage({ turfId, courtId }: { turfId: string; co
       });
       submitPaymentForm(result.payment);
     } catch (caught) {
-      showToast(caught instanceof ApiError ? caught.message : 'Unable to create open session.', 'error');
+      showToast(
+        caught instanceof ApiError ? caught.message : 'Unable to create open session.',
+        'error',
+      );
       setReserving(false);
     }
   };
@@ -242,7 +245,7 @@ export function PublicCourtDetailsPage({ turfId, courtId }: { turfId: string; co
                                       ? 'Booked'
                                       : slot.unavailableReason === 'reserved'
                                         ? 'Temporarily held'
-                                      : slot.unavailableReason}
+                                        : slot.unavailableReason}
                                   </span>
                                 )}
                               </button>
@@ -327,20 +330,70 @@ export function PublicCourtDetailsPage({ turfId, courtId }: { turfId: string; co
                 )}
               </div>
             </Modal>
-            <Modal open={openSessionOpen} onClose={() => setOpenSessionOpen(false)} title="Create open session">
-              <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">You pay one equal share now. The slot must be at least 48 hours away and every place must be filled before the 48-hour cutoff.</p>
-                <label className="block text-sm font-medium">Sport
-                  <Select value={sessionSportId} onChange={(event) => setSessionSportId(event.target.value)} options={(details.openSessionPolicy?.sportOptions ?? []).map((sport) => ({ label: sport.name, value: sport.id }))} />
-                </label>
-                <label className="block text-sm font-medium">Maximum players
-                  <Input type="number" min={details.openSessionPolicy?.minimumPlayers ?? 1} max={details.court.capacity} value={maximumPlayers} onChange={(event) => setMaximumPlayers(event.target.value)} />
-                </label>
+            <Modal
+              open={openSessionOpen}
+              onClose={() => setOpenSessionOpen(false)}
+              title="Create open session"
+              className="max-w-lg rounded-2xl p-5 sm:p-6"
+            >
+              <div className="space-y-5">
+                <p className="rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm leading-6 text-muted-foreground">
+                  You pay one equal share now. The slot must be at least 48 hours away and every
+                  place must be filled before the cutoff.
+                </p>
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="open-session-sport" className="mb-2 block text-sm font-medium">
+                      Sport
+                    </label>
+                    <Select
+                      id="open-session-sport"
+                      value={sessionSportId}
+                      onChange={(event) => setSessionSportId(event.target.value)}
+                      options={(details.openSessionPolicy?.sportOptions ?? []).map((sport) => ({
+                        label: sport.name,
+                        value: sport.id,
+                      }))}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="open-session-players"
+                      className="mb-2 block text-sm font-medium"
+                    >
+                      Maximum players
+                    </label>
+                    <Input
+                      id="open-session-players"
+                      type="number"
+                      min={details.openSessionPolicy?.minimumPlayers ?? 1}
+                      max={details.court.capacity}
+                      value={maximumPlayers}
+                      onChange={(event) => setMaximumPlayers(event.target.value)}
+                    />
+                    <p className="mt-1.5 text-xs text-muted-foreground">
+                      Allowed: {details.openSessionPolicy?.minimumPlayers ?? 1}–
+                      {details.court.capacity} players
+                    </p>
+                  </div>
+                </div>
                 <div className="rounded-lg bg-muted p-4 text-sm">
                   <p>Total court price: ₹{total.toFixed(2)}</p>
-                  <p className="mt-1 font-semibold">Per participant: ₹{maximumPlayers && Number(maximumPlayers) > 0 ? Math.ceil((total * 100) / Number(maximumPlayers)) / 100 : 0}</p>
+                  <p className="mt-1 font-semibold">
+                    Per participant: ₹
+                    {maximumPlayers && Number(maximumPlayers) > 0
+                      ? Math.ceil((total * 100) / Number(maximumPlayers)) / 100
+                      : 0}
+                  </p>
                 </div>
-                <Button className="w-full" loading={reserving} disabled={!sessionSportId || !maximumPlayers} onClick={() => void createSession()}>Pay my share and create</Button>
+                <Button
+                  className="h-12 w-full text-base"
+                  loading={reserving}
+                  disabled={!sessionSportId || !maximumPlayers}
+                  onClick={() => void createSession()}
+                >
+                  Pay my share and create
+                </Button>
               </div>
             </Modal>
           </>

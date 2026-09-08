@@ -1,12 +1,16 @@
 import { Router } from 'express';
 import { container } from 'tsyringe';
 import { authenticate } from '@presentation/shared/middlewares/authenticate';
-import { bookingRateLimiter, paymentCallbackRateLimiter } from '@presentation/shared/middlewares/rateLimiters';
+import {
+  bookingRateLimiter,
+  paymentCallbackRateLimiter,
+} from '@presentation/shared/middlewares/rateLimiters';
 import { OpenSessionController } from '../controllers/OpenSessionController.js';
 
 const router = Router();
 const controller = container.resolve(OpenSessionController);
 router.get('/', controller.list);
+router.get('/mine', authenticate, controller.listMine);
 router.get('/:id', controller.details);
 router.post('/', bookingRateLimiter, authenticate, controller.create);
 router.post('/:id/join', bookingRateLimiter, authenticate, controller.join);

@@ -71,6 +71,7 @@ export const API_ROUTES = {
   },
   openSessions: {
     base: '/open-sessions',
+    mine: '/open-sessions/mine',
     details: (id: string) => `/open-sessions/${id}`,
     join: (id: string) => `/open-sessions/${id}/join`,
   },
