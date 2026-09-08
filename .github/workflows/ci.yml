@@ -51,6 +51,7 @@ jobs:
       CSC_API_KEY: test-placeholder
       ADMIN_EMAIL: admin@test.local
       ADMIN_PASSWORD: test-only-password
+      PAYU_MERCHANT_KEY: test-placeholder
 
     steps:
 
