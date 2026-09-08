@@ -48,32 +48,49 @@ export function UserSessionProvider({ children }: { children: ReactNode }) {
   const clearUser = useCallback(() => setUser(null), [setUser]);
 
   useEffect(() => {
-    const storedUser = window.localStorage.getItem(USER_STORAGE_KEY);
-    if (!storedUser) {
-      setIsHydrated(true);
-      return;
-    }
+    let isActive = true;
 
-    try {
-      const parsedUser: unknown = JSON.parse(storedUser);
-      if (!isPublicUser(parsedUser)) throw new Error('Invalid cached user');
-      setUserState(parsedUser);
-    } catch {
-      window.localStorage.removeItem(USER_STORAGE_KEY);
-      setIsHydrated(true);
-      return;
-    }
-    setIsHydrated(true);
+    async function hydrateSession() {
+      await Promise.resolve();
+      if (!isActive) return;
 
-    // Cached profile data renders immediately; this request only synchronizes UI data.
-    // Route authentication and redirects remain the proxy's responsibility.
-    void getMe()
-      .then(setUser)
-      .catch((error: unknown) => {
-        if (error instanceof ApiError && (error.statusCode === 401 || error.statusCode === 403)) {
+      const storedUser = window.localStorage.getItem(USER_STORAGE_KEY);
+      if (!storedUser) {
+        setIsHydrated(true);
+        return;
+      }
+
+      try {
+        const parsedUser: unknown = JSON.parse(storedUser);
+        if (!isPublicUser(parsedUser)) throw new Error('Invalid cached user');
+        setUserState(parsedUser);
+      } catch {
+        window.localStorage.removeItem(USER_STORAGE_KEY);
+        setIsHydrated(true);
+        return;
+      }
+      setIsHydrated(true);
+
+      // Cached profile data renders immediately; this request only synchronizes UI data.
+      // Route authentication and redirects remain the proxy's responsibility.
+      try {
+        const currentUser = await getMe();
+        if (isActive) setUser(currentUser);
+      } catch (error: unknown) {
+        if (
+          isActive &&
+          error instanceof ApiError &&
+          (error.statusCode === 401 || error.statusCode === 403)
+        ) {
           clearUser();
         }
-      });
+      }
+    }
+
+    void hydrateSession();
+    return () => {
+      isActive = false;
+    };
   }, [clearUser, setUser]);
 
   const value = useMemo(

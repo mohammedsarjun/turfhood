@@ -30,6 +30,7 @@ export const env = {
   ),
   OTP_MAX_ATTEMPTS: Number(process.env.OTP_MAX_ATTEMPTS ?? 5),
   FRONTEND_URL: process.env.FRONTEND_URL ?? 'http://localhost:3000',
+  COOKIE_DOMAIN: process.env.COOKIE_DOMAIN || undefined,
   CLOUDINARY_CLOUD_NAME: requireEnv('CLOUDINARY_CLOUD_NAME'),
   CLOUDINARY_API_KEY: requireEnv('CLOUDINARY_API_KEY'),
   CLOUDINARY_API_SECRET: requireEnv('CLOUDINARY_API_SECRET'),

@@ -10,12 +10,28 @@ export function usePublicCourtDetails(turfId: string, courtId: string) {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    setLoading(true);
-    setError('');
-    void getPublicCourtDetails(turfId, courtId)
-      .then(setDetails)
-      .catch(() => setError('Unable to load court availability.'))
-      .finally(() => setLoading(false));
+    let isActive = true;
+
+    async function loadDetails() {
+      await Promise.resolve();
+      if (!isActive) return;
+      setLoading(true);
+      setError('');
+
+      try {
+        const result = await getPublicCourtDetails(turfId, courtId);
+        if (isActive) setDetails(result);
+      } catch {
+        if (isActive) setError('Unable to load court availability.');
+      } finally {
+        if (isActive) setLoading(false);
+      }
+    }
+
+    void loadDetails();
+    return () => {
+      isActive = false;
+    };
   }, [courtId, turfId]);
 
   return { details, loading, error };

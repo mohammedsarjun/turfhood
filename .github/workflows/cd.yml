@@ -1,0 +1,40 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Azure VM
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd ~/turfhood
+
+            git fetch origin
+            git checkout main
+            git pull origin main
+
+            docker build -f backend/Dockerfile -t turfhood-backend .
+
+            docker stop turfhood-backend || true
+            docker rm turfhood-backend || true
+
+            docker run -d \
+              --name turfhood-backend \
+              --restart unless-stopped \
+              --env-file backend/.env \
+              -p 127.0.0.1:4000:4000 \
+              turfhood-backend
