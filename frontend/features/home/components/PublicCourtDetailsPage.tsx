@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { ArrowLeft, Check, ImageIcon, Users } from 'lucide-react';
 import type { PublicCourtSlotDTO, SlotPeriod } from '@turfhood/shared';
 import { Header } from '@/components/shared';
-import { Button, Modal, Spinner, useToast } from '@/components/ui';
+import { Button, Input, Modal, Select, Spinner, useToast } from '@/components/ui';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { formatTime12Hour } from '@/lib/time';
 import { usePublicCourtDetails } from '../hooks/usePublicCourtDetails';
@@ -16,6 +16,7 @@ import {
   submitPaymentForm,
 } from '@/features/bookings/actions/bookingApi';
 import { ApiError } from '@/types/api/response';
+import { createOpenSession } from '@/features/open-sessions/actions/openSessionApi';
 
 const PERIODS: Array<{ key: SlotPeriod; label: string }> = [
   { key: 'morning', label: 'Morning' },
@@ -31,6 +32,9 @@ export function PublicCourtDetailsPage({ turfId, courtId }: { turfId: string; co
   const [selectedSlots, setSelectedSlots] = useState<Set<string>>(() => new Set());
   const [reserving, setReserving] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
+  const [openSessionOpen, setOpenSessionOpen] = useState(false);
+  const [sessionSportId, setSessionSportId] = useState('');
+  const [maximumPlayers, setMaximumPlayers] = useState('');
   const { showToast } = useToast();
   const dates = details?.dates ?? [];
   const dateAvailability = dates[selectedDate];
@@ -80,6 +84,32 @@ export function PublicCourtDetailsPage({ turfId, courtId }: { turfId: string; co
       }
       showToast(
         caught instanceof ApiError ? caught.message : 'Unable to reserve these slots.',
+        'error',
+      );
+      setReserving(false);
+    }
+  };
+  const createSession = async () => {
+    const slot = selectedForDate[0];
+    if (!dateAvailability || !slot || selectedForDate.length !== 1) {
+      showToast('Select exactly one slot for an open session.', 'error');
+      return;
+    }
+    setReserving(true);
+    try {
+      const result = await createOpenSession({
+        turfId,
+        courtId,
+        sportTypeId: sessionSportId,
+        bookingDate: dateAvailability.date,
+        startTime: slot.startTime,
+        endTime: slot.endTime,
+        maximumPlayers: Number(maximumPlayers),
+      });
+      submitPaymentForm(result.payment);
+    } catch (caught) {
+      showToast(
+        caught instanceof ApiError ? caught.message : 'Unable to create open session.',
         'error',
       );
       setReserving(false);
@@ -219,7 +249,7 @@ export function PublicCourtDetailsPage({ turfId, courtId }: { turfId: string; co
                                       ? 'Booked'
                                       : slot.unavailableReason === 'reserved'
                                         ? 'Temporarily held'
-                                      : slot.unavailableReason}
+                                        : slot.unavailableReason}
                                   </span>
                                 )}
                               </button>
@@ -286,6 +316,87 @@ export function PublicCourtDetailsPage({ turfId, courtId }: { turfId: string; co
                 </p>
                 <Button className="w-full" loading={reserving} onClick={() => void proceed()}>
                   Continue to PayU
+                </Button>
+                {details.court.allowOpenSessions && (
+                  <Button
+                    className="w-full"
+                    variant="outline"
+                    disabled={selectedForDate.length !== 1}
+                    onClick={() => {
+                      setReviewOpen(false);
+                      setSessionSportId(details.openSessionPolicy?.sportOptions[0]?.id ?? '');
+                      setMaximumPlayers(String(details.openSessionPolicy?.minimumPlayers ?? ''));
+                      setOpenSessionOpen(true);
+                    }}
+                  >
+                    Create open session
+                  </Button>
+                )}
+              </div>
+            </Modal>
+            <Modal
+              open={openSessionOpen}
+              onClose={() => setOpenSessionOpen(false)}
+              title="Create open session"
+              className="max-w-lg rounded-2xl p-5 sm:p-6"
+            >
+              <div className="space-y-5">
+                <p className="rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm leading-6 text-muted-foreground">
+                  You pay one equal share now. The slot must be at least 48 hours away and every
+                  place must be filled before the cutoff.
+                </p>
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="open-session-sport" className="mb-2 block text-sm font-medium">
+                      Sport
+                    </label>
+                    <Select
+                      id="open-session-sport"
+                      value={sessionSportId}
+                      onChange={(event) => setSessionSportId(event.target.value)}
+                      options={(details.openSessionPolicy?.sportOptions ?? []).map((sport) => ({
+                        label: sport.name,
+                        value: sport.id,
+                      }))}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="open-session-players"
+                      className="mb-2 block text-sm font-medium"
+                    >
+                      Maximum players
+                    </label>
+                    <Input
+                      id="open-session-players"
+                      type="number"
+                      min={details.openSessionPolicy?.minimumPlayers ?? 1}
+                      max={details.court.capacity}
+                      value={maximumPlayers}
+                      onChange={(event) => setMaximumPlayers(event.target.value)}
+                    />
+                    <p className="mt-1.5 text-xs text-muted-foreground">
+                      Allowed: {details.openSessionPolicy?.minimumPlayers ?? 1}–
+                      {details.court.capacity} players
+                    </p>
+                  </div>
+                </div>
+                <div className="rounded-lg bg-muted p-4 text-sm">
+                  <p>Total court price: ₹{total.toFixed(2)}</p>
+                  <p className="mt-1 font-semibold">
+                    Per participant: ₹
+                    {maximumPlayers && Number(maximumPlayers) > 0
+                      ? Math.ceil((total * 100) / Number(maximumPlayers)) / 100
+                      : 0}
+                  </p>
+                </div>
+                <Button
+                  className="h-12 w-full text-base"
+                  loading={reserving}
+                  disabled={!sessionSportId || !maximumPlayers}
+                  onClick={() => void createSession()}
+                >
+                  Pay my share and create
                 </Button>
               </div>
             </Modal>

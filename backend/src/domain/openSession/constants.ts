@@ -1,0 +1,1 @@
+export const OPEN_SESSION_PAYMENT_WINDOW_MS = 10 * 60_000;
