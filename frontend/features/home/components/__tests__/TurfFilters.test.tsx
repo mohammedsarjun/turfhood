@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import { render, screen } from '@/test/test-utils';
+import { act, render, screen } from '@/test/test-utils';
 import { listCities, listStates } from '../../../turf-onboarding/actions/locationApi';
 import {
   listPublicAmenities,
@@ -38,5 +38,36 @@ describe('TurfFilters', () => {
     await user.click(toggle);
     expect(toggle).toHaveAttribute('aria-checked', 'false');
     expect(screen.getByRole('alert')).toHaveTextContent(/allow location access/i);
+  });
+
+  it('shows a loading state while waiting for browser location', async () => {
+    let resolveLocation: PositionCallback | undefined;
+    Object.defineProperty(navigator, 'geolocation', {
+      configurable: true,
+      value: {
+        getCurrentPosition: (success: PositionCallback) => {
+          resolveLocation = success;
+        },
+      },
+    });
+    const user = userEvent.setup();
+    render(<TurfFilters open onClose={jest.fn()} onApply={jest.fn()} />);
+
+    const toggle = screen.getByRole('switch', { name: 'Near Me' });
+    await user.click(toggle);
+
+    expect(toggle).toBeDisabled();
+    expect(toggle).toHaveAttribute('aria-busy', 'true');
+    expect(screen.getByRole('status')).toHaveTextContent(/getting your location/i);
+
+    act(() => {
+      resolveLocation?.({
+        coords: { latitude: 10.1, longitude: 76.2, accuracy: 20 },
+      } as GeolocationPosition);
+    });
+
+    expect(toggle).not.toBeDisabled();
+    expect(toggle).toHaveAttribute('aria-checked', 'true');
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
   });
 });

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { LocateFixed, X } from 'lucide-react';
+import { LoaderCircle, LocateFixed, X } from 'lucide-react';
 import type { CatalogItem, OpenSessionFilters as OpenSessionFilterParams } from '@turfhood/shared';
 import { Button, Select } from '@/components/ui';
 import { listPublicSportsTypes } from '@/features/turf-onboarding/actions/catalogApi';
@@ -24,6 +24,7 @@ export function OpenSessionFilters({ open, onClose, onApply }: OpenSessionFilter
   );
   const [locationError, setLocationError] = useState('');
   const [locationAccuracy, setLocationAccuracy] = useState<number | null>(null);
+  const [isLocating, setIsLocating] = useState(false);
 
   useEffect(() => {
     void listPublicSportsTypes().then((result) => setSports(result.items));
@@ -37,6 +38,7 @@ export function OpenSessionFilters({ open, onClose, onApply }: OpenSessionFilter
   });
 
   const toggleNearMe = () => {
+    if (isLocating) return;
     if (nearMe) {
       setNearMe(false);
       setCoordinates(null);
@@ -49,8 +51,10 @@ export function OpenSessionFilters({ open, onClose, onApply }: OpenSessionFilter
       setLocationError('Location is not supported by this browser.');
       return;
     }
+    setIsLocating(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        setIsLocating(false);
         if (position.coords.accuracy > 5000) {
           setNearMe(false);
           setCoordinates(null);
@@ -70,6 +74,7 @@ export function OpenSessionFilters({ open, onClose, onApply }: OpenSessionFilter
         onApply(buildFilters(nextCoordinates));
       },
       () => {
+        setIsLocating(false);
         setNearMe(false);
         setCoordinates(null);
         setLocationAccuracy(null);
@@ -129,20 +134,31 @@ export function OpenSessionFilters({ open, onClose, onApply }: OpenSessionFilter
               role="switch"
               aria-label="Near Me"
               aria-checked={nearMe}
+              aria-busy={isLocating || undefined}
+              disabled={isLocating}
               onClick={toggleNearMe}
               className={cn(
-                'relative h-7 w-12 rounded-full transition',
+                'relative flex h-7 w-12 items-center rounded-full transition disabled:cursor-wait disabled:opacity-70',
                 nearMe ? 'bg-primary' : 'bg-slate-300',
               )}
             >
-              <span
-                className={cn(
-                  'absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow transition-transform',
-                  nearMe && 'translate-x-5',
-                )}
-              />
+              {isLocating ? (
+                <LoaderCircle className="mx-auto h-4 w-4 animate-spin text-white" />
+              ) : (
+                <span
+                  className={cn(
+                    'absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow transition-transform',
+                    nearMe && 'translate-x-5',
+                  )}
+                />
+              )}
             </button>
           </div>
+          {isLocating && (
+            <p role="status" className="mt-2 text-xs text-muted-foreground">
+              Getting your location…
+            </p>
+          )}
           {locationError && (
             <p role="alert" className="mt-2 text-xs text-destructive">
               {locationError}

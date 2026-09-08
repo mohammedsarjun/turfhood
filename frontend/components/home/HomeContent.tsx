@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { BannerDTO, NearbyTurfDTO } from '@turfhood/shared';
 import { Header } from '@/components/shared';
+import { useToast } from '@/components/ui';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import {
   BannerCarousel,
@@ -15,6 +16,7 @@ import type { HomeLocationSelection } from '@/features/home/components/CitySearc
 
 export function HomeContent() {
   const { user, clearUser } = useCurrentUser();
+  const { showToast } = useToast();
   const [banners, setBanners] = useState<BannerDTO[]>([]);
   const [location, setLocation] = useState<HomeLocationSelection | null>(null);
   const [turfs, setTurfs] = useState<NearbyTurfDTO[]>([]);
@@ -23,25 +25,31 @@ export function HomeContent() {
     void listBanners().then(setBanners);
   }, []);
 
-  const searchLocation = useCallback(async (selection: HomeLocationSelection) => {
-    setLocation(selection);
-    setLoading(true);
-    try {
-      setTurfs(
-        await listNearbyTurfs(
-          {
-            cityCode: selection.city.code,
-            cityName: selection.city.name,
-            stateCode: selection.state.code,
-            stateName: selection.state.name,
-          },
-          4,
-        ),
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const searchLocation = useCallback(
+    async (selection: HomeLocationSelection) => {
+      setLocation(selection);
+      setLoading(true);
+      try {
+        setTurfs(
+          await listNearbyTurfs(
+            {
+              cityCode: selection.city.code,
+              cityName: selection.city.name,
+              stateCode: selection.state.code,
+              stateName: selection.state.name,
+            },
+            4,
+          ),
+        );
+      } catch {
+        setTurfs([]);
+        showToast('Unable to find turfs. Please try again.', 'error');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [showToast],
+  );
 
   return (
     <>
