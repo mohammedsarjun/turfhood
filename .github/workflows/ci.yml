@@ -38,7 +38,19 @@ jobs:
     name: Unit and Integration Tests
     runs-on: ubuntu-latest
     env:
-      MONGODB_URI: ${{secrets.MONGO_URI}}
+      NODE_ENV: test
+      MONGODB_URI: ${{ secrets.MONGO_URI }}
+      JWT_SECRET: test-only-jwt-secret
+      REFRESH_TOKEN_SECRET: test-only-refresh-secret
+      RESEND_API_KEY: test-placeholder
+      GOOGLE_CLIENT_ID: test-placeholder
+      GOOGLE_CLIENT_SECRET: test-placeholder
+      CLOUDINARY_CLOUD_NAME: test-placeholder
+      CLOUDINARY_API_KEY: test-placeholder
+      CLOUDINARY_API_SECRET: test-placeholder
+      CSC_API_KEY: test-placeholder
+      ADMIN_EMAIL: admin@test.local
+      ADMIN_PASSWORD: test-only-password
 
     steps:
 
