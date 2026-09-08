@@ -8,21 +8,19 @@ import { useCurrentUser } from '@/hooks/useCurrentUser';
 
 export function ProfilePageClient() {
   const { user: currentUser, isHydrated, setUser: setCurrentUser } = useCurrentUser();
-  const [user, setUser] = useState<PublicUser | null>(currentUser);
+  const [fetchedUser, setFetchedUser] = useState<PublicUser | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
+  const user: PublicUser | null = currentUser ?? fetchedUser;
 
   useEffect(() => {
     if (!isHydrated) return;
-    if (currentUser) {
-      setUser(currentUser);
-      return;
-    }
+    if (currentUser) return;
 
     let isActive = true;
     void getMe()
       .then((currentUser) => {
         if (isActive) {
-          setUser(currentUser);
+          setFetchedUser(currentUser);
           setCurrentUser(currentUser);
         }
       })

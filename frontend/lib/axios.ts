@@ -2,7 +2,7 @@ import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { AuthErrorCode } from '@turfhood/shared';
 import { ApiError, type ApiErrorResponse } from '@/types/api/response';
 import { API_ROUTES } from '@/lib/apiRoutes';
-import { isAdminRoute, isProtectedRoute } from '@/lib/auth/routeGuard';
+import { isAdminRoute } from '@/lib/auth/routeGuard';
 
 export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -64,16 +64,6 @@ function redirectToLogin(isAdminRequest: boolean): void {
   if (window.location.pathname !== loginPath) window.location.replace(loginPath);
 }
 
-function redirectAfterBackendFailure(): void {
-  if (typeof window === 'undefined') return;
-  const pathname = window.location.pathname;
-  if (isAdminRoute(pathname)) {
-    redirectToLogin(true);
-  } else if (isProtectedRoute(pathname)) {
-    redirectToLogin(false);
-  }
-}
-
 // Normalizes every failure (validation, server, or network) into a single ApiError shape.
 // Also transparently refreshes an expired access token once and retries the original request.
 axiosInstance.interceptors.response.use(
@@ -116,7 +106,6 @@ axiosInstance.interceptors.response.use(
     }
 
     if (error.request) {
-      redirectAfterBackendFailure();
       return Promise.reject(
         new ApiError('Unable to reach the server. Check your connection and try again.', 0),
       );
