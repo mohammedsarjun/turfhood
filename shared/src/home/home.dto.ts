@@ -85,5 +85,9 @@ export interface PublicCourtSlotDateDTO {
 export interface PublicCourtDetailsResponse {
   turf: { id: string; name: string };
   court: PublicCourtCardDTO & { allowOpenSessions: boolean };
+  openSessionPolicy?: {
+    minimumPlayers: number;
+    sportOptions: Array<{ id: string; name: string }>;
+  };
   dates: PublicCourtSlotDateDTO[];
 }

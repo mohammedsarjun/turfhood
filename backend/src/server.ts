@@ -8,6 +8,8 @@ import { ADMIN_TOKENS } from './domain/admin/tokens.js';
 import type { IBookingRepository } from './domain/booking/repositories/IBookingRepository.js';
 import { BOOKING_TOKENS } from './domain/booking/tokens.js';
 import type { IManageBookingsUseCase } from './application/booking/use-cases/IManageBookingsUseCase.js';
+import type { IManageOpenSessionsUseCase } from './application/openSession/use-cases/IManageOpenSessionsUseCase.js';
+import { OPEN_SESSION_TOKENS } from './domain/openSession/tokens.js';
 
 async function bootstrap(): Promise<void> {
   await connectDatabase();
@@ -40,6 +42,15 @@ async function bootstrap(): Promise<void> {
   reconcile();
   const refundTimer = setInterval(reconcile, 5 * 60_000);
   refundTimer.unref();
+  const openSessions = container.resolve<IManageOpenSessionsUseCase>(OPEN_SESSION_TOKENS.UseCase);
+  const expireOpenSessions = () => {
+    void openSessions.expireUnfilled().catch((error: unknown) => {
+      console.error('Unable to expire unfilled open sessions.', error);
+    });
+  };
+  expireOpenSessions();
+  const openSessionTimer = setInterval(expireOpenSessions, 60_000);
+  openSessionTimer.unref();
 
   app.listen(env.PORT, () => {
     console.log(`Server running on port ${env.PORT}`);

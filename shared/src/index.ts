@@ -145,3 +145,12 @@ export type {
   ReviewDTO, CreateReviewRequest, ReviewSummaryDTO, ReviewListResponse,
 } from "./review/review.dto.js";
 export type { FavoriteIdsResponse, FavoriteTurfListResponse } from "./favorite/favorite.dto.js";
+export type {
+  OpenSessionStatus,
+  OpenSessionParticipantDTO,
+  OpenSessionDTO,
+  CreateOpenSessionRequest,
+  OpenSessionPaymentResponse,
+  OpenSessionFilters,
+  OpenSessionListResponse,
+} from "./openSession/open-session.dto.js";

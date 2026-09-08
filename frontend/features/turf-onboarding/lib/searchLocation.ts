@@ -34,7 +34,7 @@ interface OlaReverseGeocodeResponse {
 }
 
 export interface BrowserLocationAddress {
-  city: string;
+  cityCandidates: string[];
   state: string;
 }
 
@@ -52,9 +52,20 @@ export async function reverseGeocodeLocation(
   const find = (...types: string[]) =>
     components.find((component) => types.some((type) => component.types?.includes(type)))
       ?.long_name;
-  const city = find('locality', 'administrative_area_level_3', 'postal_town');
+  const cityTypes = new Set([
+    'locality',
+    'administrative_area_level_2',
+    'administrative_area_level_3',
+    'postal_town',
+  ]);
+  const cityCandidates = components
+    .filter((component) => component.types?.some((type) => cityTypes.has(type)))
+    .map((component) => component.long_name)
+    .filter((name): name is string => Boolean(name));
   const state = find('administrative_area_level_1');
-  return city && state ? { city, state } : null;
+  return cityCandidates.length && state
+    ? { cityCandidates: [...new Set(cityCandidates)], state }
+    : null;
 }
 
 /**

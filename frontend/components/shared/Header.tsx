@@ -11,6 +11,7 @@ import {
   LogOut,
   Menu,
   Search,
+  UsersRound,
   Store,
   User as UserIcon,
   X,
@@ -87,6 +88,12 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
         <Link href="/turfs" className="text-sm font-medium text-foreground hover:text-primary">
           Find Turfs
         </Link>
+        <Link
+          href="/open-sessions"
+          className="text-sm font-medium text-foreground hover:text-primary"
+        >
+          Open Sessions
+        </Link>
       </nav>
 
       <div className="flex items-center" style={{ gap: 12 }}>
@@ -131,6 +138,14 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
                   {userName}
                 </div>
               )}
+              <Link
+                href="/open-sessions"
+                role="menuitem"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-muted"
+              >
+                <UsersRound className="h-4 w-4" /> Open Sessions
+              </Link>
               <Link
                 href="/bookings"
                 role="menuitem"
@@ -220,6 +235,14 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
           >
             <Search className="h-4 w-4" />
             Find Turfs
+          </Link>
+          <Link
+            href="/open-sessions"
+            onClick={() => setIsMobileNavOpen(false)}
+            className="mt-3 flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted"
+          >
+            <UsersRound className="h-4 w-4" />
+            Open Sessions
           </Link>
         </nav>
       )}
