@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Check, ImageIcon, Users } from 'lucide-react';
 import type { PublicCourtSlotDTO, SlotPeriod } from '@turfhood/shared';
@@ -106,12 +107,15 @@ export function PublicCourtDetailsPage({ turfId, courtId }: { turfId: string; co
               <ArrowLeft className="h-4 w-4" /> Back to {details.turf.name}
             </Link>
             <section className="grid gap-7 md:grid-cols-[minmax(0,1fr)_minmax(280px,0.75fr)]">
-              <div className="h-72 overflow-hidden rounded-2xl bg-muted sm:h-96">
+              <div className="relative h-72 overflow-hidden rounded-2xl bg-muted sm:h-96">
                 {details.court.images?.[0] ? (
-                  <img
+                  <Image
                     src={details.court.images[0]}
                     alt={details.court.name}
-                    className="h-full w-full object-cover"
+                    fill
+                    unoptimized
+                    sizes="(min-width: 768px) 57vw, 100vw"
+                    className="object-cover"
                   />
                 ) : (
                   <div className="flex h-full items-center justify-center">

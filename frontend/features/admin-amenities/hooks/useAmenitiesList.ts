@@ -33,6 +33,7 @@ export function useAmenitiesList() {
   }, []);
 
   const fetchList = useCallback(async () => {
+    await Promise.resolve();
     setIsLoading(true);
     setError(null);
     try {
@@ -52,7 +53,11 @@ export function useAmenitiesList() {
   }, [page, debouncedSearch, isListedFilter]);
 
   useEffect(() => {
-    fetchList();
+    const timeoutId = window.setTimeout(() => {
+      void fetchList();
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
   }, [fetchList]);
 
   return {
