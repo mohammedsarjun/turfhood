@@ -52,6 +52,7 @@ jobs:
       ADMIN_EMAIL: admin@test.local
       ADMIN_PASSWORD: test-only-password
       PAYU_MERCHANT_KEY: test-placeholder
+      PAYU_MERCHANT_SALT: test-placeholder
 
     steps:
 
