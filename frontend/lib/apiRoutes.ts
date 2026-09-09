@@ -26,6 +26,8 @@ export const API_ROUTES = {
     login: '/admin/login',
     logout: '/admin/logout',
     me: '/admin/me',
+    dashboard: '/admin/dashboard',
+    revenue: '/admin/revenue',
     refresh: '/admin/refresh',
     commission: '/admin/commission',
     escalatedRefunds: '/admin/refunds/escalated',

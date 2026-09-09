@@ -68,6 +68,12 @@ import type { ISeedAdminUseCase } from '@application/admin/use-cases/ISeedAdminU
 import { SeedAdminUseCase } from '@application/admin/use-cases/SeedAdminUseCase';
 import type { IAdminLoginUseCase } from '@application/admin/use-cases/IAdminLoginUseCase';
 import { AdminLoginUseCase } from '@application/admin/use-cases/AdminLoginUseCase';
+import type { IAdminDashboardRepository } from '@domain/admin/repositories/IAdminDashboardRepository';
+import { AdminDashboardRepository } from '@infrastructure/admin/repositories/AdminDashboardRepository';
+import type { IGetAdminDashboardUseCase } from '@application/admin/use-cases/IGetAdminDashboardUseCase';
+import { GetAdminDashboardUseCase } from '@application/admin/use-cases/GetAdminDashboardUseCase';
+import type { IGetAdminRevenueUseCase } from '@application/admin/use-cases/IGetAdminRevenueUseCase';
+import { GetAdminRevenueUseCase } from '@application/admin/use-cases/GetAdminRevenueUseCase';
 import type { ISportsTypeRepository } from '@domain/sportsType/repositories/ISportsTypeRepository';
 import { SPORTS_TYPE_TOKENS } from '@domain/sportsType/tokens';
 import { SportsTypeRepository } from '@infrastructure/sportsType/repositories/SportsTypeRepository';
@@ -254,6 +260,15 @@ container.register<ISeedAdminUseCase>(ADMIN_TOKENS.SeedAdminUseCase, {
 });
 container.register<IAdminLoginUseCase>(ADMIN_TOKENS.AdminLoginUseCase, {
   useClass: AdminLoginUseCase,
+});
+container.register<IAdminDashboardRepository>(ADMIN_TOKENS.DashboardRepository, {
+  useClass: AdminDashboardRepository,
+});
+container.register<IGetAdminDashboardUseCase>(ADMIN_TOKENS.DashboardUseCase, {
+  useClass: GetAdminDashboardUseCase,
+});
+container.register<IGetAdminRevenueUseCase>(ADMIN_TOKENS.RevenueUseCase, {
+  useClass: GetAdminRevenueUseCase,
 });
 container.register<ISportsTypeRepository>(SPORTS_TYPE_TOKENS.SportsTypeRepository, {
   useClass: SportsTypeRepository,

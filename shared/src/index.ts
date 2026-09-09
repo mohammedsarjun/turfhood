@@ -11,6 +11,17 @@ export type {
 } from "./admin/admin-auth.dto.js";
 export { AdminErrorCode } from "./admin/admin-error-code.js";
 export type {
+  AdminDashboardDTO,
+  AdminDashboardTrendDTO,
+  AdminDashboardRecentBookingDTO,
+} from "./admin/admin-dashboard.dto.js";
+export type {
+  AdminRevenueSummaryDTO,
+  AdminRevenueTrendDTO,
+  AdminRevenueTransactionDTO,
+  AdminRevenueReportDTO,
+} from "./admin/admin-revenue.dto.js";
+export type {
   UpdateNameRequest,
   UpdateNameResponse,
   UpdatePhoneRequest,

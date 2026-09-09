@@ -1,7 +1,5 @@
-export default function AdminDashboardPage() {
-  return (
-    <main>
-      <h1>Admin Dashboard</h1>
-    </main>
-  );
+import { AdminDashboardPage } from '@/features/admin-dashboard';
+
+export default function AdminDashboardRoute() {
+  return <AdminDashboardPage />;
 }
