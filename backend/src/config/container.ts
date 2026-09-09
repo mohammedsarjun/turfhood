@@ -105,6 +105,8 @@ import type { IListNearbyTurfsUseCase } from '@application/turf/use-cases/IListN
 import type { IGetTurfDetailsUseCase } from '@application/turf/use-cases/IGetTurfDetailsUseCase';
 import type { IGetOwnerDashboardUseCase } from '@application/turf/use-cases/IGetOwnerDashboardUseCase';
 import { GetOwnerDashboardUseCase } from '@application/turf/use-cases/GetOwnerDashboardUseCase';
+import type { IGetOwnerRevenueUseCase } from '@application/turf/use-cases/IGetOwnerRevenueUseCase';
+import { GetOwnerRevenueUseCase } from '@application/turf/use-cases/GetOwnerRevenueUseCase';
 import type { ITurfOwnerApplicationRepository } from '@domain/turfOwnerApplication/repositories/ITurfOwnerApplicationRepository';
 import { TURF_OWNER_APPLICATION_TOKENS } from '@domain/turfOwnerApplication/tokens';
 import { TurfOwnerApplicationRepository } from '@infrastructure/turfOwnerApplication/repositories/TurfOwnerApplicationRepository';
@@ -302,6 +304,9 @@ container.register<IGetTurfDetailsUseCase>(TURF_TOKENS.GetTurfDetailsUseCase, {
 });
 container.register<IGetOwnerDashboardUseCase>(TURF_TOKENS.GetOwnerDashboardUseCase, {
   useClass: GetOwnerDashboardUseCase,
+});
+container.register<IGetOwnerRevenueUseCase>(TURF_TOKENS.GetOwnerRevenueUseCase, {
+  useClass: GetOwnerRevenueUseCase,
 });
 container.register<ITurfOwnerApplicationRepository>(
   TURF_OWNER_APPLICATION_TOKENS.TurfOwnerApplicationRepository,

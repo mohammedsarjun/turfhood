@@ -8,6 +8,13 @@ export interface CreateBookingPersistenceInput extends Omit<
   payuTransactionId: string;
 }
 export interface IBookingRepository {
+  revenueBetween(turfId: string, startDate: string, endDate: string): Promise<{
+    items: BookingDTO[];
+    summary: { bookings: number; grossRevenuePaise: number; commissionPaise: number; netEarningsPaise: number };
+  }>;
+  statusCountsBetween(turfId: string, startDate: string, endDate: string): Promise<{
+    booked: number; cancelled: number; completed: number;
+  }>;
   reserve(input: CreateBookingPersistenceInput): Promise<BookingDTO>;
   findById(id: string): Promise<BookingDTO | null>;
   findByTransactionId(transactionId: string): Promise<BookingDTO | null>;

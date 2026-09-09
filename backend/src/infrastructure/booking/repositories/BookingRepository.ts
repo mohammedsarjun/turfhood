@@ -11,6 +11,26 @@ import { SlotReservationModel } from '../models/SlotReservationModel.js';
 
 @injectable()
 export class BookingRepository implements IBookingRepository {
+  async statusCountsBetween(turfId: string, startDate: string, endDate: string) {
+    if (!mongoose.isValidObjectId(turfId)) return { booked: 0, cancelled: 0, completed: 0 };
+    const rows = await BookingModel.aggregate<{ _id: string; count: number }>([
+      { $match: { turfId: new mongoose.Types.ObjectId(turfId), bookingDate: { $gte: startDate, $lte: endDate }, status: { $in: ['confirmed', 'completed', 'cancelled_by_user', 'cancelled_by_owner'] } } },
+      { $group: { _id: '$status', count: { $sum: 1 } } },
+    ]);
+    const counts = new Map(rows.map((row) => [row._id, row.count]));
+    return { booked: counts.get('confirmed') ?? 0, completed: counts.get('completed') ?? 0, cancelled: (counts.get('cancelled_by_user') ?? 0) + (counts.get('cancelled_by_owner') ?? 0) };
+  }
+  async revenueBetween(turfId: string, startDate: string, endDate: string) {
+    if (!mongoose.isValidObjectId(turfId)) return { items: [], summary: { bookings: 0, grossRevenuePaise: 0, commissionPaise: 0, netEarningsPaise: 0 } };
+    const documents = await BookingModel.find({ turfId, bookingDate: { $gte: startDate, $lte: endDate }, status: { $in: ['confirmed', 'completed'] } }).sort({ bookingDate: -1, createdAt: -1 });
+    const items = documents.map((document) => this.toDTO(document));
+    return { items, summary: {
+      bookings: items.length,
+      grossRevenuePaise: items.reduce((sum, item) => sum + item.subtotalPaise - item.discountPaise, 0),
+      commissionPaise: items.reduce((sum, item) => sum + item.commissionPaise, 0),
+      netEarningsPaise: items.reduce((sum, item) => sum + item.ownerEarningsPaise, 0),
+    }};
+  }
   async reserve(input: CreateBookingPersistenceInput): Promise<BookingDTO> {
     const session = await mongoose.startSession();
     let created: BookingDocument | undefined;

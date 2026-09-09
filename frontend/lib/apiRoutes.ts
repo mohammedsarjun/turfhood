@@ -70,6 +70,7 @@ export const API_ROUTES = {
     ownerCancel: (turfId: string, id: string) => `/turf-portal/${turfId}/bookings/${id}/cancel`,
   },
   turfDashboard: (turfId: string) => `/turf-portal/${turfId}/dashboard`,
+  turfRevenue: (turfId: string) => `/turf-portal/${turfId}/revenue`,
   openSessions: {
     base: '/open-sessions',
     mine: '/open-sessions/mine',

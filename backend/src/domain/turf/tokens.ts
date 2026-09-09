@@ -5,4 +5,5 @@ export const TURF_TOKENS = {
   ListNearbyTurfsUseCase: Symbol('IListNearbyTurfsUseCase'),
   GetTurfDetailsUseCase: Symbol('IGetTurfDetailsUseCase'),
   GetOwnerDashboardUseCase: Symbol('IGetOwnerDashboardUseCase'),
+  GetOwnerRevenueUseCase: Symbol('IGetOwnerRevenueUseCase'),
 } as const;
