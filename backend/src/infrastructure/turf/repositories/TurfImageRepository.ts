@@ -6,6 +6,31 @@ import { TurfImageModel, type TurfImageDocument } from '../models/TurfImageModel
 
 @injectable()
 export class TurfImageRepository implements ITurfImageRepository {
+  async replaceAll(turfId: string, images: { url: string; isCover: boolean }[]): Promise<void> {
+    const session = await TurfImageModel.startSession();
+    try {
+      await session.withTransaction(async () => {
+        await TurfImageModel.deleteMany({ turfId }).session(session);
+        await TurfImageModel.insertMany(
+          images.map((image, order) => ({ turfId, ...image, order })),
+          { session },
+        );
+      });
+    } finally {
+      await session.endSession();
+    }
+  }
+  async replaceCover(turfId: string, url: string): Promise<void> {
+    await TurfImageModel.updateMany({ turfId }, { $set: { isCover: false } });
+    const current = await TurfImageModel.findOne({ turfId, url });
+    if (current) {
+      current.isCover = true;
+      current.order = 0;
+      await current.save();
+      return;
+    }
+    await TurfImageModel.create({ turfId, url, isCover: true, order: 0 });
+  }
   async findImageUrls(turfIds: string[]): Promise<Map<string, string[]>> {
     const documents = await TurfImageModel.find({ turfId: { $in: turfIds } }).sort({
       isCover: -1,

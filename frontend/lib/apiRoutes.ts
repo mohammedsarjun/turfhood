@@ -89,6 +89,9 @@ export const API_ROUTES = {
     nearby: '/turfs/nearby',
     discover: '/turfs/discover',
     details: (id: string) => `/turfs/${id}`,
+    manage: (id: string) => `/turfs/${id}/manage`,
+    manageCover: (id: string) => `/turfs/${id}/manage/cover`,
+    manageImages: (id: string) => `/turfs/${id}/manage/images`,
     courtDetails: (turfId: string, courtId: string) =>
       `/turfs/${turfId}/courts/${courtId}/availability`,
   },

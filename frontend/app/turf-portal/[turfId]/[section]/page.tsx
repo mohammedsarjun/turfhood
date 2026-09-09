@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { OwnerBookingsPage } from '@/features/bookings';
 import { OwnerReviewsPage } from '@/features/reviews';
+import { OwnerTurfManagementPage } from '@/features/turf-portal';
 
 const SECTION_TITLES: Record<string, string> = {
   dashboard: 'Dashboard',
@@ -23,6 +24,7 @@ export default async function TurfPortalSectionPage({ params }: TurfPortalSectio
   if (!title) notFound();
   if (section === 'bookings') return <OwnerBookingsPage turfId={turfId} />;
   if (section === 'reviews') return <OwnerReviewsPage turfId={turfId} />;
+  if (section === 'my-turf') return <OwnerTurfManagementPage turfId={turfId} />;
 
   return (
     <div>
