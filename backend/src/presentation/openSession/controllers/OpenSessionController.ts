@@ -70,6 +70,30 @@ export class OpenSessionController {
       next(error);
     }
   };
+  listRefunds = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const page = Math.max(1, Number(req.query.page) || 1);
+      const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 20));
+      res.json(await this.sessions.listRefunds(userId(req), page, limit));
+    } catch (error) {
+      next(error);
+    }
+  };
+  cancelParticipation = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      res.json(await this.sessions.cancelParticipation(userId(req), String(req.params.id)));
+    } catch (error) {
+      next(error);
+    }
+  };
+  ownerList = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const page = Math.max(1, Number(req.query.page) || 1);
+      res.json(await this.sessions.listForOwner(userId(req), String(req.params.turfId), page, 20));
+    } catch (error) {
+      next(error);
+    }
+  };
   details = async (req: Request, res: Response, next: NextFunction) => {
     try {
       res.json(await this.sessions.details(String(req.params.id)));

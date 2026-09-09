@@ -13,6 +13,18 @@ import { OpenSessionModel, type OpenSessionDocument } from '../models/OpenSessio
 
 @injectable()
 export class OpenSessionRepository implements IOpenSessionRepository {
+  async listByTurf(turfId: string, page: number, limit: number) {
+    if (!mongoose.isValidObjectId(turfId)) return { items: [], total: 0 };
+    const filter = { turfId: new mongoose.Types.ObjectId(turfId) };
+    const [documents, total] = await Promise.all([
+      OpenSessionModel.find(filter)
+        .sort({ bookingDate: -1, startTime: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit),
+      OpenSessionModel.countDocuments(filter),
+    ]);
+    return { items: documents.map((document) => this.toDTO(document)), total };
+  }
   async create(input: CreateOpenSessionPersistenceInput) {
     const session = await mongoose.startSession();
     let created: OpenSessionDocument | undefined;
@@ -196,7 +208,14 @@ export class OpenSessionRepository implements IOpenSessionRepository {
         _id: id,
         status: 'open',
         fillDeadline: { $gt: new Date() },
-        'participants.userId': { $ne: user.id },
+        participants: {
+          $not: {
+            $elemMatch: {
+              userId: user.id,
+              paymentStatus: { $in: ['pending', 'paid'] },
+            },
+          },
+        },
         $expr: {
           $lt: [
             {
@@ -270,11 +289,6 @@ export class OpenSessionRepository implements IOpenSessionRepository {
         }
         if (paid >= doc.maximumPlayers) {
           doc.status = 'full';
-          await SlotReservationModel.updateMany(
-            { bookingId: doc._id },
-            { $set: { state: 'confirmed' }, $unset: { expiresAt: 1 } },
-            { session },
-          );
         }
         result = await doc.save({ session });
       });
@@ -282,6 +296,51 @@ export class OpenSessionRepository implements IOpenSessionRepository {
       await session.endSession();
     }
     return result ? this.toDTO(result) : this.findByTransactionId(transactionId);
+  }
+
+  async listFullDue(now: Date) {
+    const docs = await OpenSessionModel.find({ status: 'full', fillDeadline: { $lte: now } });
+    return docs.map((doc) => this.toDTO(doc));
+  }
+
+  async markConfirmed(sessionId: string) {
+    await OpenSessionModel.updateOne(
+      { _id: sessionId, status: 'full' },
+      { $set: { status: 'confirmed' } },
+    );
+  }
+
+  async beginParticipantCancellation(sessionId: string, userId: string, now: Date) {
+    const doc = await OpenSessionModel.findOneAndUpdate(
+      {
+        _id: sessionId,
+        status: { $in: ['open', 'full'] },
+        fillDeadline: { $gt: now },
+        participants: {
+          $elemMatch: {
+            userId,
+            paymentStatus: 'paid',
+            paymentId: { $exists: true },
+          },
+        },
+      },
+      {
+        $set: {
+          status: 'open',
+          'participants.$.paymentStatus': 'refund_pending',
+          'participants.$.refundReason': 'Participant cancelled before the 48-hour deadline.',
+          'participants.$.refundAttemptCount': 1,
+          'participants.$.refundRequestedAt': now,
+        },
+      },
+      { new: true },
+    );
+    const participant = doc?.participants.find(
+      (item) => item.userId.toString() === userId && item.paymentStatus === 'refund_pending',
+    );
+    return participant?.paymentId
+      ? { paymentId: participant.paymentId, amountPaise: doc!.pricePerParticipantPaise }
+      : null;
   }
 
   async failParticipant(transactionId: string) {
@@ -372,6 +431,11 @@ export class OpenSessionRepository implements IOpenSessionRepository {
         (participant) => participant.paymentStatus === 'paid' && participant.paymentId,
       );
       for (const participant of paid) participant.paymentStatus = 'refund_pending';
+      for (const participant of paid) {
+        participant.refundReason = 'The open session did not fill before the 48-hour deadline.';
+        participant.refundAttemptCount = 1;
+        participant.refundRequestedAt = now;
+      }
       await doc.save();
       await SlotReservationModel.deleteMany({ bookingId: doc._id, state: 'held' });
       results.push({
@@ -388,11 +452,15 @@ export class OpenSessionRepository implements IOpenSessionRepository {
 
   async markParticipantRefundRequested(sessionId: string, userId: string, requestId: string) {
     await OpenSessionModel.updateOne(
-      { _id: sessionId, 'participants.userId': userId },
+      {
+        _id: sessionId,
+        participants: { $elemMatch: { userId, paymentStatus: 'refund_pending' } },
+      },
       {
         $set: {
           'participants.$.paymentStatus': 'refund_pending',
           'participants.$.refundRequestId': requestId,
+          'participants.$.refundRequestedAt': new Date(),
         },
       },
     );
@@ -426,7 +494,67 @@ export class OpenSessionRepository implements IOpenSessionRepository {
   ) {
     await OpenSessionModel.updateOne(
       { _id: sessionId, participants: { $elemMatch: { userId, paymentStatus: 'refund_pending' } } },
-      { $set: { 'participants.$.paymentStatus': status } },
+      {
+        $set: {
+          'participants.$.paymentStatus': status,
+          ...(status === 'refunded'
+            ? { 'participants.$.refundedAt': new Date() }
+            : { 'participants.$.refundFailureReason': 'Refund processing failed.' }),
+        },
+      },
+    );
+  }
+
+  async listRefundsByUser(userId: string) {
+    const docs = await OpenSessionModel.find({
+      participants: {
+        $elemMatch: {
+          userId,
+          paymentStatus: { $in: ['refund_pending', 'refunded', 'refund_failed'] },
+        },
+      },
+    }).sort({ updatedAt: -1 });
+    return docs.flatMap((doc) =>
+      doc.participants.flatMap((participant, index) => {
+        if (
+          participant.userId.toString() !== userId ||
+          !['refund_pending', 'refunded', 'refund_failed'].includes(participant.paymentStatus)
+        )
+          return [];
+        return [
+          {
+            id: `${doc._id.toString()}-${index}`,
+            source: 'open_session' as const,
+            reference: `OS-${doc._id.toString().slice(-8).toUpperCase()}`,
+            turfName: doc.turfName,
+            courtName: doc.courtName,
+            amountPaise: doc.pricePerParticipantPaise,
+            status:
+              participant.paymentStatus === 'refunded'
+                ? ('refunded' as const)
+                : participant.paymentStatus === 'refund_failed'
+                  ? ('failed' as const)
+                  : ('pending' as const),
+            reason: participant.refundReason ?? 'Open-session payment refund.',
+            attemptCount: participant.refundAttemptCount ?? 0,
+            escalated: false,
+            ...(participant.paymentId ? { paymentReference: participant.paymentId } : {}),
+            ...(participant.refundRequestId
+              ? { refundReference: participant.refundRequestId }
+              : {}),
+            ...(participant.refundRequestedAt
+              ? { requestedAt: participant.refundRequestedAt.toISOString() }
+              : {}),
+            ...(participant.refundedAt
+              ? { completedAt: participant.refundedAt.toISOString() }
+              : {}),
+            ...(participant.refundFailureReason
+              ? { failureReason: participant.refundFailureReason }
+              : {}),
+            createdAt: participant.joinedAt.toISOString(),
+          },
+        ];
+      }),
     );
   }
 

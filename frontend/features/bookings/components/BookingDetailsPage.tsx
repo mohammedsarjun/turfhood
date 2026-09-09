@@ -104,6 +104,11 @@ export function BookingDetailsPage({ id }: { id: string }) {
             <div className="mt-4 flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">{booking.reference}</p>
+                {booking.bookingType === 'open_session' && (
+                  <Badge variant="outline" className="mt-2">
+                    Open session
+                  </Badge>
+                )}
                 <h1 className="text-3xl font-bold">{booking.turfName}</h1>
               </div>
               <Badge
@@ -139,8 +144,12 @@ export function BookingDetailsPage({ id }: { id: string }) {
                 <p>{booking.address}</p>
                 <div className="border-t pt-4">
                   <p className="flex justify-between">
-                    <span>Customer paid</span>
-                    <strong>₹{(booking.finalAmountPaise / 100).toFixed(2)}</strong>
+                    <span>
+                      {booking.bookingType === 'open_session' ? 'Your share' : 'Customer paid'}
+                    </span>
+                    <strong>
+                      ₹{((booking.customerSharePaise ?? booking.finalAmountPaise) / 100).toFixed(2)}
+                    </strong>
                   </p>
                   <p className="mt-2 flex justify-between text-muted-foreground">
                     <span>Payment</span>
@@ -153,7 +162,7 @@ export function BookingDetailsPage({ id }: { id: string }) {
                     </p>
                   )}
                 </div>
-                {booking.status === 'confirmed' && (
+                {booking.status === 'confirmed' && booking.bookingType !== 'open_session' && (
                   <Button variant="destructive" onClick={() => setCancelOpen(true)}>
                     Cancel booking
                   </Button>

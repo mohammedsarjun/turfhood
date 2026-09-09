@@ -94,6 +94,10 @@ export interface BookingDTO {
   };
   createdAt: string;
   confirmedAt?: string;
+  bookingType?: "private" | "open_session";
+  openSessionId?: string;
+  participantUserIds?: string[];
+  customerSharePaise?: number;
 }
 export interface CreateReservationRequest {
   turfId: string;

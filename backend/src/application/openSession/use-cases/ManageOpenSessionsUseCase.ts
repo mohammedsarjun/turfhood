@@ -18,6 +18,9 @@ import type { IBookingRepository } from '@domain/booking/repositories/IBookingRe
 import { BookingActionError, BookingNotFoundError } from '@domain/booking/errors/BookingErrors';
 import { generateSlots } from '@application/court/use-cases/GetPublicCourtDetailsUseCase';
 import { isOpenSessionPaymentExpired } from '@domain/openSession/services/OpenSessionPaymentPolicy';
+import type { ICommissionSettingRepository } from '@domain/commission/repositories/ICommissionSettingRepository';
+import { COMMISSION_TOKENS } from '@domain/commission/tokens';
+import { DEFAULT_COMMISSION_PERCENTAGE } from '@application/commission/constants';
 
 const playTime = (date: string, time: string) => new Date(`${date}T${time}:00+05:30`);
 
@@ -31,6 +34,8 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
     @inject(TURF_TOKENS.TurfRepository) private readonly turfs: ITurfRepository,
     @inject(USER_TOKENS.UserRepository) private readonly users: IUserRepository,
     @inject(SPORTS_TYPE_TOKENS.SportsTypeRepository) private readonly sports: ISportsTypeRepository,
+    @inject(COMMISSION_TOKENS.Repository)
+    private readonly commissions: ICommissionSettingRepository,
   ) {}
 
   async create(userId: string, input: CreateOpenSessionRequest) {
@@ -181,6 +186,27 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
     };
   }
 
+  async listForOwner(
+    ownerId: string,
+    portalTurfId: string,
+    page: number,
+    limit: number,
+  ): Promise<OpenSessionListResponse> {
+    await this.expireUnfilled();
+    const turf = await this.turfs.findOwnedByIdOrVerificationId(portalTurfId, ownerId);
+    if (!turf?.id) throw new BookingNotFoundError();
+    const result = await this.sessions.listByTurf(turf.id, page, limit);
+    return {
+      items: result.items,
+      pagination: {
+        page,
+        limit,
+        total: result.total,
+        totalPages: Math.max(1, Math.ceil(result.total / limit)),
+      },
+    };
+  }
+
   async paymentCallback(input: PaymentCallback) {
     const session = await this.sessions.findByTransactionId(input.txnid);
     if (!session) {
@@ -211,7 +237,9 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
       await this.sessions.failParticipant(input.txnid);
       throw new BookingActionError('Open-session payment verification failed.');
     }
-    if (payment?.status === 'paid') return session;
+    if (payment?.status === 'paid') {
+      return session;
+    }
     if (
       (transactionExpired ||
         session.status === 'cancelled' ||
@@ -234,6 +262,75 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
     );
     if (!confirmed) throw new BookingActionError('Participant could not be confirmed.');
     return confirmed;
+  }
+
+  async cancelParticipation(userId: string, sessionId: string) {
+    const session = await this.sessions.findById(sessionId);
+    if (!session) throw new BookingNotFoundError();
+    const participant = session.participants.find((item) => item.userId === userId);
+    if (!participant || participant.paymentStatus !== 'paid')
+      throw new BookingActionError('You do not have an active place in this session.');
+    if (new Date(session.fillDeadline) <= new Date())
+      throw new BookingActionError('The cancellation deadline has passed.');
+    const cancellation = await this.sessions.beginParticipantCancellation(
+      sessionId,
+      userId,
+      new Date(),
+    );
+    if (!cancellation) throw new BookingActionError('This place can no longer be cancelled.');
+    try {
+      const refund = await this.payments.refund(
+        cancellation.paymentId,
+        cancellation.amountPaise,
+        `os-leave-${sessionId.slice(-10)}-${userId.slice(-8)}`,
+      );
+      await this.sessions.markParticipantRefundRequested(sessionId, userId, refund.requestId);
+    } catch (error) {
+      await this.sessions.markParticipantRefundResult(sessionId, userId, 'refund_failed');
+      throw error;
+    }
+    const updated = await this.sessions.findById(sessionId);
+    if (!updated) throw new BookingNotFoundError();
+    return updated;
+  }
+
+  async listRefunds(userId: string, page: number, limit: number) {
+    const [bookingRefunds, openSessionRefunds] = await Promise.all([
+      this.bookings.listRefundsByUser(userId),
+      this.sessions.listRefundsByUser(userId),
+    ]);
+    const items = [...bookingRefunds, ...openSessionRefunds].sort(
+      (left, right) => new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime(),
+    );
+    const start = (page - 1) * limit;
+    return {
+      items: items.slice(start, start + limit),
+      pagination: {
+        page,
+        limit,
+        total: items.length,
+        totalPages: Math.max(1, Math.ceil(items.length / limit)),
+      },
+    };
+  }
+
+  async processDeadlines() {
+    const now = new Date();
+    const due = await this.sessions.listFullDue(now);
+    const results = await Promise.allSettled(
+      due.map(async (session) => {
+        await this.ensureBookingForFilledSession(session);
+        await this.sessions.markConfirmed(session.id);
+      }),
+    );
+    const cancelled = await this.expireUnfilled();
+    const failures = results.filter((result) => result.status === 'rejected');
+    if (failures.length)
+      throw new AggregateError(
+        failures.map((failure) => failure.reason),
+        `Unable to finalize ${failures.length} open session(s).`,
+      );
+    return results.length + cancelled;
   }
 
   async expireUnfilled() {
@@ -298,6 +395,39 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
       customerName: name,
       customerEmail: email,
       description: `${session.sportName} open session at ${session.turfName}`,
+    });
+  }
+
+  private async ensureBookingForFilledSession(
+    session: Awaited<ReturnType<IOpenSessionRepository['findById']>>,
+  ) {
+    if (!session || session.status !== 'full' || new Date(session.fillDeadline) > new Date())
+      return;
+    const participantUserIds = session.participants
+      .filter((participant) => participant.paymentStatus === 'paid')
+      .map((participant) => participant.userId);
+    const customerId = participantUserIds[0];
+    if (!customerId) throw new BookingActionError('The filled session has no paid participants.');
+    const customer = await this.users.findById(customerId);
+    if (!customer) throw new BookingNotFoundError();
+    const commission = await this.commissions.get();
+    await this.bookings.ensureOpenSessionBooking({
+      openSessionId: session.id,
+      customerId,
+      participantUserIds,
+      turfId: session.turfId,
+      courtId: session.courtId,
+      turfName: session.turfName,
+      courtName: session.courtName,
+      address: session.address,
+      bookingDate: session.bookingDate,
+      startTime: session.startTime,
+      endTime: session.endTime,
+      grossAmountPaise: session.totalPricePaise,
+      commissionBasisPoints: commission?.basisPoints ?? DEFAULT_COMMISSION_PERCENTAGE * 100,
+      customerSharePaise: session.pricePerParticipantPaise,
+      customerName: customer.name,
+      customerEmail: customer.email.toString(),
     });
   }
 }

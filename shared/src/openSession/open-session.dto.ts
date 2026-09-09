@@ -1,17 +1,19 @@
-import type { PaginationMeta } from '../common/pagination.js';
+import type { PaginationMeta } from "../common/pagination.js";
 
 export type OpenSessionStatus =
-  | 'awaiting_creator_payment'
-  | 'open'
-  | 'full'
-  | 'cancelled'
-  | 'completed';
+  | "awaiting_creator_payment"
+  | "open"
+  | "full"
+  | "confirmed"
+  | "cancelled"
+  | "completed";
 
 export interface OpenSessionParticipantDTO {
   userId: string;
   name: string;
   isCreator: boolean;
-  paymentStatus: 'pending' | 'paid' | 'refund_pending' | 'refunded' | 'refund_failed';
+  paymentStatus:
+    "pending" | "paid" | "refund_pending" | "refunded" | "refund_failed";
   joinedAt: string;
 }
 

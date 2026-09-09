@@ -1,4 +1,4 @@
-import type { OpenSessionDTO } from '@turfhood/shared';
+import type { CustomerRefundDTO, OpenSessionDTO } from '@turfhood/shared';
 
 export interface CreateOpenSessionPersistenceInput {
   creatorId: string;
@@ -36,6 +36,11 @@ export interface IOpenSessionRepository {
     page: number,
     limit: number,
   ): Promise<{ items: OpenSessionDTO[]; total: number }>;
+  listByTurf(
+    turfId: string,
+    page: number,
+    limit: number,
+  ): Promise<{ items: OpenSessionDTO[]; total: number }>;
   addPendingParticipant(
     id: string,
     user: { id: string; name: string },
@@ -44,6 +49,13 @@ export interface IOpenSessionRepository {
   findByTransactionId(transactionId: string): Promise<OpenSessionDTO | null>;
   findPayment(transactionId: string): Promise<{ createdAt: Date; status: string } | null>;
   confirmParticipant(transactionId: string, paymentId: string): Promise<OpenSessionDTO | null>;
+  listFullDue(now: Date): Promise<OpenSessionDTO[]>;
+  markConfirmed(sessionId: string): Promise<void>;
+  beginParticipantCancellation(
+    sessionId: string,
+    userId: string,
+    now: Date,
+  ): Promise<{ paymentId: string; amountPaise: number } | null>;
   failParticipant(transactionId: string): Promise<void>;
   expirePendingParticipants(now: Date): Promise<number>;
   expireUnfilled(now: Date): Promise<
@@ -65,4 +77,5 @@ export interface IOpenSessionRepository {
     userId: string,
     status: 'refunded' | 'refund_failed',
   ): Promise<void>;
+  listRefundsByUser(userId: string): Promise<CustomerRefundDTO[]>;
 }

@@ -155,6 +155,11 @@ export function MyBookingsPage() {
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="text-xs text-muted-foreground">{booking.reference}</p>
+                    {booking.bookingType === 'open_session' && (
+                      <Badge variant="outline" className="mt-2">
+                        Open session
+                      </Badge>
+                    )}
                     <h2 className="mt-1 text-lg font-semibold">
                       {booking.turfName} - {booking.courtName}
                     </h2>
@@ -178,8 +183,16 @@ export function MyBookingsPage() {
                       {booking.status.replaceAll('_', ' ')}
                     </Badge>
                     <p className="mt-3 font-bold">
-                      Rs. {(booking.finalAmountPaise / 100).toLocaleString('en-IN')}
+                      Rs.{' '}
+                      {(
+                        ((booking.bookingType === 'open_session'
+                          ? booking.customerSharePaise
+                          : booking.finalAmountPaise) ?? booking.finalAmountPaise) / 100
+                      ).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                     </p>
+                    {booking.bookingType === 'open_session' && (
+                      <p className="mt-1 text-xs text-muted-foreground">Your share</p>
+                    )}
                   </div>
                 </div>
               </Link>

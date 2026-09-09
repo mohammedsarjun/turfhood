@@ -11,25 +11,143 @@ import { SlotReservationModel } from '../models/SlotReservationModel.js';
 
 @injectable()
 export class BookingRepository implements IBookingRepository {
+  async ensureOpenSessionBooking(input: {
+    openSessionId: string;
+    customerId: string;
+    participantUserIds: string[];
+    turfId: string;
+    courtId: string;
+    turfName: string;
+    courtName: string;
+    address: string;
+    bookingDate: string;
+    startTime: string;
+    endTime: string;
+    grossAmountPaise: number;
+    commissionBasisPoints: number;
+    customerSharePaise: number;
+    customerName: string;
+    customerEmail: string;
+  }) {
+    const commissionPaise = Math.round(
+      (input.grossAmountPaise * input.commissionBasisPoints) / 10_000,
+    );
+    const session = await mongoose.startSession();
+    let document: BookingDocument | null = null;
+    try {
+      await session.withTransaction(async () => {
+        document = await BookingModel.findOneAndUpdate(
+          { openSessionId: input.openSessionId },
+          {
+            $setOnInsert: {
+              reference: `OS-${input.openSessionId.slice(-8).toUpperCase()}`,
+              userId: input.customerId,
+              participantUserIds: input.participantUserIds,
+              turfId: input.turfId,
+              courtId: input.courtId,
+              turfName: input.turfName,
+              courtName: input.courtName,
+              address: input.address,
+              customerName: input.customerName,
+              customerEmail: input.customerEmail,
+              bookingDate: input.bookingDate,
+              slots: [
+                {
+                  startTime: input.startTime,
+                  endTime: input.endTime,
+                  pricePaise: input.grossAmountPaise,
+                },
+              ],
+              subtotalPaise: input.grossAmountPaise,
+              discountPaise: 0,
+              taxPaise: 0,
+              platformFeePaise: 0,
+              commissionBasisPoints: input.commissionBasisPoints,
+              commissionPaise,
+              ownerEarningsPaise: input.grossAmountPaise - commissionPaise,
+              finalAmountPaise: input.grossAmountPaise,
+              currency: 'INR',
+              status: 'confirmed',
+              paymentStatus: 'paid',
+              bookingType: 'open_session',
+              openSessionId: input.openSessionId,
+              customerSharePaise: input.customerSharePaise,
+              payuTransactionId: `open-session-${input.openSessionId}`,
+              timeline: [
+                {
+                  type: 'booking_created',
+                  description: 'Open session filled and booking confirmed.',
+                  occurredAt: new Date(),
+                  actor: 'system',
+                },
+              ],
+              confirmedAt: new Date(),
+              cancellationPolicy: {
+                graceMinutes: 0,
+                fullRefundBeforeHours: 0,
+                partialRefundBeforeHours: 0,
+                partialRefundPercentage: 0,
+              },
+            },
+          },
+          { new: true, upsert: true, runValidators: true, session },
+        );
+        if (!document) throw new Error('Open-session booking was not created.');
+        await SlotReservationModel.updateMany(
+          { bookingId: input.openSessionId },
+          { $set: { bookingId: document._id, state: 'confirmed' }, $unset: { expiresAt: 1 } },
+          { session },
+        );
+      });
+    } finally {
+      await session.endSession();
+    }
+    if (!document) throw new Error('Open-session booking was not created.');
+    return this.toDTO(document);
+  }
   async statusCountsBetween(turfId: string, startDate: string, endDate: string) {
     if (!mongoose.isValidObjectId(turfId)) return { booked: 0, cancelled: 0, completed: 0 };
     const rows = await BookingModel.aggregate<{ _id: string; count: number }>([
-      { $match: { turfId: new mongoose.Types.ObjectId(turfId), bookingDate: { $gte: startDate, $lte: endDate }, status: { $in: ['confirmed', 'completed', 'cancelled_by_user', 'cancelled_by_owner'] } } },
+      {
+        $match: {
+          turfId: new mongoose.Types.ObjectId(turfId),
+          bookingDate: { $gte: startDate, $lte: endDate },
+          status: { $in: ['confirmed', 'completed', 'cancelled_by_user', 'cancelled_by_owner'] },
+        },
+      },
       { $group: { _id: '$status', count: { $sum: 1 } } },
     ]);
     const counts = new Map(rows.map((row) => [row._id, row.count]));
-    return { booked: counts.get('confirmed') ?? 0, completed: counts.get('completed') ?? 0, cancelled: (counts.get('cancelled_by_user') ?? 0) + (counts.get('cancelled_by_owner') ?? 0) };
+    return {
+      booked: counts.get('confirmed') ?? 0,
+      completed: counts.get('completed') ?? 0,
+      cancelled: (counts.get('cancelled_by_user') ?? 0) + (counts.get('cancelled_by_owner') ?? 0),
+    };
   }
   async revenueBetween(turfId: string, startDate: string, endDate: string) {
-    if (!mongoose.isValidObjectId(turfId)) return { items: [], summary: { bookings: 0, grossRevenuePaise: 0, commissionPaise: 0, netEarningsPaise: 0 } };
-    const documents = await BookingModel.find({ turfId, bookingDate: { $gte: startDate, $lte: endDate }, status: { $in: ['confirmed', 'completed'] } }).sort({ bookingDate: -1, createdAt: -1 });
+    if (!mongoose.isValidObjectId(turfId))
+      return {
+        items: [],
+        summary: { bookings: 0, grossRevenuePaise: 0, commissionPaise: 0, netEarningsPaise: 0 },
+      };
+    const documents = await BookingModel.find({
+      turfId,
+      bookingDate: { $gte: startDate, $lte: endDate },
+      status: { $in: ['confirmed', 'completed'] },
+    }).sort({ bookingDate: -1, createdAt: -1 });
     const items = documents.map((document) => this.toDTO(document));
-    return { items, summary: {
-      bookings: items.length,
-      grossRevenuePaise: items.reduce((sum, item) => sum + item.subtotalPaise - item.discountPaise, 0),
-      commissionPaise: items.reduce((sum, item) => sum + item.commissionPaise, 0),
-      netEarningsPaise: items.reduce((sum, item) => sum + item.ownerEarningsPaise, 0),
-    }};
+    return {
+      items,
+      summary: {
+        bookings: items.length,
+        grossRevenuePaise: items.reduce(
+          (sum, item) => sum + item.subtotalPaise - item.discountPaise,
+          0,
+        ),
+        commissionPaise: items.reduce((sum, item) => sum + item.commissionPaise, 0),
+        netEarningsPaise: items.reduce((sum, item) => sum + item.ownerEarningsPaise, 0),
+      },
+    };
   }
   async reserve(input: CreateBookingPersistenceInput): Promise<BookingDTO> {
     const session = await mongoose.startSession();
@@ -77,7 +195,10 @@ export class BookingRepository implements IBookingRepository {
     return doc ? this.toDTO(doc) : null;
   }
   async listByUser(userId: string, page: number, limit: number) {
-    const filter = { userId, status: { $nin: ['pending_payment', 'expired'] } };
+    const filter = {
+      $or: [{ userId }, { participantUserIds: userId }],
+      status: { $nin: ['pending_payment', 'expired'] },
+    };
     const [docs, total] = await Promise.all([
       BookingModel.find(filter)
         .sort({ createdAt: -1 })
@@ -420,7 +541,9 @@ export class BookingRepository implements IBookingRepository {
           paymentStatus: escalated ? 'refund_escalated' : 'refund_pending',
           'refund.lastCheckedAt': new Date(),
           'refund.failureReason': reason,
-          ...(!escalated ? { 'refund.requestToken': `refund-${id.slice(-12)}-${attempts + 1}` } : {}),
+          ...(!escalated
+            ? { 'refund.requestToken': `refund-${id.slice(-12)}-${attempts + 1}` }
+            : {}),
         },
         $unset: { 'refund.payuRequestId': 1, 'refund.requestedAt': 1 },
         $push: {
@@ -442,7 +565,10 @@ export class BookingRepository implements IBookingRepository {
   async listEscalatedRefunds(page: number, limit: number) {
     const filter = { paymentStatus: 'refund_escalated' } as const;
     const [docs, total] = await Promise.all([
-      BookingModel.find(filter).sort({ updatedAt: -1 }).skip((page - 1) * limit).limit(limit),
+      BookingModel.find(filter)
+        .sort({ updatedAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit),
       BookingModel.countDocuments(filter),
     ]);
     return { items: docs.map((doc) => this.toDTO(doc)), total };
@@ -471,6 +597,51 @@ export class BookingRepository implements IBookingRepository {
     );
     return doc ? this.toDTO(doc) : null;
   }
+  async listRefundsByUser(userId: string) {
+    const docs = await BookingModel.find({
+      $or: [{ userId }, { participantUserIds: userId }],
+      paymentStatus: {
+        $in: [
+          'refund_pending',
+          'refund_failed',
+          'refund_escalated',
+          'refunded',
+          'partially_refunded',
+        ],
+      },
+    }).sort({ updatedAt: -1 });
+    return docs.map((doc) => ({
+      id: doc._id.toString(),
+      source: 'booking' as const,
+      reference: doc.reference,
+      turfName: doc.turfName,
+      courtName: doc.courtName,
+      amountPaise: doc.cancellation?.refundPaise ?? doc.finalAmountPaise,
+      status:
+        doc.paymentStatus === 'refunded'
+          ? ('refunded' as const)
+          : doc.paymentStatus === 'partially_refunded'
+            ? ('partially_refunded' as const)
+            : doc.paymentStatus === 'refund_escalated'
+              ? ('escalated' as const)
+              : doc.paymentStatus === 'refund_failed'
+                ? ('failed' as const)
+                : ('pending' as const),
+      reason:
+        doc.cancellation?.reason ??
+        (doc.cancellation?.actor === 'owner'
+          ? 'The turf owner cancelled this booking.'
+          : 'Booking cancellation refund.'),
+      attemptCount: doc.refund?.attemptCount ?? 0,
+      escalated: doc.paymentStatus === 'refund_escalated',
+      ...(doc.paymentId ? { paymentReference: doc.paymentId } : {}),
+      ...(doc.refund?.payuRequestId ? { refundReference: doc.refund.payuRequestId } : {}),
+      ...(doc.refund?.requestedAt ? { requestedAt: doc.refund.requestedAt.toISOString() } : {}),
+      ...(doc.refund?.completedAt ? { completedAt: doc.refund.completedAt.toISOString() } : {}),
+      ...(doc.refund?.failureReason ? { failureReason: doc.refund.failureReason } : {}),
+      createdAt: doc.cancellation?.cancelledAt?.toISOString() ?? doc.updatedAt.toISOString(),
+    }));
+  }
   async appendTimeline(id: string, event: Omit<BookingTimelineEventDTO, 'occurredAt'>) {
     await BookingModel.updateOne(
       { _id: id },
@@ -478,8 +649,15 @@ export class BookingRepository implements IBookingRepository {
     );
   }
   private async expirePendingInSession(now: Date, session: mongoose.ClientSession) {
-    const result = await BookingModel.updateMany(
+    const expiredBookings = await BookingModel.find(
       { status: 'pending_payment', reservationExpiresAt: { $lte: now } },
+      { _id: 1 },
+      { session },
+    );
+    const bookingIds = expiredBookings.map((booking) => booking._id);
+    if (!bookingIds.length) return 0;
+    const result = await BookingModel.updateMany(
+      { _id: { $in: bookingIds }, status: 'pending_payment' },
       {
         $set: { status: 'expired', paymentStatus: 'failed' },
         $push: {
@@ -493,7 +671,10 @@ export class BookingRepository implements IBookingRepository {
       },
       { session },
     );
-    await SlotReservationModel.deleteMany({ state: 'held', expiresAt: { $lte: now } }, { session });
+    await SlotReservationModel.deleteMany(
+      { bookingId: { $in: bookingIds }, state: 'held' },
+      { session },
+    );
     return result.modifiedCount;
   }
   private toDTO(doc: BookingDocument): BookingDTO {
@@ -569,6 +750,14 @@ export class BookingRepository implements IBookingRepository {
       cancellationPolicy: doc.cancellationPolicy,
       createdAt: doc.createdAt.toISOString(),
       ...(doc.confirmedAt ? { confirmedAt: doc.confirmedAt.toISOString() } : {}),
+      ...(doc.bookingType ? { bookingType: doc.bookingType } : {}),
+      ...(doc.openSessionId ? { openSessionId: doc.openSessionId.toString() } : {}),
+      ...(doc.participantUserIds?.length
+        ? { participantUserIds: doc.participantUserIds.map((id) => id.toString()) }
+        : {}),
+      ...(doc.customerSharePaise !== undefined
+        ? { customerSharePaise: doc.customerSharePaise }
+        : {}),
     };
   }
 }

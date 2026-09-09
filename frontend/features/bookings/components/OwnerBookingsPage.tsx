@@ -61,10 +61,20 @@ export function OwnerBookingsPage({ turfId }: { turfId: string }) {
               <tr key={item.id} className="border-t border-border">
                 <td className="p-4">
                   <strong>{item.reference}</strong>
+                  {item.bookingType === 'open_session' && (
+                    <Badge variant="outline" className="ml-2">
+                      Open session
+                    </Badge>
+                  )}
                   <span className="block text-muted-foreground">{item.courtName}</span>
                 </td>
                 <td className="p-4">
                   {item.customerName}
+                  {item.bookingType === 'open_session' && (
+                    <span className="block text-muted-foreground">
+                      {item.participantUserIds?.length ?? 0} participants
+                    </span>
+                  )}
                   <span className="block text-muted-foreground">{item.customerPhone}</span>
                 </td>
                 <td className="p-4">
@@ -80,7 +90,7 @@ export function OwnerBookingsPage({ turfId }: { turfId: string }) {
                   </Badge>
                 </td>
                 <td className="p-4">
-                  {item.status === 'confirmed' && (
+                  {item.status === 'confirmed' && item.bookingType !== 'open_session' && (
                     <Button
                       size="sm"
                       variant="destructive"

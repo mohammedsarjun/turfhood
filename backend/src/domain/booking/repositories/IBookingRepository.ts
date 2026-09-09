@@ -1,4 +1,4 @@
-import type { BookingDTO, BookingTimelineEventDTO } from '@turfhood/shared';
+import type { BookingDTO, BookingTimelineEventDTO, CustomerRefundDTO } from '@turfhood/shared';
 export interface CreateBookingPersistenceInput extends Omit<
   BookingDTO,
   'id' | 'createdAt' | 'commissionPercentage' | 'reservationExpiresAt'
@@ -8,12 +8,45 @@ export interface CreateBookingPersistenceInput extends Omit<
   payuTransactionId: string;
 }
 export interface IBookingRepository {
-  revenueBetween(turfId: string, startDate: string, endDate: string): Promise<{
+  ensureOpenSessionBooking(input: {
+    openSessionId: string;
+    customerId: string;
+    participantUserIds: string[];
+    turfId: string;
+    courtId: string;
+    turfName: string;
+    courtName: string;
+    address: string;
+    bookingDate: string;
+    startTime: string;
+    endTime: string;
+    grossAmountPaise: number;
+    commissionBasisPoints: number;
+    customerSharePaise: number;
+    customerName: string;
+    customerEmail: string;
+  }): Promise<BookingDTO>;
+  revenueBetween(
+    turfId: string,
+    startDate: string,
+    endDate: string,
+  ): Promise<{
     items: BookingDTO[];
-    summary: { bookings: number; grossRevenuePaise: number; commissionPaise: number; netEarningsPaise: number };
+    summary: {
+      bookings: number;
+      grossRevenuePaise: number;
+      commissionPaise: number;
+      netEarningsPaise: number;
+    };
   }>;
-  statusCountsBetween(turfId: string, startDate: string, endDate: string): Promise<{
-    booked: number; cancelled: number; completed: number;
+  statusCountsBetween(
+    turfId: string,
+    startDate: string,
+    endDate: string,
+  ): Promise<{
+    booked: number;
+    cancelled: number;
+    completed: number;
   }>;
   reserve(input: CreateBookingPersistenceInput): Promise<BookingDTO>;
   findById(id: string): Promise<BookingDTO | null>;
@@ -57,7 +90,11 @@ export interface IBookingRepository {
   markRefundCompleted(id: string): Promise<BookingDTO | null>;
   recordRefundAttempt(id: string): Promise<BookingDTO | null>;
   recordRefundFailure(id: string, reason: string, maxAttempts: number): Promise<BookingDTO | null>;
-  listEscalatedRefunds(page: number, limit: number): Promise<{ items: BookingDTO[]; total: number }>;
+  listEscalatedRefunds(
+    page: number,
+    limit: number,
+  ): Promise<{ items: BookingDTO[]; total: number }>;
   markManualRefundPending(id: string, requestId: string): Promise<BookingDTO | null>;
+  listRefundsByUser(userId: string): Promise<CustomerRefundDTO[]>;
   appendTimeline(id: string, event: Omit<BookingTimelineEventDTO, 'occurredAt'>): Promise<void>;
 }

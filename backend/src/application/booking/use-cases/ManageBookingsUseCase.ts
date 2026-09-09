@@ -220,7 +220,8 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
   async getMine(userId: string, id: string) {
     await this.bookings.completePast(new Date());
     const booking = await this.bookings.findById(id);
-    if (!booking || booking.userId !== userId) throw new BookingNotFoundError();
+    if (!booking || (booking.userId !== userId && !booking.participantUserIds?.includes(userId)))
+      throw new BookingNotFoundError();
     return booking;
   }
   async retryPayment(userId: string, id: string): Promise<CreateReservationResponse> {
@@ -237,6 +238,8 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
   }
   async cancelMine(userId: string, id: string, reason?: string) {
     const booking = await this.getMine(userId, id);
+    if (booking.bookingType === 'open_session')
+      throw new BookingActionError('Open-session bookings cannot be cancelled individually.');
     if (booking.status !== 'confirmed' || !booking.confirmedAt)
       throw new BookingActionError('Only confirmed bookings can be cancelled.');
     const refundPaise = calculateCustomerRefundPaise({
@@ -303,6 +306,8 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
     const turf = await this.turfs.findOwnedByIdOrVerificationId(portalTurfId, ownerId);
     const booking = await this.bookings.findById(id);
     if (!turf?.id || !booking || booking.turfId !== turf.id) throw new BookingNotFoundError();
+    if (booking.bookingType === 'open_session')
+      throw new BookingActionError('Confirmed open-session bookings cannot be cancelled.');
     const cancelled = await this.bookings.cancel(
       id,
       'owner',
@@ -385,11 +390,7 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
         if (pendingBooking.refund?.payuRequestId)
           await this.bookings.markRefundChecked(pendingBooking.id, reason);
         else
-          await this.bookings.recordRefundFailure(
-            pendingBooking.id,
-            reason,
-            MAX_REFUND_ATTEMPTS,
-          );
+          await this.bookings.recordRefundFailure(pendingBooking.id, reason, MAX_REFUND_ATTEMPTS);
       }
     }
     return completed;

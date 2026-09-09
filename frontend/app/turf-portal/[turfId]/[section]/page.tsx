@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { OwnerBookingsPage } from '@/features/bookings';
 import { OwnerReviewsPage } from '@/features/reviews';
+import { OwnerOpenSessionsPage } from '@/features/open-sessions';
 import { OwnerDashboardPage, OwnerRevenuePage, OwnerTurfManagementPage } from '@/features/turf-portal';
 
 const SECTION_TITLES: Record<string, string> = {
@@ -8,7 +9,7 @@ const SECTION_TITLES: Record<string, string> = {
   'my-turf': 'My Turf',
   courts: 'Court Management',
   bookings: 'Bookings',
-  slots: 'Slot Management',
+  'open-sessions': 'Open Sessions',
   revenue: 'Revenue',
   customers: 'Customers',
   reviews: 'Reviews',
@@ -27,6 +28,7 @@ export default async function TurfPortalSectionPage({ params }: TurfPortalSectio
   if (section === 'my-turf') return <OwnerTurfManagementPage turfId={turfId} />;
   if (section === 'dashboard') return <OwnerDashboardPage turfId={turfId} />;
   if (section === 'revenue') return <OwnerRevenuePage turfId={turfId} />;
+  if (section === 'open-sessions') return <OwnerOpenSessionsPage turfId={turfId} />;
 
   return (
     <div>

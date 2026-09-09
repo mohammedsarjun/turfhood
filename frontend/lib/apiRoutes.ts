@@ -74,8 +74,11 @@ export const API_ROUTES = {
   openSessions: {
     base: '/open-sessions',
     mine: '/open-sessions/mine',
+    refunds: '/open-sessions/refunds/mine',
     details: (id: string) => `/open-sessions/${id}`,
     join: (id: string) => `/open-sessions/${id}/join`,
+    cancelParticipation: (id: string) => `/open-sessions/${id}/participants/me`,
+    owner: (turfId: string) => `/turf-portal/${turfId}/open-sessions`,
   },
   reviews: {
     forBooking: (bookingId: string) => `/bookings/${bookingId}/review`,
