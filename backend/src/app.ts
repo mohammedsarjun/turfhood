@@ -16,6 +16,7 @@ import commissionRoutes from '@presentation/commission/routes/commission.routes'
 import bookingRoutes from '@presentation/booking/routes/booking.routes';
 import paymentRoutes from '@presentation/booking/routes/payment.routes';
 import ownerBookingRoutes from '@presentation/booking/routes/ownerBooking.routes';
+import ownerDashboardRoutes from '@presentation/turf/routes/ownerDashboard.routes';
 import reviewRoutes from '@presentation/review/routes/review.routes';
 import favoriteRoutes from '@presentation/favorite/routes/favorite.routes';
 import openSessionRoutes from '@presentation/openSession/routes/openSession.routes';
@@ -38,6 +39,7 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/open-sessions', openSessionRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/turf-portal/:turfId/bookings', ownerBookingRoutes);
+app.use('/api/turf-portal/:turfId/dashboard', ownerDashboardRoutes);
 app.use('/api', reviewRoutes);
 app.use('/api/favorites', favoriteRoutes);
 app.use('/api/sports', sportsTypeRoutes);

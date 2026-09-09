@@ -144,6 +144,9 @@ export type {
 export type {
   ReviewDTO, CreateReviewRequest, ReviewSummaryDTO, ReviewListResponse,
 } from "./review/review.dto.js";
+export type {
+  TurfDashboardDTO, TurfDashboardBookingDTO, TurfDashboardReviewDTO,
+} from "./turfDashboard/turf-dashboard.dto.js";
 export type { FavoriteIdsResponse, FavoriteTurfListResponse } from "./favorite/favorite.dto.js";
 export type {
   OpenSessionStatus,
