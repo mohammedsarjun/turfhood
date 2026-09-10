@@ -18,6 +18,7 @@ export interface RevenueTransactionDTO {
     netEarningsPaise: number;
 }
 export interface TurfRevenueReportDTO {
+    pagination?: import("../common/pagination.js").PaginationMeta;
     turfName: string;
     selectedRange: {
         startDate: string;

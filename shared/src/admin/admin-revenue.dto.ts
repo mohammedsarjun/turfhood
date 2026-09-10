@@ -24,6 +24,7 @@ export interface AdminRevenueTransactionDTO {
 }
 
 export interface AdminRevenueReportDTO {
+  pagination?: import("../common/pagination.js").PaginationMeta;
   range: { startDate: string; endDate: string };
   summary: AdminRevenueSummaryDTO;
   snapshots: {

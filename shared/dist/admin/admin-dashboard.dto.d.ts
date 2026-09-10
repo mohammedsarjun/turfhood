@@ -15,6 +15,7 @@ export interface AdminDashboardRecentBookingDTO {
     bookingType: "private" | "open_session";
 }
 export interface AdminDashboardDTO {
+    pagination?: import("../common/pagination.js").PaginationMeta;
     totalCustomers: number;
     totalOwners: number;
     approvedTurfs: number;

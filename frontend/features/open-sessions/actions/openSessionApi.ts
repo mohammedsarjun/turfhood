@@ -22,9 +22,12 @@ export async function listOpenSessions(filters: OpenSessionFilters) {
   });
   return response.data;
 }
-export async function listMyOpenSessions(page = 1) {
+export async function listMyOpenSessions(
+  page = 1,
+  filter?: import('@turfhood/shared').BookingListFilter,
+) {
   const response = await axiosInstance.get<OpenSessionListResponse>(API_ROUTES.openSessions.mine, {
-    params: { page, limit: 10 },
+    params: { page, limit: 10, filter },
   });
   return response.data;
 }
@@ -51,10 +54,14 @@ export async function cancelOpenSessionParticipation(id: string) {
   );
   return response.data;
 }
-export async function listOwnerOpenSessions(turfId: string, page = 1) {
+export async function listOwnerOpenSessions(
+  turfId: string,
+  page = 1,
+  filter?: import('@turfhood/shared').OwnerSessionListFilter,
+) {
   const response = await axiosInstance.get<OpenSessionListResponse>(
     API_ROUTES.openSessions.owner(turfId),
-    { params: { page } },
+    { params: { page, limit: 20, filter } },
   );
   return response.data;
 }

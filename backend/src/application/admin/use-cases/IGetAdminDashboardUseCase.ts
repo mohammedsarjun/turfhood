@@ -1,5 +1,5 @@
 import type { AdminDashboardDTO } from '@turfhood/shared';
 
 export interface IGetAdminDashboardUseCase {
-  execute(): Promise<AdminDashboardDTO>;
+  execute(page?: number, limit?: number): Promise<AdminDashboardDTO>;
 }

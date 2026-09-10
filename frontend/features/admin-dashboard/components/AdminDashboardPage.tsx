@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { Pagination } from '@/components/table';
 import {
   AlertTriangle,
   ArrowUpRight,
@@ -23,12 +24,15 @@ const money = (paise: number) =>
 
 export function AdminDashboardPage() {
   const [data, setData] = useState<AdminDashboardDTO>();
-  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [refreshing, setLoading] = useState(false);
+  const [loadedPage, setLoadedPage] = useState(0);
+  const loading = refreshing || loadedPage !== page;
   const { showToast } = useToast();
   const refresh = async () => {
     setLoading(true);
     try {
-      setData(await getAdminDashboard());
+      setData(await getAdminDashboard(page));
     } catch {
       showToast('Unable to load admin dashboard.', 'error');
     } finally {
@@ -36,11 +40,19 @@ export function AdminDashboardPage() {
     }
   };
   useEffect(() => {
-    void getAdminDashboard()
-      .then(setData)
-      .catch(() => showToast('Unable to load admin dashboard.', 'error'))
-      .finally(() => setLoading(false));
-  }, [showToast]);
+    let active = true;
+    void getAdminDashboard(page)
+      .then((result) => {
+        if (active) setData(result);
+      })
+      .catch(() => active && showToast('Unable to load admin dashboard.', 'error'))
+      .finally(() => {
+        if (active) setLoadedPage(page);
+      });
+    return () => {
+      active = false;
+    };
+  }, [showToast, page]);
   const maxRevenue = useMemo(
     () => Math.max(1, ...(data?.trends.map((item) => item.revenuePaise) ?? [])),
     [data],
@@ -251,6 +263,14 @@ export function AdminDashboardPage() {
                 ))}
               </tbody>
             </table>
+            {data.pagination && (
+              <Pagination
+                page={page}
+                totalPages={data.pagination.totalPages}
+                onPageChange={setPage}
+                disabled={loading}
+              />
+            )}
             {data.recentBookings.length === 0 && (
               <p className="py-10 text-center text-muted-foreground">No booking activity yet.</p>
             )}

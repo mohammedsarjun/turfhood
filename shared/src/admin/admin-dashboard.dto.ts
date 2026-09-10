@@ -17,6 +17,7 @@ export interface AdminDashboardRecentBookingDTO {
 }
 
 export interface AdminDashboardDTO {
+  pagination?: import("../common/pagination.js").PaginationMeta;
   totalCustomers: number;
   totalOwners: number;
   approvedTurfs: number;

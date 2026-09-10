@@ -172,9 +172,22 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
     return session;
   }
 
-  async listMine(userId: string, page: number, limit: number): Promise<OpenSessionListResponse> {
+  async listMine(
+    userId: string,
+    page: number,
+    limit: number,
+    filter?: import('@turfhood/shared').BookingListFilter,
+  ): Promise<OpenSessionListResponse> {
     await this.expireUnfilled();
-    const result = await this.sessions.listByParticipant(userId, page, limit);
+    const statuses =
+      filter === 'upcoming'
+        ? ['open', 'full']
+        : filter === 'completed'
+          ? ['completed']
+          : filter === 'cancelled'
+            ? ['cancelled']
+            : undefined;
+    const result = await this.sessions.listByParticipant(userId, page, limit, statuses);
     return {
       items: result.items,
       pagination: {
@@ -191,11 +204,21 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
     portalTurfId: string,
     page: number,
     limit: number,
+    filter?: import('@turfhood/shared').OwnerSessionListFilter,
   ): Promise<OpenSessionListResponse> {
     await this.expireUnfilled();
     const turf = await this.turfs.findOwnedByIdOrVerificationId(portalTurfId, ownerId);
     if (!turf?.id) throw new BookingNotFoundError();
-    const result = await this.sessions.listByTurf(turf.id, page, limit);
+    const result = await this.sessions.listByTurf(
+      turf.id,
+      page,
+      limit,
+      filter === 'active'
+        ? ['open', 'full', 'awaiting_creator_payment']
+        : filter && filter !== 'all'
+          ? [filter]
+          : undefined,
+    );
     return {
       items: result.items,
       pagination: {

@@ -1,6 +1,7 @@
 'use client';
 /* eslint-disable @next/next/no-img-element -- court images use deployment-specific CDN URLs */
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
+import { Pagination } from '@/components/table';
 import { CalendarDays, Clock3, IndianRupee, UsersRound } from 'lucide-react';
 import type { OpenSessionDTO, OpenSessionStatus } from '@turfhood/shared';
 import { Badge, Spinner } from '@/components/ui';
@@ -9,20 +10,11 @@ import { useOwnerOpenSessions } from '../hooks/useOwnerOpenSessions';
 import { SessionParticipants } from './SessionParticipants';
 type Filter = 'all' | 'active' | 'completed' | 'cancelled';
 export function OwnerOpenSessionsPage({ turfId }: { turfId: string }) {
-  const { data, loading, error } = useOwnerOpenSessions(turfId);
   const [filter, setFilter] = useState<Filter>('all');
+  const [page, setPage] = useState(1);
+  const { data, loading, error } = useOwnerOpenSessions(turfId, page, filter);
   const [expanded, setExpanded] = useState<string>();
-  const sessions = useMemo(
-    () =>
-      (data?.items ?? []).filter(
-        (session) =>
-          filter === 'all' ||
-          (filter === 'active'
-            ? ['open', 'full', 'awaiting_creator_payment'].includes(session.status)
-            : session.status === filter),
-      ),
-    [data, filter],
-  );
+  const sessions = data?.items ?? [];
   if (loading)
     return (
       <div className="flex min-h-96 items-center justify-center">
@@ -48,7 +40,11 @@ export function OwnerOpenSessionsPage({ turfId }: { turfId: string }) {
         {(['all', 'active', 'completed', 'cancelled'] as Filter[]).map((item) => (
           <button
             key={item}
-            onClick={() => setFilter(item)}
+            onClick={() => {
+              setFilter(item);
+              setPage(1);
+              setExpanded(undefined);
+            }}
             className={`rounded-lg px-4 py-2 text-sm font-medium capitalize ${filter === item ? 'bg-primary text-primary-foreground' : 'border border-border bg-card hover:bg-muted'}`}
           >
             {item}
@@ -76,6 +72,9 @@ export function OwnerOpenSessionsPage({ turfId }: { turfId: string }) {
             Sessions created for this turf will appear here.
           </p>
         </div>
+      )}
+      {data && (
+        <Pagination page={page} totalPages={data.pagination.totalPages} onPageChange={setPage} />
       )}
     </div>
   );

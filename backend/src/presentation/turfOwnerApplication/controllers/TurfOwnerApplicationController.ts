@@ -1,3 +1,4 @@
+import { parsePagination } from '@presentation/shared/utils/pagination';
 import type { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'tsyringe';
 import type { IApproveTurfOwnerApplicationUseCase } from '@application/turfOwnerApplication/use-cases/IApproveTurfOwnerApplicationUseCase';
@@ -114,8 +115,9 @@ export class TurfOwnerApplicationController {
   listMine = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = requireUserId(req);
-      const applications = await this.listMineUseCase.execute(userId);
-      res.status(HttpStatus.OK).json({ applications });
+      const { page, limit } = parsePagination(req.query, 9, 50);
+      const result = await this.listMineUseCase.execute(userId, page, limit);
+      res.status(HttpStatus.OK).json({ applications: result.items, pagination: result.pagination });
     } catch (error) {
       next(error);
     }

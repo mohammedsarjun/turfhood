@@ -35,11 +35,13 @@ export interface IOpenSessionRepository {
     userId: string,
     page: number,
     limit: number,
+    statuses?: string[],
   ): Promise<{ items: OpenSessionDTO[]; total: number }>;
   listByTurf(
     turfId: string,
     page: number,
     limit: number,
+    statuses?: string[],
   ): Promise<{ items: OpenSessionDTO[]; total: number }>;
   addPendingParticipant(
     id: string,

@@ -13,12 +13,15 @@ import { OpenSessionModel, type OpenSessionDocument } from '../models/OpenSessio
 
 @injectable()
 export class OpenSessionRepository implements IOpenSessionRepository {
-  async listByTurf(turfId: string, page: number, limit: number) {
+  async listByTurf(turfId: string, page: number, limit: number, statuses?: string[]) {
     if (!mongoose.isValidObjectId(turfId)) return { items: [], total: 0 };
-    const filter = { turfId: new mongoose.Types.ObjectId(turfId) };
+    const filter = {
+      turfId: new mongoose.Types.ObjectId(turfId),
+      ...(statuses ? { status: { $in: statuses } } : {}),
+    };
     const [documents, total] = await Promise.all([
       OpenSessionModel.find(filter)
-        .sort({ bookingDate: -1, startTime: -1 })
+        .sort({ bookingDate: -1, startTime: -1, _id: -1 })
         .skip((page - 1) * limit)
         .limit(limit),
       OpenSessionModel.countDocuments(filter),
@@ -137,9 +140,10 @@ export class OpenSessionRepository implements IOpenSessionRepository {
     return { items: docs.map((doc) => this.toDTO(doc)), total };
   }
 
-  async listByParticipant(userId: string, page: number, limit: number) {
+  async listByParticipant(userId: string, page: number, limit: number, statuses?: string[]) {
     if (!mongoose.isValidObjectId(userId)) return { items: [], total: 0 };
     const filter = {
+      ...(statuses ? { status: { $in: statuses } } : {}),
       participants: {
         $elemMatch: {
           userId: new mongoose.Types.ObjectId(userId),
@@ -151,7 +155,7 @@ export class OpenSessionRepository implements IOpenSessionRepository {
     };
     const [docs, total] = await Promise.all([
       OpenSessionModel.find(filter)
-        .sort({ bookingDate: -1, startTime: -1 })
+        .sort({ bookingDate: -1, startTime: -1, _id: -1 })
         .skip((page - 1) * limit)
         .limit(limit),
       OpenSessionModel.countDocuments(filter),

@@ -204,9 +204,22 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
     }
     return result.booking;
   }
-  async listMine(userId: string, page: number, limit: number): Promise<BookingListResponse> {
+  async listMine(
+    userId: string,
+    page: number,
+    limit: number,
+    filter?: import('@turfhood/shared').BookingListFilter,
+  ): Promise<BookingListResponse> {
     await this.bookings.completePast(new Date());
-    const result = await this.bookings.listByUser(userId, page, limit);
+    const statuses =
+      filter === 'upcoming'
+        ? ['confirmed']
+        : filter === 'completed'
+          ? ['completed']
+          : filter === 'cancelled'
+            ? ['cancelled_by_user', 'cancelled_by_owner', 'refunded', 'partially_refunded']
+            : undefined;
+    const result = await this.bookings.listByUser(userId, page, limit, statuses);
     return {
       items: result.items,
       pagination: {

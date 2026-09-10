@@ -1,7 +1,7 @@
 import { axiosInstance } from '@/lib/axios';
 import { API_ROUTES } from '@/lib/apiRoutes';
 import type { ApiResponse } from '@/types/api/response';
-import type { TurfApplicationAddress } from '@turfhood/shared';
+import type { TurfApplicationAddress, MyTurfApplicationsResponse } from '@turfhood/shared';
 import type { TurfApplicationSummary } from '../types';
 import type { DocumentEntry } from '../components/DocumentUpload';
 import type { Coordinates } from '../components/LocationMapPicker';
@@ -16,11 +16,12 @@ export async function getMyApplication(): Promise<
   return response.data;
 }
 
-export async function listMyApplications(): Promise<
-  ApiResponse<{ applications: TurfApplicationSummary[] }>
-> {
-  const response = await axiosInstance.get<{ applications: TurfApplicationSummary[] }>(
+export async function listMyApplications(
+  page = 1,
+): Promise<ApiResponse<MyTurfApplicationsResponse>> {
+  const response = await axiosInstance.get<MyTurfApplicationsResponse>(
     API_ROUTES.turfOwnerApplications.mine,
+    { params: { page, limit: 9 } },
   );
   return response.data;
 }

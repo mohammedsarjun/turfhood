@@ -55,6 +55,7 @@ export interface IBookingRepository {
     userId: string,
     page: number,
     limit: number,
+    statuses?: string[],
   ): Promise<{ items: BookingDTO[]; total: number }>;
   listByTurf(
     turfId: string,

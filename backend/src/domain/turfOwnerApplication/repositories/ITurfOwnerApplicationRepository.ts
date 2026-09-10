@@ -1,6 +1,7 @@
 import type { TurfOwnerApplication } from '../entities/TurfOwnerApplication.js';
 
 export interface ListTurfOwnerApplicationsParams {
+  applicantUserId?: string;
   page: number;
   limit: number;
   status?: 'pending' | 'approved' | 'rejected';

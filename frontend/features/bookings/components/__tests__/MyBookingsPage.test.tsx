@@ -1,4 +1,4 @@
-import { render, screen } from '@/test/test-utils';
+import { fireEvent, render, screen, waitFor } from '@/test/test-utils';
 import { listMyBookings } from '../../actions/bookingApi';
 import { listMyOpenSessions } from '../../../open-sessions/actions/openSessionApi';
 import { MyBookingsPage } from '../MyBookingsPage';
@@ -7,6 +7,23 @@ jest.mock('../../actions/bookingApi');
 jest.mock('../../../open-sessions/actions/openSessionApi');
 
 describe('MyBookingsPage', () => {
+  it('requests the next backend page and resets both lists when the status changes', async () => {
+    jest.mocked(listMyBookings).mockResolvedValue({
+      items: [],
+      pagination: { page: 1, limit: 10, total: 21, totalPages: 3 },
+    });
+    jest.mocked(listMyOpenSessions).mockResolvedValue({
+      items: [],
+      pagination: { page: 1, limit: 10, total: 0, totalPages: 1 },
+    });
+    render(<MyBookingsPage />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Next' }));
+    await waitFor(() => expect(listMyBookings).toHaveBeenLastCalledWith(2, 'upcoming'));
+    fireEvent.click(screen.getByRole('button', { name: 'Completed' }));
+    await waitFor(() => expect(listMyBookings).toHaveBeenLastCalledWith(1, 'completed'));
+    expect(listMyOpenSessions).toHaveBeenLastCalledWith(1, 'completed');
+    await screen.findByText('No completed bookings.');
+  });
   it('shows an open session joined by the current user', async () => {
     jest.mocked(listMyBookings).mockResolvedValue({
       items: [],

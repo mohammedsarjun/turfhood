@@ -17,12 +17,18 @@ export interface IManageOpenSessionsUseCase {
     latitude?: number;
     longitude?: number;
   }): Promise<OpenSessionListResponse>;
-  listMine(userId: string, page: number, limit: number): Promise<OpenSessionListResponse>;
+  listMine(
+    userId: string,
+    page: number,
+    limit: number,
+    filter?: import('@turfhood/shared').BookingListFilter,
+  ): Promise<OpenSessionListResponse>;
   listForOwner(
     ownerId: string,
     portalTurfId: string,
     page: number,
     limit: number,
+    filter?: import('@turfhood/shared').OwnerSessionListFilter,
   ): Promise<OpenSessionListResponse>;
   details(sessionId: string): Promise<OpenSessionDTO>;
   paymentCallback(input: PaymentCallback): Promise<OpenSessionDTO>;

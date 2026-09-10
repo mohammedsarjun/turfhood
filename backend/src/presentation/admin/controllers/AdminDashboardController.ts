@@ -1,3 +1,4 @@
+import { parsePagination } from '@presentation/shared/utils/pagination';
 import type { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'tsyringe';
 import type { IGetAdminDashboardUseCase } from '@application/admin/use-cases/IGetAdminDashboardUseCase';
@@ -14,7 +15,7 @@ export class AdminDashboardController {
 
   get = async (_request: Request, response: Response, next: NextFunction) => {
     try {
-      response.json(await this.dashboard.execute());
+      response.json(await this.dashboard.execute(parsePagination(_request.query).page, 6));
     } catch (error) {
       next(error);
     }
@@ -25,6 +26,8 @@ export class AdminDashboardController {
         await this.revenue.execute(
           String(request.query.startDate ?? ''),
           String(request.query.endDate ?? ''),
+          parsePagination(request.query).page,
+          20,
         ),
       );
     } catch (error) {

@@ -1,7 +1,9 @@
 'use client';
 import { useMemo, useState } from 'react';
+import { Pagination } from '@/components/table';
+import { getOwnerRevenue } from '../actions/ownerRevenueApi';
 import { FiCalendar, FiDownload, FiDollarSign, FiPercent, FiTrendingUp } from 'react-icons/fi';
-import { Button, Input, Spinner } from '@/components/ui';
+import { Button, Input, Spinner, useToast } from '@/components/ui';
 import { useOwnerRevenue } from '../hooks/useOwnerRevenue';
 import { exportRevenuePdf } from '../lib/exportRevenuePdf';
 const localDate = (value = new Date()) =>
@@ -15,6 +17,8 @@ const money = (paise: number) =>
   }).format(paise / 100);
 type Range = 'today' | 'week' | 'month' | 'year' | 'custom';
 export function OwnerRevenuePage({ turfId }: { turfId: string }) {
+  const { showToast } = useToast();
+  const [exporting, setExporting] = useState(false);
   const today = localDate();
   const [range, setRange] = useState<Range>('month');
   const [customStart, setCustomStart] = useState(`${today.slice(0, 7)}-01`);
@@ -31,7 +35,7 @@ export function OwnerRevenuePage({ turfId }: { turfId: string }) {
             ? [`${today.slice(0, 4)}-01-01`, today]
             : [customStart, customEnd];
   const validDates = Boolean(dates[0] && dates[1] && dates[0] <= dates[1]);
-  const { report, loading, error, retry } = useOwnerRevenue(
+  const { report, loading, error, retry, page, setPage } = useOwnerRevenue(
     turfId,
     validDates ? dates[0] : today,
     validDates ? dates[1] : today,
@@ -64,6 +68,17 @@ export function OwnerRevenuePage({ turfId }: { turfId: string }) {
         },
       ]
     : [];
+  async function exportReport() {
+    setExporting(true);
+    try {
+      exportRevenuePdf(await getOwnerRevenue(turfId, dates[0], dates[1]));
+      showToast('Revenue report exported.');
+    } catch {
+      showToast('Unable to export revenue report.', 'error');
+    } finally {
+      setExporting(false);
+    }
+  }
   function selectRange(value: Range) {
     setRange(value);
     setDateError(undefined);
@@ -98,7 +113,7 @@ export function OwnerRevenuePage({ turfId }: { turfId: string }) {
             Track earnings and platform fees for {report.turfName}.
           </p>
         </div>
-        <Button variant="outline" onClick={() => exportRevenuePdf(report)}>
+        <Button variant="outline" loading={exporting} onClick={() => void exportReport()}>
           <FiDownload />
           Download PDF
         </Button>
@@ -246,6 +261,14 @@ export function OwnerRevenuePage({ turfId }: { turfId: string }) {
               ))}
             </tbody>
           </table>
+          {report.pagination && (
+            <Pagination
+              page={page}
+              totalPages={report.pagination.totalPages}
+              onPageChange={setPage}
+              disabled={loading}
+            />
+          )}
           {!report.transactions.length && (
             <div className="p-12 text-center text-sm text-muted-foreground">
               <FiCalendar className="mx-auto mb-3" size={28} />

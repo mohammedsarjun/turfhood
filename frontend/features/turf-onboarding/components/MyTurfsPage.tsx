@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Pagination } from '@/components/table';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { Heading, Spinner, Text } from '@/components/ui';
@@ -17,7 +18,7 @@ function toNamesById(items: CatalogItem[]): Record<string, string> {
 
 /** Lists every turf-owner application the user has ever submitted (any status) as cards. */
 export function MyTurfsPage() {
-  const { applications, isLoading, error } = useMyApplications();
+  const { applications, isLoading, error, page, totalPages, setPage } = useMyApplications();
   const [selected, setSelected] = useState<TurfApplicationSummary | null>(null);
   const [sportNamesById, setSportNamesById] = useState<Record<string, string>>({});
   const [amenityNamesById, setAmenityNamesById] = useState<Record<string, string>>({});
@@ -88,6 +89,9 @@ export function MyTurfsPage() {
               />
             ))}
           </div>
+        )}
+        {!isLoading && !error && (
+          <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
         )}
       </div>
 

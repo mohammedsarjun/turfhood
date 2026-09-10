@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { Pagination } from '@/components/table';
 import {
   ArrowDownRight,
   CalendarRange,
@@ -36,10 +37,10 @@ export function AdminRevenuePage() {
   const [data, setData] = useState<AdminRevenueReportDTO>();
   const [loading, setLoading] = useState(true);
   const { showToast } = useToast();
-  const fetchReport = async (start = startDate, end = endDate) => {
+  const fetchReport = async (start = startDate, end = endDate, page = 1) => {
     setLoading(true);
     try {
-      setData(await getAdminRevenue(start, end));
+      setData(await getAdminRevenue(start, end, page));
     } catch {
       showToast('Unable to load platform revenue.', 'error');
     } finally {
@@ -263,6 +264,16 @@ export function AdminRevenuePage() {
                 ))}
               </tbody>
             </table>
+            {data.pagination && (
+              <Pagination
+                page={data.pagination.page}
+                totalPages={data.pagination.totalPages}
+                onPageChange={(page) =>
+                  void fetchReport(data.range.startDate, data.range.endDate, page)
+                }
+                disabled={loading}
+              />
+            )}
             {!data.transactions.length && (
               <p className="py-10 text-center text-muted-foreground">
                 No commission transactions found.

@@ -194,14 +194,14 @@ export class BookingRepository implements IBookingRepository {
     const doc = await BookingModel.findOne({ payuTransactionId: txn });
     return doc ? this.toDTO(doc) : null;
   }
-  async listByUser(userId: string, page: number, limit: number) {
+  async listByUser(userId: string, page: number, limit: number, statuses?: string[]) {
     const filter = {
       $or: [{ userId }, { participantUserIds: userId }],
-      status: { $nin: ['pending_payment', 'expired'] },
+      status: statuses ? { $in: statuses } : { $nin: ['pending_payment', 'expired'] },
     };
     const [docs, total] = await Promise.all([
       BookingModel.find(filter)
-        .sort({ createdAt: -1 })
+        .sort({ createdAt: -1, _id: -1 })
         .skip((page - 1) * limit)
         .limit(limit),
       BookingModel.countDocuments(filter),
@@ -212,7 +212,7 @@ export class BookingRepository implements IBookingRepository {
     const filter = { turfId, status: { $nin: ['pending_payment', 'expired'] } };
     const [docs, total] = await Promise.all([
       BookingModel.find(filter)
-        .sort({ bookingDate: 1 })
+        .sort({ bookingDate: 1, _id: 1 })
         .skip((page - 1) * limit)
         .limit(limit),
       BookingModel.countDocuments(filter),

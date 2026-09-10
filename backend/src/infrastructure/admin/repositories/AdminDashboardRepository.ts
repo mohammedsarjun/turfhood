@@ -18,9 +18,11 @@ export class AdminDashboardRepository implements IAdminDashboardRepository {
     const monthStart = `${today.slice(0, 7)}-01`;
     const yearStart = `${today.slice(0, 4)}-01-01`;
     const [items, snapshots] = await Promise.all([
-      BookingModel.find({ bookingDate: { $gte: startDate, $lte: endDate }, status })
-        .sort({ bookingDate: -1, createdAt: -1 })
-        .limit(100),
+      BookingModel.find({ bookingDate: { $gte: startDate, $lte: endDate }, status }).sort({
+        bookingDate: -1,
+        createdAt: -1,
+        _id: -1,
+      }),
       BookingModel.aggregate<{ _id: string; commission: number }>([
         { $match: { bookingDate: { $gte: yearStart, $lte: today }, status } },
         { $group: { _id: '$bookingDate', commission: { $sum: '$commissionPaise' } } },
@@ -94,7 +96,7 @@ export class AdminDashboardRepository implements IAdminDashboardRepository {
       })),
     };
   }
-  async getDashboard(now: Date): Promise<AdminDashboardDTO> {
+  async getDashboard(now: Date, page = 1, limit = 6): Promise<AdminDashboardDTO> {
     const firstMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 5, 1));
     const firstDate = firstMonth.toISOString().slice(0, 10);
     const revenueStatuses = ['confirmed', 'completed'];
@@ -150,8 +152,9 @@ export class AdminDashboardRepository implements IAdminDashboardRepository {
         },
       ]),
       BookingModel.find({ status: { $nin: ['pending_payment', 'expired'] } })
-        .sort({ createdAt: -1 })
-        .limit(6),
+        .sort({ createdAt: -1, _id: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit),
     ]);
     const trends = Array.from({ length: 6 }, (_, index) => {
       const date = new Date(
@@ -184,6 +187,12 @@ export class AdminDashboardRepository implements IAdminDashboardRepository {
       completedBookings,
       cancelledBookings,
       trends,
+      pagination: {
+        page,
+        limit,
+        total: totalBookings,
+        totalPages: Math.max(1, Math.ceil(totalBookings / limit)),
+      },
       recentBookings: recent.map((booking) => ({
         id: booking._id.toString(),
         reference: booking.reference,

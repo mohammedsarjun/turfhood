@@ -1,22 +1,42 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { Pagination } from '@/components/table';
 import type { BookingDTO } from '@turfhood/shared';
 import { Badge, Button, Heading, Modal, Spinner, useToast } from '@/components/ui';
 import { formatTime12Hour } from '@/lib/time';
 import { cancelOwnerBooking, listOwnerBookings } from '../actions/bookingApi';
 export function OwnerBookingsPage({ turfId }: { turfId: string }) {
   const [items, setItems] = useState<BookingDTO[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loadedKey, setLoadedKey] = useState('');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [bookingToCancel, setBookingToCancel] = useState<BookingDTO | null>(null);
   const [reason, setReason] = useState('');
   const [cancelling, setCancelling] = useState(false);
   const { showToast } = useToast();
+  const requestKey = `${turfId}:${page}`;
+  const loading = loadedKey !== requestKey;
+
   useEffect(() => {
-    void listOwnerBookings(turfId)
-      .then((result) => setItems(result.items))
-      .catch(() => showToast('Unable to load bookings.', 'error'))
-      .finally(() => setLoading(false));
-  }, [showToast, turfId]);
+    let active = true;
+    void listOwnerBookings(turfId, page)
+      .then((result) => {
+        if (!active) return;
+        if (page > result.pagination.totalPages) {
+          setPage(Math.max(1, result.pagination.totalPages));
+          return;
+        }
+        setItems(result.items);
+        setTotalPages(result.pagination.totalPages);
+      })
+      .catch(() => active && showToast('Unable to load bookings.', 'error'))
+      .finally(() => {
+        if (active) setLoadedKey(requestKey);
+      });
+    return () => {
+      active = false;
+    };
+  }, [showToast, turfId, page, requestKey]);
   const cancel = async () => {
     if (!bookingToCancel || !reason.trim()) return;
     setCancelling(true);
@@ -105,6 +125,7 @@ export function OwnerBookingsPage({ turfId }: { turfId: string }) {
           </tbody>
         </table>
       </div>
+      {!loading && <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />}
       <Modal
         open={Boolean(bookingToCancel)}
         onClose={() => setBookingToCancel(null)}

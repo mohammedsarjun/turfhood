@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Pagination } from '@/components/table';
 import { AlertTriangle, CheckCircle2, Clock3, ReceiptText } from 'lucide-react';
 import type { CustomerRefundDTO } from '@turfhood/shared';
 import { Header } from '@/components/shared';
@@ -18,14 +19,33 @@ export function CustomerRefundsPage() {
   const { user, clearUser } = useCurrentUser();
   const { showToast } = useToast();
   const [items, setItems] = useState<CustomerRefundDTO[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loadedKey, setLoadedKey] = useState('');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const requestKey = String(page);
+  const loading = loadedKey !== requestKey;
 
   useEffect(() => {
-    void listMyRefunds()
-      .then((result) => setItems(result.items))
-      .catch(() => showToast('Unable to load your refunds.', 'error'))
-      .finally(() => setLoading(false));
-  }, [showToast]);
+    let active = true;
+    void listMyRefunds(page)
+      .then((result) => {
+        if (!active) return;
+        if (page > result.pagination.totalPages) {
+          setPage(Math.max(1, result.pagination.totalPages));
+          return;
+        }
+        setItems(result.items);
+        setTotalPages(result.pagination.totalPages);
+      })
+      .catch(() => active && showToast('Unable to load your refunds.', 'error'))
+      .finally(() => {
+        if (active) setLoadedKey(requestKey);
+      });
+    return () => {
+      active = false;
+    };
+  }, [showToast, page, requestKey]);
 
   return (
     <>
@@ -98,6 +118,7 @@ export function CustomerRefundsPage() {
             ))}
           </div>
         )}
+        {!loading && <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />}
       </main>
     </>
   );

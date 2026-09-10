@@ -14,13 +14,14 @@ export interface AdminRevenueTransactionDTO {
     bookingDate: string;
     turfName: string;
     customerName: string;
-    bookingType: 'private' | 'open_session';
+    bookingType: "private" | "open_session";
     grossRevenuePaise: number;
     commissionPaise: number;
     ownerPayoutPaise: number;
     commissionPercentage: number;
 }
 export interface AdminRevenueReportDTO {
+    pagination?: import("../common/pagination.js").PaginationMeta;
     range: {
         startDate: string;
         endDate: string;

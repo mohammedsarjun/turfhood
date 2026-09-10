@@ -11,7 +11,7 @@ export class GetAdminDashboardUseCase implements IGetAdminDashboardUseCase {
     private readonly dashboard: IAdminDashboardRepository,
   ) {}
 
-  execute(): Promise<AdminDashboardDTO> {
-    return this.dashboard.getDashboard(new Date());
+  execute(page?: number, limit?: number): Promise<AdminDashboardDTO> {
+    return this.dashboard.getDashboard(new Date(), page, limit);
   }
 }
