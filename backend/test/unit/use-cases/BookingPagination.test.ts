@@ -18,9 +18,14 @@ describe('My Bookings backend pagination', () => {
     scope.registerInstance(BOOKING_TOKENS.Repository, repository);
     const useCase = scope.resolve(ManageBookingsUseCase);
     const result = await useCase.listMine('user_1', 2, 10, 'cancelled');
-    expect(calls).to.deep.equal([['user_1', 2, 10, [
-      'cancelled_by_user', 'cancelled_by_owner', 'refunded', 'partially_refunded',
-    ]]]);
+    expect(calls).to.deep.equal([
+      [
+        'user_1',
+        2,
+        10,
+        ['cancelled_by_user', 'cancelled_by_owner', 'refunded', 'partially_refunded'],
+      ],
+    ]);
     expect(result.pagination).to.deep.equal({ page: 2, limit: 10, total: 21, totalPages: 3 });
   });
 });

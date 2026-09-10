@@ -126,12 +126,7 @@ export function CitySearch({ onSearch }: CitySearchProps) {
           ...cities.map((city) => ({ label: city.name, value: city.code })),
         ]}
       />
-      <Button
-        type="button"
-        disabled={!selectedCity}
-        onClick={() => void search()}
-        className="h-11"
-      >
+      <Button type="button" disabled={!selectedCity} onClick={() => void search()} className="h-11">
         <Search className="h-4 w-4" />
         Search
       </Button>

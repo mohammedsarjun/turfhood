@@ -37,8 +37,11 @@ export type ValidatedWithdrawalRejectionRequest = Request & {
 
 const sendErrors = (res: Response, error: z.ZodError) => {
   const errors: Record<string, string[]> = {};
-  for (const issue of error.issues) errors[issue.path.at(-1)?.toString() ?? 'form'] = [issue.message];
-  res.status(HttpStatus.BAD_REQUEST).json({ message: 'Please correct the highlighted fields.', errors });
+  for (const issue of error.issues)
+    errors[issue.path.at(-1)?.toString() ?? 'form'] = [issue.message];
+  res
+    .status(HttpStatus.BAD_REQUEST)
+    .json({ message: 'Please correct the highlighted fields.', errors });
 };
 
 export function validateBankAccount(req: Request, res: Response, next: NextFunction) {

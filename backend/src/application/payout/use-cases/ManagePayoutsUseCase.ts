@@ -58,7 +58,10 @@ export class ManagePayoutsUseCase implements IManagePayoutsUseCase {
     if (!turf?.id) throw new AppError('Turf not found.', HttpStatus.NOT_FOUND);
     const bankAccount = await this.payouts.findBankAccount(ownerId, input.bankAccountId);
     if (!bankAccount)
-      throw new AppError('Add or select a valid bank account before requesting withdrawal.', HttpStatus.BAD_REQUEST);
+      throw new AppError(
+        'Add or select a valid bank account before requesting withdrawal.',
+        HttpStatus.BAD_REQUEST,
+      );
     const [completedEarnings, requestedAmount, owner] = await Promise.all([
       this.bookings.completedOwnerEarnings(turf.id),
       this.payouts.sumRequestedForTurf(ownerId, turf.id),
@@ -66,7 +69,10 @@ export class ManagePayoutsUseCase implements IManagePayoutsUseCase {
     ]);
     const availableBalancePaise = Math.max(0, completedEarnings - requestedAmount);
     if (input.amountPaise > availableBalancePaise)
-      throw new AppError('Withdrawal amount cannot exceed available balance.', HttpStatus.BAD_REQUEST);
+      throw new AppError(
+        'Withdrawal amount cannot exceed available balance.',
+        HttpStatus.BAD_REQUEST,
+      );
     if (input.amountPaise < 100)
       throw new AppError('Withdrawal amount must be at least INR 1.', HttpStatus.BAD_REQUEST);
     return this.payouts.createWithdrawal({

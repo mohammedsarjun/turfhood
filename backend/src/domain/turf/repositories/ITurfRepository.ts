@@ -16,12 +16,16 @@ export interface TurfDiscoveryRepositoryInput {
 export interface ITurfRepository {
   create(turf: Turf): Promise<Turf>;
   findOwnedByIdOrVerificationId(id: string, ownerId: string): Promise<Turf | null>;
-  updateBasicDetails(id: string, ownerId: string, input: {
-    name: string;
-    description?: string;
-    address: Turf['address'];
-    location: Turf['location'];
-  }): Promise<Turf | null>;
+  updateBasicDetails(
+    id: string,
+    ownerId: string,
+    input: {
+      name: string;
+      description?: string;
+      address: Turf['address'];
+      location: Turf['location'];
+    },
+  ): Promise<Turf | null>;
   findApprovedById(id: string): Promise<Turf | null>;
   findApprovedByIds(ids: string[]): Promise<Turf[]>;
   findApprovedByCity(

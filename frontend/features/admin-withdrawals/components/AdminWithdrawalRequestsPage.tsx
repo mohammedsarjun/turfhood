@@ -150,10 +150,7 @@ export function AdminWithdrawalRequestsPage() {
                 </thead>
                 <tbody>
                   {items.map((item) => (
-                    <tr
-                      key={item.id}
-                      className="border-b border-border align-top last:border-0"
-                    >
+                    <tr key={item.id} className="border-b border-border align-top last:border-0">
                       <td className="px-4 py-4">
                         <span className="block truncate font-medium" title={item.ownerName}>
                           {item.ownerName}
@@ -179,7 +176,8 @@ export function AdminWithdrawalRequestsPage() {
                           {item.bankAccount.bankName} - {item.bankAccount.accountType}
                         </span>
                         <span className="block truncate text-xs text-muted-foreground">
-                          A/C {item.bankAccount.accountNumber ?? item.bankAccount.accountNumberMasked}
+                          A/C{' '}
+                          {item.bankAccount.accountNumber ?? item.bankAccount.accountNumberMasked}
                         </span>
                         <span className="block truncate text-xs text-muted-foreground">
                           IFSC {item.bankAccount.ifscCode}

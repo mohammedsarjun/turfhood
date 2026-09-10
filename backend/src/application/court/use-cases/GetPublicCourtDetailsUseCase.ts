@@ -164,11 +164,7 @@ export class GetPublicCourtDetailsUseCase implements IGetPublicCourtDetailsUseCa
             ...(reason
               ? {
                   unavailableReason: reason as
-                    | 'booked'
-                    | 'reserved'
-                    | 'blocked'
-                    | 'past'
-                    | 'closed',
+                    'booked' | 'reserved' | 'blocked' | 'past' | 'closed',
                 }
               : {}),
           };

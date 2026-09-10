@@ -50,7 +50,9 @@ export class PayoutController {
     try {
       const pagination = parsePagination(req.query, 20, 50);
       const status =
-        req.query.status === 'pending' || req.query.status === 'paid' || req.query.status === 'rejected'
+        req.query.status === 'pending' ||
+        req.query.status === 'paid' ||
+        req.query.status === 'rejected'
           ? req.query.status
           : undefined;
       res.json(

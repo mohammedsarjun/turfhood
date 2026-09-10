@@ -23,17 +23,30 @@ export async function updateOwnerTurf(id: string, turf: Omit<OwnerTurfDetails, '
 export async function uploadOwnerTurfCover(id: string, cover: File): Promise<string> {
   const data = new FormData();
   data.append('cover', cover);
-  const response = await axiosInstance.post<{ url: string }>(API_ROUTES.turfs.manageCover(id), data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
+  const response = await axiosInstance.post<{ url: string }>(
+    API_ROUTES.turfs.manageCover(id),
+    data,
+    {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    },
+  );
   return response.data.url;
 }
 
-export async function updateOwnerTurfImages(id: string, retainedUrls: string[], images: File[], coverKey: string): Promise<string[]> {
+export async function updateOwnerTurfImages(
+  id: string,
+  retainedUrls: string[],
+  images: File[],
+  coverKey: string,
+): Promise<string[]> {
   const data = new FormData();
   data.append('retainedUrls', JSON.stringify(retainedUrls));
   data.append('coverKey', coverKey);
   images.forEach((image) => data.append('images', image));
-  const response = await axiosInstance.put<{ images: string[] }>(API_ROUTES.turfs.manageImages(id), data, { headers: { 'Content-Type': 'multipart/form-data' } });
+  const response = await axiosInstance.put<{ images: string[] }>(
+    API_ROUTES.turfs.manageImages(id),
+    data,
+    { headers: { 'Content-Type': 'multipart/form-data' } },
+  );
   return response.data.images;
 }

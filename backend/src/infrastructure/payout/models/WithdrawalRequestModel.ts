@@ -32,7 +32,12 @@ const schema = new Schema<WithdrawalRequestDocument>(
     ownerId: { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
     ownerName: { type: String, required: true },
     amountPaise: { type: Number, required: true, min: 100 },
-    status: { type: String, enum: ['pending', 'paid', 'rejected'], default: 'pending', index: true },
+    status: {
+      type: String,
+      enum: ['pending', 'paid', 'rejected'],
+      default: 'pending',
+      index: true,
+    },
     bankAccount: {
       _id: false,
       id: { type: String, required: true },

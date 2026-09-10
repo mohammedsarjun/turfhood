@@ -2,7 +2,11 @@ import { notFound } from 'next/navigation';
 import { OwnerBookingsPage } from '@/features/bookings';
 import { OwnerReviewsPage } from '@/features/reviews';
 import { OwnerOpenSessionsPage } from '@/features/open-sessions';
-import { OwnerDashboardPage, OwnerRevenuePage, OwnerTurfManagementPage } from '@/features/turf-portal';
+import {
+  OwnerDashboardPage,
+  OwnerRevenuePage,
+  OwnerTurfManagementPage,
+} from '@/features/turf-portal';
 
 const SECTION_TITLES: Record<string, string> = {
   dashboard: 'Dashboard',

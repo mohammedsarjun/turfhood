@@ -11,12 +11,16 @@ import { TurfOwnerApplicationModel } from '../../turfOwnerApplication/models/Tur
 
 @injectable()
 export class TurfRepository implements ITurfRepository {
-  async updateBasicDetails(id: string, ownerId: string, input: {
-    name: string;
-    description?: string;
-    address: Turf['address'];
-    location: Turf['location'];
-  }): Promise<Turf | null> {
+  async updateBasicDetails(
+    id: string,
+    ownerId: string,
+    input: {
+      name: string;
+      description?: string;
+      address: Turf['address'];
+      location: Turf['location'];
+    },
+  ): Promise<Turf | null> {
     const owned = await this.findOwnedByIdOrVerificationId(id, ownerId);
     if (!owned?.id) return null;
     const document = await TurfModel.findOneAndUpdate(

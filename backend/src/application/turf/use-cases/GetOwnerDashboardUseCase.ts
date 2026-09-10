@@ -32,26 +32,64 @@ export class GetOwnerDashboardUseCase implements IGetOwnerDashboardUseCase {
       this.courts.list({ turfId: turf.id, page: 1, limit: DASHBOARD_FETCH_LIMIT }),
     ]);
     const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
-    const earningBookings = bookingResult.items.filter((booking) => ['confirmed', 'completed'].includes(booking.status));
-    const completedBookings = bookingResult.items.filter((booking) => booking.status === 'completed');
+    const earningBookings = bookingResult.items.filter((booking) =>
+      ['confirmed', 'completed'].includes(booking.status),
+    );
+    const completedBookings = bookingResult.items.filter(
+      (booking) => booking.status === 'completed',
+    );
     const todayBookings = earningBookings.filter((booking) => booking.bookingDate === today);
     const upcoming = bookingResult.items
       .filter((booking) => booking.status === 'confirmed' && booking.bookingDate >= today)
-      .sort((a, b) => `${a.bookingDate}${a.slots[0]?.startTime ?? ''}`.localeCompare(`${b.bookingDate}${b.slots[0]?.startTime ?? ''}`))
+      .sort((a, b) =>
+        `${a.bookingDate}${a.slots[0]?.startTime ?? ''}`.localeCompare(
+          `${b.bookingDate}${b.slots[0]?.startTime ?? ''}`,
+        ),
+      )
       .slice(0, 5);
     return {
       turfName: turf.name,
       stats: {
         totalBookings: bookingResult.total,
-        totalRevenuePaise: earningBookings.reduce((sum, booking) => sum + booking.ownerEarningsPaise, 0),
-        availableBalancePaise: completedBookings.reduce((sum, booking) => sum + booking.ownerEarningsPaise, 0),
+        totalRevenuePaise: earningBookings.reduce(
+          (sum, booking) => sum + booking.ownerEarningsPaise,
+          0,
+        ),
+        availableBalancePaise: completedBookings.reduce(
+          (sum, booking) => sum + booking.ownerEarningsPaise,
+          0,
+        ),
         averageRating: reviewResult.average,
         reviewCount: reviewResult.total,
       },
-      today: { bookings: todayBookings.length, revenuePaise: todayBookings.reduce((sum, booking) => sum + booking.ownerEarningsPaise, 0) },
-      courts: { total: courtResult.total, active: courtResult.items.filter((court) => court.status === 'active').length, attentionNeeded: courtResult.items.filter((court) => court.status !== 'active').length },
-      upcomingBookings: upcoming.map((booking) => ({ id: booking.id, reference: booking.reference, customerName: booking.customerName, courtName: booking.courtName, bookingDate: booking.bookingDate, startTime: booking.slots[0]?.startTime ?? '', slotCount: booking.slots.length, ownerEarningsPaise: booking.ownerEarningsPaise, status: booking.status })),
-      recentReviews: reviewResult.items.map((review) => ({ id: review.id, customerName: review.customerName, courtName: review.courtName, rating: review.rating, comment: review.comment, createdAt: review.createdAt })),
+      today: {
+        bookings: todayBookings.length,
+        revenuePaise: todayBookings.reduce((sum, booking) => sum + booking.ownerEarningsPaise, 0),
+      },
+      courts: {
+        total: courtResult.total,
+        active: courtResult.items.filter((court) => court.status === 'active').length,
+        attentionNeeded: courtResult.items.filter((court) => court.status !== 'active').length,
+      },
+      upcomingBookings: upcoming.map((booking) => ({
+        id: booking.id,
+        reference: booking.reference,
+        customerName: booking.customerName,
+        courtName: booking.courtName,
+        bookingDate: booking.bookingDate,
+        startTime: booking.slots[0]?.startTime ?? '',
+        slotCount: booking.slots.length,
+        ownerEarningsPaise: booking.ownerEarningsPaise,
+        status: booking.status,
+      })),
+      recentReviews: reviewResult.items.map((review) => ({
+        id: review.id,
+        customerName: review.customerName,
+        courtName: review.courtName,
+        rating: review.rating,
+        comment: review.comment,
+        createdAt: review.createdAt,
+      })),
     };
   }
 }

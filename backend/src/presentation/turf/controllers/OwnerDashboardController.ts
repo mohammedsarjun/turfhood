@@ -7,11 +7,18 @@ import { HttpStatus } from '@shared/constants/httpStatus';
 
 @injectable()
 export class OwnerDashboardController {
-  constructor(@inject(TURF_TOKENS.GetOwnerDashboardUseCase) private readonly dashboard: IGetOwnerDashboardUseCase) {}
+  constructor(
+    @inject(TURF_TOKENS.GetOwnerDashboardUseCase)
+    private readonly dashboard: IGetOwnerDashboardUseCase,
+  ) {}
   get = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const ownerId = (req as AuthenticatedRequest).user!.userId;
-      res.status(HttpStatus.OK).json(await this.dashboard.execute(ownerId, String(req.params.turfId)));
-    } catch (error) { next(error); }
+      res
+        .status(HttpStatus.OK)
+        .json(await this.dashboard.execute(ownerId, String(req.params.turfId)));
+    } catch (error) {
+      next(error);
+    }
   };
 }

@@ -8,7 +8,13 @@ jest.mock('../../hooks/useOwnerDashboard', () => ({
     retry: jest.fn(),
     dashboard: {
       turfName: 'Green Arena',
-      stats: { totalBookings: 24, totalRevenuePaise: 125000, availableBalancePaise: 80000, averageRating: 4.5, reviewCount: 8 },
+      stats: {
+        totalBookings: 24,
+        totalRevenuePaise: 125000,
+        availableBalancePaise: 80000,
+        averageRating: 4.5,
+        reviewCount: 8,
+      },
       today: { bookings: 3, revenuePaise: 15000 },
       courts: { total: 3, active: 2, attentionNeeded: 1 },
       upcomingBookings: [],
