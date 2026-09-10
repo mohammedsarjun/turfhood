@@ -68,6 +68,12 @@ import type { ISeedAdminUseCase } from '@application/admin/use-cases/ISeedAdminU
 import { SeedAdminUseCase } from '@application/admin/use-cases/SeedAdminUseCase';
 import type { IAdminLoginUseCase } from '@application/admin/use-cases/IAdminLoginUseCase';
 import { AdminLoginUseCase } from '@application/admin/use-cases/AdminLoginUseCase';
+import type { IAdminDashboardRepository } from '@domain/admin/repositories/IAdminDashboardRepository';
+import { AdminDashboardRepository } from '@infrastructure/admin/repositories/AdminDashboardRepository';
+import type { IGetAdminDashboardUseCase } from '@application/admin/use-cases/IGetAdminDashboardUseCase';
+import { GetAdminDashboardUseCase } from '@application/admin/use-cases/GetAdminDashboardUseCase';
+import type { IGetAdminRevenueUseCase } from '@application/admin/use-cases/IGetAdminRevenueUseCase';
+import { GetAdminRevenueUseCase } from '@application/admin/use-cases/GetAdminRevenueUseCase';
 import type { ISportsTypeRepository } from '@domain/sportsType/repositories/ISportsTypeRepository';
 import { SPORTS_TYPE_TOKENS } from '@domain/sportsType/tokens';
 import { SportsTypeRepository } from '@infrastructure/sportsType/repositories/SportsTypeRepository';
@@ -103,6 +109,10 @@ import { ListNearbyTurfsUseCase } from '@application/turf/use-cases/ListNearbyTu
 import { GetTurfDetailsUseCase } from '@application/turf/use-cases/GetTurfDetailsUseCase';
 import type { IListNearbyTurfsUseCase } from '@application/turf/use-cases/IListNearbyTurfsUseCase';
 import type { IGetTurfDetailsUseCase } from '@application/turf/use-cases/IGetTurfDetailsUseCase';
+import type { IGetOwnerDashboardUseCase } from '@application/turf/use-cases/IGetOwnerDashboardUseCase';
+import { GetOwnerDashboardUseCase } from '@application/turf/use-cases/GetOwnerDashboardUseCase';
+import type { IGetOwnerRevenueUseCase } from '@application/turf/use-cases/IGetOwnerRevenueUseCase';
+import { GetOwnerRevenueUseCase } from '@application/turf/use-cases/GetOwnerRevenueUseCase';
 import type { ITurfOwnerApplicationRepository } from '@domain/turfOwnerApplication/repositories/ITurfOwnerApplicationRepository';
 import { TURF_OWNER_APPLICATION_TOKENS } from '@domain/turfOwnerApplication/tokens';
 import { TurfOwnerApplicationRepository } from '@infrastructure/turfOwnerApplication/repositories/TurfOwnerApplicationRepository';
@@ -174,6 +184,11 @@ import { OPEN_SESSION_TOKENS } from '@domain/openSession/tokens';
 import { OpenSessionRepository } from '@infrastructure/openSession/repositories/OpenSessionRepository';
 import type { IManageOpenSessionsUseCase } from '@application/openSession/use-cases/IManageOpenSessionsUseCase';
 import { ManageOpenSessionsUseCase } from '@application/openSession/use-cases/ManageOpenSessionsUseCase';
+import type { IPayoutRepository } from '@domain/payout/repositories/IPayoutRepository';
+import { PAYOUT_TOKENS } from '@domain/payout/tokens';
+import { PayoutRepository } from '@infrastructure/payout/repositories/PayoutRepository';
+import type { IManagePayoutsUseCase } from '@application/payout/use-cases/IManagePayoutsUseCase';
+import { ManagePayoutsUseCase } from '@application/payout/use-cases/ManagePayoutsUseCase';
 
 /** Composition root — wires domain interfaces to their infrastructure implementations. */
 container.register<IUserRepository>(USER_TOKENS.UserRepository, { useClass: UserRepository });
@@ -251,6 +266,15 @@ container.register<ISeedAdminUseCase>(ADMIN_TOKENS.SeedAdminUseCase, {
 container.register<IAdminLoginUseCase>(ADMIN_TOKENS.AdminLoginUseCase, {
   useClass: AdminLoginUseCase,
 });
+container.register<IAdminDashboardRepository>(ADMIN_TOKENS.DashboardRepository, {
+  useClass: AdminDashboardRepository,
+});
+container.register<IGetAdminDashboardUseCase>(ADMIN_TOKENS.DashboardUseCase, {
+  useClass: GetAdminDashboardUseCase,
+});
+container.register<IGetAdminRevenueUseCase>(ADMIN_TOKENS.RevenueUseCase, {
+  useClass: GetAdminRevenueUseCase,
+});
 container.register<ISportsTypeRepository>(SPORTS_TYPE_TOKENS.SportsTypeRepository, {
   useClass: SportsTypeRepository,
 });
@@ -297,6 +321,12 @@ container.register<IListNearbyTurfsUseCase>(TURF_TOKENS.ListNearbyTurfsUseCase, 
 });
 container.register<IGetTurfDetailsUseCase>(TURF_TOKENS.GetTurfDetailsUseCase, {
   useClass: GetTurfDetailsUseCase,
+});
+container.register<IGetOwnerDashboardUseCase>(TURF_TOKENS.GetOwnerDashboardUseCase, {
+  useClass: GetOwnerDashboardUseCase,
+});
+container.register<IGetOwnerRevenueUseCase>(TURF_TOKENS.GetOwnerRevenueUseCase, {
+  useClass: GetOwnerRevenueUseCase,
 });
 container.register<ITurfOwnerApplicationRepository>(
   TURF_OWNER_APPLICATION_TOKENS.TurfOwnerApplicationRepository,
@@ -395,6 +425,12 @@ container.register<IOpenSessionRepository>(OPEN_SESSION_TOKENS.Repository, {
 });
 container.register<IManageOpenSessionsUseCase>(OPEN_SESSION_TOKENS.UseCase, {
   useClass: ManageOpenSessionsUseCase,
+});
+container.register<IPayoutRepository>(PAYOUT_TOKENS.Repository, {
+  useClass: PayoutRepository,
+});
+container.register<IManagePayoutsUseCase>(PAYOUT_TOKENS.UseCase, {
+  useClass: ManagePayoutsUseCase,
 });
 
 export { container };

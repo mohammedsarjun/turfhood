@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@/test/test-utils';
+import { fireEvent, render, screen, waitFor } from '@/test/test-utils';
 import { TurfApplicationStatus } from '@turfhood/shared';
 import { listMyApplications } from '../../actions/turfOnboardingApi';
 import { listPublicAmenities, listPublicSportsTypes } from '../../actions/catalogApi';
@@ -12,6 +12,16 @@ const listPublicSportsTypesMock = jest.mocked(listPublicSportsTypes);
 const listPublicAmenitiesMock = jest.mocked(listPublicAmenities);
 
 describe('MyTurfsPage', () => {
+  it('requests another page from the backend', async () => {
+    listMyApplicationsMock.mockResolvedValue({
+      applications: [],
+      pagination: { page: 1, limit: 9, total: 10, totalPages: 2 },
+    });
+    render(<MyTurfsPage />);
+    fireEvent.click(await screen.findByRole('button', { name: 'Next' }));
+    await waitFor(() => expect(listMyApplicationsMock).toHaveBeenLastCalledWith(2));
+    await screen.findByText('Page 2 of 2');
+  });
   beforeEach(() => {
     listMyApplicationsMock.mockReset();
     listPublicSportsTypesMock.mockReset();
@@ -27,7 +37,10 @@ describe('MyTurfsPage', () => {
   });
 
   it('shows an empty-state message when there are no applications', async () => {
-    listMyApplicationsMock.mockResolvedValueOnce({ applications: [] });
+    listMyApplicationsMock.mockResolvedValueOnce({
+      applications: [],
+      pagination: { page: 1, limit: 9, total: 0, totalPages: 1 },
+    });
 
     render(<MyTurfsPage />);
 
@@ -38,6 +51,7 @@ describe('MyTurfsPage', () => {
 
   it('renders a card per application and an Add Turf link', async () => {
     listMyApplicationsMock.mockResolvedValueOnce({
+      pagination: { page: 1, limit: 9, total: 1, totalPages: 1 },
       applications: [
         {
           id: 'application_1',

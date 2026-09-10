@@ -40,3 +40,7 @@ export interface SubmitTurfApplicationResponse {
 export interface RejectTurfApplicationRequest {
     reviewNotes?: string;
 }
+export interface MyTurfApplicationsResponse {
+    applications: TurfApplicationSummary[];
+    pagination: import("../common/pagination.js").PaginationMeta;
+}

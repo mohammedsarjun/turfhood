@@ -1,3 +1,4 @@
+import { parsePagination } from '@presentation/shared/utils/pagination';
 import type { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'tsyringe';
 import type { CreateReviewRequest } from '@turfhood/shared';
@@ -7,10 +8,7 @@ import type { AuthenticatedRequest } from '@presentation/shared/middlewares/auth
 import { HttpStatus } from '@shared/constants/httpStatus';
 
 const userId = (request: Request) => (request as AuthenticatedRequest).user!.userId;
-const pagination = (request: Request) => ({
-  page: Math.max(1, Number(request.query.page) || 1),
-  limit: Math.min(20, Math.max(1, Number(request.query.limit) || 10)),
-});
+const pagination = (request: Request) => parsePagination(request.query, 10, 20);
 
 @injectable()
 export class ReviewController {

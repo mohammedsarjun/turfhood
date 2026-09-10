@@ -6,6 +6,8 @@ import type { TurfApplicationSummary } from '../types';
 
 export function useMyApplications() {
   const [applications, setApplications] = useState<TurfApplicationSummary[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,9 +16,13 @@ export function useMyApplications() {
 
     async function fetchApplications() {
       setIsLoading(true);
+      setError(null);
       try {
-        const result = await listMyApplications();
-        if (!cancelled) setApplications(result.applications);
+        const result = await listMyApplications(page);
+        if (!cancelled) {
+          setApplications(result.applications);
+          setTotalPages(result.pagination.totalPages);
+        }
       } catch {
         if (!cancelled) setError('Failed to load your turfs.');
       } finally {
@@ -28,7 +34,7 @@ export function useMyApplications() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [page]);
 
-  return { applications, isLoading, error };
+  return { applications, isLoading, error, page, totalPages, setPage };
 }

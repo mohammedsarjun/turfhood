@@ -2,4 +2,7 @@
 export const ADMIN_TOKENS = {
   SeedAdminUseCase: Symbol('ISeedAdminUseCase'),
   AdminLoginUseCase: Symbol('IAdminLoginUseCase'),
+  DashboardRepository: Symbol('IAdminDashboardRepository'),
+  DashboardUseCase: Symbol('IGetAdminDashboardUseCase'),
+  RevenueUseCase: Symbol('IGetAdminRevenueUseCase'),
 } as const;

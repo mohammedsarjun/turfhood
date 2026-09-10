@@ -1,3 +1,4 @@
+import { parsePagination } from '@presentation/shared/utils/pagination';
 import type { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'tsyringe';
 import type { CreateOpenSessionRequest } from '@turfhood/shared';
@@ -36,8 +37,7 @@ export class OpenSessionController {
   };
   list = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const page = Math.max(1, Number(req.query.page) || 1);
-      const limit = Math.min(24, Math.max(1, Number(req.query.limit) || 9));
+      const { page, limit } = parsePagination(req.query, 9, 24);
       const latitude = req.query.latitude === undefined ? undefined : Number(req.query.latitude);
       const longitude = req.query.longitude === undefined ? undefined : Number(req.query.longitude);
       const location =
@@ -63,9 +63,50 @@ export class OpenSessionController {
   };
   listMine = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const page = Math.max(1, Number(req.query.page) || 1);
-      const limit = Math.min(24, Math.max(1, Number(req.query.limit) || 10));
-      res.json(await this.sessions.listMine(userId(req), page, limit));
+      const { page, limit } = parsePagination(req.query, 10, 24);
+      const filter = req.query.filter;
+      res.json(
+        await this.sessions.listMine(
+          userId(req),
+          page,
+          limit,
+          filter === 'upcoming' || filter === 'completed' || filter === 'cancelled'
+            ? filter
+            : undefined,
+        ),
+      );
+    } catch (error) {
+      next(error);
+    }
+  };
+  listRefunds = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { page, limit } = parsePagination(req.query, 20, 50);
+      res.json(await this.sessions.listRefunds(userId(req), page, limit));
+    } catch (error) {
+      next(error);
+    }
+  };
+  cancelParticipation = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      res.json(await this.sessions.cancelParticipation(userId(req), String(req.params.id)));
+    } catch (error) {
+      next(error);
+    }
+  };
+  ownerList = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { page } = parsePagination(req.query);
+      const filter = req.query.filter;
+      res.json(
+        await this.sessions.listForOwner(
+          userId(req),
+          String(req.params.turfId),
+          page,
+          20,
+          filter === 'active' || filter === 'completed' || filter === 'cancelled' ? filter : 'all',
+        ),
+      );
     } catch (error) {
       next(error);
     }

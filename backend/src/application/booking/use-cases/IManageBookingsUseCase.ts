@@ -11,7 +11,12 @@ export interface IManageBookingsUseCase {
   reconcileRefunds(limit?: number): Promise<number>;
   listEscalatedRefunds(page: number, limit: number): Promise<BookingListResponse>;
   verifyManualRefund(bookingId: string, payuRequestId: string): Promise<BookingDTO>;
-  listMine(userId: string, page: number, limit: number): Promise<BookingListResponse>;
+  listMine(
+    userId: string,
+    page: number,
+    limit: number,
+    filter?: import('@turfhood/shared').BookingListFilter,
+  ): Promise<BookingListResponse>;
   getMine(userId: string, bookingId: string): Promise<BookingDTO>;
   retryPayment(userId: string, bookingId: string): Promise<CreateReservationResponse>;
   abandonCheckout(userId: string, bookingId: string): Promise<void>;

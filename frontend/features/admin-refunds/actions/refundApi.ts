@@ -2,8 +2,10 @@ import type { BookingDTO, BookingListResponse } from '@turfhood/shared';
 import { axiosInstance } from '@/lib/axios';
 import { API_ROUTES } from '@/lib/apiRoutes';
 
-export async function listEscalatedRefunds() {
-  const response = await axiosInstance.get<BookingListResponse>(API_ROUTES.admin.escalatedRefunds);
+export async function listEscalatedRefunds(page = 1) {
+  const response = await axiosInstance.get<BookingListResponse>(API_ROUTES.admin.escalatedRefunds, {
+    params: { page, limit: 20 },
+  });
   return response.data;
 }
 

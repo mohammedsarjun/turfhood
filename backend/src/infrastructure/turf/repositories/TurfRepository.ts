@@ -11,6 +11,32 @@ import { TurfOwnerApplicationModel } from '../../turfOwnerApplication/models/Tur
 
 @injectable()
 export class TurfRepository implements ITurfRepository {
+  async updateBasicDetails(
+    id: string,
+    ownerId: string,
+    input: {
+      name: string;
+      description?: string;
+      address: Turf['address'];
+      location: Turf['location'];
+    },
+  ): Promise<Turf | null> {
+    const owned = await this.findOwnedByIdOrVerificationId(id, ownerId);
+    if (!owned?.id) return null;
+    const document = await TurfModel.findOneAndUpdate(
+      { _id: owned.id, ownerId, isDeleted: false },
+      {
+        $set: {
+          name: input.name,
+          description: input.description ?? '',
+          address: input.address,
+          location: input.location,
+        },
+      },
+      { new: true, runValidators: true },
+    );
+    return document ? this.toDomain(document) : null;
+  }
   async findApprovedById(id: string): Promise<Turf | null> {
     if (!mongoose.isValidObjectId(id)) return null;
     const document = await TurfModel.findOne({ _id: id, status: 'approved', isDeleted: false });

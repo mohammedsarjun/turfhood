@@ -59,6 +59,10 @@ export interface BookingDocument extends Document {
   };
   createdAt: Date;
   updatedAt: Date;
+  bookingType: 'private' | 'open_session';
+  openSessionId?: mongoose.Types.ObjectId;
+  participantUserIds: mongoose.Types.ObjectId[];
+  customerSharePaise?: number;
 }
 
 const cancellationSchema = new Schema(
@@ -141,10 +145,20 @@ const schema = new Schema<BookingDocument>(
       partialRefundBeforeHours: Number,
       partialRefundPercentage: Number,
     },
+    bookingType: {
+      type: String,
+      enum: ['private', 'open_session'],
+      default: 'private',
+      index: true,
+    },
+    openSessionId: { type: Schema.Types.ObjectId, ref: 'OpenSession' },
+    participantUserIds: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    customerSharePaise: Number,
   },
   { timestamps: true, collection: 'bookings' },
 );
 schema.index({ courtId: 1, bookingDate: 1 });
+schema.index({ openSessionId: 1 }, { unique: true, sparse: true });
 export const BookingModel: Model<BookingDocument> =
   (mongoose.models.Booking as Model<BookingDocument> | undefined) ??
   model<BookingDocument>('Booking', schema);
