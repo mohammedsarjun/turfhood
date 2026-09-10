@@ -28,6 +28,7 @@ export interface OpenSessionDocument extends Document {
     transactionId: string;
     paymentId?: string;
     refundRequestId?: string;
+    refundRequestToken?: string;
     refundReason?: string;
     refundAttemptCount?: number;
     refundFailureReason?: string;
@@ -78,6 +79,7 @@ const schema = new Schema<OpenSessionDocument>(
         transactionId: { type: String, required: true },
         paymentId: String,
         refundRequestId: String,
+        refundRequestToken: String,
         refundReason: String,
         refundAttemptCount: { type: Number, min: 0, default: 0 },
         refundFailureReason: String,

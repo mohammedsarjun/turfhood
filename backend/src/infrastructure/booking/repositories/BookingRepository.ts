@@ -6,6 +6,7 @@ import type {
   IBookingRepository,
 } from '@domain/booking/repositories/IBookingRepository';
 import { SlotUnavailableError } from '@domain/booking/errors/BookingErrors';
+
 import { BookingModel, type BookingDocument } from '../models/BookingModel.js';
 import { SlotReservationModel } from '../models/SlotReservationModel.js';
 
@@ -529,11 +530,16 @@ export class BookingRepository implements IBookingRepository {
     );
     return doc ? this.toDTO(doc) : null;
   }
-  async recordRefundFailure(id: string, reason: string, maxAttempts: number) {
+  async recordRefundFailure(
+    id: string,
+    reason: string,
+    maxAttempts: number,
+    options?: { retryable?: boolean; rotateToken?: boolean },
+  ) {
     const existing = await BookingModel.findOne({ _id: id, paymentStatus: 'refund_pending' });
     if (!existing) return null;
     const attempts = existing.refund?.attemptCount ?? 0;
-    const escalated = attempts >= maxAttempts;
+    const escalated = options?.retryable === false || attempts >= maxAttempts;
     const doc = await BookingModel.findOneAndUpdate(
       { _id: id, paymentStatus: 'refund_pending' },
       {
@@ -541,8 +547,8 @@ export class BookingRepository implements IBookingRepository {
           paymentStatus: escalated ? 'refund_escalated' : 'refund_pending',
           'refund.lastCheckedAt': new Date(),
           'refund.failureReason': reason,
-          ...(!escalated
-            ? { 'refund.requestToken': `refund-${id.slice(-12)}-${attempts + 1}` }
+          ...(!escalated && options?.rotateToken
+            ? { 'refund.requestToken': `rf-${id.slice(-16)}-${attempts + 1}` }
             : {}),
         },
         $unset: { 'refund.payuRequestId': 1, 'refund.requestedAt': 1 },
@@ -550,7 +556,9 @@ export class BookingRepository implements IBookingRepository {
           timeline: {
             type: escalated ? 'refund_escalated' : 'refund_failed',
             description: escalated
-              ? `Refund failed after ${attempts} attempts and requires admin action: ${reason}`
+              ? options?.retryable === false
+                ? `Refund requires admin action because PayU rejected it permanently: ${reason}`
+                : `Refund failed after ${attempts} attempts and requires admin action: ${reason}`
               : `Refund attempt ${attempts} failed: ${reason}`,
             occurredAt: new Date(),
             actor: 'system',

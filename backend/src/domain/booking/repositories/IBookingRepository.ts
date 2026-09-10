@@ -90,7 +90,12 @@ export interface IBookingRepository {
   markRefundFailed(id: string, reason: string): Promise<BookingDTO | null>;
   markRefundCompleted(id: string): Promise<BookingDTO | null>;
   recordRefundAttempt(id: string): Promise<BookingDTO | null>;
-  recordRefundFailure(id: string, reason: string, maxAttempts: number): Promise<BookingDTO | null>;
+  recordRefundFailure(
+    id: string,
+    reason: string,
+    maxAttempts: number,
+    options?: { retryable?: boolean; rotateToken?: boolean },
+  ): Promise<BookingDTO | null>;
   listEscalatedRefunds(
     page: number,
     limit: number,

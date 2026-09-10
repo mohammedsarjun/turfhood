@@ -98,6 +98,10 @@ export class BookingController {
       next(error);
     }
   };
+  refundWebhook = (_req: Request, res: Response) => {
+    // PayU receives an acknowledgement here; its signed status API remains authoritative.
+    res.status(HttpStatus.OK).json({ received: true });
+  };
   ownerList = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { page } = parsePagination(req.query);

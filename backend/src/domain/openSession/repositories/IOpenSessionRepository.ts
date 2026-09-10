@@ -72,12 +72,34 @@ export interface IOpenSessionRepository {
     requestId: string,
   ): Promise<void>;
   listPendingParticipantRefunds(): Promise<
-    Array<{ sessionId: string; userId: string; requestId: string }>
+    Array<{
+      sessionId: string;
+      userId: string;
+      paymentId: string;
+      amountPaise: number;
+      attemptCount: number;
+      requestToken?: string;
+      requestId?: string;
+    }>
   >;
+  recordParticipantRefundAttempt(
+    sessionId: string,
+    userId: string,
+    requestToken: string,
+    maxAttempts: number,
+  ): Promise<boolean>;
+  recordParticipantRefundFailure(
+    sessionId: string,
+    userId: string,
+    reason: string,
+    terminal: boolean,
+    rotateToken: boolean,
+  ): Promise<void>;
   markParticipantRefundResult(
     sessionId: string,
     userId: string,
     status: 'refunded' | 'refund_failed',
+    reason?: string,
   ): Promise<void>;
   listRefundsByUser(userId: string): Promise<CustomerRefundDTO[]>;
 }

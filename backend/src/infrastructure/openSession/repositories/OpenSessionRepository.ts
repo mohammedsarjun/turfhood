@@ -9,6 +9,7 @@ import { SlotUnavailableError } from '@domain/booking/errors/BookingErrors';
 import { OPEN_SESSION_PAYMENT_WINDOW_MS } from '@domain/openSession/constants';
 import { openSessionPaymentCutoff } from '@domain/openSession/services/OpenSessionPaymentPolicy';
 import { SlotReservationModel } from '@infrastructure/booking/models/SlotReservationModel';
+
 import { OpenSessionModel, type OpenSessionDocument } from '../models/OpenSessionModel.js';
 
 @injectable()
@@ -333,8 +334,7 @@ export class OpenSessionRepository implements IOpenSessionRepository {
           status: 'open',
           'participants.$.paymentStatus': 'refund_pending',
           'participants.$.refundReason': 'Participant cancelled before the 48-hour deadline.',
-          'participants.$.refundAttemptCount': 1,
-          'participants.$.refundRequestedAt': now,
+          'participants.$.refundAttemptCount': 0,
         },
       },
       { new: true },
@@ -437,8 +437,7 @@ export class OpenSessionRepository implements IOpenSessionRepository {
       for (const participant of paid) participant.paymentStatus = 'refund_pending';
       for (const participant of paid) {
         participant.refundReason = 'The open session did not fill before the 48-hour deadline.';
-        participant.refundAttemptCount = 1;
-        participant.refundRequestedAt = now;
+        participant.refundAttemptCount = 0;
       }
       await doc.save();
       await SlotReservationModel.deleteMany({ bookingId: doc._id, state: 'held' });
@@ -473,17 +472,23 @@ export class OpenSessionRepository implements IOpenSessionRepository {
   async listPendingParticipantRefunds() {
     const docs = await OpenSessionModel.find({
       participants: {
-        $elemMatch: { paymentStatus: 'refund_pending', refundRequestId: { $exists: true } },
+        $elemMatch: { paymentStatus: 'refund_pending', paymentId: { $exists: true } },
       },
     });
     return docs.flatMap((doc) =>
       doc.participants.flatMap((participant) =>
-        participant.paymentStatus === 'refund_pending' && participant.refundRequestId
+        participant.paymentStatus === 'refund_pending' && participant.paymentId
           ? [
               {
                 sessionId: doc._id.toString(),
                 userId: participant.userId.toString(),
-                requestId: participant.refundRequestId,
+                paymentId: participant.paymentId,
+                amountPaise: doc.pricePerParticipantPaise,
+                attemptCount: participant.refundAttemptCount ?? 0,
+                ...(participant.refundRequestToken
+                  ? { requestToken: participant.refundRequestToken }
+                  : {}),
+                ...(participant.refundRequestId ? { requestId: participant.refundRequestId } : {}),
               },
             ]
           : [],
@@ -491,10 +496,64 @@ export class OpenSessionRepository implements IOpenSessionRepository {
     );
   }
 
+  async recordParticipantRefundAttempt(
+    sessionId: string,
+    userId: string,
+    requestToken: string,
+    maxAttempts: number,
+  ) {
+    const result = await OpenSessionModel.updateOne(
+      {
+        _id: sessionId,
+        participants: {
+          $elemMatch: {
+            userId,
+            paymentStatus: 'refund_pending',
+            $or: [
+              { refundAttemptCount: { $exists: false } },
+              { refundAttemptCount: { $lt: maxAttempts } },
+            ],
+          },
+        },
+      },
+      {
+        $inc: { 'participants.$.refundAttemptCount': 1 },
+        $set: {
+          'participants.$.refundRequestToken': requestToken,
+          'participants.$.refundRequestedAt': new Date(),
+        },
+      },
+    );
+    return result.modifiedCount > 0;
+  }
+
+  async recordParticipantRefundFailure(
+    sessionId: string,
+    userId: string,
+    reason: string,
+    terminal: boolean,
+    rotateToken: boolean,
+  ) {
+    await OpenSessionModel.updateOne(
+      { _id: sessionId, participants: { $elemMatch: { userId, paymentStatus: 'refund_pending' } } },
+      {
+        $set: {
+          'participants.$.paymentStatus': terminal ? 'refund_failed' : 'refund_pending',
+          'participants.$.refundFailureReason': reason,
+        },
+        $unset: {
+          'participants.$.refundRequestId': 1,
+          ...(rotateToken ? { 'participants.$.refundRequestToken': 1 } : {}),
+        },
+      },
+    );
+  }
+
   async markParticipantRefundResult(
     sessionId: string,
     userId: string,
     status: 'refunded' | 'refund_failed',
+    reason?: string,
   ) {
     await OpenSessionModel.updateOne(
       { _id: sessionId, participants: { $elemMatch: { userId, paymentStatus: 'refund_pending' } } },
@@ -503,7 +562,7 @@ export class OpenSessionRepository implements IOpenSessionRepository {
           'participants.$.paymentStatus': status,
           ...(status === 'refunded'
             ? { 'participants.$.refundedAt': new Date() }
-            : { 'participants.$.refundFailureReason': 'Refund processing failed.' }),
+            : { 'participants.$.refundFailureReason': reason ?? 'Refund processing failed.' }),
         },
       },
     );
@@ -541,7 +600,7 @@ export class OpenSessionRepository implements IOpenSessionRepository {
                   : ('pending' as const),
             reason: participant.refundReason ?? 'Open-session payment refund.',
             attemptCount: participant.refundAttemptCount ?? 0,
-            escalated: false,
+            escalated: participant.paymentStatus === 'refund_failed',
             ...(participant.paymentId ? { paymentReference: participant.paymentId } : {}),
             ...(participant.refundRequestId
               ? { refundReference: participant.refundRequestId }

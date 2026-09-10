@@ -70,7 +70,7 @@ export function AdminRefundsPage() {
     <div>
       <Heading variant="h1">Escalated refunds</Heading>
       <p className="mt-2 text-sm text-muted-foreground">
-        Refunds that failed three automatic attempts.
+        Refunds that need manual review after automatic retries or a permanent PayU rejection.
       </p>
       <div className="mt-6 space-y-4">
         {items.length === 0 && (
@@ -91,7 +91,8 @@ export function AdminRefundsPage() {
                   </p>
                 </div>
                 <Badge variant="destructive">
-                  {booking.refund?.attemptCount ?? 0} attempts failed
+                  {booking.refund?.attemptCount ?? 0} automatic{' '}
+                  {(booking.refund?.attemptCount ?? 0) === 1 ? 'attempt' : 'attempts'}
                 </Badge>
               </div>
               <p className="text-sm">
@@ -99,6 +100,12 @@ export function AdminRefundsPage() {
                 {((booking.cancellation?.refundPaise ?? booking.finalAmountPaise) / 100).toFixed(2)}
               </p>
               <p className="text-sm text-destructive">{booking.refund?.failureReason}</p>
+              {booking.refund?.failureReason?.includes('PayU error 105:') && (
+                <p className="text-sm text-muted-foreground">
+                  PayU rejected the amount. Check the captured payment and any previous partial or
+                  manual refunds in PayU before creating a refund in the dashboard.
+                </p>
+              )}
               <div className="flex flex-col gap-2 sm:flex-row">
                 <input
                   className="flex-1 rounded-lg border border-input bg-background px-3 py-2 text-sm"
