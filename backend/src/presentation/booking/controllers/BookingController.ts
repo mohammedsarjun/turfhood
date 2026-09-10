@@ -1,3 +1,4 @@
+import { parsePagination } from '@presentation/shared/utils/pagination';
 import type { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'tsyringe';
 import type { CreateReservationRequest } from '@turfhood/shared';
@@ -23,9 +24,18 @@ export class BookingController {
   };
   mine = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const page = Math.max(1, Number(req.query.page) || 1);
-      const limit = Math.min(20, Math.max(1, Number(req.query.limit) || 10));
-      res.json(await this.bookings.listMine(userId(req), page, limit));
+      const { page, limit } = parsePagination(req.query, 10, 20);
+      const filter = req.query.filter;
+      res.json(
+        await this.bookings.listMine(
+          userId(req),
+          page,
+          limit,
+          filter === 'upcoming' || filter === 'completed' || filter === 'cancelled'
+            ? filter
+            : undefined,
+        ),
+      );
     } catch (error) {
       next(error);
     }
@@ -88,9 +98,13 @@ export class BookingController {
       next(error);
     }
   };
+  refundWebhook = (_req: Request, res: Response) => {
+    // PayU receives an acknowledgement here; its signed status API remains authoritative.
+    res.status(HttpStatus.OK).json({ received: true });
+  };
   ownerList = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const page = Math.max(1, Number(req.query.page) || 1);
+      const { page } = parsePagination(req.query);
       res.json(await this.bookings.listForOwner(userId(req), String(req.params.turfId), page, 20));
     } catch (error) {
       next(error);
@@ -120,8 +134,7 @@ export class BookingController {
   };
   adminEscalatedRefunds = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const page = Math.max(1, Number(req.query.page) || 1);
-      const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 20));
+      const { page, limit } = parsePagination(req.query, 20, 50);
       res.json(await this.bookings.listEscalatedRefunds(page, limit));
     } catch (error) {
       next(error);

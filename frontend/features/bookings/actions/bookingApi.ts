@@ -13,9 +13,12 @@ export async function createReservation(input: CreateReservationRequest) {
   );
   return response.data;
 }
-export async function listMyBookings(page = 1) {
+export async function listMyBookings(
+  page = 1,
+  filter?: import('@turfhood/shared').BookingListFilter,
+) {
   const response = await axiosInstance.get<BookingListResponse>(API_ROUTES.bookings.mine, {
-    params: { page, limit: 10 },
+    params: { page, limit: 10, filter },
   });
   return response.data;
 }
@@ -36,8 +39,10 @@ export async function retryBookingPayment(id: string) {
 export async function abandonBookingCheckout(id: string) {
   await axiosInstance.post(API_ROUTES.bookings.abandon(id));
 }
-export async function listOwnerBookings(turfId: string) {
-  const response = await axiosInstance.get<BookingListResponse>(API_ROUTES.bookings.owner(turfId));
+export async function listOwnerBookings(turfId: string, page = 1) {
+  const response = await axiosInstance.get<BookingListResponse>(API_ROUTES.bookings.owner(turfId), {
+    params: { page, limit: 20 },
+  });
   return response.data;
 }
 export async function cancelOwnerBooking(turfId: string, id: string, reason: string) {

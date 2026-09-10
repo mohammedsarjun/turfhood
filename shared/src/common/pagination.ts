@@ -16,3 +16,7 @@ export interface PaginatedResponse<T> {
   items: T[];
   pagination: PaginationMeta;
 }
+
+export type BookingListFilter = "upcoming" | "completed" | "cancelled";
+export type OwnerSessionListFilter =
+  "all" | "active" | "completed" | "cancelled";

@@ -19,6 +19,20 @@ export interface RefundStatusResult {
   providerStatus: string;
   requestId?: string;
   reason?: string;
+  errorCode?: string;
+  retryable?: boolean;
+}
+
+export class RefundProviderError extends Error {
+  constructor(
+    message: string,
+    public readonly retryable: boolean,
+    public readonly errorCode?: string,
+    public readonly requestMayExist = false,
+  ) {
+    super(message);
+    this.name = 'RefundProviderError';
+  }
 }
 export interface PaymentCallback {
   txnid: string;

@@ -42,13 +42,17 @@ export class TurfOwnerApplicationRepository implements ITurfOwnerApplicationRepo
 
   async list(params: ListTurfOwnerApplicationsParams): Promise<ListTurfOwnerApplicationsResult> {
     const filter: Record<string, unknown> = {};
+    if (params.applicantUserId) filter.applicantUserId = params.applicantUserId;
     if (params.status) {
       filter.status = params.status;
     }
 
     const skip = (params.page - 1) * params.limit;
     const [docs, total] = await Promise.all([
-      TurfOwnerApplicationModel.find(filter).sort({ createdAt: -1 }).skip(skip).limit(params.limit),
+      TurfOwnerApplicationModel.find(filter)
+        .sort({ createdAt: -1, _id: -1 })
+        .skip(skip)
+        .limit(params.limit),
       TurfOwnerApplicationModel.countDocuments(filter),
     ]);
 

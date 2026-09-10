@@ -13,11 +13,15 @@ import {
 } from 'lucide-react';
 import type { OpenSessionDTO } from '@turfhood/shared';
 import { Header } from '@/components/shared';
-import { Badge, Button, Card, CardContent, Spinner, useToast } from '@/components/ui';
+import { Badge, Button, Card, CardContent, Modal, Spinner, useToast } from '@/components/ui';
 import { submitPaymentForm } from '@/features/bookings/actions/bookingApi';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { formatTime12Hour } from '@/lib/time';
-import { getOpenSession, joinOpenSession } from '../actions/openSessionApi';
+import {
+  cancelOpenSessionParticipation,
+  getOpenSession,
+  joinOpenSession,
+} from '../actions/openSessionApi';
 import { SessionParticipants } from './SessionParticipants';
 
 const remaining = (deadline: string) => {
@@ -34,6 +38,8 @@ export function OpenSessionDetailsPage({ id }: { id: string }) {
   const [session, setSession] = useState<OpenSessionDTO>();
   const [timer, setTimer] = useState('');
   const [joining, setJoining] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+  const [cancelConfirmationOpen, setCancelConfirmationOpen] = useState(false);
   const [loadFailed, setLoadFailed] = useState(false);
 
   useEffect(() => {
@@ -59,6 +65,18 @@ export function OpenSessionDetailsPage({ id }: { id: string }) {
     } catch {
       showToast('Unable to join this session.', 'error');
       setJoining(false);
+    }
+  };
+  const cancelParticipation = async () => {
+    setCancelling(true);
+    try {
+      setSession(await cancelOpenSessionParticipation(id));
+      setCancelConfirmationOpen(false);
+      showToast('Your place was cancelled. A full refund has been requested.');
+    } catch {
+      showToast('Unable to cancel your place.', 'error');
+    } finally {
+      setCancelling(false);
     }
   };
 
@@ -198,13 +216,48 @@ export function OpenSessionDetailsPage({ id }: { id: string }) {
                     ? 'You are already in this session'
                     : `Join for ₹${(session.pricePerParticipantPaise / 100).toFixed(2)}`}
                 </Button>
+                {alreadyJoined && session.status !== 'confirmed' && (
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    loading={cancelling}
+                    onClick={() => setCancelConfirmationOpen(true)}
+                  >
+                    Cancel place and get full refund
+                  </Button>
+                )}
                 <p className="text-center text-xs text-muted-foreground">
-                  Minimum {session.minimumPlayers} players required by the court
+                  All {session.maximumPlayers} paid players are required for confirmation
                 </p>
               </CardContent>
             </Card>
           </aside>
         </div>
+        <Modal
+          open={cancelConfirmationOpen}
+          onClose={() => setCancelConfirmationOpen(false)}
+          title="Cancel your open-session place?"
+        >
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Your place becomes available to another player and a full refund of ₹
+              {(session.pricePerParticipantPaise / 100).toFixed(2)} will be requested. You can join
+              again later if a place is still available.
+            </p>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setCancelConfirmationOpen(false)}>
+                Keep my place
+              </Button>
+              <Button
+                variant="destructive"
+                loading={cancelling}
+                onClick={() => void cancelParticipation()}
+              >
+                Cancel and refund
+              </Button>
+            </div>
+          </div>
+        </Modal>
       </main>
     </>
   );

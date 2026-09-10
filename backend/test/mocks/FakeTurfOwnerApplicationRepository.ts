@@ -42,8 +42,16 @@ export class FakeTurfOwnerApplicationRepository implements ITurfOwnerApplication
   }
 
   async list(params: ListTurfOwnerApplicationsParams): Promise<ListTurfOwnerApplicationsResult> {
-    void params;
-    return this.options.listResult ?? { items: [], total: 0 };
+    if (this.options.listResult) return this.options.listResult;
+    const items = (this.options.allByApplicant ?? []).filter(
+      (item) =>
+        (!params.applicantUserId || item.applicantUserId === params.applicantUserId) &&
+        (!params.status || item.status === params.status),
+    );
+    return {
+      items: items.slice((params.page - 1) * params.limit, params.page * params.limit),
+      total: items.length,
+    };
   }
 
   async create(application: TurfOwnerApplication): Promise<TurfOwnerApplication> {

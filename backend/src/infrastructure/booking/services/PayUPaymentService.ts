@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+
 import { injectable } from 'tsyringe';
 import type { BookingDTO } from '@turfhood/shared';
 import type {
@@ -8,9 +9,42 @@ import type {
   PaymentForm,
   RefundStatusResult,
 } from '@domain/booking/services/IPaymentService';
+import { RefundProviderError } from '@domain/booking/services/IPaymentService';
 import { env } from '@config/env';
 
 const sha512 = (value: string) => createHash('sha512').update(value).digest('hex');
+const RETRYABLE_REFUND_ERROR_CODES = new Set([
+  '120',
+  '123',
+  '231',
+  '248',
+  '249',
+  '259',
+  '261',
+  '262',
+  '264',
+  '265',
+  '267',
+  '302',
+  '500',
+  '502',
+]);
+const POSSIBLY_CREATED_REFUND_CODES = new Set(['106', '109', '214', '225', '226', '227']);
+
+const refundError = (message: unknown, code: unknown) => {
+  const errorCode = String(code ?? '').trim();
+  const providerMessage = String(message ?? 'Unknown error').trim();
+  const details = errorCode ? `PayU error ${errorCode}: ${providerMessage}` : providerMessage;
+  const requestMayExist =
+    POSSIBLY_CREATED_REFUND_CODES.has(errorCode) ||
+    /already used|already logged|request pending/i.test(providerMessage);
+  const retryable =
+    requestMayExist ||
+    RETRYABLE_REFUND_ERROR_CODES.has(errorCode) ||
+    /try after|temporary|lock/i.test(providerMessage);
+  return new RefundProviderError(details, retryable, errorCode || undefined, requestMayExist);
+};
+
 @injectable()
 export class PayUPaymentService implements IPaymentService {
   createForm(booking: BookingDTO, transactionId: string): PaymentForm {
@@ -67,6 +101,15 @@ export class PayUPaymentService implements IPaymentService {
     return expected === data.hash;
   }
   async refund(paymentId: string, amountPaise: number, requestToken: string) {
+    if (!/^\d+$/.test(paymentId))
+      throw new RefundProviderError('PayU payment ID is missing or invalid.', false);
+    if (!Number.isSafeInteger(amountPaise) || amountPaise <= 0)
+      throw new RefundProviderError('Refund amount must be a positive number of paise.', false);
+    if (!requestToken.trim() || requestToken.length > 23)
+      throw new RefundProviderError(
+        'Refund token must contain between 1 and 23 characters.',
+        false,
+      );
     const command = 'cancel_refund_transaction';
     const body = new URLSearchParams({
       key: env.PAYU_MERCHANT_KEY,
@@ -74,6 +117,7 @@ export class PayUPaymentService implements IPaymentService {
       var1: paymentId,
       var2: requestToken,
       var3: (amountPaise / 100).toFixed(2),
+      var5: `${env.BACKEND_PUBLIC_URL}/api/payments/payu/refund-webhook`,
       hash: sha512(`${env.PAYU_MERCHANT_KEY}|${command}|${paymentId}|${env.PAYU_MERCHANT_SALT}`),
     });
     const response = await fetch(env.PAYU_API_URL, {
@@ -89,12 +133,12 @@ export class PayUPaymentService implements IPaymentService {
       status?: unknown;
       error_code?: unknown;
       request_id?: unknown;
+      txn_update_id?: unknown;
       msg?: unknown;
     };
     const accepted = Number(result.status) === 1 || String(result.error_code) === '102';
-    const requestId = String(result.request_id ?? '').trim();
-    if (!accepted || !requestId)
-      throw new Error(`PayU rejected the refund request: ${String(result.msg ?? 'Unknown error')}`);
+    const requestId = String(result.request_id ?? result.txn_update_id ?? '').trim();
+    if (!accepted || !requestId) throw refundError(result.msg, result.error_code);
     return { requestId };
   }
 
@@ -153,13 +197,17 @@ export class PayUPaymentService implements IPaymentService {
     const requestId = String(action.request_id ?? '').trim();
     if (providerStatus === 'success')
       return { status: 'success', providerStatus, ...(requestId ? { requestId } : {}) };
-    if (providerStatus === 'failure' || providerStatus === 'failed')
+    if (providerStatus === 'failure' || providerStatus === 'failed') {
+      const errorCode = String(action.error_code ?? action.statusCode ?? '').trim();
       return {
         status: 'failed',
         providerStatus,
         ...(requestId ? { requestId } : {}),
         reason: String(action.msg ?? action.error_Message ?? 'PayU refund failed.'),
+        ...(errorCode ? { errorCode } : {}),
+        retryable: refundError(action.msg ?? action.error_Message, errorCode).retryable,
       };
+    }
     return {
       status: 'pending',
       providerStatus: providerStatus || 'unknown',
@@ -180,11 +228,7 @@ export class PayUPaymentService implements IPaymentService {
       return null;
     }
     const record = value as Record<string, unknown>;
-    if (
-      matches(record) &&
-      String(record.action ?? '').toLowerCase() === 'refund'
-    )
-      return record;
+    if (matches(record) && String(record.action ?? '').toLowerCase() === 'refund') return record;
     for (const child of Object.values(record)) {
       const found = this.findRefundAction(child, matches);
       if (found) return found;

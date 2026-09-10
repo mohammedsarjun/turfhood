@@ -43,13 +43,13 @@ async function bootstrap(): Promise<void> {
   const refundTimer = setInterval(reconcile, 5 * 60_000);
   refundTimer.unref();
   const openSessions = container.resolve<IManageOpenSessionsUseCase>(OPEN_SESSION_TOKENS.UseCase);
-  const expireOpenSessions = () => {
-    void openSessions.expireUnfilled().catch((error: unknown) => {
-      console.error('Unable to expire unfilled open sessions.', error);
+  const processOpenSessionDeadlines = () => {
+    void openSessions.processDeadlines().catch((error: unknown) => {
+      console.error('Unable to process open-session deadlines.', error);
     });
   };
-  expireOpenSessions();
-  const openSessionTimer = setInterval(expireOpenSessions, 60_000);
+  processOpenSessionDeadlines();
+  const openSessionTimer = setInterval(processOpenSessionDeadlines, 60_000);
   openSessionTimer.unref();
 
   app.listen(env.PORT, () => {

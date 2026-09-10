@@ -1,0 +1,336 @@
+'use client';
+
+import Link from 'next/link';
+import type { IconType } from 'react-icons';
+import {
+  FiArrowRight,
+  FiCalendar,
+  FiDollarSign,
+  FiGrid,
+  FiMapPin,
+  FiSettings,
+  FiStar,
+  FiTrendingUp,
+  FiUsers,
+} from 'react-icons/fi';
+import { Badge, Button, Spinner } from '@/components/ui';
+import { formatTime12Hour } from '@/lib/time';
+import { useOwnerDashboard } from '../hooks/useOwnerDashboard';
+
+const money = (paise: number) =>
+  new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0,
+  }).format(paise / 100);
+const date = (value: string) =>
+  new Intl.DateTimeFormat('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }).format(
+    new Date(`${value}T00:00:00`),
+  );
+
+export function OwnerDashboardPage({ turfId }: { turfId: string }) {
+  const { dashboard, isLoading, error, retry } = useOwnerDashboard(turfId);
+  if (isLoading)
+    return (
+      <div className="flex min-h-96 items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  if (!dashboard || error)
+    return (
+      <div className="mx-auto max-w-lg rounded-2xl border border-border bg-card p-8 text-center shadow-sm">
+        <h1 className="text-xl font-semibold">Dashboard unavailable</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {error ?? 'Unable to load your dashboard.'}
+        </p>
+        <Button className="mt-5" onClick={() => void retry()}>
+          Try again
+        </Button>
+      </div>
+    );
+
+  const stats = [
+    {
+      label: 'Total bookings',
+      value: dashboard.stats.totalBookings.toLocaleString('en-IN'),
+      note: 'All customer bookings',
+      icon: FiCalendar,
+      tone: 'bg-blue-50 text-blue-700 dark:bg-blue-950',
+    },
+    {
+      label: 'Total revenue',
+      value: money(dashboard.stats.totalRevenuePaise),
+      note: 'Net owner earnings',
+      icon: FiTrendingUp,
+      tone: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950',
+    },
+    {
+      label: 'Available balance',
+      value: money(dashboard.stats.availableBalancePaise),
+      note: 'From completed bookings',
+      icon: FiDollarSign,
+      tone: 'bg-violet-50 text-violet-700 dark:bg-violet-950',
+    },
+    {
+      label: 'Average rating',
+      value: dashboard.stats.reviewCount ? dashboard.stats.averageRating.toFixed(1) : '--',
+      note: `${dashboard.stats.reviewCount} review${dashboard.stats.reviewCount === 1 ? '' : 's'}`,
+      icon: FiStar,
+      tone: 'bg-amber-50 text-amber-700 dark:bg-amber-950',
+    },
+  ];
+
+  return (
+    <div className="mx-auto max-w-7xl space-y-7 pb-10">
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <div>
+          <p className="text-sm font-semibold text-primary">BUSINESS OVERVIEW</p>
+          <h1 className="mt-1 text-3xl font-bold tracking-tight">Good to see you</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Here&apos;s what&apos;s happening at {dashboard.turfName}.
+          </p>
+        </div>
+        <Link href={`/turf-portal/${turfId}/bookings`}>
+          <Button>
+            <FiCalendar />
+            View bookings
+          </Button>
+        </Link>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {stats.map((stat) => (
+          <StatCard key={stat.label} {...stat} />
+        ))}
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+        <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+          <div className="flex items-center justify-between border-b border-border p-5">
+            <div>
+              <h2 className="font-semibold">Upcoming bookings</h2>
+              <p className="mt-1 text-xs text-muted-foreground">Your next confirmed arrivals</p>
+            </div>
+            <Link
+              href={`/turf-portal/${turfId}/bookings`}
+              className="flex items-center gap-1 text-sm font-medium text-primary"
+            >
+              View all <FiArrowRight />
+            </Link>
+          </div>
+          {dashboard.upcomingBookings.length ? (
+            <div className="divide-y divide-border">
+              {dashboard.upcomingBookings.map((booking) => (
+                <div
+                  key={booking.id}
+                  className="grid gap-3 p-5 sm:grid-cols-[90px_1fr_auto] sm:items-center"
+                >
+                  <div>
+                    <p className="text-sm font-semibold">{date(booking.bookingDate)}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {formatTime12Hour(booking.startTime)}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="font-medium">{booking.customerName}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {booking.courtName} · {booking.slotCount} slot
+                      {booking.slotCount === 1 ? '' : 's'} · {booking.reference}
+                    </p>
+                  </div>
+                  <div className="text-left sm:text-right">
+                    <p className="font-semibold">{money(booking.ownerEarningsPaise)}</p>
+                    <Badge variant="success" className="mt-1">
+                      Confirmed
+                    </Badge>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <Empty icon={FiCalendar} text="No upcoming bookings yet." />
+          )}
+        </section>
+
+        <div className="space-y-6">
+          <section className="rounded-2xl bg-sidebar-bg p-6 text-white shadow-sm">
+            <p className="text-sm text-sidebar-text">Today&apos;s schedule</p>
+            <p className="mt-3 text-4xl font-bold">{dashboard.today.bookings}</p>
+            <p className="mt-1 text-sm text-sidebar-muted">
+              confirmed booking{dashboard.today.bookings === 1 ? '' : 's'} today
+            </p>
+            <div className="my-5 h-px bg-sidebar-divider" />
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-sidebar-text">Expected earnings</span>
+              <strong className="text-lg text-primary">
+                {money(dashboard.today.revenuePaise)}
+              </strong>
+            </div>
+          </section>
+          <section className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="font-semibold">Court health</h2>
+                <p className="mt-1 text-xs text-muted-foreground">Keep every court bookable</p>
+              </div>
+              <div className="rounded-xl bg-success p-3 text-success-foreground">
+                <FiGrid />
+              </div>
+            </div>
+            <div className="mt-5 grid grid-cols-3 gap-3 text-center">
+              <Metric value={dashboard.courts.total} label="Total" />
+              <Metric value={dashboard.courts.active} label="Active" />
+              <Metric
+                value={dashboard.courts.attentionNeeded}
+                label="Attention"
+                warning={dashboard.courts.attentionNeeded > 0}
+              />
+            </div>
+            <Link
+              href={`/turf-portal/${turfId}/courts`}
+              className="mt-5 flex items-center justify-center gap-2 rounded-lg border border-border py-2.5 text-sm font-medium hover:bg-muted"
+            >
+              <FiSettings />
+              Manage courts
+            </Link>
+          </section>
+        </div>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-[1.35fr_1fr]">
+        <section className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="font-semibold">Recent reviews</h2>
+              <p className="mt-1 text-xs text-muted-foreground">Latest customer feedback</p>
+            </div>
+            <Link
+              href={`/turf-portal/${turfId}/reviews`}
+              className="text-sm font-medium text-primary"
+            >
+              View all
+            </Link>
+          </div>
+          {dashboard.recentReviews.length ? (
+            <div className="mt-4 divide-y divide-border">
+              {dashboard.recentReviews.map((review) => (
+                <div key={review.id} className="py-4">
+                  <div className="flex justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-medium">{review.customerName}</p>
+                      <p className="text-xs text-muted-foreground">{review.courtName}</p>
+                    </div>
+                    <span className="flex h-fit items-center gap-1 rounded-full bg-amber-50 px-2 py-1 text-xs font-semibold text-amber-700">
+                      <FiStar className="fill-current" />
+                      {review.rating}
+                    </span>
+                  </div>
+                  <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                    {review.comment}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <Empty icon={FiStar} text="No reviews received yet." />
+          )}
+        </section>
+        <section className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+          <h2 className="font-semibold">Quick actions</h2>
+          <p className="mt-1 text-xs text-muted-foreground">Common tasks, one click away</p>
+          <div className="mt-4 grid gap-3">
+            <QuickLink
+              href={`/turf-portal/${turfId}/my-turf`}
+              icon={FiMapPin}
+              title="Update turf profile"
+              text="Photos, details and location"
+            />
+            <QuickLink
+              href={`/turf-portal/${turfId}/courts`}
+              icon={FiGrid}
+              title="Manage courts"
+              text="Availability, prices and settings"
+            />
+            <QuickLink
+              href={`/turf-portal/${turfId}/customers`}
+              icon={FiUsers}
+              title="View customers"
+              text="Know who plays at your turf"
+            />
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function StatCard({
+  label,
+  value,
+  note,
+  icon: Icon,
+  tone,
+}: {
+  label: string;
+  value: string;
+  note: string;
+  icon: IconType;
+  tone: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+      <div className="flex items-start justify-between">
+        <div>
+          <p className="text-sm text-muted-foreground">{label}</p>
+          <p className="mt-2 text-2xl font-bold tracking-tight">{value}</p>
+        </div>
+        <div className={`rounded-xl p-3 ${tone}`}>
+          <Icon size={20} />
+        </div>
+      </div>
+      <p className="mt-3 text-xs text-muted-foreground">{note}</p>
+    </div>
+  );
+}
+function Metric({ value, label, warning }: { value: number; label: string; warning?: boolean }) {
+  return (
+    <div className="rounded-xl bg-muted px-2 py-3">
+      <p className={`text-xl font-bold ${warning ? 'text-warning-foreground' : ''}`}>{value}</p>
+      <p className="mt-1 text-[11px] text-muted-foreground">{label}</p>
+    </div>
+  );
+}
+function Empty({ icon: Icon, text }: { icon: IconType; text: string }) {
+  return (
+    <div className="flex min-h-40 flex-col items-center justify-center p-6 text-center text-muted-foreground">
+      <Icon size={28} />
+      <p className="mt-3 text-sm">{text}</p>
+    </div>
+  );
+}
+function QuickLink({
+  href,
+  icon: Icon,
+  title,
+  text,
+}: {
+  href: string;
+  icon: IconType;
+  title: string;
+  text: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="flex items-center gap-3 rounded-xl border border-border p-3 transition hover:border-primary/50 hover:bg-muted"
+    >
+      <div className="rounded-lg bg-success p-2.5 text-success-foreground">
+        <Icon />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-medium">{title}</p>
+        <p className="truncate text-xs text-muted-foreground">{text}</p>
+      </div>
+      <FiArrowRight className="text-muted-foreground" />
+    </Link>
+  );
+}

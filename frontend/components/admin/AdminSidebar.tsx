@@ -10,6 +10,8 @@ import {
   Sparkles,
   Percent,
   ReceiptText,
+  WalletCards,
+  ChartNoAxesCombined,
   X,
   type LucideIcon,
 } from 'lucide-react';
@@ -23,6 +25,8 @@ export interface AdminNavItem {
 
 export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
+  { label: 'Revenue', href: '/admin/revenue', icon: ChartNoAxesCombined },
+  { label: 'Withdrawals', href: '/admin/withdrawal-requests', icon: WalletCards },
   { label: 'Sports', href: '/admin/sports', icon: Trophy },
   { label: 'Amenities', href: '/admin/amenities', icon: Sparkles },
   { label: 'Banners', href: '/admin/banners', icon: Images },

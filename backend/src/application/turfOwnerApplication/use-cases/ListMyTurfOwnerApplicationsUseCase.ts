@@ -15,8 +15,20 @@ export class ListMyTurfOwnerApplicationsUseCase implements IListMyTurfOwnerAppli
     private readonly applicationRepository: ITurfOwnerApplicationRepository,
   ) {}
 
-  async execute(userId: string): Promise<TurfApplicationSummary[]> {
-    const applications = await this.applicationRepository.findAllByApplicant(userId);
-    return applications.map(toTurfApplicationSummaryDTO);
+  async execute(
+    userId: string,
+    page = 1,
+    limit = 9,
+  ): Promise<import('@turfhood/shared').PaginatedResponse<TurfApplicationSummary>> {
+    const result = await this.applicationRepository.list({ applicantUserId: userId, page, limit });
+    return {
+      items: result.items.map(toTurfApplicationSummaryDTO),
+      pagination: {
+        page,
+        limit,
+        total: result.total,
+        totalPages: Math.max(1, Math.ceil(result.total / limit)),
+      },
+    };
   }
 }

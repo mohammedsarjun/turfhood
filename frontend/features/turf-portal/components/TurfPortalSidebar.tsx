@@ -42,7 +42,7 @@ const NAVIGATION_GROUPS: ReadonlyArray<{
       { label: 'My Turf', segment: 'my-turf', icon: FiMapPin },
       { label: 'Court Management', segment: 'courts', icon: FiSettings },
       { label: 'Bookings', segment: 'bookings', icon: FiCalendar },
-      { label: 'Slot Management', segment: 'slots', icon: FiGrid },
+      { label: 'Open Sessions', segment: 'open-sessions', icon: FiUsers },
     ],
   },
   {

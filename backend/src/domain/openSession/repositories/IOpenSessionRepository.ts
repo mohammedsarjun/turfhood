@@ -1,4 +1,4 @@
-import type { OpenSessionDTO } from '@turfhood/shared';
+import type { CustomerRefundDTO, OpenSessionDTO } from '@turfhood/shared';
 
 export interface CreateOpenSessionPersistenceInput {
   creatorId: string;
@@ -35,6 +35,13 @@ export interface IOpenSessionRepository {
     userId: string,
     page: number,
     limit: number,
+    statuses?: string[],
+  ): Promise<{ items: OpenSessionDTO[]; total: number }>;
+  listByTurf(
+    turfId: string,
+    page: number,
+    limit: number,
+    statuses?: string[],
   ): Promise<{ items: OpenSessionDTO[]; total: number }>;
   addPendingParticipant(
     id: string,
@@ -44,6 +51,13 @@ export interface IOpenSessionRepository {
   findByTransactionId(transactionId: string): Promise<OpenSessionDTO | null>;
   findPayment(transactionId: string): Promise<{ createdAt: Date; status: string } | null>;
   confirmParticipant(transactionId: string, paymentId: string): Promise<OpenSessionDTO | null>;
+  listFullDue(now: Date): Promise<OpenSessionDTO[]>;
+  markConfirmed(sessionId: string): Promise<void>;
+  beginParticipantCancellation(
+    sessionId: string,
+    userId: string,
+    now: Date,
+  ): Promise<{ paymentId: string; amountPaise: number } | null>;
   failParticipant(transactionId: string): Promise<void>;
   expirePendingParticipants(now: Date): Promise<number>;
   expireUnfilled(now: Date): Promise<
@@ -58,11 +72,34 @@ export interface IOpenSessionRepository {
     requestId: string,
   ): Promise<void>;
   listPendingParticipantRefunds(): Promise<
-    Array<{ sessionId: string; userId: string; requestId: string }>
+    Array<{
+      sessionId: string;
+      userId: string;
+      paymentId: string;
+      amountPaise: number;
+      attemptCount: number;
+      requestToken?: string;
+      requestId?: string;
+    }>
   >;
+  recordParticipantRefundAttempt(
+    sessionId: string,
+    userId: string,
+    requestToken: string,
+    maxAttempts: number,
+  ): Promise<boolean>;
+  recordParticipantRefundFailure(
+    sessionId: string,
+    userId: string,
+    reason: string,
+    terminal: boolean,
+    rotateToken: boolean,
+  ): Promise<void>;
   markParticipantRefundResult(
     sessionId: string,
     userId: string,
     status: 'refunded' | 'refund_failed',
+    reason?: string,
   ): Promise<void>;
+  listRefundsByUser(userId: string): Promise<CustomerRefundDTO[]>;
 }

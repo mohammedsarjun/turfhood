@@ -1,10 +1,11 @@
 import { randomUUID } from 'node:crypto';
+
 import { inject, injectable } from 'tsyringe';
 import type { CreateOpenSessionRequest, OpenSessionListResponse } from '@turfhood/shared';
-import type { IManageOpenSessionsUseCase } from './IManageOpenSessionsUseCase.js';
 import type { IOpenSessionRepository } from '@domain/openSession/repositories/IOpenSessionRepository';
 import { OPEN_SESSION_TOKENS } from '@domain/openSession/tokens';
 import type { IPaymentService, PaymentCallback } from '@domain/booking/services/IPaymentService';
+import { RefundProviderError } from '@domain/booking/services/IPaymentService';
 import { BOOKING_TOKENS } from '@domain/booking/tokens';
 import type { ICourtRepository } from '@domain/court/repositories/ICourtRepository';
 import { COURT_TOKENS } from '@domain/court/tokens';
@@ -18,8 +19,21 @@ import type { IBookingRepository } from '@domain/booking/repositories/IBookingRe
 import { BookingActionError, BookingNotFoundError } from '@domain/booking/errors/BookingErrors';
 import { generateSlots } from '@application/court/use-cases/GetPublicCourtDetailsUseCase';
 import { isOpenSessionPaymentExpired } from '@domain/openSession/services/OpenSessionPaymentPolicy';
+import type { ICommissionSettingRepository } from '@domain/commission/repositories/ICommissionSettingRepository';
+import { COMMISSION_TOKENS } from '@domain/commission/tokens';
+import { DEFAULT_COMMISSION_PERCENTAGE } from '@application/commission/constants';
+
+import type { IManageOpenSessionsUseCase } from './IManageOpenSessionsUseCase.js';
 
 const playTime = (date: string, time: string) => new Date(`${date}T${time}:00+05:30`);
+const openSessionRefundToken = (
+  purpose: 'late' | 'leave' | 'expire',
+  firstId: string,
+  secondId = '',
+) => `os${purpose[0]}-${firstId.slice(-8)}${secondId ? `-${secondId.slice(-8)}` : ''}`;
+const MAX_REFUND_ATTEMPTS = 3;
+const participantRefundToken = (sessionId: string, userId: string, attempt: number) =>
+  `osr-${sessionId.slice(-8)}-${userId.slice(-8)}-${attempt}`;
 
 @injectable()
 export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
@@ -31,6 +45,8 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
     @inject(TURF_TOKENS.TurfRepository) private readonly turfs: ITurfRepository,
     @inject(USER_TOKENS.UserRepository) private readonly users: IUserRepository,
     @inject(SPORTS_TYPE_TOKENS.SportsTypeRepository) private readonly sports: ISportsTypeRepository,
+    @inject(COMMISSION_TOKENS.Repository)
+    private readonly commissions: ICommissionSettingRepository,
   ) {}
 
   async create(userId: string, input: CreateOpenSessionRequest) {
@@ -167,9 +183,53 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
     return session;
   }
 
-  async listMine(userId: string, page: number, limit: number): Promise<OpenSessionListResponse> {
+  async listMine(
+    userId: string,
+    page: number,
+    limit: number,
+    filter?: import('@turfhood/shared').BookingListFilter,
+  ): Promise<OpenSessionListResponse> {
     await this.expireUnfilled();
-    const result = await this.sessions.listByParticipant(userId, page, limit);
+    const statuses =
+      filter === 'upcoming'
+        ? ['open', 'full']
+        : filter === 'completed'
+          ? ['completed']
+          : filter === 'cancelled'
+            ? ['cancelled']
+            : undefined;
+    const result = await this.sessions.listByParticipant(userId, page, limit, statuses);
+    return {
+      items: result.items,
+      pagination: {
+        page,
+        limit,
+        total: result.total,
+        totalPages: Math.max(1, Math.ceil(result.total / limit)),
+      },
+    };
+  }
+
+  async listForOwner(
+    ownerId: string,
+    portalTurfId: string,
+    page: number,
+    limit: number,
+    filter?: import('@turfhood/shared').OwnerSessionListFilter,
+  ): Promise<OpenSessionListResponse> {
+    await this.expireUnfilled();
+    const turf = await this.turfs.findOwnedByIdOrVerificationId(portalTurfId, ownerId);
+    if (!turf?.id) throw new BookingNotFoundError();
+    const result = await this.sessions.listByTurf(
+      turf.id,
+      page,
+      limit,
+      filter === 'active'
+        ? ['open', 'full', 'awaiting_creator_payment']
+        : filter && filter !== 'all'
+          ? [filter]
+          : undefined,
+    );
     return {
       items: result.items,
       pagination: {
@@ -194,7 +254,7 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
         await this.payments.refund(
           input.mihpayid,
           Math.round(Number(input.amount) * 100),
-          `os-late-${input.txnid.slice(-18)}`,
+          openSessionRefundToken('late', input.txnid),
         );
       }
       throw new BookingNotFoundError();
@@ -206,12 +266,16 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
     if (
       !this.payments.verifyCallback(input) ||
       input.status !== 'success' ||
-      Math.round(Number(input.amount) * 100) !== session.pricePerParticipantPaise
+      Math.round(Number(input.amount) * 100) !== session.pricePerParticipantPaise ||
+      !input.mihpayid ||
+      !/^\d+$/.test(input.mihpayid)
     ) {
       await this.sessions.failParticipant(input.txnid);
       throw new BookingActionError('Open-session payment verification failed.');
     }
-    if (payment?.status === 'paid') return session;
+    if (payment?.status === 'paid') {
+      return session;
+    }
     if (
       (transactionExpired ||
         session.status === 'cancelled' ||
@@ -221,19 +285,81 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
       await this.payments.refund(
         input.mihpayid,
         session.pricePerParticipantPaise,
-        `os-late-${input.txnid.slice(-18)}`,
+        openSessionRefundToken('late', input.txnid),
       );
       await this.sessions.failParticipant(input.txnid);
       throw new BookingActionError(
         'The participant payment window expired and the payment is being refunded.',
       );
     }
-    const confirmed = await this.sessions.confirmParticipant(
-      input.txnid,
-      input.mihpayid ?? input.txnid,
-    );
+    const confirmed = await this.sessions.confirmParticipant(input.txnid, input.mihpayid);
     if (!confirmed) throw new BookingActionError('Participant could not be confirmed.');
     return confirmed;
+  }
+
+  async cancelParticipation(userId: string, sessionId: string) {
+    const session = await this.sessions.findById(sessionId);
+    if (!session) throw new BookingNotFoundError();
+    const participant = session.participants.find((item) => item.userId === userId);
+    if (!participant || participant.paymentStatus !== 'paid')
+      throw new BookingActionError('You do not have an active place in this session.');
+    if (new Date(session.fillDeadline) <= new Date())
+      throw new BookingActionError('The cancellation deadline has passed.');
+    const cancellation = await this.sessions.beginParticipantCancellation(
+      sessionId,
+      userId,
+      new Date(),
+    );
+    if (!cancellation) throw new BookingActionError('This place can no longer be cancelled.');
+    await this.processParticipantRefund({
+      sessionId,
+      userId,
+      paymentId: cancellation.paymentId,
+      amountPaise: cancellation.amountPaise,
+      attemptCount: 0,
+    });
+    const updated = await this.sessions.findById(sessionId);
+    if (!updated) throw new BookingNotFoundError();
+    return updated;
+  }
+
+  async listRefunds(userId: string, page: number, limit: number) {
+    const [bookingRefunds, openSessionRefunds] = await Promise.all([
+      this.bookings.listRefundsByUser(userId),
+      this.sessions.listRefundsByUser(userId),
+    ]);
+    const items = [...bookingRefunds, ...openSessionRefunds].sort(
+      (left, right) => new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime(),
+    );
+    const start = (page - 1) * limit;
+    return {
+      items: items.slice(start, start + limit),
+      pagination: {
+        page,
+        limit,
+        total: items.length,
+        totalPages: Math.max(1, Math.ceil(items.length / limit)),
+      },
+    };
+  }
+
+  async processDeadlines() {
+    const now = new Date();
+    const due = await this.sessions.listFullDue(now);
+    const results = await Promise.allSettled(
+      due.map(async (session) => {
+        await this.ensureBookingForFilledSession(session);
+        await this.sessions.markConfirmed(session.id);
+      }),
+    );
+    const cancelled = await this.expireUnfilled();
+    const failures = results.filter((result) => result.status === 'rejected');
+    if (failures.length)
+      throw new AggregateError(
+        failures.map((failure) => failure.reason),
+        `Unable to finalize ${failures.length} open session(s).`,
+      );
+    return results.length + cancelled;
   }
 
   async expireUnfilled() {
@@ -241,19 +367,7 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
     const pendingRefunds = await this.sessions.listPendingParticipantRefunds();
     for (const refund of pendingRefunds) {
       try {
-        const result = await this.payments.checkRefund(refund.requestId);
-        if (result.status === 'success')
-          await this.sessions.markParticipantRefundResult(
-            refund.sessionId,
-            refund.userId,
-            'refunded',
-          );
-        else if (result.status === 'failed')
-          await this.sessions.markParticipantRefundResult(
-            refund.sessionId,
-            refund.userId,
-            'refund_failed',
-          );
+        await this.processParticipantRefund(refund);
       } catch (error) {
         console.error('Unable to reconcile open-session refund.', error);
       }
@@ -262,27 +376,112 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
     for (const session of expired) {
       for (const payment of session.payments) {
         try {
-          const result = await this.payments.refund(
-            payment.paymentId,
-            payment.amountPaise,
-            `os-refund-${session.sessionId.slice(-10)}-${payment.userId.slice(-8)}`,
-          );
-          await this.sessions.markParticipantRefundRequested(
-            session.sessionId,
-            payment.userId,
-            result.requestId,
-          );
+          await this.processParticipantRefund({
+            sessionId: session.sessionId,
+            userId: payment.userId,
+            paymentId: payment.paymentId,
+            amountPaise: payment.amountPaise,
+            attemptCount: 0,
+          });
         } catch (error) {
           console.error('Unable to initiate open-session refund.', error);
-          await this.sessions.markParticipantRefundResult(
-            session.sessionId,
-            payment.userId,
-            'refund_failed',
-          );
         }
       }
     }
     return expired.length;
+  }
+
+  private async processParticipantRefund(input: {
+    sessionId: string;
+    userId: string;
+    paymentId: string;
+    amountPaise: number;
+    attemptCount: number;
+    requestToken?: string;
+    requestId?: string;
+  }) {
+    if (input.requestId) {
+      const status = await this.payments.checkRefund(input.requestId);
+      if (status.status === 'success') {
+        await this.sessions.markParticipantRefundResult(input.sessionId, input.userId, 'refunded');
+      } else if (status.status === 'failed') {
+        const reason = `${status.errorCode ? `PayU error ${status.errorCode}: ` : ''}${status.reason ?? `PayU reported ${status.providerStatus}.`}`;
+        await this.sessions.recordParticipantRefundFailure(
+          input.sessionId,
+          input.userId,
+          reason,
+          status.retryable !== true || input.attemptCount >= MAX_REFUND_ATTEMPTS,
+          status.retryable === true,
+        );
+      }
+      return;
+    }
+
+    if (input.requestToken) {
+      const existing = await this.payments.findRefund(input.paymentId, input.requestToken);
+      if (existing) {
+        if (existing.requestId)
+          await this.sessions.markParticipantRefundRequested(
+            input.sessionId,
+            input.userId,
+            existing.requestId,
+          );
+        if (existing.status === 'success')
+          await this.sessions.markParticipantRefundResult(
+            input.sessionId,
+            input.userId,
+            'refunded',
+          );
+        else if (existing.status === 'failed') {
+          const reason = `${existing.errorCode ? `PayU error ${existing.errorCode}: ` : ''}${existing.reason ?? `PayU reported ${existing.providerStatus}.`}`;
+          await this.sessions.recordParticipantRefundFailure(
+            input.sessionId,
+            input.userId,
+            reason,
+            existing.retryable !== true || input.attemptCount >= MAX_REFUND_ATTEMPTS,
+            existing.retryable === true,
+          );
+        }
+        return;
+      }
+    }
+
+    const attempt = input.attemptCount + 1;
+    const requestToken =
+      input.requestToken ?? participantRefundToken(input.sessionId, input.userId, attempt);
+    const recorded = await this.sessions.recordParticipantRefundAttempt(
+      input.sessionId,
+      input.userId,
+      requestToken,
+      MAX_REFUND_ATTEMPTS,
+    );
+    if (!recorded) {
+      await this.sessions.markParticipantRefundResult(
+        input.sessionId,
+        input.userId,
+        'refund_failed',
+        'Refund retry limit reached.',
+      );
+      return;
+    }
+    try {
+      const refund = await this.payments.refund(input.paymentId, input.amountPaise, requestToken);
+      await this.sessions.markParticipantRefundRequested(
+        input.sessionId,
+        input.userId,
+        refund.requestId,
+      );
+    } catch (error) {
+      const providerError = error instanceof RefundProviderError ? error : null;
+      const retryable = providerError?.retryable ?? true;
+      await this.sessions.recordParticipantRefundFailure(
+        input.sessionId,
+        input.userId,
+        error instanceof Error ? error.message : 'Refund initiation failed.',
+        !retryable || attempt >= MAX_REFUND_ATTEMPTS,
+        Boolean(providerError && retryable && !providerError.requestMayExist),
+      );
+    }
   }
 
   private paymentForm(
@@ -298,6 +497,39 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
       customerName: name,
       customerEmail: email,
       description: `${session.sportName} open session at ${session.turfName}`,
+    });
+  }
+
+  private async ensureBookingForFilledSession(
+    session: Awaited<ReturnType<IOpenSessionRepository['findById']>>,
+  ) {
+    if (!session || session.status !== 'full' || new Date(session.fillDeadline) > new Date())
+      return;
+    const participantUserIds = session.participants
+      .filter((participant) => participant.paymentStatus === 'paid')
+      .map((participant) => participant.userId);
+    const customerId = participantUserIds[0];
+    if (!customerId) throw new BookingActionError('The filled session has no paid participants.');
+    const customer = await this.users.findById(customerId);
+    if (!customer) throw new BookingNotFoundError();
+    const commission = await this.commissions.get();
+    await this.bookings.ensureOpenSessionBooking({
+      openSessionId: session.id,
+      customerId,
+      participantUserIds,
+      turfId: session.turfId,
+      courtId: session.courtId,
+      turfName: session.turfName,
+      courtName: session.courtName,
+      address: session.address,
+      bookingDate: session.bookingDate,
+      startTime: session.startTime,
+      endTime: session.endTime,
+      grossAmountPaise: session.totalPricePaise,
+      commissionBasisPoints: commission?.basisPoints ?? DEFAULT_COMMISSION_PERCENTAGE * 100,
+      customerSharePaise: session.pricePerParticipantPaise,
+      customerName: customer.name,
+      customerEmail: customer.email.toString(),
     });
   }
 }

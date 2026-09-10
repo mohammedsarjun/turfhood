@@ -14,7 +14,7 @@ export class GoogleAuthService implements IGoogleAuthService {
   private readonly client = new OAuth2Client(
     env.GOOGLE_CLIENT_ID,
     env.GOOGLE_CLIENT_SECRET,
-    'postmessage',
+    env.GOOGLE_REDIRECT_URI,
   );
 
   async verifyAndGetProfile(code: string): Promise<GoogleProfile> {

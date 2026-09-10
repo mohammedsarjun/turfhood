@@ -70,12 +70,10 @@ export function validateAvailabilityOverride(
 ): void {
   const result = createAvailabilityOverrideSchema.safeParse(req.body);
   if (!result.success) {
-    res
-      .status(HttpStatus.BAD_REQUEST)
-      .json({
-        message: 'Invalid availability override.',
-        errors: result.error.flatten().fieldErrors,
-      });
+    res.status(HttpStatus.BAD_REQUEST).json({
+      message: 'Invalid availability override.',
+      errors: result.error.flatten().fieldErrors,
+    });
     return;
   }
   (req as ValidatedAvailabilityOverrideRequest).validatedOverride = {
