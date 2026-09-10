@@ -39,6 +39,7 @@ export interface IBookingRepository {
       netEarningsPaise: number;
     };
   }>;
+  completedOwnerEarnings(turfId: string): Promise<number>;
   statusCountsBetween(
     turfId: string,
     startDate: string,

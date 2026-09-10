@@ -1,11 +1,24 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Pagination } from '@/components/table';
 import { getOwnerRevenue } from '../actions/ownerRevenueApi';
-import { FiCalendar, FiDownload, FiDollarSign, FiPercent, FiTrendingUp } from 'react-icons/fi';
-import { Button, Input, Spinner, useToast } from '@/components/ui';
+import {
+  FiCalendar,
+  FiCreditCard,
+  FiDownload,
+  FiDollarSign,
+  FiPercent,
+  FiTrendingUp,
+} from 'react-icons/fi';
+import type { BankAccountType, PayoutOverviewDTO } from '@turfhood/shared';
+import { Button, Input, Select, Spinner, useToast } from '@/components/ui';
 import { useOwnerRevenue } from '../hooks/useOwnerRevenue';
 import { exportRevenuePdf } from '../lib/exportRevenuePdf';
+import {
+  createBankAccount,
+  createWithdrawalRequest,
+  getOwnerPayoutOverview,
+} from '../actions/ownerPayoutApi';
 const localDate = (value = new Date()) =>
   new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(value);
 const ago = (days: number) => localDate(new Date(Date.now() - days * 86_400_000));
@@ -192,6 +205,7 @@ export function OwnerRevenuePage({ turfId }: { turfId: string }) {
           bookings={report.snapshots.thisMonth.bookings}
         />
       </div>
+      <PayoutPanel turfId={turfId} />
       <div className="grid gap-4 md:grid-cols-3">
         {cards.map(({ icon: Icon, ...card }) => (
           <div key={card.label} className="rounded-2xl border border-border bg-card p-5 shadow-sm">
@@ -278,6 +292,263 @@ export function OwnerRevenuePage({ turfId }: { turfId: string }) {
         </div>
       </section>
     </div>
+  );
+}
+function PayoutPanel({ turfId }: { turfId: string }) {
+  const { showToast } = useToast();
+  const [overview, setOverview] = useState<PayoutOverviewDTO>();
+  const [loading, setLoading] = useState(true);
+  const [savingBank, setSavingBank] = useState(false);
+  const [requesting, setRequesting] = useState(false);
+  const [bankForm, setBankForm] = useState({
+    accountHolderName: '',
+    bankName: '',
+    accountNumber: '',
+    ifscCode: '',
+    accountType: 'savings' as BankAccountType,
+  });
+  const [bankErrors, setBankErrors] = useState<Record<string, string>>({});
+  const [withdrawalForm, setWithdrawalForm] = useState({ amount: '', bankAccountId: '' });
+  const [withdrawalErrors, setWithdrawalErrors] = useState<Record<string, string>>({});
+
+  const refresh = async () => {
+    setOverview(await getOwnerPayoutOverview(turfId));
+  };
+
+  useEffect(() => {
+    let active = true;
+    void getOwnerPayoutOverview(turfId)
+      .then((value) => {
+        if (active) setOverview(value);
+      })
+      .catch(() => active && showToast('Unable to load payout details.', 'error'))
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [showToast, turfId]);
+
+  const updateBank = (field: keyof typeof bankForm, value: string) => {
+    setBankForm((current) => ({ ...current, [field]: value }));
+    setBankErrors((current) => ({ ...current, [field]: '' }));
+  };
+
+  const updateWithdrawal = (field: keyof typeof withdrawalForm, value: string) => {
+    setWithdrawalForm((current) => ({ ...current, [field]: value }));
+    setWithdrawalErrors((current) => ({ ...current, [field]: '' }));
+  };
+
+  const validateBank = () => {
+    const errors: Record<string, string> = {};
+    if (bankForm.accountHolderName.trim().length < 2)
+      errors.accountHolderName = 'Account holder name is required.';
+    if (bankForm.bankName.trim().length < 2) errors.bankName = 'Bank name is required.';
+    if (!/^\d{9,18}$/.test(bankForm.accountNumber.trim()))
+      errors.accountNumber = 'Account number must be 9 to 18 digits.';
+    if (!/^[A-Z]{4}0[A-Z0-9]{6}$/i.test(bankForm.ifscCode.trim()))
+      errors.ifscCode = 'Enter a valid IFSC code.';
+    setBankErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const validateWithdrawal = () => {
+    const errors: Record<string, string> = {};
+    const amountPaise = Math.round(Number(withdrawalForm.amount) * 100);
+    if (!withdrawalForm.bankAccountId) errors.bankAccountId = 'Choose the receiving account.';
+    if (!Number.isFinite(amountPaise) || amountPaise < 100)
+      errors.amount = 'Enter an amount of at least INR 1.';
+    else if (overview && amountPaise > overview.availableBalancePaise)
+      errors.amount = 'Amount cannot exceed available balance.';
+    setWithdrawalErrors(errors);
+    return { valid: Object.keys(errors).length === 0, amountPaise };
+  };
+
+  const submitBank = async () => {
+    if (!validateBank()) return;
+    setSavingBank(true);
+    try {
+      await createBankAccount(turfId, {
+        accountHolderName: bankForm.accountHolderName.trim(),
+        bankName: bankForm.bankName.trim(),
+        accountNumber: bankForm.accountNumber.trim(),
+        ifscCode: bankForm.ifscCode.trim().toUpperCase(),
+        accountType: bankForm.accountType,
+      });
+      setBankForm({
+        accountHolderName: '',
+        bankName: '',
+        accountNumber: '',
+        ifscCode: '',
+        accountType: 'savings',
+      });
+      await refresh();
+      showToast('Bank account added.');
+    } catch {
+      showToast('Unable to add bank account.', 'error');
+    } finally {
+      setSavingBank(false);
+    }
+  };
+
+  const submitWithdrawal = async () => {
+    if (!overview?.bankAccounts.length) {
+      showToast('Add at least one bank account before requesting withdrawal.', 'error');
+      return;
+    }
+    const validation = validateWithdrawal();
+    if (!validation.valid) return;
+    setRequesting(true);
+    try {
+      await createWithdrawalRequest(turfId, {
+        amountPaise: validation.amountPaise,
+        bankAccountId: withdrawalForm.bankAccountId,
+      });
+      setWithdrawalForm({ amount: '', bankAccountId: '' });
+      await refresh();
+      showToast('Withdrawal request sent to admin.');
+    } catch {
+      showToast('Unable to request withdrawal.', 'error');
+    } finally {
+      setRequesting(false);
+    }
+  };
+
+  const accounts = overview?.bankAccounts ?? [];
+  return (
+    <section className="grid gap-4 lg:grid-cols-[1fr_1fr]">
+      <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h2 className="font-semibold">Withdrawal request</h2>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Select a saved account and request your available completed earnings.
+            </p>
+          </div>
+          <FiDollarSign className="text-primary" />
+        </div>
+        <p className="mt-5 text-xs text-muted-foreground">Available balance</p>
+        <p className="mt-1 text-2xl font-bold">
+          {loading ? 'Loading...' : money(overview?.availableBalancePaise ?? 0)}
+        </p>
+        <div className="mt-5 grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-start">
+          <label className="text-sm font-medium">
+            Amount
+            <Input
+              className="mt-1"
+              inputMode="decimal"
+              placeholder="5000"
+              value={withdrawalForm.amount}
+              errorMessage={withdrawalErrors.amount}
+              onChange={(event) => updateWithdrawal('amount', event.target.value)}
+              disabled={!accounts.length}
+            />
+          </label>
+          <label className="text-sm font-medium">
+            Account
+            <Select
+              className="mt-1"
+              value={withdrawalForm.bankAccountId}
+              errorMessage={withdrawalErrors.bankAccountId}
+              onChange={(event) => updateWithdrawal('bankAccountId', event.target.value)}
+              disabled={!accounts.length}
+              options={[
+                { label: 'Choose account', value: '' },
+                ...accounts.map((account) => ({
+                  label: `${account.bankName} ${account.accountNumberMasked}`,
+                  value: account.id,
+                })),
+              ]}
+            />
+          </label>
+          <Button
+            className="sm:mt-6"
+            loading={requesting}
+            disabled={!accounts.length || loading}
+            onClick={() => void submitWithdrawal()}
+          >
+            Request
+          </Button>
+        </div>
+        {!accounts.length && (
+          <p className="mt-3 text-xs text-destructive">
+            Add at least one bank account before requesting withdrawal.
+          </p>
+        )}
+        <div className="mt-5 space-y-2">
+          {(overview?.withdrawalRequests ?? []).slice(0, 3).map((request) => (
+            <div
+              key={request.id}
+              className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-muted px-3 py-2 text-sm"
+            >
+              <span>{money(request.amountPaise)}</span>
+              <span className="capitalize text-muted-foreground">{request.status}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h2 className="font-semibold">Bank accounts</h2>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Add the account where admin should send payouts.
+            </p>
+          </div>
+          <FiCreditCard className="text-primary" />
+        </div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <Input
+            placeholder="Account holder name"
+            value={bankForm.accountHolderName}
+            errorMessage={bankErrors.accountHolderName}
+            onChange={(event) => updateBank('accountHolderName', event.target.value)}
+          />
+          <Input
+            placeholder="Bank name"
+            value={bankForm.bankName}
+            errorMessage={bankErrors.bankName}
+            onChange={(event) => updateBank('bankName', event.target.value)}
+          />
+          <Input
+            placeholder="Account number"
+            inputMode="numeric"
+            value={bankForm.accountNumber}
+            errorMessage={bankErrors.accountNumber}
+            onChange={(event) => updateBank('accountNumber', event.target.value)}
+          />
+          <Input
+            placeholder="IFSC code"
+            value={bankForm.ifscCode}
+            errorMessage={bankErrors.ifscCode}
+            onChange={(event) => updateBank('ifscCode', event.target.value)}
+          />
+          <Select
+            value={bankForm.accountType}
+            onChange={(event) => updateBank('accountType', event.target.value)}
+            options={[
+              { label: 'Savings account', value: 'savings' },
+              { label: 'Current account', value: 'current' },
+            ]}
+          />
+          <Button loading={savingBank} onClick={() => void submitBank()}>
+            Add account
+          </Button>
+        </div>
+        <div className="mt-5 space-y-2">
+          {accounts.map((account) => (
+            <div key={account.id} className="rounded-lg border border-border px-3 py-2 text-sm">
+              <strong>{account.bankName}</strong>
+              <span className="ml-2 text-muted-foreground">{account.accountNumberMasked}</span>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {account.accountHolderName} - {account.ifscCode}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 function RevenueChart({ points }: { points: { label: string; value: number }[] }) {

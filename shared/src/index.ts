@@ -178,6 +178,17 @@ export type {
   TurfRevenueReportDTO,
 } from "./revenue/revenue.dto.js";
 export type {
+  BankAccountDTO,
+  BankAccountType,
+  CreateBankAccountRequest,
+  CreateWithdrawalRequest,
+  PayoutOverviewDTO,
+  RejectWithdrawalRequest,
+  WithdrawalRequestDTO,
+  WithdrawalRequestListResponse,
+  WithdrawalRequestStatus,
+} from "./payout/payout.dto.js";
+export type {
   FavoriteIdsResponse,
   FavoriteTurfListResponse,
 } from "./favorite/favorite.dto.js";

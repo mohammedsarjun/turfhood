@@ -150,6 +150,20 @@ export class BookingRepository implements IBookingRepository {
       },
     };
   }
+  async completedOwnerEarnings(turfId: string) {
+    if (!mongoose.isValidObjectId(turfId)) return 0;
+    const rows = await BookingModel.aggregate<{ _id: null; total: number }>([
+      {
+        $match: {
+          turfId: new mongoose.Types.ObjectId(turfId),
+          status: 'completed',
+          paymentStatus: 'paid',
+        },
+      },
+      { $group: { _id: null, total: { $sum: '$ownerEarningsPaise' } } },
+    ]);
+    return rows[0]?.total ?? 0;
+  }
   async reserve(input: CreateBookingPersistenceInput): Promise<BookingDTO> {
     const session = await mongoose.startSession();
     let created: BookingDocument | undefined;

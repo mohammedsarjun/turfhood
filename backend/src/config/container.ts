@@ -184,6 +184,11 @@ import { OPEN_SESSION_TOKENS } from '@domain/openSession/tokens';
 import { OpenSessionRepository } from '@infrastructure/openSession/repositories/OpenSessionRepository';
 import type { IManageOpenSessionsUseCase } from '@application/openSession/use-cases/IManageOpenSessionsUseCase';
 import { ManageOpenSessionsUseCase } from '@application/openSession/use-cases/ManageOpenSessionsUseCase';
+import type { IPayoutRepository } from '@domain/payout/repositories/IPayoutRepository';
+import { PAYOUT_TOKENS } from '@domain/payout/tokens';
+import { PayoutRepository } from '@infrastructure/payout/repositories/PayoutRepository';
+import type { IManagePayoutsUseCase } from '@application/payout/use-cases/IManagePayoutsUseCase';
+import { ManagePayoutsUseCase } from '@application/payout/use-cases/ManagePayoutsUseCase';
 
 /** Composition root — wires domain interfaces to their infrastructure implementations. */
 container.register<IUserRepository>(USER_TOKENS.UserRepository, { useClass: UserRepository });
@@ -420,6 +425,12 @@ container.register<IOpenSessionRepository>(OPEN_SESSION_TOKENS.Repository, {
 });
 container.register<IManageOpenSessionsUseCase>(OPEN_SESSION_TOKENS.UseCase, {
   useClass: ManageOpenSessionsUseCase,
+});
+container.register<IPayoutRepository>(PAYOUT_TOKENS.Repository, {
+  useClass: PayoutRepository,
+});
+container.register<IManagePayoutsUseCase>(PAYOUT_TOKENS.UseCase, {
+  useClass: ManagePayoutsUseCase,
 });
 
 export { container };
