@@ -20,6 +20,7 @@ import type { ICourtRepository } from '@domain/court/repositories/ICourtReposito
 import { COURT_TOKENS } from '@domain/court/tokens';
 import type { ITurfRepository } from '@domain/turf/repositories/ITurfRepository';
 import { TURF_TOKENS } from '@domain/turf/tokens';
+import { TurfSuspendedError } from '@domain/turf/errors/TurfSuspendedError';
 import type { IUserRepository } from '@domain/user/repositories/IUserRepository';
 import { USER_TOKENS } from '@domain/user/tokens';
 import type { ICommissionSettingRepository } from '@domain/commission/repositories/ICommissionSettingRepository';
@@ -89,15 +90,17 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
       throw new BookingActionError('Bookings are available only for the next 14 days.');
     const [court, turf, user, override, commission] = await Promise.all([
       this.courts.findByIdAndTurf(input.courtId, input.turfId),
-      this.turfs.findApprovedById(input.turfId),
+      this.turfs.findById(input.turfId),
       this.users.findById(userId),
       this.courts
         .listOverrides(input.courtId)
         .then((items) => items.find((item) => item.date === input.bookingDate)),
       this.commissions.get(),
     ]);
+    if (turf?.status === 'suspended') throw new TurfSuspendedError(turf.suspensionReason);
     if (!court || court.status !== 'active' || !turf || !user)
       throw new BookingActionError('Court is not available.');
+    if (turf.status !== 'approved') throw new BookingActionError('Court is not available.');
     if (!user.phone)
       throw new BookingActionError('Add a phone number to your profile before booking.');
     const parsedDate = new Date(`${input.bookingDate}T00:00:00Z`);

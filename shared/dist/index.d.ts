@@ -4,6 +4,7 @@ export type { AdminLoginRequest, AdminLoginResponse, } from "./admin/admin-auth.
 export { AdminErrorCode } from "./admin/admin-error-code.js";
 export type { AdminDashboardDTO, AdminDashboardTrendDTO, AdminDashboardRecentBookingDTO, } from "./admin/admin-dashboard.dto.js";
 export type { AdminRevenueSummaryDTO, AdminRevenueTrendDTO, AdminRevenueTransactionDTO, AdminRevenueReportDTO, } from "./admin/admin-revenue.dto.js";
+export type { AdminTurfStatus, AdminUserSummaryDTO, AdminTurfSummaryDTO, SuspendUserRequest, SuspendTurfRequest, AdminUserListResponse, AdminTurfListResponse, } from "./admin/admin-management.dto.js";
 export type { UpdateNameRequest, UpdateNameResponse, UpdatePhoneRequest, UpdatePhoneResponse, RequestEmailChangeRequest, RequestEmailChangeResponse, ConfirmEmailChangeRequest, ConfirmEmailChangeResponse, ChangePasswordRequest, ChangePasswordResponse, SetPasswordRequest, SetPasswordResponse, AvatarUploadResponse, } from "./user/profile.dto.js";
 export type { AuthTokenPayload, RefreshTokenPayload, } from "./auth/token.dto.js";
 export type { RefreshResponse } from "./auth/refresh.dto.js";

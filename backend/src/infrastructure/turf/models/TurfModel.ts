@@ -17,6 +17,7 @@ export interface TurfDocument extends Document {
   sportsOffered: mongoose.Types.ObjectId[];
   rating: TurfRating;
   status: TurfStatus;
+  suspensionReason?: string;
   verificationId?: mongoose.Types.ObjectId;
   isDeleted: boolean;
   createdAt: Date;
@@ -60,6 +61,7 @@ const turfSchema = new Schema<TurfDocument>(
       required: true,
       default: 'approved',
     },
+    suspensionReason: { type: String, trim: true },
     verificationId: { type: Schema.Types.ObjectId, ref: 'TurfOwnerApplication' },
     isDeleted: { type: Boolean, required: true, default: false },
   },

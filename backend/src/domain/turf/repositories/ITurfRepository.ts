@@ -15,7 +15,10 @@ export interface TurfDiscoveryRepositoryInput {
 
 export interface ITurfRepository {
   create(turf: Turf): Promise<Turf>;
+  findById(id: string): Promise<Turf | null>;
   findOwnedByIdOrVerificationId(id: string, ownerId: string): Promise<Turf | null>;
+  findOwnedPortalByIdOrVerificationId(id: string, ownerId: string): Promise<Turf | null>;
+  findByVerificationIds(verificationIds: string[]): Promise<Turf[]>;
   updateBasicDetails(
     id: string,
     ownerId: string,

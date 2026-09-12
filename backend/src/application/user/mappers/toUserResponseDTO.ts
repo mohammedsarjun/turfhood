@@ -11,6 +11,7 @@ export function toUserResponseDTO(user: User): UserResponseDTO {
     roles: user.roles,
     isVerified: user.isVerified,
     status: user.status,
+    ...(user.suspensionReason ? { suspensionReason: user.suspensionReason } : {}),
     createdAt: user.createdAt as Date,
     ...(user.avatarUrl ? { avatarUrl: user.avatarUrl } : {}),
     hasPassword: user.passwordHash !== '',

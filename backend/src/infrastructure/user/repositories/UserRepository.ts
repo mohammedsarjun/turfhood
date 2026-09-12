@@ -137,6 +137,7 @@ export class UserRepository implements IUserRepository {
       roles: doc.roles,
       isVerified: doc.isVerified,
       status: doc.status,
+      ...(doc.suspensionReason ? { suspensionReason: doc.suspensionReason } : {}),
       ...(doc.googleId ? { googleId: doc.googleId } : {}),
       ...(doc.avatarUrl ? { avatarUrl: doc.avatarUrl } : {}),
       createdAt: doc.createdAt,

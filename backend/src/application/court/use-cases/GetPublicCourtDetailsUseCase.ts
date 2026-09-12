@@ -12,6 +12,7 @@ import type { ICourtRepository } from '@domain/court/repositories/ICourtReposito
 import { COURT_TOKENS } from '@domain/court/tokens';
 import type { ITurfRepository } from '@domain/turf/repositories/ITurfRepository';
 import { TURF_TOKENS } from '@domain/turf/tokens';
+import { TurfSuspendedError } from '@domain/turf/errors/TurfSuspendedError';
 import type { ISportsTypeRepository } from '@domain/sportsType/repositories/ISportsTypeRepository';
 import { SPORTS_TYPE_TOKENS } from '@domain/sportsType/tokens';
 import { AppError } from '@shared/errors/AppError';
@@ -117,10 +118,14 @@ export class GetPublicCourtDetailsUseCase implements IGetPublicCourtDetailsUseCa
     today = new Date(),
   ): Promise<PublicCourtDetailsResponse> {
     const [turf, court] = await Promise.all([
-      this.turfs.findApprovedById(turfId),
+      this.turfs.findById(turfId),
       this.courts.findByIdAndTurf(courtId, turfId),
     ]);
-    if (!turf || !court || court.status !== 'active') {
+    if (!turf) {
+      throw new AppError('Court not found.', HttpStatus.NOT_FOUND);
+    }
+    if (turf.status === 'suspended') throw new TurfSuspendedError(turf.suspensionReason);
+    if (turf.status !== 'approved' || !court || court.status !== 'active') {
       throw new AppError('Court not found.', HttpStatus.NOT_FOUND);
     }
     const dateValues = Array.from(

@@ -20,6 +20,7 @@ interface TurfPortalSidebarProps {
   turfId: string;
   open: boolean;
   onNavigate: () => void;
+  suspended?: boolean;
 }
 
 interface NavigationItem {
@@ -62,6 +63,7 @@ export const TurfPortalSidebar = memo(function TurfPortalSidebar({
   turfId,
   open,
   onNavigate,
+  suspended = false,
 }: TurfPortalSidebarProps) {
   const pathname = usePathname();
   const basePath = `/turf-portal/${turfId}`;
@@ -85,7 +87,13 @@ export const TurfPortalSidebar = memo(function TurfPortalSidebar({
       </button>
 
       <nav aria-label="Turf portal navigation" className="space-y-6 py-2">
-        {NAVIGATION_GROUPS.map((group) => (
+        {(suspended
+          ? NAVIGATION_GROUPS.map((group) => ({
+              ...group,
+              items: group.items.filter((item) => item.segment === 'revenue'),
+            })).filter((group) => group.items.length > 0)
+          : NAVIGATION_GROUPS
+        ).map((group) => (
           <section
             key={group.label}
             aria-labelledby={`nav-${group.label.replaceAll(' ', '-').toLowerCase()}`}

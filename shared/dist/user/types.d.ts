@@ -10,6 +10,7 @@ export interface PublicUser {
     roles: UserRole[];
     isVerified: boolean;
     status: UserStatus;
+    suspensionReason?: string;
     createdAt: string;
     avatarUrl?: string;
     /** Whether a password is set on the account (false for Google-only accounts). */

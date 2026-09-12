@@ -39,7 +39,7 @@ router.post('/signup', signupRateLimiter, validateSignUpRequest, signUpControlle
 router.post('/login', authRateLimiter, validateLoginRequest, loginController.handle);
 router.post('/google', authRateLimiter, validateGoogleAuthRequest, googleAuthController.handle);
 router.get('/me', authenticate, meController.handle);
-router.post('/logout', authenticate, logoutController.handle);
+router.post('/logout', logoutController.handle);
 router.post('/refresh', authRateLimiter, refreshController.handle);
 
 router.patch('/me/name', authenticate, validateUpdateNameRequest, profileController.updateName);

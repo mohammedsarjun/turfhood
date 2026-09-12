@@ -56,5 +56,5 @@ export function useLogin() {
     }
   });
 
-  return { register, onSubmit, errors, isSubmitting, formError };
+  return { register, onSubmit, errors, isSubmitting, formError, setFormError };
 }

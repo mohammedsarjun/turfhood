@@ -15,6 +15,7 @@ export interface UserProps {
   roles: UserRole[];
   isVerified: boolean;
   status: UserStatus;
+  suspensionReason?: string;
   googleId?: string;
   avatarUrl?: string;
   createdAt?: Date;
@@ -119,6 +120,10 @@ export class User {
 
   get status(): UserStatus {
     return this.props.status;
+  }
+
+  get suspensionReason(): string | undefined {
+    return this.props.suspensionReason;
   }
 
   get googleId(): string | undefined {

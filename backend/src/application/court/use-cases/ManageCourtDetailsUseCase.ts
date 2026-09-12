@@ -3,6 +3,7 @@ import type { ITurfRepository } from '@domain/turf/repositories/ITurfRepository'
 import { TURF_TOKENS } from '@domain/turf/tokens';
 import type { ICourtRepository } from '@domain/court/repositories/ICourtRepository';
 import { COURT_TOKENS } from '@domain/court/tokens';
+import { TurfSuspendedError } from '@domain/turf/errors/TurfSuspendedError';
 import { CourtAccessError } from '@domain/court/errors/CourtAccessError';
 import {
   AvailabilityOverrideNotFoundError,
@@ -25,8 +26,12 @@ export class ManageCourtDetailsUseCase implements IManageCourtDetailsUseCase {
   ) {}
 
   private async resolve(input: CourtAccessInput) {
-    const turf = await this.turfs.findOwnedByIdOrVerificationId(input.portalTurfId, input.ownerId);
+    const turf = await this.turfs.findOwnedPortalByIdOrVerificationId(
+      input.portalTurfId,
+      input.ownerId,
+    );
     if (!turf?.id) throw new CourtAccessError();
+    if (turf.status === 'suspended') throw new TurfSuspendedError(turf.suspensionReason);
     const court = await this.courts.findByIdAndTurf(input.courtId, turf.id);
     if (!court) throw new CourtAccessError('The requested court was not found.');
     return { turf, court };

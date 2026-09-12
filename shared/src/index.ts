@@ -22,6 +22,15 @@ export type {
   AdminRevenueReportDTO,
 } from "./admin/admin-revenue.dto.js";
 export type {
+  AdminTurfStatus,
+  AdminUserSummaryDTO,
+  AdminTurfSummaryDTO,
+  SuspendUserRequest,
+  SuspendTurfRequest,
+  AdminUserListResponse,
+  AdminTurfListResponse,
+} from "./admin/admin-management.dto.js";
+export type {
   UpdateNameRequest,
   UpdateNameResponse,
   UpdatePhoneRequest,

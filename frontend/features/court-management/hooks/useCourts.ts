@@ -15,6 +15,7 @@ export function useCourts(turfId: string) {
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [errorCode, setErrorCode] = useState<string | null>(null);
   const debouncedSearch = useDebouncedValue(search, 400);
 
   const changeSearch = useCallback((value: string) => {
@@ -25,6 +26,7 @@ export function useCourts(turfId: string) {
   const refetch = useCallback(async () => {
     setIsLoading(true);
     setError(null);
+    setErrorCode(null);
     try {
       const result = await listCourts(turfId, {
         page,
@@ -35,6 +37,7 @@ export function useCourts(turfId: string) {
       setTotalPages(result.pagination.totalPages);
     } catch (caught) {
       setError(caught instanceof ApiError ? caught.message : 'Failed to load courts.');
+      setErrorCode(caught instanceof ApiError ? (caught.code ?? null) : null);
     } finally {
       setIsLoading(false);
     }
@@ -54,6 +57,7 @@ export function useCourts(turfId: string) {
     setSearch: changeSearch,
     isLoading,
     error,
+    errorCode,
     refetch,
   };
 }

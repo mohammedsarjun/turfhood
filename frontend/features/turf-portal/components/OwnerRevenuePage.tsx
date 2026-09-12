@@ -205,7 +205,18 @@ export function OwnerRevenuePage({ turfId }: { turfId: string }) {
           bookings={report.snapshots.thisMonth.bookings}
         />
       </div>
-      <PayoutPanel turfId={turfId} />
+      {report.isSuspended ? (
+        <section className="rounded-2xl border border-destructive/40 bg-destructive/5 p-5 shadow-sm">
+          <h2 className="font-semibold text-destructive">Withdrawals disabled</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {report.suspensionReason
+              ? `This turf is suspended. Reason: ${report.suspensionReason}`
+              : 'This turf is suspended. Withdrawals are unavailable until admin restores it.'}
+          </p>
+        </section>
+      ) : (
+        <PayoutPanel turfId={turfId} />
+      )}
       <div className="grid gap-4 md:grid-cols-3">
         {cards.map(({ icon: Icon, ...card }) => (
           <div key={card.label} className="rounded-2xl border border-border bg-card p-5 shadow-sm">

@@ -24,6 +24,8 @@ import reviewRoutes from '@presentation/review/routes/review.routes';
 import favoriteRoutes from '@presentation/favorite/routes/favorite.routes';
 import openSessionRoutes from '@presentation/openSession/routes/openSession.routes';
 import notificationRoutes from '@presentation/notification/routes/notification.routes';
+import { authenticate } from '@presentation/shared/middlewares/authenticate';
+import { blockSuspendedTurfOwnerAccess } from '@presentation/turf/middlewares/blockSuspendedTurfOwnerAccess';
 import { errorHandler } from '@shared/middlewares/errorHandler';
 import { env } from '@config/env';
 
@@ -43,17 +45,37 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/open-sessions', openSessionRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/payments', paymentRoutes);
-app.use('/api/turf-portal/:turfId/bookings', ownerBookingRoutes);
-app.use('/api/turf-portal/:turfId/dashboard', ownerDashboardRoutes);
+app.use(
+  '/api/turf-portal/:turfId/bookings',
+  authenticate,
+  blockSuspendedTurfOwnerAccess,
+  ownerBookingRoutes,
+);
+app.use(
+  '/api/turf-portal/:turfId/dashboard',
+  authenticate,
+  blockSuspendedTurfOwnerAccess,
+  ownerDashboardRoutes,
+);
 app.use('/api/turf-portal/:turfId/revenue', ownerRevenueRoutes);
-app.use('/api/turf-portal/:turfId/payouts', ownerPayoutRoutes);
-app.use('/api/turf-portal/:turfId/open-sessions', ownerOpenSessionRoutes);
+app.use(
+  '/api/turf-portal/:turfId/payouts',
+  authenticate,
+  blockSuspendedTurfOwnerAccess,
+  ownerPayoutRoutes,
+);
+app.use(
+  '/api/turf-portal/:turfId/open-sessions',
+  authenticate,
+  blockSuspendedTurfOwnerAccess,
+  ownerOpenSessionRoutes,
+);
 app.use('/api', reviewRoutes);
 app.use('/api/favorites', favoriteRoutes);
 app.use('/api/sports', sportsTypeRoutes);
 app.use('/api/amenities', amenityRoutes);
 app.use('/api/turf-owner-applications', turfOwnerApplicationRoutes);
-app.use('/api/turfs/:turfId/courts', courtRoutes);
+app.use('/api/turfs/:turfId/courts', authenticate, blockSuspendedTurfOwnerAccess, courtRoutes);
 app.use('/api/locations', locationRoutes);
 app.use('/api/banners', bannerRoutes);
 app.use('/api/turfs', turfRoutes);

@@ -12,6 +12,7 @@ export interface UserDocument extends Document {
   avatarUrl?: string;
   isVerified: boolean;
   status: UserStatus;
+  suspensionReason?: string;
   deletedAt?: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -46,6 +47,7 @@ const userSchema = new Schema<UserDocument>(
       required: true,
       default: 'active',
     },
+    suspensionReason: { type: String, trim: true },
     deletedAt: { type: Date },
   },
   { timestamps: true },

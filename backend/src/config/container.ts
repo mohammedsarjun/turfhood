@@ -74,6 +74,10 @@ import type { IGetAdminDashboardUseCase } from '@application/admin/use-cases/IGe
 import { GetAdminDashboardUseCase } from '@application/admin/use-cases/GetAdminDashboardUseCase';
 import type { IGetAdminRevenueUseCase } from '@application/admin/use-cases/IGetAdminRevenueUseCase';
 import { GetAdminRevenueUseCase } from '@application/admin/use-cases/GetAdminRevenueUseCase';
+import type { IAdminManagementRepository } from '@domain/admin/repositories/IAdminManagementRepository';
+import { AdminManagementRepository } from '@infrastructure/admin/repositories/AdminManagementRepository';
+import type { IManageAdminResourcesUseCase } from '@application/admin/use-cases/IManageAdminResourcesUseCase';
+import { ManageAdminResourcesUseCase } from '@application/admin/use-cases/ManageAdminResourcesUseCase';
 import type { ISportsTypeRepository } from '@domain/sportsType/repositories/ISportsTypeRepository';
 import { SPORTS_TYPE_TOKENS } from '@domain/sportsType/tokens';
 import { SportsTypeRepository } from '@infrastructure/sportsType/repositories/SportsTypeRepository';
@@ -280,6 +284,12 @@ container.register<IGetAdminDashboardUseCase>(ADMIN_TOKENS.DashboardUseCase, {
 });
 container.register<IGetAdminRevenueUseCase>(ADMIN_TOKENS.RevenueUseCase, {
   useClass: GetAdminRevenueUseCase,
+});
+container.register<IAdminManagementRepository>(ADMIN_TOKENS.ManagementRepository, {
+  useClass: AdminManagementRepository,
+});
+container.register<IManageAdminResourcesUseCase>(ADMIN_TOKENS.ManagementUseCase, {
+  useClass: ManageAdminResourcesUseCase,
 });
 container.register<ISportsTypeRepository>(SPORTS_TYPE_TOKENS.SportsTypeRepository, {
   useClass: SportsTypeRepository,

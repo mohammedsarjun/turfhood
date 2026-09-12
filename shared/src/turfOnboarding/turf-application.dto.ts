@@ -34,7 +34,9 @@ export interface TurfApplicationSummary {
   documents: TurfApplicationDocument[];
   images: TurfApplicationImage[];
   status: TurfApplicationStatus;
+  turfStatus?: "approved" | "suspended";
   reviewNotes?: string;
+  suspensionReason?: string;
   createdAt: string;
   updatedAt: string;
 }
