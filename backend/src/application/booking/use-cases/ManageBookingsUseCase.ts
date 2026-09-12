@@ -29,6 +29,8 @@ import { DEFAULT_COMMISSION_PERCENTAGE } from '@application/commission/constants
 import type { IEmailService } from '@domain/otp/services/IEmailService';
 import { OTP_TOKENS } from '@domain/otp/tokens';
 import { calculateCustomerRefundPaise } from '@domain/booking/services/BookingPolicy';
+import type { IManageNotificationsUseCase } from '@application/notification/use-cases/IManageNotificationsUseCase';
+import { NOTIFICATION_TOKENS } from '@domain/notification/tokens';
 
 import type { IManageBookingsUseCase } from './IManageBookingsUseCase.js';
 
@@ -65,6 +67,8 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
     @inject(COMMISSION_TOKENS.Repository)
     private readonly commissions: ICommissionSettingRepository,
     @inject(OTP_TOKENS.EmailService) private readonly emails: IEmailService,
+    @inject(NOTIFICATION_TOKENS.UseCase)
+    private readonly notifications: IManageNotificationsUseCase,
   ) {}
   async reserve(
     userId: string,
@@ -355,6 +359,14 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
       type: 'booking_cancelled',
       description: 'Turf owner cancelled the booking; 100% refund applies.',
       actor: 'owner',
+    });
+    await this.notifications.create({
+      userId: booking.userId,
+      type: 'booking_cancelled_by_owner',
+      title: 'Booking cancelled by turf owner',
+      message: `${booking.turfName} cancelled your ${booking.courtName} booking on ${booking.bookingDate}. A full refund has been requested.`,
+      link: `/bookings/${booking.id}`,
+      dedupeKey: `owner-cancelled-booking:${booking.id}`,
     });
     if (booking.paymentId) {
       try {

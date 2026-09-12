@@ -233,7 +233,14 @@ export function AdminWithdrawalRequestsPage() {
           )}
         </CardContent>
       </Card>
-      {!loading && <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />}
+      {!loading && (
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+          hidden={items.length === 0}
+        />
+      )}
       <Modal
         open={Boolean(rejecting)}
         onClose={() => setRejecting(undefined)}

@@ -269,6 +269,7 @@ export function AdminDashboardPage() {
                 totalPages={data.pagination.totalPages}
                 onPageChange={setPage}
                 disabled={loading}
+                hidden={data.recentBookings.length === 0}
               />
             )}
             {data.recentBookings.length === 0 && (

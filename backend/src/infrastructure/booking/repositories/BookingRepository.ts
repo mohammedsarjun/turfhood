@@ -227,7 +227,7 @@ export class BookingRepository implements IBookingRepository {
     const filter = { turfId, status: { $nin: ['pending_payment', 'expired'] } };
     const [docs, total] = await Promise.all([
       BookingModel.find(filter)
-        .sort({ bookingDate: 1, _id: 1 })
+        .sort({ createdAt: -1, _id: -1 })
         .skip((page - 1) * limit)
         .limit(limit),
       BookingModel.countDocuments(filter),

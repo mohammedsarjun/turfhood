@@ -108,6 +108,7 @@ export function OpenSessionsPage() {
                   page={pagination.page}
                   totalPages={pagination.totalPages}
                   onPageChange={changePage}
+                  hidden={items.length === 0}
                 />
               </>
             ) : (

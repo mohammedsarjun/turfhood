@@ -97,6 +97,7 @@ export function AllTurfsPage() {
                   page={pagination.page}
                   totalPages={pagination.totalPages}
                   onPageChange={changePage}
+                  hidden={items.length === 0}
                 />
               </>
             ) : (

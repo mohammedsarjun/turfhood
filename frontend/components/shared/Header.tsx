@@ -21,6 +21,7 @@ import { Avatar } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { logout } from '@/lib/auth/logoutApi';
 import { useMyApplication } from '@/features/turf-onboarding/hooks/useMyApplication';
+import { NotificationDropdown } from '@/features/notifications';
 
 export interface HeaderProps {
   userName?: string;
@@ -38,7 +39,9 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const notificationRef = useRef<HTMLDivElement>(null);
   const { application } = useMyApplication();
   const turfOwnerLinkHref = application ? '/my-turfs' : '/become-a-turf-owner';
   const turfOwnerLinkLabel = application ? 'My Turfs' : 'Become a Turf Owner';
@@ -62,6 +65,26 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
       document.removeEventListener('keydown', handleEscape);
     };
   }, [isMenuOpen]);
+
+  useEffect(() => {
+    if (!isNotificationOpen) return;
+
+    function handleClickOutside(event: MouseEvent) {
+      if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
+        setIsNotificationOpen(false);
+      }
+    }
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') setIsNotificationOpen(false);
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isNotificationOpen]);
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -106,13 +129,22 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
         >
           {isMobileNavOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
-        <button
-          type="button"
-          aria-label="Notifications"
-          className="relative flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
-        >
-          <Bell className="h-5 w-5" />
-        </button>
+        <div className="relative" ref={notificationRef}>
+          <button
+            type="button"
+            aria-label="Notifications"
+            aria-haspopup="dialog"
+            aria-expanded={isNotificationOpen}
+            onClick={() => setIsNotificationOpen((open) => !open)}
+            className="relative flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+          >
+            <Bell className="h-5 w-5" />
+          </button>
+          <NotificationDropdown
+            open={isNotificationOpen}
+            onClose={() => setIsNotificationOpen(false)}
+          />
+        </div>
 
         <div className="relative" ref={menuRef}>
           <button

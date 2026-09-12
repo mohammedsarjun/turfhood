@@ -55,7 +55,12 @@ export function TurfApplicationsTable({
         isLoading={isLoading}
         emptyMessage="No applications found."
       />
-      <Pagination page={page} totalPages={totalPages} onPageChange={onPageChange} />
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={onPageChange}
+        hidden={items.length === 0}
+      />
     </>
   );
 }

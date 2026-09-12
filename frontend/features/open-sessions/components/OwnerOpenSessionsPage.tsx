@@ -74,7 +74,12 @@ export function OwnerOpenSessionsPage({ turfId }: { turfId: string }) {
         </div>
       )}
       {data && (
-        <Pagination page={page} totalPages={data.pagination.totalPages} onPageChange={setPage} />
+        <Pagination
+          page={page}
+          totalPages={data.pagination.totalPages}
+          onPageChange={setPage}
+          hidden={sessions.length === 0}
+        />
       )}
     </div>
   );

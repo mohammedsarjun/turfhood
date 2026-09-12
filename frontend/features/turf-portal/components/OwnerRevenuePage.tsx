@@ -281,6 +281,7 @@ export function OwnerRevenuePage({ turfId }: { turfId: string }) {
               totalPages={report.pagination.totalPages}
               onPageChange={setPage}
               disabled={loading}
+              hidden={report.transactions.length === 0}
             />
           )}
           {!report.transactions.length && (

@@ -32,4 +32,11 @@ describe('Pagination', () => {
     expect(screen.getByRole('button', { name: /prev/i })).not.toBeDisabled();
     expect(screen.getByRole('button', { name: /next/i })).toBeDisabled();
   });
+
+  it('does not render when hidden', () => {
+    render(<Pagination hidden page={1} totalPages={1} onPageChange={jest.fn()} />);
+
+    expect(screen.queryByRole('button', { name: /prev/i })).not.toBeInTheDocument();
+    expect(screen.queryByText(/page 1 of 1/i)).not.toBeInTheDocument();
+  });
 });

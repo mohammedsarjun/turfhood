@@ -189,6 +189,12 @@ import { PAYOUT_TOKENS } from '@domain/payout/tokens';
 import { PayoutRepository } from '@infrastructure/payout/repositories/PayoutRepository';
 import type { IManagePayoutsUseCase } from '@application/payout/use-cases/IManagePayoutsUseCase';
 import { ManagePayoutsUseCase } from '@application/payout/use-cases/ManagePayoutsUseCase';
+import type { INotificationRepository } from '@domain/notification/repositories/INotificationRepository';
+import { NOTIFICATION_TOKENS } from '@domain/notification/tokens';
+import { NotificationRepository } from '@infrastructure/notification/repositories/NotificationRepository';
+import { NotificationSocketGateway } from '@infrastructure/notification/services/NotificationSocketGateway';
+import type { IManageNotificationsUseCase } from '@application/notification/use-cases/IManageNotificationsUseCase';
+import { ManageNotificationsUseCase } from '@application/notification/use-cases/ManageNotificationsUseCase';
 
 /** Composition root — wires domain interfaces to their infrastructure implementations. */
 container.register<IUserRepository>(USER_TOKENS.UserRepository, { useClass: UserRepository });
@@ -431,6 +437,16 @@ container.register<IPayoutRepository>(PAYOUT_TOKENS.Repository, {
 });
 container.register<IManagePayoutsUseCase>(PAYOUT_TOKENS.UseCase, {
   useClass: ManagePayoutsUseCase,
+});
+container.registerSingleton<NotificationSocketGateway>(
+  NOTIFICATION_TOKENS.SocketGateway,
+  NotificationSocketGateway,
+);
+container.register<INotificationRepository>(NOTIFICATION_TOKENS.Repository, {
+  useClass: NotificationRepository,
+});
+container.register<IManageNotificationsUseCase>(NOTIFICATION_TOKENS.UseCase, {
+  useClass: ManageNotificationsUseCase,
 });
 
 export { container };

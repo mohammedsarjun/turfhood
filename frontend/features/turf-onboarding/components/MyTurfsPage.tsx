@@ -91,7 +91,12 @@ export function MyTurfsPage() {
           </div>
         )}
         {!isLoading && !error && (
-          <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            hidden={applications.length === 0}
+          />
         )}
       </div>
 

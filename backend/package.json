@@ -33,6 +33,7 @@
     "multer": "^2.2.0",
     "reflect-metadata": "^0.2.2",
     "resend": "^4.0.1",
+    "socket.io": "^4.8.3",
     "tsyringe": "^4.8.0",
     "zod": "^3.24.1"
   },

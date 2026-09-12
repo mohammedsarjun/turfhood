@@ -130,6 +130,7 @@ export function TurfDetailPage({ turfId }: { turfId: string }) {
                     page={details.courts.pagination.page}
                     totalPages={details.courts.pagination.totalPages}
                     onPageChange={(page) => void load(page)}
+                    hidden={details.courts.items.length === 0}
                   />
                 </>
               ) : (

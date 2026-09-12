@@ -206,6 +206,12 @@ export type {
   CustomerRefundDTO,
   CustomerRefundListResponse,
 } from "./refund/refund.dto.js";
+export type {
+  NotificationType,
+  NotificationDTO,
+  NotificationFilter,
+  NotificationListResponse,
+} from "./notification/notification.dto.js";
 
 export type {
   BookingListFilter,
