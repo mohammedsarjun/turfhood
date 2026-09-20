@@ -1,6 +1,7 @@
 export { RateLimitErrorCode } from "./common/rate-limit-error-code.js";
 export { AdminErrorCode } from "./admin/admin-error-code.js";
 export { AuthErrorCode } from "./auth/auth-error-code.js";
+export { DISCORD_OAUTH_CONSTANTS } from "./auth/discord-constants.js";
 export { OtpErrorCode } from "./otp/otp-error-code.js";
 export { DEFAULT_OTP_EXPIRY_SECONDS, DEFAULT_OTP_SESSION_EXPIRY_SECONDS, } from "./otp/otp-constants.js";
 export { maskEmail } from "./otp/otp.util.js";

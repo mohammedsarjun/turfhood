@@ -104,7 +104,7 @@ export function MyBookingsPage() {
                   page={sessionPage}
                   totalPages={sessionTotalPages}
                   onPageChange={setSessionPage}
-                  hidden={openSessions.length === 0}
+                  hidden={sessionTotalPages <= 1}
                 />
               </section>
             )}
@@ -171,7 +171,7 @@ export function MyBookingsPage() {
               page={page}
               totalPages={totalPages}
               onPageChange={setPage}
-              hidden={items.length === 0}
+              hidden={totalPages <= 1}
             />
           </div>
         )}

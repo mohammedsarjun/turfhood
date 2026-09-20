@@ -95,7 +95,7 @@ export function MyTurfsPage() {
             page={page}
             totalPages={totalPages}
             onPageChange={setPage}
-            hidden={applications.length === 0}
+            hidden={totalPages <= 1}
           />
         )}
       </div>

@@ -8,6 +8,7 @@ export interface UserDocument extends Document {
   passwordHash?: string;
   authProviders: AuthProvider[];
   googleId?: string;
+  discordId?: string;
   roles: UserRole[];
   avatarUrl?: string;
   isVerified: boolean;
@@ -28,11 +29,12 @@ const userSchema = new Schema<UserDocument>(
     passwordHash: { type: String, select: false },
     authProviders: {
       type: [String],
-      enum: ['email', 'phone_otp', 'google'],
+      enum: ['email', 'phone_otp', 'google', 'discord'],
       required: true,
       default: [],
     },
     googleId: { type: String, unique: true, sparse: true },
+    discordId: { type: String, unique: true, sparse: true },
     roles: {
       type: [String],
       enum: ['customer', 'admin', 'turf_owner'],

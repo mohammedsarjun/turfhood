@@ -62,6 +62,11 @@ export type {
   GoogleAuthRequest,
   GoogleAuthResponse,
 } from "./auth/google-auth.dto.js";
+export type {
+  DiscordAuthRequest,
+  DiscordAuthResponse,
+} from "./auth/discord-auth.dto.js";
+export { DISCORD_OAUTH_CONSTANTS } from "./auth/discord-constants.js";
 export type { OtpPurpose } from "./otp/otp-purpose.js";
 export { OtpErrorCode } from "./otp/otp-error-code.js";
 export {

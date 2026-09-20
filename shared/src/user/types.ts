@@ -1,6 +1,6 @@
 export type UserRole = 'customer' | 'admin' | 'turf_owner';
 export type UserStatus = 'active' | 'suspended' | 'deleted';
-export type AuthProvider = 'email' | 'phone_otp' | 'google';
+export type AuthProvider = 'email' | 'phone_otp' | 'google' | 'discord';
 
 /** Safe, outward-facing shape of a User — shared by every frontend/backend auth response. */
 export interface PublicUser {

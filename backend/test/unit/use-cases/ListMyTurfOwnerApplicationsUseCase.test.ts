@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { ListMyTurfOwnerApplicationsUseCase } from '../../../src/application/turfOwnerApplication/use-cases/ListMyTurfOwnerApplicationsUseCase.js';
 import { FakeTurfOwnerApplicationRepository } from '../../mocks/FakeTurfOwnerApplicationRepository.js';
+import { FakeTurfRepository } from '../../mocks/FakeTurfRepository.js';
 import { buildTurfOwnerApplication } from '../../fixtures/turfOwnerApplications.fixture.js';
 
 describe('ListMyTurfOwnerApplicationsUseCase', () => {
@@ -13,7 +14,10 @@ describe('ListMyTurfOwnerApplicationsUseCase', () => {
         buildTurfOwnerApplication({ id: 'three' }),
       ],
     });
-    const result = await new ListMyTurfOwnerApplicationsUseCase(repository).execute('user_1', 2, 2);
+    const result = await new ListMyTurfOwnerApplicationsUseCase(
+      repository,
+      new FakeTurfRepository(),
+    ).execute('user_1', 2, 2);
     expect(result.items.map((item) => item.id)).to.deep.equal(['three']);
     expect(result.pagination).to.deep.equal({ page: 2, limit: 2, total: 3, totalPages: 2 });
   });
@@ -26,7 +30,10 @@ describe('ListMyTurfOwnerApplicationsUseCase', () => {
     const applicationRepository = new FakeTurfOwnerApplicationRepository({
       allByApplicant: applications,
     });
-    const useCase = new ListMyTurfOwnerApplicationsUseCase(applicationRepository);
+    const useCase = new ListMyTurfOwnerApplicationsUseCase(
+      applicationRepository,
+      new FakeTurfRepository(),
+    );
 
     const result = await useCase.execute('user_1');
 
@@ -44,7 +51,10 @@ describe('ListMyTurfOwnerApplicationsUseCase', () => {
 
   it('returns an empty array when the user has never applied', async () => {
     const applicationRepository = new FakeTurfOwnerApplicationRepository({ allByApplicant: [] });
-    const useCase = new ListMyTurfOwnerApplicationsUseCase(applicationRepository);
+    const useCase = new ListMyTurfOwnerApplicationsUseCase(
+      applicationRepository,
+      new FakeTurfRepository(),
+    );
 
     const result = await useCase.execute('user_1');
 

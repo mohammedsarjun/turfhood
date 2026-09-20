@@ -9,6 +9,7 @@ import type { IUserRepository } from '@domain/user/repositories/IUserRepository'
 import type { IPasswordHasher } from '@domain/user/services/IPasswordHasher';
 import type { ITokenService } from '@domain/user/services/ITokenService';
 import type { IGoogleAuthService } from '@domain/user/services/IGoogleAuthService';
+import type { IDiscordAuthService } from '@domain/user/services/IDiscordAuthService';
 import type { IFileStorageService } from '@domain/shared/services/IFileStorageService';
 import { SHARED_TOKENS } from '@domain/shared/tokens';
 import { USER_TOKENS } from '@domain/user/tokens';
@@ -16,6 +17,7 @@ import { UserRepository } from '@infrastructure/user/repositories/UserRepository
 import { BcryptPasswordHasher } from '@infrastructure/user/services/BcryptPasswordHasher';
 import { JwtTokenService } from '@infrastructure/user/services/JwtTokenService';
 import { GoogleAuthService } from '@infrastructure/user/services/GoogleAuthService';
+import { DiscordAuthService } from '@infrastructure/user/services/DiscordAuthService';
 import { CloudinaryFileStorageService } from '@infrastructure/shared/services/CloudinaryFileStorageService';
 import type { ISignUpUserUseCase } from '@application/user/use-cases/ISignUpUserUseCase';
 import { SignUpUserUseCase } from '@application/user/use-cases/SignUpUserUseCase';
@@ -25,6 +27,8 @@ import type { IGetCurrentUserUseCase } from '@application/user/use-cases/IGetCur
 import { GetCurrentUserUseCase } from '@application/user/use-cases/GetCurrentUserUseCase';
 import type { ILoginWithGoogleUseCase } from '@application/user/use-cases/ILoginWithGoogleUseCase';
 import { LoginWithGoogleUseCase } from '@application/user/use-cases/LoginWithGoogleUseCase';
+import type { ILoginWithDiscordUseCase } from '@application/user/use-cases/ILoginWithDiscordUseCase';
+import { LoginWithDiscordUseCase } from '@application/user/use-cases/LoginWithDiscordUseCase';
 import type { IUpdateNameUseCase } from '@application/user/use-cases/IUpdateNameUseCase';
 import { UpdateNameUseCase } from '@application/user/use-cases/UpdateNameUseCase';
 import type { IUpdatePhoneUseCase } from '@application/user/use-cases/IUpdatePhoneUseCase';
@@ -207,6 +211,9 @@ container.register<ITokenService>(USER_TOKENS.TokenService, { useClass: JwtToken
 container.register<IGoogleAuthService>(USER_TOKENS.GoogleAuthService, {
   useClass: GoogleAuthService,
 });
+container.register<IDiscordAuthService>(USER_TOKENS.DiscordAuthService, {
+  useClass: DiscordAuthService,
+});
 container.register<IFileStorageService>(SHARED_TOKENS.FileStorageService, {
   useClass: CloudinaryFileStorageService,
 });
@@ -219,6 +226,9 @@ container.register<IGetCurrentUserUseCase>(USER_TOKENS.GetCurrentUserUseCase, {
 });
 container.register<ILoginWithGoogleUseCase>(USER_TOKENS.LoginWithGoogleUseCase, {
   useClass: LoginWithGoogleUseCase,
+});
+container.register<ILoginWithDiscordUseCase>(USER_TOKENS.LoginWithDiscordUseCase, {
+  useClass: LoginWithDiscordUseCase,
 });
 container.register<IUpdateNameUseCase>(USER_TOKENS.UpdateNameUseCase, {
   useClass: UpdateNameUseCase,

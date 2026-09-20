@@ -12,6 +12,8 @@ export { AuthErrorCode } from "./auth/auth-error-code.js";
 export type { LoginRequest, LoginSuccessResponse, LoginNeedsVerificationResponse, LoginResponse, } from "./auth/login.dto.js";
 export type { SignUpRequest, SignUpResponse } from "./auth/signup.dto.js";
 export type { GoogleAuthRequest, GoogleAuthResponse, } from "./auth/google-auth.dto.js";
+export type { DiscordAuthRequest, DiscordAuthResponse, } from "./auth/discord-auth.dto.js";
+export { DISCORD_OAUTH_CONSTANTS } from "./auth/discord-constants.js";
 export type { OtpPurpose } from "./otp/otp-purpose.js";
 export { OtpErrorCode } from "./otp/otp-error-code.js";
 export { DEFAULT_OTP_EXPIRY_SECONDS, DEFAULT_OTP_SESSION_EXPIRY_SECONDS, } from "./otp/otp-constants.js";
