@@ -14,7 +14,10 @@ import { useAdminManagementList } from '../hooks/useAdminManagementList';
 import { SuspendReasonModal } from './SuspendReasonModal';
 
 export function AdminUsersPage() {
-  const loader = useCallback(listAdminUsers, []);
+  const loader = useCallback(
+    (params: Parameters<typeof listAdminUsers>[0]) => listAdminUsers(params),
+    [],
+  );
   const { items, page, totalPages, search, setSearch, isLoading, error, setPage, refetch } =
     useAdminManagementList(loader, 'Failed to load users.');
   const { showToast } = useToast();
@@ -93,7 +96,11 @@ export function AdminUsersPage() {
         <Heading variant="h1">Users</Heading>
       </div>
       <div style={{ marginBottom: 16 }}>
-        <SearchInput value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search users" />
+        <SearchInput
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Search users"
+        />
       </div>
       {error && <Text className="mb-3 text-destructive">{error}</Text>}
       <DataTable

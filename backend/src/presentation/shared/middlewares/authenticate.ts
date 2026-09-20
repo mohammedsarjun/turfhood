@@ -21,7 +21,11 @@ function extractToken(req: Request): string | undefined {
 }
 
 /** Verifies the request's JWT (Authorization header or accessToken cookie) before letting it reach a controller. */
-export async function authenticate(req: Request, _res: Response, next: NextFunction): Promise<void> {
+export async function authenticate(
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+): Promise<void> {
   try {
     const token = extractToken(req);
     if (!token) {

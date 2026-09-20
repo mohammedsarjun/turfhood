@@ -1,7 +1,10 @@
 import { injectable } from 'tsyringe';
 import { DISCORD_OAUTH_CONSTANTS } from '@turfhood/shared';
 import { DiscordTokenInvalidError } from '@domain/user/errors/DiscordTokenInvalidError';
-import type { DiscordProfile, IDiscordAuthService } from '@domain/user/services/IDiscordAuthService';
+import type {
+  DiscordProfile,
+  IDiscordAuthService,
+} from '@domain/user/services/IDiscordAuthService';
 import { env } from '@config/env';
 
 interface DiscordTokenResponse {

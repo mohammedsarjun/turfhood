@@ -27,7 +27,9 @@ export class NotificationController {
 
   markRead = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json({ notification: await this.notifications.markRead(userId(req), String(req.params.id)) });
+      res.json({
+        notification: await this.notifications.markRead(userId(req), String(req.params.id)),
+      });
     } catch (error) {
       next(error);
     }

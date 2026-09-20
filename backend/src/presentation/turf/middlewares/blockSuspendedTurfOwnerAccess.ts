@@ -12,7 +12,8 @@ export async function blockSuspendedTurfOwnerAccess(
 ): Promise<void> {
   try {
     const userId = (req as AuthenticatedRequest).user?.userId;
-    const rawTurfId = req.params.turfId ?? req.params.id ?? req.baseUrl.match(/\/turf-portal\/([^/]+)/)?.[1];
+    const rawTurfId =
+      req.params.turfId ?? req.params.id ?? req.baseUrl.match(/\/turf-portal\/([^/]+)/)?.[1];
     const turfId = Array.isArray(rawTurfId) ? rawTurfId[0] : rawTurfId;
     if (!userId || !turfId) {
       next();

@@ -22,10 +22,7 @@ export async function listAdminUsers(
   return response.data;
 }
 
-export async function suspendAdminUser(
-  id: string,
-  reason: string,
-): Promise<AdminUserSummaryDTO> {
+export async function suspendAdminUser(id: string, reason: string): Promise<AdminUserSummaryDTO> {
   const response = await axiosInstance.post<{ user: AdminUserSummaryDTO }>(
     API_ROUTES.admin.suspendUser(id),
     { reason },
@@ -49,10 +46,7 @@ export async function listAdminTurfs(
   return response.data;
 }
 
-export async function suspendAdminTurf(
-  id: string,
-  reason: string,
-): Promise<AdminTurfSummaryDTO> {
+export async function suspendAdminTurf(id: string, reason: string): Promise<AdminTurfSummaryDTO> {
   const response = await axiosInstance.post<{ turf: AdminTurfSummaryDTO }>(
     API_ROUTES.admin.suspendTurf(id),
     { reason },

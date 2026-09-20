@@ -28,7 +28,8 @@ import type { ILoginWithDiscordUseCase } from './ILoginWithDiscordUseCase.js';
 export class LoginWithDiscordUseCase implements ILoginWithDiscordUseCase {
   constructor(
     @inject(USER_TOKENS.UserRepository) private readonly userRepository: IUserRepository,
-    @inject(USER_TOKENS.DiscordAuthService) private readonly discordAuthService: IDiscordAuthService,
+    @inject(USER_TOKENS.DiscordAuthService)
+    private readonly discordAuthService: IDiscordAuthService,
     @inject(USER_TOKENS.TokenService) private readonly tokenService: ITokenService,
     @inject(REFRESH_TOKEN_TOKENS.RefreshTokenRepository)
     private readonly refreshTokenRepository: IRefreshTokenRepository,
@@ -37,7 +38,10 @@ export class LoginWithDiscordUseCase implements ILoginWithDiscordUseCase {
   ) {}
 
   async execute(request: DiscordAuthRequestDTO): Promise<DiscordAuthResponseDTO> {
-    const profile = await this.discordAuthService.verifyAndGetProfile(request.code, request.redirectUri);
+    const profile = await this.discordAuthService.verifyAndGetProfile(
+      request.code,
+      request.redirectUri,
+    );
     if (!profile.emailVerified) {
       throw new DiscordEmailNotVerifiedError();
     }

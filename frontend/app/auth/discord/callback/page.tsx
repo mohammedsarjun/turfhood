@@ -11,7 +11,17 @@ function DiscordCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { setUser } = useCurrentUser();
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(() => {
+    const errorParam = searchParams.get('error');
+    if (errorParam) {
+      return 'Discord authorization was denied or cancelled.';
+    }
+    const code = searchParams.get('code');
+    if (!code) {
+      return 'No authorization code provided.';
+    }
+    return null;
+  });
 
   useEffect(() => {
     const code = searchParams.get('code');
@@ -24,9 +34,7 @@ function DiscordCallbackContent() {
           window.location.origin,
         );
         window.close();
-        return;
       }
-      setError('Discord authorization was denied or cancelled.');
       return;
     }
 
@@ -37,9 +45,7 @@ function DiscordCallbackContent() {
           window.location.origin,
         );
         window.close();
-        return;
       }
-      setError('No authorization code provided.');
       return;
     }
 
@@ -88,8 +94,12 @@ function DiscordCallbackContent() {
       ) : (
         <>
           <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
-          <h2 className="text-xl font-semibold text-foreground mb-2">Authenticating with Discord</h2>
-          <p className="text-sm text-muted-foreground">Please wait while we log you into TurfHood…</p>
+          <h2 className="text-xl font-semibold text-foreground mb-2">
+            Authenticating with Discord
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Please wait while we log you into TurfHood…
+          </p>
         </>
       )}
     </div>

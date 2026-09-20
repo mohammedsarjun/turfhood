@@ -10,8 +10,18 @@ import { CourtFormModal } from './CourtFormModal';
 import { CourtsTable } from './CourtsTable';
 
 export function CourtManagementPage({ turfId }: { turfId: string }) {
-  const { items, page, setPage, totalPages, search, setSearch, isLoading, error, errorCode, refetch } =
-    useCourts(turfId);
+  const {
+    items,
+    page,
+    setPage,
+    totalPages,
+    search,
+    setSearch,
+    isLoading,
+    error,
+    errorCode,
+    refetch,
+  } = useCourts(turfId);
   const [modalOpen, setModalOpen] = useState(false);
   const [sports, setSports] = useState<Array<{ id: string; name: string }>>([]);
   const sportNames = useMemo(
@@ -27,7 +37,11 @@ export function CourtManagementPage({ turfId }: { turfId: string }) {
     <div>
       <div className="mb-6 flex items-center justify-between gap-4">
         <Heading variant="h1">Court Management</Heading>
-        <Button type="button" disabled={errorCode === 'TURF_SUSPENDED'} onClick={() => setModalOpen(true)}>
+        <Button
+          type="button"
+          disabled={errorCode === 'TURF_SUSPENDED'}
+          onClick={() => setModalOpen(true)}
+        >
           <FiPlus size={16} />
           Add Courts
         </Button>

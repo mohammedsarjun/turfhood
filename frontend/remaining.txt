@@ -1,0 +1,36 @@
+
+=== D:\Brototype files\turfhub-project\frontend\features\admin-management\hooks\useAdminManagementList.ts
+  L34 [react-hooks/set-state-in-effect] Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\Brototype files\turfhub-project\frontend\features\admin-management\hooks\useAdminManagementList.ts:34:5
+  32 |   useEffect(() => {
+  33 |     let isCancelled = false;
+> 34 |     setIsLoading(true);
+     |     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  35 |     setError(null);
+  36 |
+  37 |     loader({
+
+=== D:\Brototype files\turfhub-project\frontend\features\notifications\components\NotificationDropdown.tsx
+  L45 [react-hooks/set-state-in-effect] Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\Brototype files\turfhub-project\frontend\features\notifications\components\NotificationDropdown.tsx:45:5
+  43 |
+  44 |     let isCancelled = false;
+> 45 |     setLoading(true);
+     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  46 |     setError('');
+  47 |
+  48 |     listNotifications(filter)

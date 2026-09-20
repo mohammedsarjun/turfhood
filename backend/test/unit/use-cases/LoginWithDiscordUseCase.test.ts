@@ -91,7 +91,11 @@ describe('LoginWithDiscordUseCase', () => {
 
     expect(userRepository.createCalls).to.have.length(0);
     expect(userRepository.linkDiscordAccountCalls).to.deep.equal([
-      { userId: 'user_1', discordId: 'discord_123', avatarUrl: 'https://cdn.discordapp.com/avatars/discord_123/avatar.png' },
+      {
+        userId: 'user_1',
+        discordId: 'discord_123',
+        avatarUrl: 'https://cdn.discordapp.com/avatars/discord_123/avatar.png',
+      },
     ]);
     expect(result.accessToken).to.be.a('string').that.is.not.empty;
   });
@@ -167,7 +171,9 @@ describe('LoginWithDiscordUseCase', () => {
 
     try {
       await useCase.execute({ code: 'auth-code' });
-      expect.fail('Expected execute() to throw DiscordEmailNotVerifiedError, but it did not throw.');
+      expect.fail(
+        'Expected execute() to throw DiscordEmailNotVerifiedError, but it did not throw.',
+      );
     } catch (error) {
       expect(error).to.be.instanceOf(DiscordEmailNotVerifiedError);
     }

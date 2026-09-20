@@ -9,9 +9,12 @@ import { API_ROUTES } from '@/lib/apiRoutes';
 export async function listNotifications(
   filter: NotificationFilter = 'all',
 ): Promise<NotificationListResponse> {
-  const response = await axiosInstance.get<NotificationListResponse>(API_ROUTES.notifications.base, {
-    params: { filter, limit: 10 },
-  });
+  const response = await axiosInstance.get<NotificationListResponse>(
+    API_ROUTES.notifications.base,
+    {
+      params: { filter, limit: 10 },
+    },
+  );
   return response.data;
 }
 

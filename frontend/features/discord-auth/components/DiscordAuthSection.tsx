@@ -15,7 +15,12 @@ interface DiscordAuthSectionProps {
   className?: string;
 }
 
-export function DiscordAuthSection({ onClick, loading, error, className }: DiscordAuthSectionProps) {
+export function DiscordAuthSection({
+  onClick,
+  loading,
+  error,
+  className,
+}: DiscordAuthSectionProps) {
   return (
     <div className={className}>
       <button

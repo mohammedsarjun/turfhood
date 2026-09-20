@@ -1,22 +1,54 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import type { PaginatedResponse } from '@turfhood/shared';
 import { useDebouncedValue } from '@/components/table';
 import { ApiError } from '@/types/api/response';
 
 const PAGE_SIZE = 10;
 
+interface ListState<T> {
+  items: T[];
+  totalPages: number;
+  isLoading: boolean;
+  error: string | null;
+}
+
+type ListAction<T> =
+  | { type: 'FETCH_START' }
+  | { type: 'FETCH_SUCCESS'; items: T[]; totalPages: number }
+  | { type: 'FETCH_ERROR'; error: string };
+
+function listReducer<T>(state: ListState<T>, action: ListAction<T>): ListState<T> {
+  switch (action.type) {
+    case 'FETCH_START':
+      return { ...state, isLoading: true, error: null };
+    case 'FETCH_SUCCESS':
+      return { ...state, isLoading: false, items: action.items, totalPages: action.totalPages };
+    case 'FETCH_ERROR':
+      return { ...state, isLoading: false, error: action.error };
+    default:
+      return state;
+  }
+}
+
 export function useAdminManagementList<T>(
-  loader: (params: { page: number; limit: number; search?: string }) => Promise<PaginatedResponse<T>>,
+  loader: (params: {
+    page: number;
+    limit: number;
+    search?: string;
+  }) => Promise<PaginatedResponse<T>>,
   fallbackError: string,
 ) {
-  const [items, setItems] = useState<T[]>([]);
+  const [state, dispatch] = useReducer(listReducer<T>, {
+    items: [],
+    totalPages: 1,
+    isLoading: true,
+    error: null,
+  });
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [refreshIndex, setRefreshIndex] = useState(0);
   const debouncedSearch = useDebouncedValue(search);
 
   const handleSearchChange = useCallback((value: string) => {
@@ -24,36 +56,50 @@ export function useAdminManagementList<T>(
     setPage(1);
   }, []);
 
-  const refetch = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const result = await loader({
-        page,
-        limit: PAGE_SIZE,
-        ...(debouncedSearch ? { search: debouncedSearch } : {}),
-      });
-      setItems(result.items);
-      setTotalPages(result.pagination.totalPages);
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : fallbackError);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [debouncedSearch, fallbackError, loader, page]);
+  const refetch = useCallback(() => {
+    setRefreshIndex((index) => index + 1);
+  }, []);
 
   useEffect(() => {
-    void refetch();
-  }, [refetch]);
+    let isCancelled = false;
+    dispatch({ type: 'FETCH_START' });
+
+    loader({
+      page,
+      limit: PAGE_SIZE,
+      ...(debouncedSearch ? { search: debouncedSearch } : {}),
+    })
+      .then((result) => {
+        if (!isCancelled) {
+          dispatch({
+            type: 'FETCH_SUCCESS',
+            items: result.items,
+            totalPages: result.pagination.totalPages,
+          });
+        }
+      })
+      .catch((err: unknown) => {
+        if (!isCancelled) {
+          dispatch({
+            type: 'FETCH_ERROR',
+            error: err instanceof ApiError ? err.message : fallbackError,
+          });
+        }
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [debouncedSearch, fallbackError, loader, page, refreshIndex]);
 
   return {
-    items,
+    items: state.items,
     page,
-    totalPages,
+    totalPages: state.totalPages,
     search,
     setSearch: handleSearchChange,
-    isLoading,
-    error,
+    isLoading: state.isLoading,
+    error: state.error,
     setPage,
     refetch,
   };

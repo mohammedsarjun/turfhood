@@ -1,4 +1,8 @@
-import type { NotificationFilter, NotificationListResponse, NotificationDTO } from '@turfhood/shared';
+import type {
+  NotificationFilter,
+  NotificationListResponse,
+  NotificationDTO,
+} from '@turfhood/shared';
 import type { CreateNotificationInput } from '@domain/notification/repositories/INotificationRepository';
 
 export interface IManageNotificationsUseCase {

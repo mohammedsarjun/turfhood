@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useReducer, useState } from 'react';
 import Link from 'next/link';
 import { Check, X } from 'lucide-react';
 import { io, type Socket } from 'socket.io-client';
@@ -30,44 +30,90 @@ function socketUrl(): string | undefined {
   }
 }
 
+interface FetchState {
+  items: NotificationDTO[];
+  unreadCount: number;
+  loading: boolean;
+  error: string;
+}
+
+type FetchAction =
+  | { type: 'FETCH_START' }
+  | { type: 'FETCH_SUCCESS'; items: NotificationDTO[]; unreadCount: number }
+  | { type: 'FETCH_ERROR' }
+  | { type: 'SET_UNREAD_COUNT'; unreadCount: number }
+  | { type: 'PREPEND_ITEM'; notification: NotificationDTO }
+  | { type: 'UPDATE_ITEM'; notification: NotificationDTO };
+
+function fetchReducer(state: FetchState, action: FetchAction): FetchState {
+  switch (action.type) {
+    case 'FETCH_START':
+      return { ...state, loading: true, error: '' };
+    case 'FETCH_SUCCESS':
+      return { ...state, loading: false, items: action.items, unreadCount: action.unreadCount };
+    case 'FETCH_ERROR':
+      return { ...state, loading: false, error: 'Unable to load notifications.' };
+    case 'SET_UNREAD_COUNT':
+      return { ...state, unreadCount: action.unreadCount };
+    case 'PREPEND_ITEM':
+      return {
+        ...state,
+        items: [action.notification, ...state.items].slice(0, 10),
+      };
+    case 'UPDATE_ITEM':
+      return {
+        ...state,
+        items: state.items.map((item) =>
+          item.id === action.notification.id ? action.notification : item,
+        ),
+      };
+    default:
+      return state;
+  }
+}
+
 export function NotificationDropdown({ open, onClose }: NotificationDropdownProps) {
   const [filter, setFilter] = useState<NotificationFilter>('all');
-  const [items, setItems] = useState<NotificationDTO[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [fetchState, dispatch] = useReducer(fetchReducer, {
+    items: [],
+    unreadCount: 0,
+    loading: false,
+    error: '',
+  });
   const [updatingId, setUpdatingId] = useState<string>();
-  const [error, setError] = useState('');
-
-  const load = useCallback(async (nextFilter = filter) => {
-    setLoading(true);
-    setError('');
-    try {
-      const result = await listNotifications(nextFilter);
-      setItems(result.items);
-      setUnreadCount(result.unreadCount);
-    } catch {
-      setError('Unable to load notifications.');
-    } finally {
-      setLoading(false);
-    }
-  }, [filter]);
 
   useEffect(() => {
-    if (open) void load();
-  }, [load, open]);
+    if (!open) return;
+
+    let isCancelled = false;
+    dispatch({ type: 'FETCH_START' });
+
+    listNotifications(filter)
+      .then((result) => {
+        if (!isCancelled) {
+          dispatch({ type: 'FETCH_SUCCESS', items: result.items, unreadCount: result.unreadCount });
+        }
+      })
+      .catch(() => {
+        if (!isCancelled) {
+          dispatch({ type: 'FETCH_ERROR' });
+        }
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [filter, open]);
 
   useEffect(() => {
     const url = socketUrl();
     if (!url) return;
     const socket: Socket = io(url, { withCredentials: true, transports: ['websocket'] });
     socket.on('notification:new', (payload: NotificationSocketPayload) => {
-      setUnreadCount(payload.unreadCount);
-      setItems((current) => {
-        if (filter === 'read' || current.some((item) => item.id === payload.notification.id)) {
-          return current;
-        }
-        return [payload.notification, ...current].slice(0, 10);
-      });
+      dispatch({ type: 'SET_UNREAD_COUNT', unreadCount: payload.unreadCount });
+      if (filter !== 'read') {
+        dispatch({ type: 'PREPEND_ITEM', notification: payload.notification });
+      }
     });
     return () => {
       socket.disconnect();
@@ -86,18 +132,21 @@ export function NotificationDropdown({ open, onClose }: NotificationDropdownProp
     setUpdatingId(notification.id);
     try {
       const updated = await markNotificationRead(notification.id);
-      setItems((current) =>
-        filter === 'read'
-          ? current.map((item) => (item.id === updated.id ? updated : item))
-          : current.map((item) => (item.id === updated.id ? updated : item)),
-      );
-      if (!notification.readAt) setUnreadCount((current) => Math.max(0, current - 1));
+      dispatch({ type: 'UPDATE_ITEM', notification: updated });
+      if (!notification.readAt) {
+        dispatch({
+          type: 'SET_UNREAD_COUNT',
+          unreadCount: Math.max(0, fetchState.unreadCount - 1),
+        });
+      }
     } finally {
       setUpdatingId(undefined);
     }
   };
 
   if (!open) return null;
+
+  const { items, unreadCount, loading, error } = fetchState;
 
   return (
     <div className="absolute right-0 z-30 mt-2 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-lg border border-border bg-card shadow-xl">
@@ -122,10 +171,7 @@ export function NotificationDropdown({ open, onClose }: NotificationDropdownProp
             type="button"
             size="sm"
             variant={filter === tab.value ? 'primary' : 'outline'}
-            onClick={() => {
-              setFilter(tab.value);
-              void load(tab.value);
-            }}
+            onClick={() => setFilter(tab.value)}
           >
             {tab.label}
           </Button>

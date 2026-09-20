@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button, Modal, Textarea } from '@/components/ui';
 
 export interface SuspendReasonModalProps {
@@ -23,12 +23,11 @@ export function SuspendReasonModal({
   const [reason, setReason] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!open) {
-      setReason('');
-      setError(null);
-    }
-  }, [open]);
+  const handleClose = () => {
+    setReason('');
+    setError(null);
+    onClose();
+  };
 
   const handleSubmit = async () => {
     const trimmed = reason.trim();
@@ -41,10 +40,12 @@ export function SuspendReasonModal({
       return;
     }
     await onSubmit(trimmed);
+    setReason('');
+    setError(null);
   };
 
   return (
-    <Modal open={open} onClose={onClose} title={title}>
+    <Modal open={open} onClose={handleClose} title={title}>
       <p className="text-sm text-muted-foreground" style={{ marginBottom: 12 }}>
         {subjectName}
       </p>
@@ -60,7 +61,7 @@ export function SuspendReasonModal({
       />
       {error && <p className="mt-2 text-sm text-destructive">{error}</p>}
       <div className="mt-5 flex justify-end" style={{ gap: 8 }}>
-        <Button type="button" variant="outline" onClick={onClose}>
+        <Button type="button" variant="outline" onClick={handleClose}>
           Cancel
         </Button>
         <Button type="button" variant="destructive" loading={isSubmitting} onClick={handleSubmit}>

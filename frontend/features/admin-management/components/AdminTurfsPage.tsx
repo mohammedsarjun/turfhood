@@ -14,7 +14,10 @@ import { useAdminManagementList } from '../hooks/useAdminManagementList';
 import { SuspendReasonModal } from './SuspendReasonModal';
 
 export function AdminTurfsPage() {
-  const loader = useCallback(listAdminTurfs, []);
+  const loader = useCallback(
+    (params: Parameters<typeof listAdminTurfs>[0]) => listAdminTurfs(params),
+    [],
+  );
   const { items, page, totalPages, search, setSearch, isLoading, error, setPage, refetch } =
     useAdminManagementList(loader, 'Failed to load turfs.');
   const { showToast } = useToast();
@@ -95,7 +98,11 @@ export function AdminTurfsPage() {
         <Heading variant="h1">Turfs</Heading>
       </div>
       <div style={{ marginBottom: 16 }}>
-        <SearchInput value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search turfs" />
+        <SearchInput
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Search turfs"
+        />
       </div>
       {error && <Text className="mb-3 text-destructive">{error}</Text>}
       <DataTable

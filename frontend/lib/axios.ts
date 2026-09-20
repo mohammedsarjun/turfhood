@@ -68,10 +68,13 @@ function forceSuspendedUserLogout(message: string): void {
   if (typeof window === 'undefined' || suspensionLogoutStarted) return;
   suspensionLogoutStarted = true;
   window.localStorage.removeItem(USER_STORAGE_KEY);
-  axiosInstance.post(API_ROUTES.users.logout).catch(() => undefined).finally(() => {
-    const params = new URLSearchParams({ suspended: message });
-    window.location.replace(`/login?${params.toString()}`);
-  });
+  axiosInstance
+    .post(API_ROUTES.users.logout)
+    .catch(() => undefined)
+    .finally(() => {
+      const params = new URLSearchParams({ suspended: message });
+      window.location.replace(`/login?${params.toString()}`);
+    });
 }
 
 // Normalizes every failure (validation, server, or network) into a single ApiError shape.
