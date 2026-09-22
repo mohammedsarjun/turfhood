@@ -478,6 +478,8 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
     const result = await this.payments.checkRefund(payuRequestId.trim());
     if (result.status === 'failed')
       throw new BookingActionError(result.reason ?? 'PayU reports that the manual refund failed.');
+    if (result.status === 'pending' && result.providerStatus === 'not_available')
+      throw new BookingActionError('Invalid request ID. PayU could not find this refund transaction.');
     const pending = await this.bookings.markManualRefundPending(booking.id, payuRequestId.trim());
     if (!pending) throw new BookingActionError('Refund can no longer be verified.');
     if (result.status === 'success') {
