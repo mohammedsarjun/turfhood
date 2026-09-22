@@ -9,7 +9,7 @@ import {
 
 describe('resolveGuardRedirect', () => {
   it.each([
-    ['/', false, '/login'],
+    ['/', false, null],
     ['/', true, null],
     ['/profile', false, '/login'],
     ['/profile', true, null],
@@ -28,11 +28,22 @@ describe('resolveGuardRedirect', () => {
     ['/signup', false, null],
     ['/some-other-page', false, null],
     ['/some-other-page', true, null],
+    ['/turfs', false, null],
+    ['/turfs/turf_1', false, null],
+    ['/turfs/turf_1/courts/court_1', false, null],
+    ['/open-sessions', false, null],
+    ['/open-sessions/session_1', false, null],
   ])('resolveGuardRedirect(%p, %p) -> %p', (pathname, isAuthenticated, expected) => {
     expect(resolveGuardRedirect(pathname, isAuthenticated)).toBe(expected);
   });
 
   it('classifies protected and logged-out-only routes', () => {
+    expect(isProtectedRoute('/')).toBe(false);
+    expect(isProtectedRoute('/turfs')).toBe(false);
+    expect(isProtectedRoute('/turfs/turf_1')).toBe(false);
+    expect(isProtectedRoute('/turfs/turf_1/courts/court_1')).toBe(false);
+    expect(isProtectedRoute('/open-sessions')).toBe(false);
+    expect(isProtectedRoute('/open-sessions/session_1')).toBe(false);
     expect(isProtectedRoute('/my-turfs')).toBe(true);
     expect(isProtectedRoute('/favorites')).toBe(true);
     expect(isProtectedRoute('/refunds')).toBe(true);

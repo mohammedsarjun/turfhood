@@ -3,11 +3,13 @@
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { ArrowLeft, Check, ImageIcon, Users } from 'lucide-react';
 import type { PublicCourtSlotDTO, SlotPeriod } from '@turfhood/shared';
-import { Header } from '@/components/shared';
+import { PublicHeader } from '@/components/shared';
 import { Button, Input, Modal, Select, Spinner, useToast } from '@/components/ui';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
+import { withNextParam } from '@/lib/auth/redirect';
 import { formatTime12Hour } from '@/lib/time';
 import { usePublicCourtDetails } from '../hooks/usePublicCourtDetails';
 import {
@@ -26,7 +28,9 @@ const PERIODS: Array<{ key: SlotPeriod; label: string }> = [
 ];
 
 export function PublicCourtDetailsPage({ turfId, courtId }: { turfId: string; courtId: string }) {
-  const { user, clearUser } = useCurrentUser();
+  const { user } = useCurrentUser();
+  const pathname = usePathname();
+  const router = useRouter();
   const { details, loading, error } = usePublicCourtDetails(turfId, courtId);
   const [selectedDate, setSelectedDate] = useState(0);
   const [selectedSlots, setSelectedSlots] = useState<Set<string>>(() => new Set());
@@ -61,8 +65,15 @@ export function PublicCourtDetailsPage({ turfId, courtId }: { turfId: string; co
   const selectedForDate =
     dateAvailability?.slots.filter((slot) => selectedSlots.has(slot.id)) ?? [];
   const total = selectedForDate.reduce((sum, slot) => sum + slot.price, 0);
+  const redirectToLogin = () => {
+    router.push(`/login?${withNextParam(pathname)}`);
+  };
   const proceed = async () => {
     if (!dateAvailability || !selectedForDate.length) return;
+    if (!user) {
+      redirectToLogin();
+      return;
+    }
     setReserving(true);
     let reservationId: string | undefined;
     try {
@@ -90,6 +101,10 @@ export function PublicCourtDetailsPage({ turfId, courtId }: { turfId: string; co
     }
   };
   const createSession = async () => {
+    if (!user) {
+      redirectToLogin();
+      return;
+    }
     const slot = selectedForDate[0];
     if (!dateAvailability || !slot || selectedForDate.length !== 1) {
       showToast('Select exactly one slot for an open session.', 'error');
@@ -118,7 +133,7 @@ export function PublicCourtDetailsPage({ turfId, courtId }: { turfId: string; co
 
   return (
     <>
-      <Header userName={user?.name} avatarUrl={user?.avatarUrl} onLoggedOut={clearUser} />
+      <PublicHeader />
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
         {loading ? (
           <div className="flex min-h-96 items-center justify-center">
@@ -315,7 +330,7 @@ export function PublicCourtDetailsPage({ turfId, courtId }: { turfId: string; co
                   Slots are held for 10 minutes after you continue to PayU.
                 </p>
                 <Button className="w-full" loading={reserving} onClick={() => void proceed()}>
-                  Continue to PayU
+                  {user ? 'Continue to PayU' : 'Login to continue'}
                 </Button>
                 {details.court.allowOpenSessions && (
                   <Button

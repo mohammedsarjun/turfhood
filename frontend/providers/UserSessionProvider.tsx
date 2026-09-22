@@ -13,7 +13,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import type { PublicUser } from '@turfhood/shared';
 import { getMe } from '@/features/profile/actions/profileApi';
 import { ApiError } from '@/types/api/response';
-import { isProtectedRoute } from '@/lib/auth/routeGuard';
+import { getSafeAuthRedirect } from '@/lib/auth/redirect';
+import { isAuthRoute, isProtectedRoute } from '@/lib/auth/routeGuard';
 
 const USER_STORAGE_KEY = 'turfhood.currentUser';
 
@@ -47,6 +48,7 @@ function ProtectedRouteBoundary({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const isProtected = isProtectedRoute(pathname);
+  const isAuth = isAuthRoute(pathname);
 
   useEffect(() => {
     if (!isProtected) return;
@@ -66,7 +68,13 @@ function ProtectedRouteBoundary({ children }: { children: ReactNode }) {
     };
   }, [isProtected, router, session]);
 
-  if (isProtected && !session?.isHydrated) {
+  useEffect(() => {
+    if (!isAuth || !session?.isHydrated || !session.user) return;
+    const authRedirectPath = getSafeAuthRedirect(new URLSearchParams(window.location.search).get('next'));
+    router.replace(authRedirectPath);
+  }, [isAuth, router, session?.isHydrated, session?.user]);
+
+  if ((isProtected || isAuth) && !session?.isHydrated) {
     return (
       <main className="flex min-h-screen items-center justify-center" aria-busy="true">
         <p className="text-sm text-muted-foreground">Loading...</p>
@@ -75,6 +83,10 @@ function ProtectedRouteBoundary({ children }: { children: ReactNode }) {
   }
 
   if (isProtected && !session?.user) {
+    return null;
+  }
+
+  if (isAuth && session?.user) {
     return null;
   }
 
@@ -118,10 +130,8 @@ export function UserSessionProvider({ children }: { children: ReactNode }) {
         setIsHydrated(true);
         return;
       }
-      setIsHydrated(true);
 
-      // Cached profile data renders immediately; this request only synchronizes UI data.
-      // Route authentication and redirects remain the proxy's responsibility.
+      // Validate cached profile data before authenticated-only child effects run.
       try {
         const currentUser = await getMe();
         if (isActive) setUser(currentUser);
@@ -133,6 +143,8 @@ export function UserSessionProvider({ children }: { children: ReactNode }) {
         ) {
           clearUser();
         }
+      } finally {
+        if (isActive) setIsHydrated(true);
       }
     }
 

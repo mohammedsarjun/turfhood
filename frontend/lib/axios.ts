@@ -4,6 +4,12 @@ import { ApiError, type ApiErrorResponse } from '@/types/api/response';
 import { API_ROUTES } from '@/lib/apiRoutes';
 import { isAdminRoute } from '@/lib/auth/routeGuard';
 
+declare module 'axios' {
+  interface AxiosRequestConfig {
+    skipAuthRedirect?: boolean;
+  }
+}
+
 export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   timeout: 10000,
@@ -20,6 +26,7 @@ const AUTH_ENDPOINTS: string[] = [
   API_ROUTES.auth.signUp,
   API_ROUTES.auth.otpVerify,
   API_ROUTES.admin.login,
+  API_ROUTES.users.me,
   API_ROUTES.users.refresh,
   API_ROUTES.admin.refresh,
 ];
@@ -89,6 +96,7 @@ axiosInstance.interceptors.response.use(
       ACCESS_TOKEN_ERROR_CODES.has(error.response.data.code ?? '') &&
       originalRequest &&
       !originalRequest._retriedAfterRefresh &&
+      !originalRequest.skipAuthRedirect &&
       !AUTH_ENDPOINTS.includes(originalRequest.url ?? '')
     ) {
       originalRequest._retriedAfterRefresh = true;

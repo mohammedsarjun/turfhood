@@ -3,20 +3,23 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { login } from '../actions/loginApi';
 import { loginSchema, type LoginFormValues } from '../schema/loginSchema';
 import { sendOtp } from '@/features/otp';
 import { ApiError } from '@/types/api/response';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
+import { getSafeAuthRedirect } from '@/lib/auth/redirect';
 
 const isFormField = (field: string): field is keyof LoginFormValues =>
   field === 'email' || field === 'password';
 
 export function useLogin() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { setUser } = useCurrentUser();
   const [formError, setFormError] = useState<string | null>(null);
+  const nextPath = getSafeAuthRedirect(searchParams.get('next'));
 
   const {
     register,
@@ -35,12 +38,12 @@ export function useLogin() {
       const result = await login({ email, password });
       if (result.status === 'needs_verification') {
         await sendOtp({ email: result.email, purpose: 'login' });
-        router.push('/otp');
+        router.push(nextPath === '/' ? '/otp' : `/otp?next=${encodeURIComponent(nextPath)}`);
         return;
       }
       setUser(result.user);
       // replace (not push): once logged in, /login must not remain a back-button target.
-      router.replace('/');
+      router.replace(nextPath);
     } catch (error) {
       if (error instanceof ApiError) {
         for (const [field, messages] of Object.entries(error.errors ?? {})) {

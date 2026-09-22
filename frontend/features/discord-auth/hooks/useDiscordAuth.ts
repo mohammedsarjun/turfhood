@@ -1,17 +1,20 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { DISCORD_OAUTH_CONSTANTS } from '@turfhood/shared';
 import { discordAuth } from '../actions/discordAuthApi';
 import { ApiError } from '@/types/api/response';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
+import { getSafeAuthRedirect } from '@/lib/auth/redirect';
 
 export function useDiscordAuth() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { setUser } = useCurrentUser();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const nextPath = getSafeAuthRedirect(searchParams.get('next'));
 
   const trigger = useCallback(() => {
     setError(null);
@@ -66,7 +69,7 @@ export function useDiscordAuth() {
         try {
           const result = await discordAuth({ code, redirectUri });
           setUser(result.user);
-          router.replace('/');
+          router.replace(nextPath);
         } catch (caughtError) {
           if (caughtError instanceof ApiError) {
             setError(caughtError.message);
@@ -100,7 +103,7 @@ export function useDiscordAuth() {
         }
       }
     }, 1000);
-  }, [router, setUser]);
+  }, [nextPath, router, setUser]);
 
   return { trigger, isLoading, error };
 }

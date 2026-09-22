@@ -75,10 +75,10 @@ app.use('/api/favorites', favoriteRoutes);
 app.use('/api/sports', sportsTypeRoutes);
 app.use('/api/amenities', amenityRoutes);
 app.use('/api/turf-owner-applications', turfOwnerApplicationRoutes);
-app.use('/api/turfs/:turfId/courts', authenticate, blockSuspendedTurfOwnerAccess, courtRoutes);
 app.use('/api/locations', locationRoutes);
 app.use('/api/banners', bannerRoutes);
 app.use('/api/turfs', turfRoutes);
+app.use('/api/turfs/:turfId/courts', authenticate, blockSuspendedTurfOwnerAccess, courtRoutes);
 
 app.use(errorHandler);
 

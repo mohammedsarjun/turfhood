@@ -55,6 +55,22 @@ function clearUserSession(response: NextResponse): NextResponse {
   return response;
 }
 
+function getSafeAuthRedirect(request: NextRequest): string {
+  const next = request.nextUrl.searchParams.get('next');
+  if (!next) return '/';
+
+  try {
+    const decoded = decodeURIComponent(next);
+    if (!decoded.startsWith('/') || decoded.startsWith('//')) return '/';
+    if (decoded.startsWith('/login') || decoded.startsWith('/signup') || decoded.startsWith('/otp')) {
+      return '/';
+    }
+    return decoded;
+  } catch {
+    return '/';
+  }
+}
+
 async function requestSessionRefresh(
   refreshToken: string,
   config: SessionRefreshConfig,
@@ -151,13 +167,14 @@ export async function proxy(request: NextRequest) {
 
   if (userSession) {
     if (userRedirectTo) {
-      return NextResponse.redirect(new URL(userRedirectTo, request.url));
+      const redirectTo = isAuthRoute(pathname) ? getSafeAuthRedirect(request) : userRedirectTo;
+      return NextResponse.redirect(new URL(redirectTo, request.url));
     }
   } else if (isProtectedRoute(pathname) || isAuthRoute(pathname)) {
     const recoveredSession = await recoverSession(request, userRefreshConfig);
     if (recoveredSession) {
       const response = isAuthRoute(pathname)
-        ? NextResponse.redirect(new URL('/', request.url))
+        ? NextResponse.redirect(new URL(getSafeAuthRedirect(request), request.url))
         : NextResponse.next();
       return attachSessionCookies(response, recoveredSession);
     }

@@ -1,6 +1,5 @@
 /** Paths that require a valid session; unauthenticated visitors are redirected to /login. */
 export const PROTECTED_ROUTES = [
-  '/',
   '/profile',
   '/favorites',
   '/refunds',
