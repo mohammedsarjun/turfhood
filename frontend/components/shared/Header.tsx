@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import {
   Bell,
   CalendarCheck,
@@ -35,7 +34,6 @@ export interface HeaderProps {
  * equivalent on touch devices, so click-to-toggle is what actually works on mobile too.
  */
 export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
-  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
@@ -90,11 +88,11 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
     setIsLoggingOut(true);
     try {
       await logout();
-    } finally {
       onLoggedOut?.();
       setIsMenuOpen(false);
-      router.push('/login');
-      router.refresh();
+      window.location.replace('/login');
+    } catch {
+      setIsLoggingOut(false);
     }
   };
 

@@ -1,9 +1,19 @@
 'use client';
 
-import { createContext, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import type { PublicUser } from '@turfhood/shared';
 import { getMe } from '@/features/profile/actions/profileApi';
 import { ApiError } from '@/types/api/response';
+import { isProtectedRoute } from '@/lib/auth/routeGuard';
 
 const USER_STORAGE_KEY = 'turfhood.currentUser';
 
@@ -31,6 +41,45 @@ interface UserSessionState {
 }
 
 export const UserSessionContext = createContext<UserSessionState | null>(null);
+
+function ProtectedRouteBoundary({ children }: { children: ReactNode }) {
+  const session = useContext(UserSessionContext);
+  const pathname = usePathname();
+  const router = useRouter();
+  const isProtected = isProtectedRoute(pathname);
+
+  useEffect(() => {
+    if (!isProtected) return;
+
+    function redirectIfSessionWasCleared() {
+      if (window.localStorage.getItem(USER_STORAGE_KEY)) return;
+      session?.clearUser();
+      router.replace('/login');
+    }
+
+    redirectIfSessionWasCleared();
+    window.addEventListener('pageshow', redirectIfSessionWasCleared);
+    window.addEventListener('storage', redirectIfSessionWasCleared);
+    return () => {
+      window.removeEventListener('pageshow', redirectIfSessionWasCleared);
+      window.removeEventListener('storage', redirectIfSessionWasCleared);
+    };
+  }, [isProtected, router, session]);
+
+  if (isProtected && !session?.isHydrated) {
+    return (
+      <main className="flex min-h-screen items-center justify-center" aria-busy="true">
+        <p className="text-sm text-muted-foreground">Loading...</p>
+      </main>
+    );
+  }
+
+  if (isProtected && !session?.user) {
+    return null;
+  }
+
+  return <>{children}</>;
+}
 
 export function UserSessionProvider({ children }: { children: ReactNode }) {
   const [user, setUserState] = useState<PublicUser | null>(null);
@@ -98,5 +147,9 @@ export function UserSessionProvider({ children }: { children: ReactNode }) {
     [user, isHydrated, setUser, clearUser],
   );
 
-  return <UserSessionContext.Provider value={value}>{children}</UserSessionContext.Provider>;
+  return (
+    <UserSessionContext.Provider value={value}>
+      <ProtectedRouteBoundary>{children}</ProtectedRouteBoundary>
+    </UserSessionContext.Provider>
+  );
 }

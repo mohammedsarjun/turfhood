@@ -3,6 +3,7 @@ export const PROTECTED_ROUTES = [
   '/',
   '/profile',
   '/favorites',
+  '/refunds',
   '/my-turfs',
   '/become-a-turf-owner',
   '/become-a-turf-owner/apply',
