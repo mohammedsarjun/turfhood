@@ -34,6 +34,7 @@ export interface TurfProps {
   sportsOffered: string[];
   rating: TurfRating;
   status: TurfStatus;
+  suspensionReason?: string;
   verificationId?: string;
   isDeleted: boolean;
   createdAt?: Date;
@@ -116,6 +117,10 @@ export class Turf {
 
   get status(): TurfStatus {
     return this.props.status;
+  }
+
+  get suspensionReason(): string | undefined {
+    return this.props.suspensionReason;
   }
 
   get verificationId(): string | undefined {

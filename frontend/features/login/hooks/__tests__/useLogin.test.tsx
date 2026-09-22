@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import { push, replace } from '@/__mocks__/next/navigation';
+import { push, replace, useSearchParams } from '@/__mocks__/next/navigation';
 import { render, screen, waitFor } from '@/test/test-utils';
 import { login } from '../../actions/loginApi';
 import { sendOtp } from '../../../otp/actions/otpApi';
@@ -37,6 +37,7 @@ describe('useLogin', () => {
   beforeEach(() => {
     push.mockClear();
     replace.mockClear();
+    useSearchParams.mockReturnValue(new URLSearchParams());
     loginMock.mockClear();
     sendOtpMock.mockClear();
   });
@@ -79,5 +80,29 @@ describe('useLogin', () => {
       expect(replace).toHaveBeenCalledWith('/');
     });
     expect(sendOtpMock).not.toHaveBeenCalled();
+  });
+
+  it('redirects to a safe next path after a successful login', async () => {
+    useSearchParams.mockReturnValue(new URLSearchParams({ next: '/turfs/turf_1/courts/court_1' }));
+    loginMock.mockResolvedValueOnce({
+      status: 'success',
+      user: {
+        id: 'user_1',
+        name: 'Jordan Lee',
+        email: 'jordan@example.com',
+        roles: ['customer'],
+        isVerified: true,
+        status: 'active',
+        createdAt: new Date('2026-01-01').toISOString(),
+      },
+      accessToken: 'token_123',
+      refreshToken: 'refresh_token_123',
+    });
+
+    await submitLogin('jordan@example.com', 'password1');
+
+    await waitFor(() => {
+      expect(replace).toHaveBeenCalledWith('/turfs/turf_1/courts/court_1');
+    });
   });
 });

@@ -43,6 +43,12 @@ export class TurfRepository implements ITurfRepository {
     return document ? this.toDomain(document) : null;
   }
 
+  async findById(id: string): Promise<Turf | null> {
+    if (!mongoose.isValidObjectId(id)) return null;
+    const document = await TurfModel.findOne({ _id: id, isDeleted: false });
+    return document ? this.toDomain(document) : null;
+  }
+
   async findApprovedByIds(ids: string[]): Promise<Turf[]> {
     const validIds = ids.filter((id) => mongoose.isValidObjectId(id));
     if (!validIds.length) return [];
@@ -176,10 +182,22 @@ export class TurfRepository implements ITurfRepository {
   }
 
   async findOwnedByIdOrVerificationId(id: string, ownerId: string): Promise<Turf | null> {
+    return this.findOwnedByIdOrVerificationIdForStatuses(id, ownerId, ['approved']);
+  }
+
+  async findOwnedPortalByIdOrVerificationId(id: string, ownerId: string): Promise<Turf | null> {
+    return this.findOwnedByIdOrVerificationIdForStatuses(id, ownerId, ['approved', 'suspended']);
+  }
+
+  private async findOwnedByIdOrVerificationIdForStatuses(
+    id: string,
+    ownerId: string,
+    statuses: Array<Turf['status']>,
+  ): Promise<Turf | null> {
     let doc = await TurfModel.findOne({
       ownerId,
       isDeleted: false,
-      status: 'approved',
+      status: { $in: statuses },
       $or: [{ _id: id }, { verificationId: id }],
     });
     if (!doc) {
@@ -194,11 +212,21 @@ export class TurfRepository implements ITurfRepository {
           _id: application.turfId,
           ownerId,
           isDeleted: false,
-          status: 'approved',
+          status: { $in: statuses },
         });
       }
     }
     return doc ? this.toDomain(doc) : null;
+  }
+
+  async findByVerificationIds(verificationIds: string[]): Promise<Turf[]> {
+    const validIds = verificationIds.filter((id) => mongoose.isValidObjectId(id));
+    if (!validIds.length) return [];
+    const docs = await TurfModel.find({
+      verificationId: { $in: validIds.map((id) => new mongoose.Types.ObjectId(id)) },
+      isDeleted: false,
+    });
+    return docs.map((doc) => this.toDomain(doc));
   }
 
   private toDomain(doc: TurfDocument): Turf {
@@ -213,6 +241,7 @@ export class TurfRepository implements ITurfRepository {
       sportsOffered: doc.sportsOffered.map((id) => id.toString()),
       rating: doc.rating,
       status: doc.status,
+      ...(doc.suspensionReason ? { suspensionReason: doc.suspensionReason } : {}),
       ...(doc.verificationId ? { verificationId: doc.verificationId.toString() } : {}),
       isDeleted: doc.isDeleted,
       createdAt: doc.createdAt,

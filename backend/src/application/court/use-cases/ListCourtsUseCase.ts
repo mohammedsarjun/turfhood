@@ -15,7 +15,10 @@ export class ListCourtsUseCase implements IListCourtsUseCase {
   ) {}
 
   async execute(input: Parameters<IListCourtsUseCase['execute']>[0]) {
-    const turf = await this.turfs.findOwnedByIdOrVerificationId(input.portalTurfId, input.ownerId);
+    const turf = await this.turfs.findOwnedPortalByIdOrVerificationId(
+      input.portalTurfId,
+      input.ownerId,
+    );
     if (!turf?.id) throw new CourtAccessError();
     const result = await this.courts.list({
       turfId: turf.id,

@@ -22,6 +22,15 @@ export type {
   AdminRevenueReportDTO,
 } from "./admin/admin-revenue.dto.js";
 export type {
+  AdminTurfStatus,
+  AdminUserSummaryDTO,
+  AdminTurfSummaryDTO,
+  SuspendUserRequest,
+  SuspendTurfRequest,
+  AdminUserListResponse,
+  AdminTurfListResponse,
+} from "./admin/admin-management.dto.js";
+export type {
   UpdateNameRequest,
   UpdateNameResponse,
   UpdatePhoneRequest,
@@ -53,6 +62,11 @@ export type {
   GoogleAuthRequest,
   GoogleAuthResponse,
 } from "./auth/google-auth.dto.js";
+export type {
+  DiscordAuthRequest,
+  DiscordAuthResponse,
+} from "./auth/discord-auth.dto.js";
+export { DISCORD_OAUTH_CONSTANTS } from "./auth/discord-constants.js";
 export type { OtpPurpose } from "./otp/otp-purpose.js";
 export { OtpErrorCode } from "./otp/otp-error-code.js";
 export {
@@ -93,7 +107,6 @@ export type {
 export { CatalogErrorCode } from "./catalog/catalog-error-code.js";
 export type { LocationOption } from "./location/location.dto.js";
 export type {
-  BannerDTO,
   NearbyTurfDTO,
   TurfDiscoveryFilters,
   PublicCourtCardDTO,
@@ -206,6 +219,12 @@ export type {
   CustomerRefundDTO,
   CustomerRefundListResponse,
 } from "./refund/refund.dto.js";
+export type {
+  NotificationType,
+  NotificationDTO,
+  NotificationFilter,
+  NotificationListResponse,
+} from "./notification/notification.dto.js";
 
 export type {
   BookingListFilter,

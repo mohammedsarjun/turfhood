@@ -82,7 +82,12 @@ export const CourtsTable = memo(function CourtsTable({
         isLoading={isLoading}
         emptyMessage="No courts found."
       />
-      <Pagination page={page} totalPages={totalPages} onPageChange={onPageChange} />
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={onPageChange}
+        hidden={courts.length === 0}
+      />
     </>
   );
 });

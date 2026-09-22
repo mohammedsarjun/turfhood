@@ -4,6 +4,12 @@ import { ApiError, type ApiErrorResponse } from '@/types/api/response';
 import { API_ROUTES } from '@/lib/apiRoutes';
 import { isAdminRoute } from '@/lib/auth/routeGuard';
 
+declare module 'axios' {
+  interface AxiosRequestConfig {
+    skipAuthRedirect?: boolean;
+  }
+}
+
 export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   timeout: 10000,
@@ -20,6 +26,7 @@ const AUTH_ENDPOINTS: string[] = [
   API_ROUTES.auth.signUp,
   API_ROUTES.auth.otpVerify,
   API_ROUTES.admin.login,
+  API_ROUTES.users.me,
   API_ROUTES.users.refresh,
   API_ROUTES.admin.refresh,
 ];
@@ -53,12 +60,28 @@ const ACCESS_TOKEN_ERROR_CODES = new Set<string>([
   AuthErrorCode.TOKEN_EXPIRED,
 ]);
 
+const USER_STORAGE_KEY = 'turfhood.currentUser';
+let suspensionLogoutStarted = false;
+
 function redirectToLogin(isAdminRequest: boolean): void {
   if (typeof window === 'undefined') return;
   const loginPath = isAdminRequest ? '/admin/login' : '/login';
   const publicUserPaths = ['/login', '/signup', '/forgot-password', '/otp'];
   if (!isAdminRequest && publicUserPaths.includes(window.location.pathname)) return;
   if (window.location.pathname !== loginPath) window.location.replace(loginPath);
+}
+
+function forceSuspendedUserLogout(message: string): void {
+  if (typeof window === 'undefined' || suspensionLogoutStarted) return;
+  suspensionLogoutStarted = true;
+  window.localStorage.removeItem(USER_STORAGE_KEY);
+  axiosInstance
+    .post(API_ROUTES.users.logout)
+    .catch(() => undefined)
+    .finally(() => {
+      const params = new URLSearchParams({ suspended: message });
+      window.location.replace(`/login?${params.toString()}`);
+    });
 }
 
 // Normalizes every failure (validation, server, or network) into a single ApiError shape.
@@ -73,6 +96,7 @@ axiosInstance.interceptors.response.use(
       ACCESS_TOKEN_ERROR_CODES.has(error.response.data.code ?? '') &&
       originalRequest &&
       !originalRequest._retriedAfterRefresh &&
+      !originalRequest.skipAuthRedirect &&
       !AUTH_ENDPOINTS.includes(originalRequest.url ?? '')
     ) {
       originalRequest._retriedAfterRefresh = true;
@@ -92,6 +116,9 @@ axiosInstance.interceptors.response.use(
 
     if (error.response) {
       const { message, errors, code } = error.response.data;
+      if (error.response.status === 403 && code === 'ACCOUNT_SUSPENDED') {
+        forceSuspendedUserLogout(message ?? 'Your account has been suspended.');
+      }
       return Promise.reject(
         new ApiError(
           message ?? 'Something went wrong. Please try again later.',

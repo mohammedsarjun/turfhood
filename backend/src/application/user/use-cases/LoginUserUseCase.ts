@@ -49,7 +49,7 @@ export class LoginUserUseCase implements ILoginUserUseCase {
     }
 
     if (user.status === 'suspended') {
-      throw new AccountSuspendedError();
+      throw new AccountSuspendedError(user.suspensionReason);
     }
     if (user.status === 'deleted') {
       throw new InvalidCredentialsError();

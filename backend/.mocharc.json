@@ -1,6 +1,6 @@
 {
   "extension": ["ts"],
   "file": ["test/setup.ts"],
-  "node-option": ["import=tsx"],
+  "node-option": ["import=./test/patch-os-user-info.mjs", "import=tsx"],
   "timeout": 10000
 }

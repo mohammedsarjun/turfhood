@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useToast } from '@/components/ui';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { addFavorite, listFavoriteIds, removeFavorite } from '../actions/favoriteApi';
 
 let favoriteIds: Set<string> | null = null;
@@ -30,16 +31,18 @@ function loadFavorites() {
 export function useFavoriteTurf(turfId: string) {
   const [, render] = useState(0);
   const [saving, setSaving] = useState(false);
+  const { user, isHydrated } = useCurrentUser();
   const { showToast } = useToast();
 
   useEffect(() => {
+    if (!isHydrated || !user) return;
     const listener = () => render((value) => value + 1);
     listeners.add(listener);
     void loadFavorites().catch(() => undefined);
     return () => {
       listeners.delete(listener);
     };
-  }, []);
+  }, [isHydrated, user]);
 
   const favorite = favoriteIds?.has(turfId) ?? false;
   const toggle = async () => {

@@ -8,10 +8,12 @@ export interface UserDocument extends Document {
   passwordHash?: string;
   authProviders: AuthProvider[];
   googleId?: string;
+  discordId?: string;
   roles: UserRole[];
   avatarUrl?: string;
   isVerified: boolean;
   status: UserStatus;
+  suspensionReason?: string;
   deletedAt?: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -27,11 +29,12 @@ const userSchema = new Schema<UserDocument>(
     passwordHash: { type: String, select: false },
     authProviders: {
       type: [String],
-      enum: ['email', 'phone_otp', 'google'],
+      enum: ['email', 'phone_otp', 'google', 'discord'],
       required: true,
       default: [],
     },
     googleId: { type: String, unique: true, sparse: true },
+    discordId: { type: String, unique: true, sparse: true },
     roles: {
       type: [String],
       enum: ['customer', 'admin', 'turf_owner'],
@@ -46,6 +49,7 @@ const userSchema = new Schema<UserDocument>(
       required: true,
       default: 'active',
     },
+    suspensionReason: { type: String, trim: true },
     deletedAt: { type: Date },
   },
   { timestamps: true },

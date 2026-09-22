@@ -4,10 +4,9 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, MapPin, Star } from 'lucide-react';
 import type { ReviewListResponse, TurfDetailResponse } from '@turfhood/shared';
-import { Header } from '@/components/shared';
+import { PublicHeader } from '@/components/shared';
 import { Pagination } from '@/components/table';
 import { Spinner } from '@/components/ui';
-import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { getPublicTurfDetails } from '../actions/homeApi';
 import { PublicCourtCard } from './PublicCourtCard';
 import { TurfLocationMap } from './TurfLocationMap';
@@ -15,7 +14,6 @@ import { listTurfReviews } from '@/features/reviews/actions/reviewApi';
 import { ReviewList } from '@/features/reviews';
 
 export function TurfDetailPage({ turfId }: { turfId: string }) {
-  const { user, clearUser } = useCurrentUser();
   const [details, setDetails] = useState<TurfDetailResponse | null>(null);
   const [mainImage, setMainImage] = useState('');
   const [loading, setLoading] = useState(true);
@@ -45,7 +43,7 @@ export function TurfDetailPage({ turfId }: { turfId: string }) {
   }, [turfId]);
   return (
     <>
-      <Header userName={user?.name} avatarUrl={user?.avatarUrl} onLoggedOut={clearUser} />
+      <PublicHeader />
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
         {loading && !details ? (
           <div className="flex min-h-96 items-center justify-center">
@@ -130,6 +128,7 @@ export function TurfDetailPage({ turfId }: { turfId: string }) {
                     page={details.courts.pagination.page}
                     totalPages={details.courts.pagination.totalPages}
                     onPageChange={(page) => void load(page)}
+                    hidden={details.courts.items.length === 0}
                   />
                 </>
               ) : (

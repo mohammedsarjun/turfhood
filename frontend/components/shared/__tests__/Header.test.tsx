@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import { push, refresh } from '@/__mocks__/next/navigation';
+import { push, refresh, replace } from '@/__mocks__/next/navigation';
 import { render, screen, waitFor } from '@/test/test-utils';
 import { logout } from '../../../lib/auth/logoutApi';
 import { useMyApplication } from '../../../features/turf-onboarding/hooks/useMyApplication';
@@ -15,6 +15,7 @@ describe('Header', () => {
   beforeEach(() => {
     push.mockClear();
     refresh.mockClear();
+    replace.mockClear();
     logoutMock.mockClear();
     useMyApplicationMock.mockReturnValue({ application: null, isLoading: false, error: null });
   });
@@ -134,6 +135,6 @@ describe('Header', () => {
     await waitFor(() => {
       expect(logoutMock).toHaveBeenCalled();
     });
-    expect(push).toHaveBeenCalledWith('/login');
+    expect(replace).toHaveBeenCalledWith('/login');
   });
 });

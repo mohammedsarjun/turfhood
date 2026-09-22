@@ -7,6 +7,7 @@ import { ListMyTurfOwnerApplicationsUseCase } from '../../src/application/turfOw
 import { TURF_OWNER_APPLICATION_TOKENS } from '../../src/domain/turfOwnerApplication/tokens.js';
 import type { AuthenticatedRequest } from '../../src/presentation/shared/middlewares/authenticate.js';
 import { FakeTurfOwnerApplicationRepository } from '../mocks/FakeTurfOwnerApplicationRepository.js';
+import { FakeTurfRepository } from '../mocks/FakeTurfRepository.js';
 import { buildTurfOwnerApplication } from '../fixtures/turfOwnerApplications.fixture.js';
 
 describe('My Turfs pagination HTTP contract (in-memory repository)', () => {
@@ -21,6 +22,7 @@ describe('My Turfs pagination HTTP contract (in-memory repository)', () => {
             buildTurfOwnerApplication({ id: 'two' }),
           ],
         }),
+        new FakeTurfRepository(),
       ),
     );
     const controller = scope.resolve(TurfOwnerApplicationController);

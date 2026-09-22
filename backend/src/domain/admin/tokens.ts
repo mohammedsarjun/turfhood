@@ -5,4 +5,6 @@ export const ADMIN_TOKENS = {
   DashboardRepository: Symbol('IAdminDashboardRepository'),
   DashboardUseCase: Symbol('IGetAdminDashboardUseCase'),
   RevenueUseCase: Symbol('IGetAdminRevenueUseCase'),
+  ManagementRepository: Symbol('IAdminManagementRepository'),
+  ManagementUseCase: Symbol('IManageAdminResourcesUseCase'),
 } as const;

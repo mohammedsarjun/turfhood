@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   Bell,
   CalendarCheck,
@@ -21,6 +21,7 @@ import { Avatar } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { logout } from '@/lib/auth/logoutApi';
 import { useMyApplication } from '@/features/turf-onboarding/hooks/useMyApplication';
+import { NotificationDropdown } from '@/features/notifications';
 
 export interface HeaderProps {
   userName?: string;
@@ -34,12 +35,15 @@ export interface HeaderProps {
  * equivalent on touch devices, so click-to-toggle is what actually works on mobile too.
  */
 export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
-  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
+  const notificationRef = useRef<HTMLDivElement>(null);
   const { application } = useMyApplication();
+  const router = useRouter();
   const turfOwnerLinkHref = application ? '/my-turfs' : '/become-a-turf-owner';
   const turfOwnerLinkLabel = application ? 'My Turfs' : 'Become a Turf Owner';
 
@@ -63,15 +67,35 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
     };
   }, [isMenuOpen]);
 
+  useEffect(() => {
+    if (!isNotificationOpen) return;
+
+    function handleClickOutside(event: MouseEvent) {
+      if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
+        setIsNotificationOpen(false);
+      }
+    }
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') setIsNotificationOpen(false);
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isNotificationOpen]);
+
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
       await logout();
-    } finally {
       onLoggedOut?.();
       setIsMenuOpen(false);
-      router.push('/login');
-      router.refresh();
+      router.replace('/login');
+    } catch {
+      setIsLoggingOut(false);
     }
   };
 
@@ -106,13 +130,26 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
         >
           {isMobileNavOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
-        <button
-          type="button"
-          aria-label="Notifications"
-          className="relative flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
-        >
-          <Bell className="h-5 w-5" />
-        </button>
+        <div className="relative" ref={notificationRef}>
+          <button
+            type="button"
+            aria-label="Notifications"
+            aria-haspopup="dialog"
+            aria-expanded={isNotificationOpen}
+            onClick={() => setIsNotificationOpen((open) => !open)}
+            className="relative flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+          >
+            <Bell className="h-5 w-5" />
+            {unreadCount > 0 && (
+              <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-red-500" aria-label={`${unreadCount} unread notifications`} />
+            )}
+          </button>
+          <NotificationDropdown
+            open={isNotificationOpen}
+            onClose={() => setIsNotificationOpen(false)}
+            onUnreadCountChange={setUnreadCount}
+          />
+        </div>
 
         <div className="relative" ref={menuRef}>
           <button

@@ -19,6 +19,7 @@ export async function createOpenSession(input: CreateOpenSessionRequest) {
 export async function listOpenSessions(filters: OpenSessionFilters) {
   const response = await axiosInstance.get<OpenSessionListResponse>(API_ROUTES.openSessions.base, {
     params: filters,
+    skipAuthRedirect: true,
   });
   return response.data;
 }
@@ -39,7 +40,9 @@ export async function listMyRefunds(page = 1) {
   return response.data;
 }
 export async function getOpenSession(id: string) {
-  const response = await axiosInstance.get<OpenSessionDTO>(API_ROUTES.openSessions.details(id));
+  const response = await axiosInstance.get<OpenSessionDTO>(API_ROUTES.openSessions.details(id), {
+    skipAuthRedirect: true,
+  });
   return response.data;
 }
 export async function joinOpenSession(id: string) {

@@ -73,7 +73,12 @@ export function SportsTable({
         isLoading={isLoading}
         emptyMessage="No sports found."
       />
-      <Pagination page={page} totalPages={totalPages} onPageChange={onPageChange} />
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={onPageChange}
+        hidden={items.length === 0}
+      />
     </>
   );
 }

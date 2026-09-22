@@ -70,7 +70,7 @@ export class LoginWithGoogleUseCase implements ILoginWithGoogleUseCase {
       throw new InvalidCredentialsError();
     }
     if (user.status === 'suspended') {
-      throw new AccountSuspendedError();
+      throw new AccountSuspendedError(user.suspensionReason);
     }
     if (user.status === 'deleted') {
       throw new InvalidCredentialsError();

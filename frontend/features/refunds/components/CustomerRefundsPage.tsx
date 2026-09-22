@@ -118,7 +118,14 @@ export function CustomerRefundsPage() {
             ))}
           </div>
         )}
-        {!loading && <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />}
+        {!loading && (
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            hidden={items.length === 0}
+          />
+        )}
       </main>
     </>
   );

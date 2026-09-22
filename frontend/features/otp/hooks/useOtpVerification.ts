@@ -1,16 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { verifyOtp, resendOtp } from '../actions/otpApi';
 import { OTP_LENGTH, buildOtpFromDigits, isOtpComplete } from '../lib/otpInput';
 import { useCountdown } from './useCountdown';
 import { OtpErrorCode, type OtpPurpose } from '../types';
 import { ApiError } from '@/types/api/response';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
+import { getSafeAuthRedirect } from '@/lib/auth/redirect';
 
 export function useOtpVerification(purpose: OtpPurpose, initialExpiresAt: number) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { setUser } = useCurrentUser();
   const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(''));
   const [formError, setFormError] = useState<string | null>(null);
@@ -19,6 +21,7 @@ export function useOtpVerification(purpose: OtpPurpose, initialExpiresAt: number
   const [isVerified, setIsVerified] = useState(false);
   const [expiresAt, setExpiresAt] = useState(initialExpiresAt);
   const countdown = useCountdown(expiresAt);
+  const nextPath = getSafeAuthRedirect(searchParams.get('next'));
 
   const submitOtp = async () => {
     if (!isOtpComplete(digits)) return;
@@ -32,7 +35,7 @@ export function useOtpVerification(purpose: OtpPurpose, initialExpiresAt: number
       setUser(result.user);
       setIsVerified(true);
       // replace (not push): once verified, /otp must not remain a back-button target.
-      router.replace('/');
+      router.replace(nextPath);
     } catch (error) {
       if (error instanceof ApiError) {
         setFormError(error.message);

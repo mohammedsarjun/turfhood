@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   ArrowLeft,
   CalendarDays,
@@ -12,10 +13,11 @@ import {
   UsersRound,
 } from 'lucide-react';
 import type { OpenSessionDTO } from '@turfhood/shared';
-import { Header } from '@/components/shared';
+import { PublicHeader } from '@/components/shared';
 import { Badge, Button, Card, CardContent, Modal, Spinner, useToast } from '@/components/ui';
 import { submitPaymentForm } from '@/features/bookings/actions/bookingApi';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
+import { withNextParam } from '@/lib/auth/redirect';
 import { formatTime12Hour } from '@/lib/time';
 import {
   cancelOpenSessionParticipation,
@@ -33,7 +35,9 @@ const remaining = (deadline: string) => {
 };
 
 export function OpenSessionDetailsPage({ id }: { id: string }) {
-  const { user, clearUser } = useCurrentUser();
+  const { user } = useCurrentUser();
+  const pathname = usePathname();
+  const router = useRouter();
   const { showToast } = useToast();
   const [session, setSession] = useState<OpenSessionDTO>();
   const [timer, setTimer] = useState('');
@@ -58,6 +62,11 @@ export function OpenSessionDetailsPage({ id }: { id: string }) {
     return () => clearInterval(handle);
   }, [session]);
   const join = async () => {
+    if (!user) {
+      router.push(`/login?${withNextParam(pathname)}`);
+      return;
+    }
+
     setJoining(true);
     try {
       const result = await joinOpenSession(id);
@@ -83,7 +92,7 @@ export function OpenSessionDetailsPage({ id }: { id: string }) {
   if (!session)
     return (
       <>
-        <Header userName={user?.name} avatarUrl={user?.avatarUrl} onLoggedOut={clearUser} />
+        <PublicHeader />
         <main className="mx-auto flex min-h-80 max-w-6xl items-center justify-center px-4">
           {loadFailed ? (
             <div className="rounded-2xl border border-border bg-card p-8 text-center">
@@ -105,7 +114,7 @@ export function OpenSessionDetailsPage({ id }: { id: string }) {
   const spotsLeft = Math.max(0, session.maximumPlayers - session.joinedPlayers);
   return (
     <>
-      <Header userName={user?.name} avatarUrl={user?.avatarUrl} onLoggedOut={clearUser} />
+      <PublicHeader />
       <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
         <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-sm">
           <Link
@@ -214,7 +223,9 @@ export function OpenSessionDetailsPage({ id }: { id: string }) {
                 >
                   {alreadyJoined
                     ? 'You are already in this session'
-                    : `Join for ₹${(session.pricePerParticipantPaise / 100).toFixed(2)}`}
+                    : user
+                      ? `Join for ₹${(session.pricePerParticipantPaise / 100).toFixed(2)}`
+                      : `Login to join for ₹${(session.pricePerParticipantPaise / 100).toFixed(2)}`}
                 </Button>
                 {alreadyJoined && session.status !== 'confirmed' && (
                   <Button

@@ -1,7 +1,7 @@
 import type { Email } from '../value-objects/Email.js';
 import type { Phone } from '../value-objects/Phone.js';
 
-export type AuthProvider = 'email' | 'phone_otp' | 'google';
+export type AuthProvider = 'email' | 'phone_otp' | 'google' | 'discord';
 export type UserRole = 'customer' | 'admin' | 'turf_owner';
 export type UserStatus = 'active' | 'suspended' | 'deleted';
 
@@ -15,7 +15,9 @@ export interface UserProps {
   roles: UserRole[];
   isVerified: boolean;
   status: UserStatus;
+  suspensionReason?: string;
   googleId?: string;
+  discordId?: string;
   avatarUrl?: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -59,6 +61,29 @@ export class User {
       isVerified: true,
       status: 'active',
       googleId: input.googleId,
+      ...(input.avatarUrl ? { avatarUrl: input.avatarUrl } : {}),
+    });
+  }
+
+  /**
+   * Registers a brand-new user from a verified Discord profile. No password/phone is collected —
+   * `passwordHash` stays `''` and `phone` stays unset. `isVerified: true` because Discord has already proven email ownership.
+   */
+  static registerViaDiscord(input: {
+    name: string;
+    email: Email;
+    discordId: string;
+    avatarUrl?: string;
+  }): User {
+    return new User({
+      name: input.name,
+      email: input.email,
+      passwordHash: '',
+      authProviders: ['discord'],
+      roles: ['customer'],
+      isVerified: true,
+      status: 'active',
+      discordId: input.discordId,
       ...(input.avatarUrl ? { avatarUrl: input.avatarUrl } : {}),
     });
   }
@@ -121,8 +146,16 @@ export class User {
     return this.props.status;
   }
 
+  get suspensionReason(): string | undefined {
+    return this.props.suspensionReason;
+  }
+
   get googleId(): string | undefined {
     return this.props.googleId;
+  }
+
+  get discordId(): string | undefined {
+    return this.props.discordId;
   }
 
   get avatarUrl(): string | undefined {

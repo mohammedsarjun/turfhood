@@ -20,6 +20,7 @@ import type { ICourtRepository } from '@domain/court/repositories/ICourtReposito
 import { COURT_TOKENS } from '@domain/court/tokens';
 import type { ITurfRepository } from '@domain/turf/repositories/ITurfRepository';
 import { TURF_TOKENS } from '@domain/turf/tokens';
+import { TurfSuspendedError } from '@domain/turf/errors/TurfSuspendedError';
 import type { IUserRepository } from '@domain/user/repositories/IUserRepository';
 import { USER_TOKENS } from '@domain/user/tokens';
 import type { ICommissionSettingRepository } from '@domain/commission/repositories/ICommissionSettingRepository';
@@ -29,6 +30,8 @@ import { DEFAULT_COMMISSION_PERCENTAGE } from '@application/commission/constants
 import type { IEmailService } from '@domain/otp/services/IEmailService';
 import { OTP_TOKENS } from '@domain/otp/tokens';
 import { calculateCustomerRefundPaise } from '@domain/booking/services/BookingPolicy';
+import type { IManageNotificationsUseCase } from '@application/notification/use-cases/IManageNotificationsUseCase';
+import { NOTIFICATION_TOKENS } from '@domain/notification/tokens';
 
 import type { IManageBookingsUseCase } from './IManageBookingsUseCase.js';
 
@@ -65,6 +68,8 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
     @inject(COMMISSION_TOKENS.Repository)
     private readonly commissions: ICommissionSettingRepository,
     @inject(OTP_TOKENS.EmailService) private readonly emails: IEmailService,
+    @inject(NOTIFICATION_TOKENS.UseCase)
+    private readonly notifications: IManageNotificationsUseCase,
   ) {}
   async reserve(
     userId: string,
@@ -85,15 +90,17 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
       throw new BookingActionError('Bookings are available only for the next 14 days.');
     const [court, turf, user, override, commission] = await Promise.all([
       this.courts.findByIdAndTurf(input.courtId, input.turfId),
-      this.turfs.findApprovedById(input.turfId),
+      this.turfs.findById(input.turfId),
       this.users.findById(userId),
       this.courts
         .listOverrides(input.courtId)
         .then((items) => items.find((item) => item.date === input.bookingDate)),
       this.commissions.get(),
     ]);
+    if (turf?.status === 'suspended') throw new TurfSuspendedError(turf.suspensionReason);
     if (!court || court.status !== 'active' || !turf || !user)
       throw new BookingActionError('Court is not available.');
+    if (turf.status !== 'approved') throw new BookingActionError('Court is not available.');
     if (!user.phone)
       throw new BookingActionError('Add a phone number to your profile before booking.');
     const parsedDate = new Date(`${input.bookingDate}T00:00:00Z`);
@@ -356,6 +363,14 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
       description: 'Turf owner cancelled the booking; 100% refund applies.',
       actor: 'owner',
     });
+    await this.notifications.create({
+      userId: booking.userId,
+      type: 'booking_cancelled_by_owner',
+      title: 'Booking cancelled by turf owner',
+      message: `${booking.turfName} cancelled your ${booking.courtName} booking on ${booking.bookingDate}. A full refund has been requested.`,
+      link: `/bookings/${booking.id}`,
+      dedupeKey: `owner-cancelled-booking:${booking.id}`,
+    });
     if (booking.paymentId) {
       try {
         return await this.initiateRefund(cancelled, booking.finalAmountPaise);
@@ -463,6 +478,8 @@ export class ManageBookingsUseCase implements IManageBookingsUseCase {
     const result = await this.payments.checkRefund(payuRequestId.trim());
     if (result.status === 'failed')
       throw new BookingActionError(result.reason ?? 'PayU reports that the manual refund failed.');
+    if (result.status === 'pending' && result.providerStatus === 'not_available')
+      throw new BookingActionError('Invalid request ID. PayU could not find this refund transaction.');
     const pending = await this.bookings.markManualRefundPending(booking.id, payuRequestId.trim());
     if (!pending) throw new BookingActionError('Refund can no longer be verified.');
     if (result.status === 'success') {

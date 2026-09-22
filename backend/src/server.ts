@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import http from 'node:http';
 import { container } from './config/container.js';
 import app from './app.js';
 import { connectDatabase } from './config/database.js';
@@ -10,6 +11,9 @@ import { BOOKING_TOKENS } from './domain/booking/tokens.js';
 import type { IManageBookingsUseCase } from './application/booking/use-cases/IManageBookingsUseCase.js';
 import type { IManageOpenSessionsUseCase } from './application/openSession/use-cases/IManageOpenSessionsUseCase.js';
 import { OPEN_SESSION_TOKENS } from './domain/openSession/tokens.js';
+import type { IManageNotificationsUseCase } from './application/notification/use-cases/IManageNotificationsUseCase.js';
+import { NOTIFICATION_TOKENS } from './domain/notification/tokens.js';
+import { configureNotificationSocket } from './infrastructure/notification/socket.js';
 
 async function bootstrap(): Promise<void> {
   await connectDatabase();
@@ -20,6 +24,8 @@ async function bootstrap(): Promise<void> {
     email: env.ADMIN_EMAIL,
     password: env.ADMIN_PASSWORD,
   });
+  const server = http.createServer(app);
+  configureNotificationSocket(server);
 
   const bookingRepository = container.resolve<IBookingRepository>(BOOKING_TOKENS.Repository);
   const cleanupTimer = setInterval(() => {
@@ -51,8 +57,19 @@ async function bootstrap(): Promise<void> {
   processOpenSessionDeadlines();
   const openSessionTimer = setInterval(processOpenSessionDeadlines, 60_000);
   openSessionTimer.unref();
+  const notificationUseCase = container.resolve<IManageNotificationsUseCase>(
+    NOTIFICATION_TOKENS.UseCase,
+  );
+  const processBookingReminders = () => {
+    void notificationUseCase.notifyUpcomingBookingReminders().catch((error: unknown) => {
+      console.error('Unable to send booking reminder notifications.', error);
+    });
+  };
+  processBookingReminders();
+  const notificationTimer = setInterval(processBookingReminders, 60_000);
+  notificationTimer.unref();
 
-  app.listen(env.PORT, () => {
+  server.listen(env.PORT, () => {
     console.log(`Server running on port ${env.PORT}`);
   });
 }

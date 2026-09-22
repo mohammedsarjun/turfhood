@@ -32,7 +32,7 @@ export class GetOwnerRevenueUseCase implements IGetOwnerRevenueUseCase {
       startDate > endDate
     )
       throw new AppError('Choose a valid date range.', HttpStatus.BAD_REQUEST);
-    const turf = await this.turfs.findOwnedByIdOrVerificationId(portalTurfId, ownerId);
+    const turf = await this.turfs.findOwnedPortalByIdOrVerificationId(portalTurfId, ownerId);
     if (!turf?.id) throw new AppError('Turf not found.', HttpStatus.NOT_FOUND);
     const today = indiaDate(new Date());
     const monthStart = `${today.slice(0, 7)}-01`;
@@ -67,6 +67,8 @@ export class GetOwnerRevenueUseCase implements IGetOwnerRevenueUseCase {
         ? { pagination: { page, limit, total, totalPages: Math.max(1, Math.ceil(total / limit)) } }
         : {}),
       turfName: turf.name,
+      ...(turf.status === 'suspended' ? { isSuspended: true } : {}),
+      ...(turf.suspensionReason ? { suspensionReason: turf.suspensionReason } : {}),
       selectedRange: { startDate, endDate, summary: selected.summary },
       snapshots: {
         today: todayData.summary,
