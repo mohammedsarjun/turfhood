@@ -4,11 +4,14 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 COPY backend/package.json ./backend/package.json
+COPY shared/package.json ./shared/package.json
 
 RUN npm ci
 
 COPY backend ./backend
 COPY shared ./shared
+
+RUN npm run build --workspace=shared
 
 WORKDIR /app/backend
 

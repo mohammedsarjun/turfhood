@@ -52,6 +52,7 @@ describe('ListCourtsUseCase', () => {
     const turfs: ITurfRepository = {
       create: async (input) => input,
       findOwnedByIdOrVerificationId: async () => turf,
+      findOwnedPortalByIdOrVerificationId: async () => turf,
     };
     const useCase = new ListCourtsUseCase(courts, turfs);
 
@@ -86,6 +87,7 @@ describe('ListCourtsUseCase', () => {
     const turfs: ITurfRepository = {
       create: async (input) => input,
       findOwnedByIdOrVerificationId: async () => null,
+      findOwnedPortalByIdOrVerificationId: async () => null,
     };
     const useCase = new ListCourtsUseCase(courts, turfs);
 

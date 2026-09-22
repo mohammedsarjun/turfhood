@@ -1,0 +1,4973 @@
+[
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\__mocks__\\@react-oauth\\google.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\__mocks__\\next\\navigation.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\admin\\(protected)\\amenities\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\admin\\(protected)\\banners\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\admin\\(protected)\\commission\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\admin\\(protected)\\dashboard\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\admin\\(protected)\\layout.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\admin\\(protected)\\refunds\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\admin\\(protected)\\revenue\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\admin\\(protected)\\sports\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\admin\\(protected)\\turf-owner-applications\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\admin\\(protected)\\turfs\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\admin\\(protected)\\users\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\admin\\(protected)\\withdrawal-requests\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\admin\\login\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\auth\\discord\\callback\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\become-a-turf-owner\\apply\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\become-a-turf-owner\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\bookings\\[bookingId]\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\bookings\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\change-password\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\favorites\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\forgot-password\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\layout.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\login\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\my-turfs\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\open-sessions\\[sessionId]\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\open-sessions\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\otp\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\profile\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\providers.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\refunds\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\signup\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\turf-portal\\[turfId]\\[section]\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\turf-portal\\[turfId]\\courts\\[courtId]\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\turf-portal\\[turfId]\\courts\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\turf-portal\\[turfId]\\layout.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\turfs\\[turfId]\\courts\\[courtId]\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\turfs\\[turfId]\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\app\\turfs\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\admin\\AdminHeader.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 47,
+        "column": 11,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 47,
+        "endColumn": 91,
+        "suppressions": [
+          {
+            "kind": "directive",
+            "justification": "static public asset, no next/image usage elsewhere in this repo"
+          }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\admin\\AdminShell.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\admin\\AdminSidebar.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\admin\\__tests__\\AdminSidebar.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\auth\\SocialAuthSection.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\home\\HomeContent.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\home\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\shared\\AuthLayout.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\shared\\BrandPanel.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\shared\\Header.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 105,
+        "column": 9,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 105,
+        "endColumn": 89,
+        "suppressions": [
+          {
+            "kind": "directive",
+            "justification": "static public asset, no next/image usage elsewhere in this repo"
+          }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\shared\\TurfImageGallery.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 47,
+        "column": 9,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 47,
+        "endColumn": 92,
+        "suppressions": [
+          { "kind": "directive", "justification": "no next/image usage elsewhere in this repo" }
+        ]
+      },
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 65,
+        "column": 15,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 69,
+        "endColumn": 17,
+        "suppressions": [
+          { "kind": "directive", "justification": "no next/image usage elsewhere in this repo" }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\shared\\UserShell.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\shared\\__tests__\\Header.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\shared\\__tests__\\TurfImageGallery.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\shared\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\table\\DataTable.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\table\\Pagination.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\table\\SearchInput.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\table\\__tests__\\DataTable.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\table\\__tests__\\Pagination.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\table\\hooks\\__tests__\\useDebouncedValue.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\table\\hooks\\useDebouncedValue.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\table\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\ui\\Avatar.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 17,
+        "column": 7,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 17,
+        "endColumn": 73,
+        "suppressions": [
+          { "kind": "directive", "justification": "user-uploaded avatar, arbitrary origin" }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\ui\\Badge.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\ui\\Button.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\ui\\Card.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\ui\\Input.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\ui\\Modal.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\ui\\Select.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\ui\\Spinner.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\ui\\Textarea.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\ui\\TimeInput.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\ui\\Toast.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\ui\\Typography.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\ui\\__tests__\\Avatar.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\components\\ui\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\eslint.config.mjs",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-amenities\\actions\\__mocks__\\amenitiesApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-amenities\\actions\\amenitiesApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-amenities\\components\\AdminAmenitiesPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-amenities\\components\\AmenitiesFilters.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-amenities\\components\\AmenitiesTable.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 33,
+        "column": 11,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 33,
+        "endColumn": 82,
+        "suppressions": [
+          { "kind": "directive", "justification": "arbitrary Cloudinary-hosted icon" }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-amenities\\components\\AmenityFormModal.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-amenities\\components\\IconPicker.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 52,
+        "column": 11,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 52,
+        "endColumn": 81,
+        "suppressions": [
+          { "kind": "directive", "justification": "local object URL preview, never uploaded as-is" }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-amenities\\components\\IconUpload.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 30,
+        "column": 11,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 30,
+        "endColumn": 81,
+        "suppressions": [
+          { "kind": "directive", "justification": "arbitrary Cloudinary-hosted icon" }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-amenities\\hooks\\useAmenitiesList.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-amenities\\hooks\\useAmenityForm.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-amenities\\hooks\\useIconUpload.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-amenities\\hooks\\useToggleAmenityListed.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-amenities\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-amenities\\schema\\amenityFormSchema.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-amenities\\types\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-banners\\actions\\bannerApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-banners\\components\\AdminBannersPage.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 67,
+        "column": 13,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 67,
+        "endColumn": 94,
+        "suppressions": [{ "kind": "directive", "justification": "admin-managed Cloudinary image" }]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-banners\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-commission\\actions\\commissionApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-commission\\components\\AdminCommissionPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-commission\\hooks\\useCommissionSetting.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-commission\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-dashboard\\actions\\adminDashboardApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-dashboard\\components\\AdminDashboardPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-dashboard\\components\\__tests__\\AdminDashboardPage.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-dashboard\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-login\\actions\\__mocks__\\adminLoginApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-login\\actions\\adminLoginApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-login\\actions\\adminLogoutApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-login\\components\\AdminLoginForm.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-login\\components\\__tests__\\AdminLoginForm.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-login\\hooks\\__tests__\\useAdminLogin.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-login\\hooks\\useAdminLogin.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-login\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-login\\schema\\adminLoginSchema.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-login\\types\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-management\\actions\\adminManagementApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-management\\components\\AdminTurfsPage.tsx",
+    "messages": [
+      {
+        "ruleId": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useMemo has a missing dependency: 'handleUnsuspend'. Either include it or remove the dependency array.",
+        "line": 61,
+        "column": 5,
+        "nodeType": "ArrayExpression",
+        "endLine": 61,
+        "endColumn": 21,
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [handleUnsuspend, unsuspendingId]",
+            "fix": { "range": [2259, 2275], "text": "[handleUnsuspend, unsuspendingId]" }
+          }
+        ]
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "'use client';\n\nimport { useCallback, useMemo, useState } from 'react';\nimport type { AdminTurfSummaryDTO } from '@turfhood/shared';\nimport { DataTable, Pagination, SearchInput, type ColumnDef } from '@/components/table';\nimport { Badge, Button, Heading, Text, useToast } from '@/components/ui';\nimport { ApiError } from '@/types/api/response';\nimport {\n  listAdminTurfs,\n  suspendAdminTurf,\n  unsuspendAdminTurf,\n} from '../actions/adminManagementApi';\nimport { useAdminManagementList } from '../hooks/useAdminManagementList';\nimport { SuspendReasonModal } from './SuspendReasonModal';\n\nexport function AdminTurfsPage() {\n  const loader = useCallback((params: Parameters<typeof listAdminTurfs>[0]) => listAdminTurfs(params), []);\n  const { items, page, totalPages, search, setSearch, isLoading, error, setPage, refetch } =\n    useAdminManagementList(loader, 'Failed to load turfs.');\n  const { showToast } = useToast();\n  const [selectedTurf, setSelectedTurf] = useState<AdminTurfSummaryDTO | null>(null);\n  const [isSubmitting, setIsSubmitting] = useState(false);\n  const [unsuspendingId, setUnsuspendingId] = useState<string | null>(null);\n\n  const columns = useMemo<ColumnDef<AdminTurfSummaryDTO>[]>(\n    () => [\n      { header: 'Turf', accessor: (turf) => turf.name },\n      { header: 'Owner', accessor: (turf) => turf.ownerEmail ?? turf.ownerName },\n      {\n        header: 'Location',\n        accessor: (turf) => `${turf.address.city}, ${turf.address.state}`,\n      },\n      {\n        header: 'Status',\n        accessor: (turf) => (\n          <Badge variant={turf.status === 'suspended' ? 'destructive' : 'success'}>\n            {turf.status}\n          </Badge>\n        ),\n      },\n      {\n        header: 'Actions',\n        accessor: (turf) =>\n          turf.status === 'suspended' ? (\n            <Button\n              type=\"button\"\n              variant=\"outline\"\n              size=\"sm\"\n              loading={unsuspendingId === turf.id}\n              onClick={() => void handleUnsuspend(turf)}\n            >\n              Unsuspend\n            </Button>\n          ) : (\n            <Button type=\"button\" variant=\"outline\" size=\"sm\" onClick={() => setSelectedTurf(turf)}>\n              Suspend\n            </Button>\n          ),\n      },\n    ],\n    [unsuspendingId],\n  );\n\n  const handleSuspend = async (reason: string) => {\n    if (!selectedTurf) return;\n    setIsSubmitting(true);\n    try {\n      await suspendAdminTurf(selectedTurf.id, reason);\n      showToast('Turf suspended successfully.');\n      setSelectedTurf(null);\n      await refetch();\n    } catch (err) {\n      showToast(err instanceof ApiError ? err.message : 'Failed to suspend turf.', 'error');\n    } finally {\n      setIsSubmitting(false);\n    }\n  };\n\n  const handleUnsuspend = async (turf: AdminTurfSummaryDTO) => {\n    setUnsuspendingId(turf.id);\n    try {\n      await unsuspendAdminTurf(turf.id);\n      showToast('Turf unsuspended successfully.');\n      await refetch();\n    } catch (err) {\n      showToast(err instanceof ApiError ? err.message : 'Failed to unsuspend turf.', 'error');\n    } finally {\n      setUnsuspendingId(null);\n    }\n  };\n\n  return (\n    <div>\n      <div className=\"flex items-center justify-between\" style={{ marginBottom: 24 }}>\n        <Heading variant=\"h1\">Turfs</Heading>\n      </div>\n      <div style={{ marginBottom: 16 }}>\n        <SearchInput value={search} onChange={(event) => setSearch(event.target.value)} placeholder=\"Search turfs\" />\n      </div>\n      {error && <Text className=\"mb-3 text-destructive\">{error}</Text>}\n      <DataTable\n        columns={columns}\n        rows={items}\n        rowKey={(turf) => turf.id}\n        isLoading={isLoading}\n        emptyMessage=\"No turfs found.\"\n      />\n      <Pagination\n        page={page}\n        totalPages={totalPages}\n        onPageChange={setPage}\n        disabled={isLoading}\n        hidden={items.length === 0}\n      />\n      <SuspendReasonModal\n        open={Boolean(selectedTurf)}\n        title=\"Suspend turf\"\n        subjectName={selectedTurf?.name ?? ''}\n        isSubmitting={isSubmitting}\n        onClose={() => setSelectedTurf(null)}\n        onSubmit={handleSuspend}\n      />\n    </div>\n  );\n}\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-management\\components\\AdminUsersPage.tsx",
+    "messages": [
+      {
+        "ruleId": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useMemo has a missing dependency: 'handleUnsuspend'. Either include it or remove the dependency array.",
+        "line": 59,
+        "column": 5,
+        "nodeType": "ArrayExpression",
+        "endLine": 59,
+        "endColumn": 21,
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [handleUnsuspend, unsuspendingId]",
+            "fix": { "range": [2259, 2275], "text": "[handleUnsuspend, unsuspendingId]" }
+          }
+        ]
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "'use client';\n\nimport { useCallback, useMemo, useState } from 'react';\nimport type { AdminUserSummaryDTO } from '@turfhood/shared';\nimport { DataTable, Pagination, SearchInput, type ColumnDef } from '@/components/table';\nimport { Badge, Button, Heading, Text, useToast } from '@/components/ui';\nimport { ApiError } from '@/types/api/response';\nimport {\n  listAdminUsers,\n  suspendAdminUser,\n  unsuspendAdminUser,\n} from '../actions/adminManagementApi';\nimport { useAdminManagementList } from '../hooks/useAdminManagementList';\nimport { SuspendReasonModal } from './SuspendReasonModal';\n\nexport function AdminUsersPage() {\n  const loader = useCallback((params: Parameters<typeof listAdminUsers>[0]) => listAdminUsers(params), []);\n  const { items, page, totalPages, search, setSearch, isLoading, error, setPage, refetch } =\n    useAdminManagementList(loader, 'Failed to load users.');\n  const { showToast } = useToast();\n  const [selectedUser, setSelectedUser] = useState<AdminUserSummaryDTO | null>(null);\n  const [isSubmitting, setIsSubmitting] = useState(false);\n  const [unsuspendingId, setUnsuspendingId] = useState<string | null>(null);\n\n  const columns = useMemo<ColumnDef<AdminUserSummaryDTO>[]>(\n    () => [\n      { header: 'Name', accessor: (user) => user.name },\n      { header: 'Email', accessor: (user) => user.email ?? '-' },\n      { header: 'Phone', accessor: (user) => user.phone ?? '-' },\n      { header: 'Roles', accessor: (user) => user.roles.join(', ') },\n      {\n        header: 'Status',\n        accessor: (user) => (\n          <Badge variant={user.status === 'suspended' ? 'destructive' : 'success'}>\n            {user.status}\n          </Badge>\n        ),\n      },\n      {\n        header: 'Actions',\n        accessor: (user) =>\n          user.status === 'suspended' ? (\n            <Button\n              type=\"button\"\n              variant=\"outline\"\n              size=\"sm\"\n              loading={unsuspendingId === user.id}\n              onClick={() => void handleUnsuspend(user)}\n            >\n              Unsuspend\n            </Button>\n          ) : (\n            <Button type=\"button\" variant=\"outline\" size=\"sm\" onClick={() => setSelectedUser(user)}>\n              Suspend\n            </Button>\n          ),\n      },\n    ],\n    [unsuspendingId],\n  );\n\n  const handleSuspend = async (reason: string) => {\n    if (!selectedUser) return;\n    setIsSubmitting(true);\n    try {\n      await suspendAdminUser(selectedUser.id, reason);\n      showToast('User suspended successfully.');\n      setSelectedUser(null);\n      await refetch();\n    } catch (err) {\n      showToast(err instanceof ApiError ? err.message : 'Failed to suspend user.', 'error');\n    } finally {\n      setIsSubmitting(false);\n    }\n  };\n\n  const handleUnsuspend = async (user: AdminUserSummaryDTO) => {\n    setUnsuspendingId(user.id);\n    try {\n      await unsuspendAdminUser(user.id);\n      showToast('User unsuspended successfully.');\n      await refetch();\n    } catch (err) {\n      showToast(err instanceof ApiError ? err.message : 'Failed to unsuspend user.', 'error');\n    } finally {\n      setUnsuspendingId(null);\n    }\n  };\n\n  return (\n    <div>\n      <div className=\"flex items-center justify-between\" style={{ marginBottom: 24 }}>\n        <Heading variant=\"h1\">Users</Heading>\n      </div>\n      <div style={{ marginBottom: 16 }}>\n        <SearchInput value={search} onChange={(event) => setSearch(event.target.value)} placeholder=\"Search users\" />\n      </div>\n      {error && <Text className=\"mb-3 text-destructive\">{error}</Text>}\n      <DataTable\n        columns={columns}\n        rows={items}\n        rowKey={(user) => user.id}\n        isLoading={isLoading}\n        emptyMessage=\"No users found.\"\n      />\n      <Pagination\n        page={page}\n        totalPages={totalPages}\n        onPageChange={setPage}\n        disabled={isLoading}\n        hidden={items.length === 0}\n      />\n      <SuspendReasonModal\n        open={Boolean(selectedUser)}\n        title=\"Suspend user\"\n        subjectName={selectedUser?.name ?? ''}\n        isSubmitting={isSubmitting}\n        onClose={() => setSelectedUser(null)}\n        onSubmit={handleSuspend}\n      />\n    </div>\n  );\n}\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-management\\components\\SuspendReasonModal.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-management\\hooks\\useAdminManagementList.ts",
+    "messages": [
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\nD:\\Brototype files\\turfhub-project\\frontend\\features\\admin-management\\hooks\\useAdminManagementList.ts:34:5\n  32 |   useEffect(() => {\n  33 |     let isCancelled = false;\n> 34 |     setIsLoading(true);\n     |     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect\n  35 |     setError(null);\n  36 |\n  37 |     loader({",
+        "line": 34,
+        "column": 5,
+        "nodeType": null,
+        "endLine": 34,
+        "endColumn": 17
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 1,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "'use client';\n\nimport { useCallback, useEffect, useState } from 'react';\nimport type { PaginatedResponse } from '@turfhood/shared';\nimport { useDebouncedValue } from '@/components/table';\nimport { ApiError } from '@/types/api/response';\n\nconst PAGE_SIZE = 10;\n\nexport function useAdminManagementList<T>(\n  loader: (params: { page: number; limit: number; search?: string }) => Promise<PaginatedResponse<T>>,\n  fallbackError: string,\n) {\n  const [items, setItems] = useState<T[]>([]);\n  const [page, setPage] = useState(1);\n  const [totalPages, setTotalPages] = useState(1);\n  const [search, setSearch] = useState('');\n  const [isLoading, setIsLoading] = useState(true);\n  const [error, setError] = useState<string | null>(null);\n  const [refreshIndex, setRefreshIndex] = useState(0);\n  const debouncedSearch = useDebouncedValue(search);\n\n  const handleSearchChange = useCallback((value: string) => {\n    setSearch(value);\n    setPage(1);\n  }, []);\n\n  const refetch = useCallback(async () => {\n    setRefreshIndex((index) => index + 1);\n  }, []);\n\n  useEffect(() => {\n    let isCancelled = false;\n    setIsLoading(true);\n    setError(null);\n\n    loader({\n      page,\n      limit: PAGE_SIZE,\n      ...(debouncedSearch ? { search: debouncedSearch } : {}),\n    })\n      .then((result) => {\n        if (!isCancelled) {\n          setItems(result.items);\n          setTotalPages(result.pagination.totalPages);\n        }\n      })\n      .catch((err) => {\n        if (!isCancelled) {\n          setError(err instanceof ApiError ? err.message : fallbackError);\n        }\n      })\n      .finally(() => {\n        if (!isCancelled) {\n          setIsLoading(false);\n        }\n      });\n\n    return () => {\n      isCancelled = true;\n    };\n  }, [debouncedSearch, fallbackError, loader, page, refreshIndex]);\n\n  return {\n    items,\n    page,\n    totalPages,\n    search,\n    setSearch: handleSearchChange,\n    isLoading,\n    error,\n    setPage,\n    refetch,\n  };\n}\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-management\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-refunds\\actions\\refundApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-refunds\\components\\AdminRefundsPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-refunds\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-revenue\\actions\\adminRevenueApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-revenue\\components\\AdminRevenuePage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-revenue\\components\\__tests__\\AdminRevenuePage.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-revenue\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-sports\\actions\\__mocks__\\sportsApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-sports\\actions\\sportsApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-sports\\components\\AdminSportsPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-sports\\components\\IconPicker.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 52,
+        "column": 11,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 52,
+        "endColumn": 81,
+        "suppressions": [
+          { "kind": "directive", "justification": "local object URL preview, never uploaded as-is" }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-sports\\components\\IconUpload.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 30,
+        "column": 11,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 30,
+        "endColumn": 81,
+        "suppressions": [
+          { "kind": "directive", "justification": "arbitrary Cloudinary-hosted icon" }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-sports\\components\\SportsFilters.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-sports\\components\\SportsFormModal.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-sports\\components\\SportsTable.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 33,
+        "column": 11,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 33,
+        "endColumn": 82,
+        "suppressions": [
+          { "kind": "directive", "justification": "arbitrary Cloudinary-hosted icon" }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-sports\\hooks\\useIconUpload.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-sports\\hooks\\useSportsForm.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-sports\\hooks\\useSportsList.ts",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\nD:\\Brototype files\\turfhub-project\\frontend\\features\\admin-sports\\hooks\\useSportsList.ts:58:10\n  56 |     // etc.) exists in this codebase yet, so isLoading/items are set directly from here.\n  57 |     // eslint-disable-next-line react-hooks/set-state-in-effect -- see comment above\n> 58 |     void fetchList();\n     |          ^^^^^^^^^ Avoid calling setState() directly within an effect\n  59 |   }, [fetchList]);\n  60 |\n  61 |   return {",
+        "line": 58,
+        "column": 10,
+        "nodeType": null,
+        "endLine": 58,
+        "endColumn": 19,
+        "suppressions": [{ "kind": "directive", "justification": "see comment above" }]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-sports\\hooks\\useToggleSportsListed.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-sports\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-sports\\schema\\sportsFormSchema.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-sports\\types\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-turf-applications\\actions\\__mocks__\\turfApplicationsAdminApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-turf-applications\\actions\\turfApplicationsAdminApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-turf-applications\\components\\AdminTurfApplicationsPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-turf-applications\\components\\ApplicationReviewModal.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-turf-applications\\components\\TurfApplicationsFilters.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-turf-applications\\components\\TurfApplicationsTable.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-turf-applications\\components\\__tests__\\ApplicationReviewModal.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-turf-applications\\hooks\\useReviewApplication.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-turf-applications\\hooks\\useTurfApplicationsList.ts",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\nD:\\Brototype files\\turfhub-project\\frontend\\features\\admin-turf-applications\\hooks\\useTurfApplicationsList.ts:50:10\n  48 |     // etc.) exists in this codebase yet, so isLoading/items are set directly from here.\n  49 |     // eslint-disable-next-line react-hooks/set-state-in-effect -- see comment above\n> 50 |     void fetchList();\n     |          ^^^^^^^^^ Avoid calling setState() directly within an effect\n  51 |   }, [fetchList]);\n  52 |\n  53 |   return {",
+        "line": 50,
+        "column": 10,
+        "nodeType": null,
+        "endLine": 50,
+        "endColumn": 19,
+        "suppressions": [{ "kind": "directive", "justification": "see comment above" }]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-turf-applications\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-withdrawals\\actions\\withdrawalRequestsApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-withdrawals\\components\\AdminWithdrawalRequestsPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\admin-withdrawals\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\bookings\\actions\\bookingApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\bookings\\components\\BookingDetailsPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\bookings\\components\\MyBookingsPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\bookings\\components\\OwnerBookingsPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\bookings\\components\\__tests__\\MyBookingsPage.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\bookings\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\change-password\\actions\\__mocks__\\changePasswordApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\change-password\\actions\\changePasswordApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\change-password\\components\\ChangePasswordForm.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\change-password\\components\\__tests__\\ChangePasswordForm.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\change-password\\hooks\\__tests__\\useChangePassword.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\change-password\\hooks\\useChangePassword.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\change-password\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\change-password\\lib\\__tests__\\passwordRules.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\change-password\\lib\\passwordRules.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\change-password\\schema\\changePasswordSchema.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\change-password\\types\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\court-management\\actions\\courtApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\court-management\\components\\CourtDetailsPage.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 403,
+        "column": 7,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 407,
+        "endColumn": 9,
+        "suppressions": [{ "kind": "directive", "justification": "owner-hosted court image" }]
+      },
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 420,
+        "column": 15,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 420,
+        "endColumn": 80,
+        "suppressions": [{ "kind": "directive", "justification": "owner-hosted court image" }]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\court-management\\components\\CourtFormModal.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\court-management\\components\\CourtManagementPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\court-management\\components\\CourtsTable.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 36,
+        "column": 17,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 36,
+        "endColumn": 90,
+        "suppressions": [{ "kind": "directive", "justification": "user-hosted court image" }]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\court-management\\hooks\\useCourts.ts",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\nD:\\Brototype files\\turfhub-project\\frontend\\features\\court-management\\hooks\\useCourts.ts:48:10\n  46 |   useEffect(() => {\n  47 |     // eslint-disable-next-line react-hooks/set-state-in-effect -- list data is loaded without a query library\n> 48 |     void refetch();\n     |          ^^^^^^^ Avoid calling setState() directly within an effect\n  49 |   }, [refetch]);\n  50 |\n  51 |   return {",
+        "line": 48,
+        "column": 10,
+        "nodeType": null,
+        "endLine": 48,
+        "endColumn": 17,
+        "suppressions": [
+          { "kind": "directive", "justification": "list data is loaded without a query library" }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\court-management\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\court-management\\lib\\__tests__\\courtSchema.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\court-management\\types\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\discord-auth\\actions\\discordAuthApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\discord-auth\\components\\DiscordAuthSection.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\discord-auth\\hooks\\useDiscordAuth.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\discord-auth\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\favorites\\actions\\favoriteApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\favorites\\components\\FavoritesPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\favorites\\hooks\\useFavoriteTurf.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\favorites\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\forgot-password\\actions\\__mocks__\\forgotPasswordApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\forgot-password\\actions\\forgotPasswordApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\forgot-password\\components\\ForgotPasswordForm.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\forgot-password\\components\\__tests__\\ForgotPasswordForm.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\forgot-password\\hooks\\__tests__\\useForgotPassword.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\forgot-password\\hooks\\useForgotPassword.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\forgot-password\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\forgot-password\\schema\\forgotPasswordSchema.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\forgot-password\\types\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\google-auth\\actions\\__mocks__\\googleAuthApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\google-auth\\actions\\googleAuthApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\google-auth\\components\\GoogleAuthSection.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\google-auth\\components\\__tests__\\GoogleAuthSection.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\google-auth\\hooks\\__tests__\\useGoogleAuth.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\google-auth\\hooks\\useGoogleAuth.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\google-auth\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\home\\actions\\homeApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\home\\components\\AllTurfsPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\home\\components\\BannerCarousel.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 30,
+        "column": 7,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 34,
+        "endColumn": 9,
+        "suppressions": [
+          { "kind": "directive", "justification": "remote admin-managed Cloudinary URL" }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\home\\components\\CitySearch.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\home\\components\\NearbyTurfs.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 94,
+        "column": 13,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 98,
+        "endColumn": 15,
+        "suppressions": [{ "kind": "directive", "justification": "remote turf image" }]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\home\\components\\PublicCourtCard.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 32,
+        "column": 13,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 32,
+        "endColumn": 88,
+        "suppressions": [{ "kind": "directive", "justification": "remote court image" }]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\home\\components\\PublicCourtDetailsPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\home\\components\\TurfDetailPage.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 176,
+        "column": 11,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 176,
+        "endColumn": 84,
+        "suppressions": [{ "kind": "directive", "justification": "remote user-managed turf image" }]
+      },
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 193,
+        "column": 15,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 197,
+        "endColumn": 17,
+        "suppressions": [
+          { "kind": "directive", "justification": "remote user-managed turf thumbnail" }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\home\\components\\TurfFilters.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\home\\components\\TurfLocationMap.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "severity": 2,
+        "message": "Unexpected any. Specify a different type.",
+        "line": 24,
+        "column": 26,
+        "nodeType": "TSAnyKeyword",
+        "messageId": "unexpectedAny",
+        "endLine": 24,
+        "endColumn": 29,
+        "suggestions": [
+          {
+            "messageId": "suggestUnknown",
+            "fix": { "range": [919, 922], "text": "unknown" },
+            "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+          },
+          {
+            "messageId": "suggestNever",
+            "fix": { "range": [919, 922], "text": "never" },
+            "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+          }
+        ],
+        "suppressions": [{ "kind": "directive", "justification": "SDK map types are incomplete" }]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\home\\components\\__tests__\\BannerCarousel.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\home\\components\\__tests__\\NearbyTurfs.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\home\\components\\__tests__\\PublicCourtCard.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\home\\components\\__tests__\\TurfFilters.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\home\\hooks\\usePublicCourtDetails.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\home\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\login\\actions\\__mocks__\\loginApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\login\\actions\\loginApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\login\\components\\LoginForm.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\login\\hooks\\__tests__\\useLogin.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\login\\hooks\\useLogin.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\login\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\login\\schema\\loginSchema.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\login\\types\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\notifications\\actions\\notificationApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\notifications\\components\\NotificationDropdown.tsx",
+    "messages": [
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\nD:\\Brototype files\\turfhub-project\\frontend\\features\\notifications\\components\\NotificationDropdown.tsx:45:5\n  43 |\n  44 |     let isCancelled = false;\n> 45 |     setLoading(true);\n     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect\n  46 |     setError('');\n  47 |\n  48 |     listNotifications(filter)",
+        "line": 45,
+        "column": 5,
+        "nodeType": null,
+        "endLine": 45,
+        "endColumn": 15
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 1,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "'use client';\n\nimport { useEffect, useMemo, useState } from 'react';\nimport Link from 'next/link';\nimport { Check, X } from 'lucide-react';\nimport { io, type Socket } from 'socket.io-client';\nimport type { NotificationDTO, NotificationFilter } from '@turfhood/shared';\nimport { Badge, Button, Spinner } from '@/components/ui';\nimport { cn } from '@/lib/utils';\nimport { listNotifications, markNotificationRead } from '../actions/notificationApi';\n\ninterface NotificationSocketPayload {\n  notification: NotificationDTO;\n  unreadCount: number;\n}\n\ninterface NotificationDropdownProps {\n  open: boolean;\n  onClose: () => void;\n}\n\nfunction socketUrl(): string | undefined {\n  const base = process.env.NEXT_PUBLIC_API_BASE_URL;\n  if (!base) return undefined;\n  try {\n    const parsed = new URL(base);\n    return parsed.origin;\n  } catch {\n    return undefined;\n  }\n}\n\nexport function NotificationDropdown({ open, onClose }: NotificationDropdownProps) {\n  const [filter, setFilter] = useState<NotificationFilter>('all');\n  const [items, setItems] = useState<NotificationDTO[]>([]);\n  const [unreadCount, setUnreadCount] = useState(0);\n  const [loading, setLoading] = useState(false);\n  const [updatingId, setUpdatingId] = useState<string>();\n  const [error, setError] = useState('');\n\n  useEffect(() => {\n    if (!open) return;\n\n    let isCancelled = false;\n    setLoading(true);\n    setError('');\n\n    listNotifications(filter)\n      .then((result) => {\n        if (!isCancelled) {\n          setItems(result.items);\n          setUnreadCount(result.unreadCount);\n        }\n      })\n      .catch(() => {\n        if (!isCancelled) {\n          setError('Unable to load notifications.');\n        }\n      })\n      .finally(() => {\n        if (!isCancelled) {\n          setLoading(false);\n        }\n      });\n\n    return () => {\n      isCancelled = true;\n    };\n  }, [filter, open]);\n\n  useEffect(() => {\n    const url = socketUrl();\n    if (!url) return;\n    const socket: Socket = io(url, { withCredentials: true, transports: ['websocket'] });\n    socket.on('notification:new', (payload: NotificationSocketPayload) => {\n      setUnreadCount(payload.unreadCount);\n      setItems((current) => {\n        if (filter === 'read' || current.some((item) => item.id === payload.notification.id)) {\n          return current;\n        }\n        return [payload.notification, ...current].slice(0, 10);\n      });\n    });\n    return () => {\n      socket.disconnect();\n    };\n  }, [filter]);\n\n  const tabs = useMemo(\n    () => [\n      { value: 'all' as const, label: 'All' },\n      { value: 'read' as const, label: 'Read' },\n    ],\n    [],\n  );\n\n  const markRead = async (notification: NotificationDTO) => {\n    setUpdatingId(notification.id);\n    try {\n      const updated = await markNotificationRead(notification.id);\n      setItems((current) =>\n        filter === 'read'\n          ? current.map((item) => (item.id === updated.id ? updated : item))\n          : current.map((item) => (item.id === updated.id ? updated : item)),\n      );\n      if (!notification.readAt) setUnreadCount((current) => Math.max(0, current - 1));\n    } finally {\n      setUpdatingId(undefined);\n    }\n  };\n\n  if (!open) return null;\n\n  return (\n    <div className=\"absolute right-0 z-30 mt-2 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-lg border border-border bg-card shadow-xl\">\n      <div className=\"flex items-center justify-between border-b border-border px-4 py-3\">\n        <div>\n          <p className=\"font-semibold\">Notifications</p>\n          <p className=\"text-xs text-muted-foreground\">{unreadCount} unread</p>\n        </div>\n        <button\n          type=\"button\"\n          aria-label=\"Close notifications\"\n          onClick={onClose}\n          className=\"rounded-md p-1 text-muted-foreground hover:bg-muted hover:text-foreground\"\n        >\n          <X className=\"h-4 w-4\" />\n        </button>\n      </div>\n      <div className=\"flex gap-2 border-b border-border px-4 py-3\">\n        {tabs.map((tab) => (\n          <Button\n            key={tab.value}\n            type=\"button\"\n            size=\"sm\"\n            variant={filter === tab.value ? 'primary' : 'outline'}\n            onClick={() => setFilter(tab.value)}\n          >\n            {tab.label}\n          </Button>\n        ))}\n      </div>\n      <div className=\"max-h-96 overflow-y-auto\">\n        {loading ? (\n          <div className=\"flex min-h-40 items-center justify-center\">\n            <Spinner />\n          </div>\n        ) : error ? (\n          <p role=\"alert\" className=\"px-4 py-8 text-center text-sm text-destructive\">\n            {error}\n          </p>\n        ) : items.length === 0 ? (\n          <p className=\"px-4 py-8 text-center text-sm text-muted-foreground\">\n            No notifications found.\n          </p>\n        ) : (\n          <div className=\"divide-y divide-border\">\n            {items.map((notification) => (\n              <div key={notification.id} className=\"px-4 py-3\">\n                <div className=\"flex items-start justify-between gap-3\">\n                  <Link\n                    href={notification.link ?? '#'}\n                    onClick={onClose}\n                    className=\"min-w-0 flex-1\"\n                  >\n                    <div className=\"flex items-center gap-2\">\n                      <p className=\"truncate text-sm font-semibold\">{notification.title}</p>\n                      {!notification.readAt && <Badge variant=\"warning\">New</Badge>}\n                    </div>\n                    <p className=\"mt-1 text-sm leading-5 text-muted-foreground\">\n                      {notification.message}\n                    </p>\n                    <p className=\"mt-2 text-xs text-muted-foreground\">\n                      {new Date(notification.createdAt).toLocaleString('en-IN', {\n                        dateStyle: 'medium',\n                        timeStyle: 'short',\n                      })}\n                    </p>\n                  </Link>\n                  {!notification.readAt && filter === 'all' && (\n                    <button\n                      type=\"button\"\n                      aria-label={`Mark ${notification.title} as read`}\n                      disabled={updatingId === notification.id}\n                      onClick={() => void markRead(notification)}\n                      className={cn(\n                        'mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border text-muted-foreground hover:bg-muted hover:text-foreground disabled:opacity-50',\n                      )}\n                    >\n                      <Check className=\"h-4 w-4\" />\n                    </button>\n                  )}\n                </div>\n              </div>\n            ))}\n          </div>\n        )}\n      </div>\n    </div>\n  );\n}\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\notifications\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\open-sessions\\actions\\openSessionApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\open-sessions\\components\\OpenSessionCard.tsx",
+    "messages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 13,
+        "column": 13,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 17,
+        "endColumn": 15
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import Link from 'next/link';\nimport { Calendar, MapPin, Users } from 'lucide-react';\nimport type { OpenSessionDTO } from '@turfhood/shared';\nimport { Card, CardContent } from '@/components/ui';\nimport { formatTime12Hour } from '@/lib/time';\n\nexport function OpenSessionCard({ session }: { session: OpenSessionDTO }) {\n  return (\n    <Link href={`/open-sessions/${session.id}`}>\n      <Card className=\"h-full overflow-hidden transition hover:border-primary\">\n        <div className=\"h-44 bg-muted\">\n          {session.courtImage ? (\n            <img\n              src={session.courtImage}\n              alt={session.courtName}\n              className=\"h-full w-full object-cover\"\n            />\n          ) : null}\n        </div>\n        <CardContent className=\"space-y-3 py-4\">\n          <div>\n            <p className=\"text-sm font-medium text-primary\">{session.sportName}</p>\n            <h2 className=\"text-lg font-semibold\">\n              {session.turfName} - {session.courtName}\n            </h2>\n          </div>\n          <p className=\"flex items-center gap-2 text-sm\">\n            <Calendar className=\"h-4 w-4\" />\n            {new Date(`${session.bookingDate}T00:00:00`).toLocaleDateString('en-IN')} at{' '}\n            {formatTime12Hour(session.startTime)}\n          </p>\n          <p className=\"flex items-center gap-2 text-sm\">\n            <Users className=\"h-4 w-4\" />\n            {session.joinedPlayers} joined · {session.maximumPlayers - session.joinedPlayers} spots\n            left\n          </p>\n          <p className=\"flex items-center gap-2 truncate text-sm text-muted-foreground\">\n            <MapPin className=\"h-4 w-4 shrink-0\" />\n            {session.address}\n          </p>\n          <p className=\"text-lg font-bold\">\n            ₹{(session.pricePerParticipantPaise / 100).toFixed(2)}{' '}\n            <span className=\"text-sm font-normal text-muted-foreground\">per player</span>\n          </p>\n        </CardContent>\n      </Card>\n    </Link>\n  );\n}\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\open-sessions\\components\\OpenSessionDetailsPage.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 125,
+        "column": 15,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 129,
+        "endColumn": 17,
+        "suppressions": [{ "kind": "directive", "justification": "remote court image URL" }]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\open-sessions\\components\\OpenSessionFilters.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\open-sessions\\components\\OpenSessionsPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\open-sessions\\components\\OwnerOpenSessionsPage.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 105,
+        "column": 13,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 109,
+        "endColumn": 15,
+        "suppressions": [
+          { "kind": "directive", "justification": "court images use deployment-specific CDN URLs" }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\open-sessions\\components\\SessionParticipants.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\open-sessions\\components\\__tests__\\OpenSessionCard.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\open-sessions\\components\\__tests__\\OpenSessionFilters.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\open-sessions\\components\\__tests__\\OwnerOpenSessionsPage.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\open-sessions\\components\\__tests__\\SessionParticipants.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\open-sessions\\hooks\\useOwnerOpenSessions.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\open-sessions\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\otp\\actions\\__mocks__\\otpApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\otp\\actions\\otpApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\otp\\components\\OtpDigitInput.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\otp\\components\\OtpForm.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\otp\\components\\ResendControl.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\otp\\components\\__tests__\\OtpDigitInput.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\otp\\components\\__tests__\\OtpForm.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\otp\\hooks\\__tests__\\useCountdown.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\otp\\hooks\\useCountdown.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\otp\\hooks\\useOtpVerification.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\otp\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\otp\\lib\\__tests__\\otpInput.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\otp\\lib\\otpInput.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\otp\\schema\\otpSchema.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\otp\\types\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\actions\\__mocks__\\profileApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\actions\\profileApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\components\\AvatarUpload.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\components\\ChangePasswordForm.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\components\\EmailChangeSection.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\components\\NameField.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\components\\PasswordSection.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\components\\PhoneField.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\components\\ProfileContent.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\components\\ProfileHeader.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\components\\ProfilePageClient.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\components\\SetPasswordForm.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\components\\__tests__\\EmailChangeSection.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\components\\__tests__\\NameField.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\components\\__tests__\\PasswordSection.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\components\\__tests__\\PhoneField.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\hooks\\useAvatarUpload.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\hooks\\useChangePassword.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\hooks\\useEmailChange.ts",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "react-hooks/purity",
+        "severity": 2,
+        "message": "Error: Cannot call impure function during render\n\n`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).\n\nD:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\hooks\\useEmailChange.ts:46:19\n  44 |       const result = await requestEmailChange({ newEmail });\n  45 |       // eslint-disable-next-line react-hooks/purity -- runs only on submit (post-await), never during render; matches useOtpVerification's resend().\n> 46 |       const now = Date.now();\n     |                   ^^^^^^^^^^ Cannot call impure function\n  47 |       setPendingEmail(newEmail);\n  48 |       setExpiresAt(now + result.expiresInSeconds * 1000);\n  49 |       setDigits(Array(OTP_LENGTH).fill(''));",
+        "line": 46,
+        "column": 19,
+        "nodeType": null,
+        "endLine": 46,
+        "endColumn": 29,
+        "suppressions": [
+          {
+            "kind": "directive",
+            "justification": "runs only on submit (post-await), never during render; matches useOtpVerification's resend()."
+          }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\hooks\\useProfile.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\hooks\\useSetPassword.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\hooks\\useUpdateName.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\hooks\\useUpdatePhone.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\lib\\__tests__\\validateAvatarFile.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\lib\\validateAvatarFile.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\schema\\changeEmailSchema.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\schema\\changePasswordSchema.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\schema\\setPasswordSchema.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\schema\\updateNameSchema.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\schema\\updatePhoneSchema.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\profile\\types\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\refunds\\components\\CustomerRefundsPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\refunds\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\reviews\\actions\\reviewApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\reviews\\components\\OwnerReviewsPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\reviews\\components\\ReviewList.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\reviews\\components\\StarRating.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\reviews\\components\\__tests__\\StarRating.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\reviews\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\signup\\actions\\__mocks__\\signUpApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\signup\\actions\\signUpApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\signup\\components\\SignUpForm.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\signup\\components\\__tests__\\SignUpForm.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\signup\\hooks\\useSignUp.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\signup\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\signup\\schema\\signUpSchema.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\signup\\types\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\actions\\__mocks__\\turfOnboardingApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\actions\\catalogApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\actions\\locationApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\actions\\turfOnboardingApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\components\\BecomeATurfOwnerContent.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\components\\CountryStateCityFields.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\components\\DocumentUpload.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\components\\LocationMapPicker.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "severity": 2,
+        "message": "Unexpected any. Specify a different type.",
+        "line": 43,
+        "column": 25,
+        "nodeType": "TSAnyKeyword",
+        "messageId": "unexpectedAny",
+        "endLine": 43,
+        "endColumn": 28,
+        "suggestions": [
+          {
+            "messageId": "suggestUnknown",
+            "fix": { "range": [1547, 1550], "text": "unknown" },
+            "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+          },
+          {
+            "messageId": "suggestNever",
+            "fix": { "range": [1547, 1550], "text": "never" },
+            "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+          }
+        ],
+        "suppressions": [
+          {
+            "kind": "directive",
+            "justification": "olamaps-web-sdk's public types are largely untyped (`any`)"
+          }
+        ]
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "severity": 2,
+        "message": "Unexpected any. Specify a different type.",
+        "line": 45,
+        "column": 28,
+        "nodeType": "TSAnyKeyword",
+        "messageId": "unexpectedAny",
+        "endLine": 45,
+        "endColumn": 31,
+        "suggestions": [
+          {
+            "messageId": "suggestUnknown",
+            "fix": { "range": [1664, 1667], "text": "unknown" },
+            "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+          },
+          {
+            "messageId": "suggestNever",
+            "fix": { "range": [1664, 1667], "text": "never" },
+            "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+          }
+        ],
+        "suppressions": [{ "kind": "directive", "justification": "see above" }]
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "severity": 2,
+        "message": "Unexpected any. Specify a different type.",
+        "line": 47,
+        "column": 29,
+        "nodeType": "TSAnyKeyword",
+        "messageId": "unexpectedAny",
+        "endLine": 47,
+        "endColumn": 32,
+        "suggestions": [
+          {
+            "messageId": "suggestUnknown",
+            "fix": { "range": [1782, 1785], "text": "unknown" },
+            "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+          },
+          {
+            "messageId": "suggestNever",
+            "fix": { "range": [1782, 1785], "text": "never" },
+            "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+          }
+        ],
+        "suppressions": [{ "kind": "directive", "justification": "see above" }]
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "severity": 2,
+        "message": "Unexpected any. Specify a different type.",
+        "line": 113,
+        "column": 19,
+        "nodeType": "TSAnyKeyword",
+        "messageId": "unexpectedAny",
+        "endLine": 113,
+        "endColumn": 22,
+        "suggestions": [
+          {
+            "messageId": "suggestUnknown",
+            "fix": { "range": [3984, 3987], "text": "unknown" },
+            "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+          },
+          {
+            "messageId": "suggestNever",
+            "fix": { "range": [3984, 3987], "text": "never" },
+            "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+          }
+        ],
+        "suppressions": [{ "kind": "directive", "justification": "see above" }]
+      },
+      {
+        "ruleId": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useEffect has missing dependencies: 'placeMarkerAt' and 'value'. Either include them or remove the dependency array.",
+        "line": 142,
+        "column": 6,
+        "nodeType": "ArrayExpression",
+        "endLine": 142,
+        "endColumn": 14,
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [apiKey, placeMarkerAt, value]",
+            "fix": { "range": [4986, 4994], "text": "[apiKey, placeMarkerAt, value]" }
+          }
+        ],
+        "suppressions": [
+          {
+            "kind": "directive",
+            "justification": "initializes the map once per mount; `value`/`onChange` only seed the initial state"
+          }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\components\\MyTurfsPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\components\\TurfCard.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 32,
+        "column": 11,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 32,
+        "endColumn": 96,
+        "suppressions": [
+          { "kind": "directive", "justification": "no next/image usage elsewhere in this repo" }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\components\\TurfDetailModal.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\components\\TurfImageUpload.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 124,
+        "column": 15,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 124,
+        "endColumn": 97,
+        "suppressions": [
+          { "kind": "directive", "justification": "local object URL preview, never uploaded as-is" }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\components\\TurfOnboardingWizard.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\components\\TurfOwnerInfoPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\components\\__tests__\\BecomeATurfOwnerContent.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\components\\__tests__\\CountryStateCityFields.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\components\\__tests__\\LocationMapPicker.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\components\\__tests__\\MyTurfsPage.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\components\\__tests__\\TurfCard.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\hooks\\useMyApplication.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\hooks\\useMyApplications.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\hooks\\useTurfOnboardingWizard.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\lib\\__tests__\\cropImageToBlob.test.ts",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "severity": 2,
+        "message": "Unexpected any. Specify a different type.",
+        "line": 23,
+        "column": 33,
+        "nodeType": "TSAnyKeyword",
+        "messageId": "unexpectedAny",
+        "endLine": 23,
+        "endColumn": 36,
+        "suggestions": [
+          {
+            "messageId": "suggestUnknown",
+            "fix": { "range": [802, 805], "text": "unknown" },
+            "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+          },
+          {
+            "messageId": "suggestNever",
+            "fix": { "range": [802, 805], "text": "never" },
+            "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+          }
+        ],
+        "suppressions": [
+          { "kind": "directive", "justification": "test stub for the DOM Image constructor" }
+        ]
+      },
+      {
+        "ruleId": "@typescript-eslint/no-explicit-any",
+        "severity": 2,
+        "message": "Unexpected any. Specify a different type.",
+        "line": 66,
+        "column": 36,
+        "nodeType": "TSAnyKeyword",
+        "messageId": "unexpectedAny",
+        "endLine": 66,
+        "endColumn": 39,
+        "suggestions": [
+          {
+            "messageId": "suggestUnknown",
+            "fix": { "range": [2206, 2209], "text": "unknown" },
+            "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+          },
+          {
+            "messageId": "suggestNever",
+            "fix": { "range": [2206, 2209], "text": "never" },
+            "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+          }
+        ],
+        "suppressions": [
+          { "kind": "directive", "justification": "test stub for the DOM Image constructor" }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\lib\\__tests__\\validateCoordinates.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\lib\\__tests__\\validateDocumentFile.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\lib\\__tests__\\validateSportsSelection.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\lib\\__tests__\\validateTurfDetails.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\lib\\__tests__\\validateTurfImages.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\lib\\cropImageToBlob.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\lib\\searchLocation.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\lib\\turfApplicationStatusCopy.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\lib\\validateCoordinates.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\lib\\validateDocumentFile.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\lib\\validateSportsSelection.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\lib\\validateTurfDetails.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\lib\\validateTurfImages.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-onboarding\\types\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-portal\\actions\\ownerDashboardApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-portal\\actions\\ownerPayoutApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-portal\\actions\\ownerRevenueApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-portal\\actions\\ownerTurfApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-portal\\components\\OwnerDashboardPage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-portal\\components\\OwnerRevenuePage.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-portal\\components\\OwnerTurfManagementPage.tsx",
+    "messages": [],
+    "suppressedMessages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 286,
+        "column": 13,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 290,
+        "endColumn": 15,
+        "suppressions": [
+          { "kind": "directive", "justification": "turf images use deployment-specific CDN URLs" }
+        ]
+      },
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 320,
+        "column": 19,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 324,
+        "endColumn": 21,
+        "suppressions": [
+          { "kind": "directive", "justification": "turf images use deployment-specific CDN URLs" }
+        ]
+      },
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 381,
+        "column": 17,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 385,
+        "endColumn": 19,
+        "suppressions": [
+          { "kind": "directive", "justification": "turf images use deployment-specific CDN URLs" }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-portal\\components\\TurfPortalHeader.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-portal\\components\\TurfPortalShell.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-portal\\components\\TurfPortalSidebar.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-portal\\components\\__tests__\\OwnerDashboardPage.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-portal\\components\\__tests__\\OwnerRevenuePage.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-portal\\hooks\\useOwnerDashboard.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-portal\\hooks\\useOwnerRevenue.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-portal\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\features\\turf-portal\\lib\\exportRevenuePdf.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\hooks\\useCurrentUser.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\jest.config.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\jest.setup.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\lib\\__tests__\\olaMapStyle.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\lib\\__tests__\\time.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\lib\\apiRoutes.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\lib\\auth\\__mocks__\\logoutApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\lib\\auth\\__tests__\\routeGuard.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\lib\\auth\\__tests__\\session.test.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\lib\\auth\\logoutApi.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\lib\\auth\\routeGuard.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\lib\\auth\\session.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\lib\\axios.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\lib\\olaMapStyle.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\lib\\time.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\lib\\utils.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\lib\\validateImageFile.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\next.config.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\postcss.config.mjs",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\providers\\UserSessionProvider.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\proxy.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\styles\\tokens.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\test\\fixtures\\profile.fixture.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\test\\fixtures\\signup.fixture.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\test\\test-utils.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\Brototype files\\turfhub-project\\frontend\\types\\api\\response.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  }
+]

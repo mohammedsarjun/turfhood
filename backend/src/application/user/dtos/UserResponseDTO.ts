@@ -9,6 +9,7 @@ export interface UserResponseDTO {
   roles: UserRole[];
   isVerified: boolean;
   status: UserStatus;
+  suspensionReason?: string;
   createdAt: Date;
   avatarUrl?: string;
   hasPassword: boolean;

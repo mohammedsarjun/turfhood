@@ -10,7 +10,11 @@ import type {
 
 export interface IManagePayoutsUseCase {
   getOwnerOverview(ownerId: string, portalTurfId: string): Promise<PayoutOverviewDTO>;
-  addBankAccount(ownerId: string, input: CreateBankAccountRequest): Promise<BankAccountDTO>;
+  addBankAccount(
+    ownerId: string,
+    portalTurfId: string,
+    input: CreateBankAccountRequest,
+  ): Promise<BankAccountDTO>;
   requestWithdrawal(
     ownerId: string,
     portalTurfId: string,

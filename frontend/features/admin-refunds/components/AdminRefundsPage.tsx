@@ -123,7 +123,14 @@ export function AdminRefundsPage() {
           </Card>
         ))}
       </div>
-      {!loading && <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />}
+      {!loading && (
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+          hidden={items.length === 0}
+        />
+      )}
     </div>
   );
 }

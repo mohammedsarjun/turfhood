@@ -3,10 +3,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { SlidersHorizontal } from 'lucide-react';
 import type { OpenSessionDTO, PaginationMeta } from '@turfhood/shared';
-import { Header } from '@/components/shared';
+import { PublicHeader } from '@/components/shared';
 import { Pagination } from '@/components/table';
 import { Button, Spinner, useToast } from '@/components/ui';
-import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { listOpenSessions } from '../actions/openSessionApi';
 import { OpenSessionCard } from './OpenSessionCard';
 import { OpenSessionFilters, type OpenSessionFilterValues } from './OpenSessionFilters';
@@ -14,7 +13,6 @@ import { OpenSessionFilters, type OpenSessionFilterValues } from './OpenSessionF
 const PAGE_SIZE = 9;
 
 export function OpenSessionsPage() {
-  const { user, clearUser } = useCurrentUser();
   const { showToast } = useToast();
   const [filters, setFilters] = useState<OpenSessionFilterValues>({});
   const [items, setItems] = useState<OpenSessionDTO[]>([]);
@@ -64,7 +62,7 @@ export function OpenSessionsPage() {
 
   return (
     <>
-      <Header userName={user?.name} avatarUrl={user?.avatarUrl} onLoggedOut={clearUser} />
+      <PublicHeader />
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
         <div className="mb-6 flex items-center justify-between gap-4">
           <div>
@@ -108,6 +106,7 @@ export function OpenSessionsPage() {
                   page={pagination.page}
                   totalPages={pagination.totalPages}
                   onPageChange={changePage}
+                  hidden={items.length === 0}
                 />
               </>
             ) : (

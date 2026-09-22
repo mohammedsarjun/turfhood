@@ -272,6 +272,7 @@ export function AdminRevenuePage() {
                   void fetchReport(data.range.startDate, data.range.endDate, page)
                 }
                 disabled={loading}
+                hidden={data.transactions.length === 0}
               />
             )}
             {!data.transactions.length && (

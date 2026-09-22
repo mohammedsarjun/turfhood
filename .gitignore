@@ -1,1 +1,29 @@
-node_modules/
+# dependencies
+/node_modules
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+.pnpm-debug.log
+
+# testing
+/coverage
+test_output*.txt
+jest_out.txt
+
+# next.js
+.next/
+/out/
+build/
+dist/
+
+# Env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Misc
+.DS_Store
+*.pem
+

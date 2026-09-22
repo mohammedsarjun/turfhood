@@ -1,14 +1,10 @@
 import 'reflect-metadata';
 import { container } from 'tsyringe';
-import type { IBannerRepository } from '@domain/banner/repositories/IBannerRepository';
-import { BANNER_TOKENS } from '@domain/banner/tokens';
-import { BannerRepository } from '@infrastructure/banner/repositories/BannerRepository';
-import type { IManageBannersUseCase } from '@application/banner/use-cases/IManageBannersUseCase';
-import { ManageBannersUseCase } from '@application/banner/use-cases/ManageBannersUseCase';
 import type { IUserRepository } from '@domain/user/repositories/IUserRepository';
 import type { IPasswordHasher } from '@domain/user/services/IPasswordHasher';
 import type { ITokenService } from '@domain/user/services/ITokenService';
 import type { IGoogleAuthService } from '@domain/user/services/IGoogleAuthService';
+import type { IDiscordAuthService } from '@domain/user/services/IDiscordAuthService';
 import type { IFileStorageService } from '@domain/shared/services/IFileStorageService';
 import { SHARED_TOKENS } from '@domain/shared/tokens';
 import { USER_TOKENS } from '@domain/user/tokens';
@@ -16,6 +12,7 @@ import { UserRepository } from '@infrastructure/user/repositories/UserRepository
 import { BcryptPasswordHasher } from '@infrastructure/user/services/BcryptPasswordHasher';
 import { JwtTokenService } from '@infrastructure/user/services/JwtTokenService';
 import { GoogleAuthService } from '@infrastructure/user/services/GoogleAuthService';
+import { DiscordAuthService } from '@infrastructure/user/services/DiscordAuthService';
 import { CloudinaryFileStorageService } from '@infrastructure/shared/services/CloudinaryFileStorageService';
 import type { ISignUpUserUseCase } from '@application/user/use-cases/ISignUpUserUseCase';
 import { SignUpUserUseCase } from '@application/user/use-cases/SignUpUserUseCase';
@@ -25,6 +22,8 @@ import type { IGetCurrentUserUseCase } from '@application/user/use-cases/IGetCur
 import { GetCurrentUserUseCase } from '@application/user/use-cases/GetCurrentUserUseCase';
 import type { ILoginWithGoogleUseCase } from '@application/user/use-cases/ILoginWithGoogleUseCase';
 import { LoginWithGoogleUseCase } from '@application/user/use-cases/LoginWithGoogleUseCase';
+import type { ILoginWithDiscordUseCase } from '@application/user/use-cases/ILoginWithDiscordUseCase';
+import { LoginWithDiscordUseCase } from '@application/user/use-cases/LoginWithDiscordUseCase';
 import type { IUpdateNameUseCase } from '@application/user/use-cases/IUpdateNameUseCase';
 import { UpdateNameUseCase } from '@application/user/use-cases/UpdateNameUseCase';
 import type { IUpdatePhoneUseCase } from '@application/user/use-cases/IUpdatePhoneUseCase';
@@ -74,6 +73,10 @@ import type { IGetAdminDashboardUseCase } from '@application/admin/use-cases/IGe
 import { GetAdminDashboardUseCase } from '@application/admin/use-cases/GetAdminDashboardUseCase';
 import type { IGetAdminRevenueUseCase } from '@application/admin/use-cases/IGetAdminRevenueUseCase';
 import { GetAdminRevenueUseCase } from '@application/admin/use-cases/GetAdminRevenueUseCase';
+import type { IAdminManagementRepository } from '@domain/admin/repositories/IAdminManagementRepository';
+import { AdminManagementRepository } from '@infrastructure/admin/repositories/AdminManagementRepository';
+import type { IManageAdminResourcesUseCase } from '@application/admin/use-cases/IManageAdminResourcesUseCase';
+import { ManageAdminResourcesUseCase } from '@application/admin/use-cases/ManageAdminResourcesUseCase';
 import type { ISportsTypeRepository } from '@domain/sportsType/repositories/ISportsTypeRepository';
 import { SPORTS_TYPE_TOKENS } from '@domain/sportsType/tokens';
 import { SportsTypeRepository } from '@infrastructure/sportsType/repositories/SportsTypeRepository';
@@ -189,6 +192,12 @@ import { PAYOUT_TOKENS } from '@domain/payout/tokens';
 import { PayoutRepository } from '@infrastructure/payout/repositories/PayoutRepository';
 import type { IManagePayoutsUseCase } from '@application/payout/use-cases/IManagePayoutsUseCase';
 import { ManagePayoutsUseCase } from '@application/payout/use-cases/ManagePayoutsUseCase';
+import type { INotificationRepository } from '@domain/notification/repositories/INotificationRepository';
+import { NOTIFICATION_TOKENS } from '@domain/notification/tokens';
+import { NotificationRepository } from '@infrastructure/notification/repositories/NotificationRepository';
+import { NotificationSocketGateway } from '@infrastructure/notification/services/NotificationSocketGateway';
+import type { IManageNotificationsUseCase } from '@application/notification/use-cases/IManageNotificationsUseCase';
+import { ManageNotificationsUseCase } from '@application/notification/use-cases/ManageNotificationsUseCase';
 
 /** Composition root — wires domain interfaces to their infrastructure implementations. */
 container.register<IUserRepository>(USER_TOKENS.UserRepository, { useClass: UserRepository });
@@ -196,6 +205,9 @@ container.register<IPasswordHasher>(USER_TOKENS.PasswordHasher, { useClass: Bcry
 container.register<ITokenService>(USER_TOKENS.TokenService, { useClass: JwtTokenService });
 container.register<IGoogleAuthService>(USER_TOKENS.GoogleAuthService, {
   useClass: GoogleAuthService,
+});
+container.register<IDiscordAuthService>(USER_TOKENS.DiscordAuthService, {
+  useClass: DiscordAuthService,
 });
 container.register<IFileStorageService>(SHARED_TOKENS.FileStorageService, {
   useClass: CloudinaryFileStorageService,
@@ -209,6 +221,9 @@ container.register<IGetCurrentUserUseCase>(USER_TOKENS.GetCurrentUserUseCase, {
 });
 container.register<ILoginWithGoogleUseCase>(USER_TOKENS.LoginWithGoogleUseCase, {
   useClass: LoginWithGoogleUseCase,
+});
+container.register<ILoginWithDiscordUseCase>(USER_TOKENS.LoginWithDiscordUseCase, {
+  useClass: LoginWithDiscordUseCase,
 });
 container.register<IUpdateNameUseCase>(USER_TOKENS.UpdateNameUseCase, {
   useClass: UpdateNameUseCase,
@@ -274,6 +289,12 @@ container.register<IGetAdminDashboardUseCase>(ADMIN_TOKENS.DashboardUseCase, {
 });
 container.register<IGetAdminRevenueUseCase>(ADMIN_TOKENS.RevenueUseCase, {
   useClass: GetAdminRevenueUseCase,
+});
+container.register<IAdminManagementRepository>(ADMIN_TOKENS.ManagementRepository, {
+  useClass: AdminManagementRepository,
+});
+container.register<IManageAdminResourcesUseCase>(ADMIN_TOKENS.ManagementUseCase, {
+  useClass: ManageAdminResourcesUseCase,
 });
 container.register<ISportsTypeRepository>(SPORTS_TYPE_TOKENS.SportsTypeRepository, {
   useClass: SportsTypeRepository,
@@ -381,12 +402,6 @@ container.register<IRevokeRefreshTokenUseCase>(REFRESH_TOKEN_TOKENS.RevokeRefres
   useClass: RevokeRefreshTokenUseCase,
 });
 container.register<ICourtRepository>(COURT_TOKENS.CourtRepository, { useClass: CourtRepository });
-container.register<IBannerRepository>(BANNER_TOKENS.BannerRepository, {
-  useClass: BannerRepository,
-});
-container.register<IManageBannersUseCase>(BANNER_TOKENS.ManageBannersUseCase, {
-  useClass: ManageBannersUseCase,
-});
 container.register<ICreateCourtUseCase>(COURT_TOKENS.CreateCourtUseCase, {
   useClass: CreateCourtUseCase,
 });
@@ -431,6 +446,16 @@ container.register<IPayoutRepository>(PAYOUT_TOKENS.Repository, {
 });
 container.register<IManagePayoutsUseCase>(PAYOUT_TOKENS.UseCase, {
   useClass: ManagePayoutsUseCase,
+});
+container.registerSingleton<NotificationSocketGateway>(
+  NOTIFICATION_TOKENS.SocketGateway,
+  NotificationSocketGateway,
+);
+container.register<INotificationRepository>(NOTIFICATION_TOKENS.Repository, {
+  useClass: NotificationRepository,
+});
+container.register<IManageNotificationsUseCase>(NOTIFICATION_TOKENS.UseCase, {
+  useClass: ManageNotificationsUseCase,
 });
 
 export { container };

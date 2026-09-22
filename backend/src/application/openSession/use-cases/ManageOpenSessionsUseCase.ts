@@ -22,6 +22,8 @@ import { isOpenSessionPaymentExpired } from '@domain/openSession/services/OpenSe
 import type { ICommissionSettingRepository } from '@domain/commission/repositories/ICommissionSettingRepository';
 import { COMMISSION_TOKENS } from '@domain/commission/tokens';
 import { DEFAULT_COMMISSION_PERCENTAGE } from '@application/commission/constants';
+import type { IManageNotificationsUseCase } from '@application/notification/use-cases/IManageNotificationsUseCase';
+import { NOTIFICATION_TOKENS } from '@domain/notification/tokens';
 
 import type { IManageOpenSessionsUseCase } from './IManageOpenSessionsUseCase.js';
 
@@ -47,6 +49,8 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
     @inject(SPORTS_TYPE_TOKENS.SportsTypeRepository) private readonly sports: ISportsTypeRepository,
     @inject(COMMISSION_TOKENS.Repository)
     private readonly commissions: ICommissionSettingRepository,
+    @inject(NOTIFICATION_TOKENS.UseCase)
+    private readonly notifications: IManageNotificationsUseCase,
   ) {}
 
   async create(userId: string, input: CreateOpenSessionRequest) {
@@ -123,6 +127,24 @@ export class ManageOpenSessionsUseCase implements IManageOpenSessionsUseCase {
       fillDeadline: new Date(startsAt.getTime() - 48 * 60 * 60_000),
       creator: { name: user.name, transactionId },
     });
+    await this.notifications.create({
+      userId,
+      type: 'open_session_created',
+      title: 'Open session created',
+      message: `${sport.name} at ${turf.name} is scheduled for ${input.bookingDate} at ${input.startTime}.`,
+      link: `/open-sessions/${created.id}`,
+      dedupeKey: `open-session-created:${created.id}:creator`,
+    });
+    if (turf.ownerId !== userId) {
+      await this.notifications.create({
+        userId: turf.ownerId,
+        type: 'open_session_created',
+        title: 'Open session created at your turf',
+        message: `${user.name} created a ${sport.name} open session for ${court.name} on ${input.bookingDate}.`,
+        link: `/turf-portal/${turf.id ?? input.turfId}/open-sessions`,
+        dedupeKey: `open-session-created:${created.id}:owner`,
+      });
+    }
     return {
       session: created,
       payment: this.paymentForm(created, transactionId, user.name, user.email.toString()),

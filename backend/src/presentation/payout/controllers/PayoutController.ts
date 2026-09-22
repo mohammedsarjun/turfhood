@@ -28,7 +28,9 @@ export class PayoutController {
     try {
       const ownerId = (req as AuthenticatedRequest).user!.userId;
       const input = (req as ValidatedBankAccountRequest).validatedBankAccount!;
-      res.status(HttpStatus.CREATED).json(await this.payouts.addBankAccount(ownerId, input));
+      res
+        .status(HttpStatus.CREATED)
+        .json(await this.payouts.addBankAccount(ownerId, String(req.params.turfId), input));
     } catch (error) {
       next(error);
     }

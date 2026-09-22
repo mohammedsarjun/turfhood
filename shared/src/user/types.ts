@@ -1,6 +1,6 @@
 export type UserRole = 'customer' | 'admin' | 'turf_owner';
 export type UserStatus = 'active' | 'suspended' | 'deleted';
-export type AuthProvider = 'email' | 'phone_otp' | 'google';
+export type AuthProvider = 'email' | 'phone_otp' | 'google' | 'discord';
 
 /** Safe, outward-facing shape of a User — shared by every frontend/backend auth response. */
 export interface PublicUser {
@@ -11,6 +11,7 @@ export interface PublicUser {
   roles: UserRole[];
   isVerified: boolean;
   status: UserStatus;
+  suspensionReason?: string;
   createdAt: string;
   avatarUrl?: string;
   /** Whether a password is set on the account (false for Google-only accounts). */

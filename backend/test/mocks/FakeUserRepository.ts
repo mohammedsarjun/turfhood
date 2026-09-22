@@ -12,6 +12,8 @@ interface FakeUserRepositoryOptions {
   existingUserByPhone?: User | null;
   /** Returned by findByGoogleId(); set this to simulate "an account already linked to this Google id". */
   existingUserByGoogleId?: User | null;
+  /** Returned by findByDiscordId(); set this to simulate "an account already linked to this Discord id". */
+  existingUserByDiscordId?: User | null;
 }
 
 /**
@@ -25,6 +27,11 @@ export class FakeUserRepository implements IUserRepository {
   public readonly linkGoogleAccountCalls: Array<{
     userId: string;
     googleId: string;
+    avatarUrl?: string;
+  }> = [];
+  public readonly linkDiscordAccountCalls: Array<{
+    userId: string;
+    discordId: string;
     avatarUrl?: string;
   }> = [];
   public readonly createCalls: User[] = [];
@@ -53,6 +60,10 @@ export class FakeUserRepository implements IUserRepository {
     return this.options.existingUserByGoogleId ?? null;
   }
 
+  async findByDiscordId(): Promise<User | null> {
+    return this.options.existingUserByDiscordId ?? null;
+  }
+
   async create(user: User): Promise<User> {
     this.createCalls.push(user);
     return user;
@@ -68,6 +79,10 @@ export class FakeUserRepository implements IUserRepository {
 
   async linkGoogleAccount(userId: string, googleId: string, avatarUrl?: string): Promise<void> {
     this.linkGoogleAccountCalls.push({ userId, googleId, ...(avatarUrl ? { avatarUrl } : {}) });
+  }
+
+  async linkDiscordAccount(userId: string, discordId: string, avatarUrl?: string): Promise<void> {
+    this.linkDiscordAccountCalls.push({ userId, discordId, ...(avatarUrl ? { avatarUrl } : {}) });
   }
 
   async updateName(userId: string, name: string): Promise<void> {

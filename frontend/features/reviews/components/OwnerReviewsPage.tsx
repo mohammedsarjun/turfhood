@@ -43,7 +43,12 @@ export function OwnerReviewsPage({ turfId }: { turfId: string }) {
       </p>
       <div className="mt-6">{data && <ReviewList items={data.items} summary={data.summary} />}</div>
       {data && (
-        <Pagination page={page} totalPages={data.pagination.totalPages} onPageChange={setPage} />
+        <Pagination
+          page={page}
+          totalPages={data.pagination.totalPages}
+          onPageChange={setPage}
+          hidden={data.items.length === 0}
+        />
       )}
     </div>
   );

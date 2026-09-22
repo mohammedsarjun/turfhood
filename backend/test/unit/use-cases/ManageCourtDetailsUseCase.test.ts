@@ -66,6 +66,7 @@ function repositories() {
   const turfs: ITurfRepository = {
     create: async (input) => input,
     findOwnedByIdOrVerificationId: async () => turf,
+    findOwnedPortalByIdOrVerificationId: async () => turf,
   };
   return { courts, turfs };
 }

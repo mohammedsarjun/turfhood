@@ -2,13 +2,22 @@ import { Button } from '@/components/ui';
 
 export interface PaginationProps {
   disabled?: boolean;
+  hidden?: boolean;
   page: number;
   totalPages: number;
   onPageChange: (page: number) => void;
 }
 
 /** Simple prev/next pager shared by every admin list page. */
-export function Pagination({ page, totalPages, onPageChange, disabled = false }: PaginationProps) {
+export function Pagination({
+  page,
+  totalPages,
+  onPageChange,
+  disabled = false,
+  hidden = false,
+}: PaginationProps) {
+  if (hidden) return null;
+
   return (
     <div className="flex items-center justify-between" style={{ marginTop: 12 }}>
       <Button

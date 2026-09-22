@@ -3,7 +3,9 @@ import { axiosInstance } from '@/lib/axios';
 import { API_ROUTES } from '@/lib/apiRoutes';
 
 export async function listFavoriteIds() {
-  const response = await axiosInstance.get<FavoriteIdsResponse>(API_ROUTES.favorites.ids);
+  const response = await axiosInstance.get<FavoriteIdsResponse>(API_ROUTES.favorites.ids, {
+    skipAuthRedirect: true,
+  });
   return response.data.turfIds;
 }
 

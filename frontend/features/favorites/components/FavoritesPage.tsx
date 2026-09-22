@@ -52,6 +52,7 @@ export function FavoritesPage() {
               page={data.pagination.page}
               totalPages={data.pagination.totalPages}
               onPageChange={(page) => void load(page)}
+              hidden={data.items.length === 0}
             />
           </>
         ) : (

@@ -41,6 +41,11 @@ export class UserRepository implements IUserRepository {
     return doc ? this.toDomain(doc) : null;
   }
 
+  async findByDiscordId(discordId: string): Promise<User | null> {
+    const doc = await UserModel.findOne({ discordId }).select('+passwordHash');
+    return doc ? this.toDomain(doc) : null;
+  }
+
   async create(user: User): Promise<User> {
     try {
       const doc = await UserModel.create({
@@ -53,6 +58,7 @@ export class UserRepository implements IUserRepository {
         isVerified: user.isVerified,
         status: user.status,
         googleId: user.googleId,
+        discordId: user.discordId,
         avatarUrl: user.avatarUrl,
       });
       return this.toDomain(doc);
@@ -81,6 +87,16 @@ export class UserRepository implements IUserRepository {
       {
         $set: { googleId, ...(avatarUrl ? { avatarUrl } : {}) },
         $addToSet: { authProviders: 'google' },
+      },
+    );
+  }
+
+  async linkDiscordAccount(userId: string, discordId: string, avatarUrl?: string): Promise<void> {
+    await UserModel.updateOne(
+      { _id: userId },
+      {
+        $set: { discordId, ...(avatarUrl ? { avatarUrl } : {}) },
+        $addToSet: { authProviders: 'discord' },
       },
     );
   }
@@ -137,7 +153,9 @@ export class UserRepository implements IUserRepository {
       roles: doc.roles,
       isVerified: doc.isVerified,
       status: doc.status,
+      ...(doc.suspensionReason ? { suspensionReason: doc.suspensionReason } : {}),
       ...(doc.googleId ? { googleId: doc.googleId } : {}),
+      ...(doc.discordId ? { discordId: doc.discordId } : {}),
       ...(doc.avatarUrl ? { avatarUrl: doc.avatarUrl } : {}),
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,

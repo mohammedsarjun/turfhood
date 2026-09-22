@@ -20,6 +20,8 @@ export interface RevenueTransactionDTO {
 export interface TurfRevenueReportDTO {
   pagination?: import("../common/pagination.js").PaginationMeta;
   turfName: string;
+  isSuspended?: boolean;
+  suspensionReason?: string;
   selectedRange: {
     startDate: string;
     endDate: string;

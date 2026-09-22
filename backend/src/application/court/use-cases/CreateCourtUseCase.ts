@@ -5,6 +5,7 @@ import type { ITurfRepository } from '@domain/turf/repositories/ITurfRepository'
 import { TURF_TOKENS } from '@domain/turf/tokens';
 import type { ICourtRepository } from '@domain/court/repositories/ICourtRepository';
 import { COURT_TOKENS } from '@domain/court/tokens';
+import { TurfSuspendedError } from '@domain/turf/errors/TurfSuspendedError';
 import { CourtAccessError } from '@domain/court/errors/CourtAccessError';
 import { DuplicateCourtNameError } from '@domain/court/errors/DuplicateCourtNameError';
 
@@ -19,8 +20,12 @@ export class CreateCourtUseCase implements ICreateCourtUseCase {
   ) {}
 
   async execute(input: Parameters<ICreateCourtUseCase['execute']>[0]) {
-    const turf = await this.turfs.findOwnedByIdOrVerificationId(input.portalTurfId, input.ownerId);
+    const turf = await this.turfs.findOwnedPortalByIdOrVerificationId(
+      input.portalTurfId,
+      input.ownerId,
+    );
     if (!turf?.id) throw new CourtAccessError();
+    if (turf.status === 'suspended') throw new TurfSuspendedError(turf.suspensionReason);
     if (await this.courts.existsByName(turf.id, input.name)) {
       throw new DuplicateCourtNameError(input.name);
     }

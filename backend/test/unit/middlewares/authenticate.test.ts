@@ -12,6 +12,8 @@ import { TokenExpiredError } from '../../../src/domain/user/errors/TokenExpiredE
 import { TokenInvalidError } from '../../../src/domain/user/errors/TokenInvalidError.js';
 import { TokenMissingError } from '../../../src/domain/user/errors/TokenMissingError.js';
 import { env } from '../../../src/config/env.js';
+import { FakeUserRepository } from '../../mocks/FakeUserRepository.js';
+import { buildPersistedUser } from '../../fixtures/users.fixture.js';
 
 function buildRequest(options: {
   authorization?: string;
@@ -29,14 +31,17 @@ describe('authenticate middleware', () => {
 
   beforeEach(() => {
     container.register(USER_TOKENS.TokenService, { useValue: tokenService });
+    container.register(USER_TOKENS.UserRepository, {
+      useValue: new FakeUserRepository({ existingUserById: buildPersistedUser() }),
+    });
   });
 
   // HAPPY PATH: a valid Bearer token authenticates the request and calls next() with no error.
-  it('calls next() with no error and sets req.user for a valid Bearer token', () => {
+  it('calls next() with no error and sets req.user for a valid Bearer token', async () => {
     const req = buildRequest({ authorization: `Bearer ${validToken}` });
     let nextArg: unknown = 'not-called';
 
-    authenticate(req, {} as Response, (error) => {
+    await authenticate(req, {} as Response, (error) => {
       nextArg = error;
     });
 
@@ -45,11 +50,11 @@ describe('authenticate middleware', () => {
   });
 
   // HAPPY PATH: falls back to the accessToken cookie when there's no Authorization header.
-  it('calls next() with no error and sets req.user for a valid accessToken cookie', () => {
+  it('calls next() with no error and sets req.user for a valid accessToken cookie', async () => {
     const req = buildRequest({ cookies: { accessToken: validToken } });
     let nextArg: unknown = 'not-called';
 
-    authenticate(req, {} as Response, (error) => {
+    await authenticate(req, {} as Response, (error) => {
       nextArg = error;
     });
 
@@ -58,11 +63,11 @@ describe('authenticate middleware', () => {
   });
 
   // BRANCH UNDER TEST: no token anywhere on the request must be rejected before reaching the controller.
-  it('calls next(TokenMissingError) when no token is present', () => {
+  it('calls next(TokenMissingError) when no token is present', async () => {
     const req = buildRequest({});
     let nextArg: unknown = 'not-called';
 
-    authenticate(req, {} as Response, (error) => {
+    await authenticate(req, {} as Response, (error) => {
       nextArg = error;
     });
 
@@ -70,14 +75,14 @@ describe('authenticate middleware', () => {
   });
 
   // BRANCH UNDER TEST: an expired token is rejected with the specific expired error.
-  it('calls next(TokenExpiredError) for an expired token', () => {
+  it('calls next(TokenExpiredError) for an expired token', async () => {
     const token = jwt.sign({ userId: 'user_1', roles: ['customer'] }, env.JWT_SECRET, {
       expiresIn: -10,
     });
     const req = buildRequest({ authorization: `Bearer ${token}` });
     let nextArg: unknown = 'not-called';
 
-    authenticate(req, {} as Response, (error) => {
+    await authenticate(req, {} as Response, (error) => {
       nextArg = error;
     });
 
@@ -85,11 +90,11 @@ describe('authenticate middleware', () => {
   });
 
   // BRANCH UNDER TEST: a malformed token is rejected with the generic invalid error.
-  it('calls next(TokenInvalidError) for a malformed token', () => {
+  it('calls next(TokenInvalidError) for a malformed token', async () => {
     const req = buildRequest({ authorization: 'Bearer not-a-real-jwt' });
     let nextArg: unknown = 'not-called';
 
-    authenticate(req, {} as Response, (error) => {
+    await authenticate(req, {} as Response, (error) => {
       nextArg = error;
     });
 

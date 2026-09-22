@@ -7,6 +7,7 @@ import type { ISportsTypeRepository } from '@domain/sportsType/repositories/ISpo
 import { TURF_TOKENS } from '@domain/turf/tokens';
 import { COURT_TOKENS } from '@domain/court/tokens';
 import { SPORTS_TYPE_TOKENS } from '@domain/sportsType/tokens';
+import { TurfSuspendedError } from '@domain/turf/errors/TurfSuspendedError';
 import { AppError } from '@shared/errors/AppError';
 import { HttpStatus } from '@shared/constants/httpStatus';
 
@@ -22,8 +23,10 @@ export class GetTurfDetailsUseCase implements IGetTurfDetailsUseCase {
   ) {}
 
   async execute(turfId: string, page: number, limit: number): Promise<TurfDetailResponse> {
-    const turf = await this.turfs.findApprovedById(turfId);
+    const turf = await this.turfs.findById(turfId);
     if (!turf) throw new AppError('Turf not found.', HttpStatus.NOT_FOUND);
+    if (turf.status === 'suspended') throw new TurfSuspendedError(turf.suspensionReason);
+    if (turf.status !== 'approved') throw new AppError('Turf not found.', HttpStatus.NOT_FOUND);
     const [imageMap, courtResult, sportResult] = await Promise.all([
       this.images.findImageUrls([turfId]),
       this.courts.listPublic({ turfId, page, limit }),

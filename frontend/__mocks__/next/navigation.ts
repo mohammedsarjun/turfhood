@@ -15,3 +15,4 @@ export function useRouter() {
 
 // Tests set a return value with `usePathname.mockReturnValue('/admin/sports')`.
 export const usePathname = jest.fn(() => '/');
+export const useSearchParams = jest.fn(() => new URLSearchParams());

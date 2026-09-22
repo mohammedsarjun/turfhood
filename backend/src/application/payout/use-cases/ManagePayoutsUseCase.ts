@@ -10,6 +10,7 @@ import { PAYOUT_TOKENS } from '@domain/payout/tokens';
 import type { IPayoutRepository } from '@domain/payout/repositories/IPayoutRepository';
 import { TURF_TOKENS } from '@domain/turf/tokens';
 import type { ITurfRepository } from '@domain/turf/repositories/ITurfRepository';
+import { TurfSuspendedError } from '@domain/turf/errors/TurfSuspendedError';
 import { USER_TOKENS } from '@domain/user/tokens';
 import type { IUserRepository } from '@domain/user/repositories/IUserRepository';
 import { AppError } from '@shared/errors/AppError';
@@ -26,8 +27,9 @@ export class ManagePayoutsUseCase implements IManagePayoutsUseCase {
   ) {}
 
   async getOwnerOverview(ownerId: string, portalTurfId: string) {
-    const turf = await this.turfs.findOwnedByIdOrVerificationId(portalTurfId, ownerId);
+    const turf = await this.turfs.findOwnedPortalByIdOrVerificationId(portalTurfId, ownerId);
     if (!turf?.id) throw new AppError('Turf not found.', HttpStatus.NOT_FOUND);
+    if (turf.status === 'suspended') throw new TurfSuspendedError(turf.suspensionReason);
     const [bankAccounts, withdrawalRequests, completedEarnings, requestedAmount] =
       await Promise.all([
         this.payouts.listBankAccounts(ownerId),
@@ -42,7 +44,10 @@ export class ManagePayoutsUseCase implements IManagePayoutsUseCase {
     };
   }
 
-  async addBankAccount(ownerId: string, input: CreateBankAccountRequest) {
+  async addBankAccount(ownerId: string, portalTurfId: string, input: CreateBankAccountRequest) {
+    const turf = await this.turfs.findOwnedPortalByIdOrVerificationId(portalTurfId, ownerId);
+    if (!turf?.id) throw new AppError('Turf not found.', HttpStatus.NOT_FOUND);
+    if (turf.status === 'suspended') throw new TurfSuspendedError(turf.suspensionReason);
     return this.payouts.createBankAccount({
       ownerId,
       accountHolderName: input.accountHolderName.trim(),
@@ -54,8 +59,9 @@ export class ManagePayoutsUseCase implements IManagePayoutsUseCase {
   }
 
   async requestWithdrawal(ownerId: string, portalTurfId: string, input: CreateWithdrawalRequest) {
-    const turf = await this.turfs.findOwnedByIdOrVerificationId(portalTurfId, ownerId);
+    const turf = await this.turfs.findOwnedPortalByIdOrVerificationId(portalTurfId, ownerId);
     if (!turf?.id) throw new AppError('Turf not found.', HttpStatus.NOT_FOUND);
+    if (turf.status === 'suspended') throw new TurfSuspendedError(turf.suspensionReason);
     const bankAccount = await this.payouts.findBankAccount(ownerId, input.bankAccountId);
     if (!bankAccount)
       throw new AppError(

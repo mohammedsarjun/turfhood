@@ -1,23 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
 import { Button, Input } from '@/components/ui';
-import { GoogleAuthSection, useGoogleAuth } from '@/features/google-auth';
+import { SocialAuthSection } from '@/components/auth/SocialAuthSection';
 import { useLogin } from '../hooks/useLogin';
 
 interface LoginFormProps {
   signupSuccess?: boolean;
+  suspendedMessage?: string;
 }
 
 const fieldLabelClass = 'block text-sm font-medium text-foreground';
 const fieldLabelStyle = { marginBottom: 6 };
 
-export function LoginForm({ signupSuccess }: LoginFormProps) {
-  const { register, onSubmit, errors, isSubmitting, formError } = useLogin();
+export function LoginForm({ signupSuccess, suspendedMessage }: LoginFormProps) {
+  const { register, onSubmit, errors, isSubmitting, formError, setFormError } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
-  const googleAuth = useGoogleAuth();
+
+  useEffect(() => {
+    if (suspendedMessage) setFormError(suspendedMessage);
+  }, [setFormError, suspendedMessage]);
 
   return (
     <div>
@@ -42,11 +46,7 @@ export function LoginForm({ signupSuccess }: LoginFormProps) {
         </p>
       )}
 
-      <GoogleAuthSection
-        onClick={() => googleAuth.trigger()}
-        loading={googleAuth.isLoading}
-        error={googleAuth.error}
-      />
+      <SocialAuthSection />
 
       <form onSubmit={onSubmit} noValidate className="flex flex-col" style={{ gap: 16 }}>
         <div>

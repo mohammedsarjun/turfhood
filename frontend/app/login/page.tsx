@@ -13,11 +13,11 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 interface LoginPageProps {
-  searchParams: Promise<{ signupSuccess?: string }>;
+  searchParams: Promise<{ signupSuccess?: string; suspended?: string }>;
 }
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
-  const { signupSuccess } = await searchParams;
+  const { signupSuccess, suspended } = await searchParams;
 
   return (
     <AuthLayout
@@ -36,7 +36,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         </BrandPanel>
       }
     >
-      <LoginForm signupSuccess={signupSuccess === 'true'} />
+      <LoginForm signupSuccess={signupSuccess === 'true'} suspendedMessage={suspended} />
     </AuthLayout>
   );
 }

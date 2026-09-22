@@ -104,6 +104,7 @@ export function MyBookingsPage() {
                   page={sessionPage}
                   totalPages={sessionTotalPages}
                   onPageChange={setSessionPage}
+                  hidden={sessionTotalPages <= 1}
                 />
               </section>
             )}
@@ -166,7 +167,12 @@ export function MyBookingsPage() {
                 No {filter} bookings.
               </p>
             )}
-            <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+              hidden={totalPages <= 1}
+            />
           </div>
         )}
       </main>

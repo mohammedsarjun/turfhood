@@ -3,10 +3,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { SlidersHorizontal } from 'lucide-react';
 import type { NearbyTurfDTO, PaginationMeta } from '@turfhood/shared';
-import { Header } from '@/components/shared';
+import { PublicHeader } from '@/components/shared';
 import { Button } from '@/components/ui';
 import { Pagination } from '@/components/table';
-import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { discoverTurfs } from '../actions/homeApi';
 import { TurfCard } from './NearbyTurfs';
 import { TurfFilters, type DiscoveryFilterValues } from './TurfFilters';
@@ -14,7 +13,6 @@ import { TurfFilters, type DiscoveryFilterValues } from './TurfFilters';
 const PAGE_SIZE = 10;
 
 export function AllTurfsPage() {
-  const { user, clearUser } = useCurrentUser();
   const [filters, setFilters] = useState<DiscoveryFilterValues>({});
   const [items, setItems] = useState<NearbyTurfDTO[]>([]);
   const [pagination, setPagination] = useState<PaginationMeta>({
@@ -55,7 +53,7 @@ export function AllTurfsPage() {
 
   return (
     <>
-      <Header userName={user?.name} avatarUrl={user?.avatarUrl} onLoggedOut={clearUser} />
+      <PublicHeader />
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
         <div className="mb-6 flex items-center justify-between">
           <div>
@@ -97,6 +95,7 @@ export function AllTurfsPage() {
                   page={pagination.page}
                   totalPages={pagination.totalPages}
                   onPageChange={changePage}
+                  hidden={items.length === 0}
                 />
               </>
             ) : (
