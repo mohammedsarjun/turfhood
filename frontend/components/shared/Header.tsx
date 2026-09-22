@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   Bell,
@@ -42,6 +43,7 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const notificationRef = useRef<HTMLDivElement>(null);
   const { application } = useMyApplication();
+  const router = useRouter();
   const turfOwnerLinkHref = application ? '/my-turfs' : '/become-a-turf-owner';
   const turfOwnerLinkLabel = application ? 'My Turfs' : 'Become a Turf Owner';
 
@@ -91,7 +93,7 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
       await logout();
       onLoggedOut?.();
       setIsMenuOpen(false);
-      window.location.replace('/login');
+      router.replace('/login');
     } catch {
       setIsLoggingOut(false);
     }

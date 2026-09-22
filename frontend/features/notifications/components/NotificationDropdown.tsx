@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Check, X } from 'lucide-react';
 import { io, type Socket } from 'socket.io-client';
@@ -84,7 +84,9 @@ export function NotificationDropdown({ open, onClose, onUnreadCountChange }: Not
   });
   const [updatingId, setUpdatingId] = useState<string>();
   const onUnreadCountChangeRef = useRef(onUnreadCountChange);
-  onUnreadCountChangeRef.current = onUnreadCountChange;
+  useLayoutEffect(() => {
+    onUnreadCountChangeRef.current = onUnreadCountChange;
+  });
 
   useEffect(() => {
     onUnreadCountChangeRef.current?.(fetchState.unreadCount);
