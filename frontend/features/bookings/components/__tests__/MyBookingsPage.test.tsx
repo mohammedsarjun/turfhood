@@ -5,6 +5,9 @@ import { MyBookingsPage } from '../MyBookingsPage';
 
 jest.mock('../../actions/bookingApi');
 jest.mock('../../../open-sessions/actions/openSessionApi');
+jest.mock('../../../turf-onboarding/hooks/useMyApplication', () => ({
+  useMyApplication: () => ({ application: null, isLoading: false, error: null }),
+}));
 
 describe('MyBookingsPage', () => {
   it('requests the next backend page and resets both lists when the status changes', async () => {
