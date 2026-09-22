@@ -12,6 +12,7 @@ interface TurfPortalHeaderProps {
 
 export function TurfPortalHeader({ turfName, onMenuClick }: TurfPortalHeaderProps) {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const notificationRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -56,13 +57,17 @@ export function TurfPortalHeader({ turfName, onMenuClick }: TurfPortalHeaderProp
             aria-haspopup="dialog"
             aria-expanded={isNotificationOpen}
             onClick={() => setIsNotificationOpen((open) => !open)}
-            className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+            className="relative flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
           >
             <FiBell size={18} />
+            {unreadCount > 0 && (
+              <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-red-500" aria-label={`${unreadCount} unread notifications`} />
+            )}
           </button>
           <NotificationDropdown
             open={isNotificationOpen}
             onClose={() => setIsNotificationOpen(false)}
+            onUnreadCountChange={setUnreadCount}
           />
         </div>
         <Link

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Check, X } from 'lucide-react';
 import { io, type Socket } from 'socket.io-client';
@@ -17,6 +17,8 @@ interface NotificationSocketPayload {
 interface NotificationDropdownProps {
   open: boolean;
   onClose: () => void;
+  /** Called whenever the resolved unread count changes so the parent bell can show a dot. */
+  onUnreadCountChange?: (count: number) => void;
 }
 
 function socketUrl(): string | undefined {
@@ -72,7 +74,7 @@ function fetchReducer(state: FetchState, action: FetchAction): FetchState {
   }
 }
 
-export function NotificationDropdown({ open, onClose }: NotificationDropdownProps) {
+export function NotificationDropdown({ open, onClose, onUnreadCountChange }: NotificationDropdownProps) {
   const [filter, setFilter] = useState<NotificationFilter>('all');
   const [fetchState, dispatch] = useReducer(fetchReducer, {
     items: [],
@@ -81,6 +83,12 @@ export function NotificationDropdown({ open, onClose }: NotificationDropdownProp
     error: '',
   });
   const [updatingId, setUpdatingId] = useState<string>();
+  const onUnreadCountChangeRef = useRef(onUnreadCountChange);
+  onUnreadCountChangeRef.current = onUnreadCountChange;
+
+  useEffect(() => {
+    onUnreadCountChangeRef.current?.(fetchState.unreadCount);
+  }, [fetchState.unreadCount]);
 
   useEffect(() => {
     if (!open) return;

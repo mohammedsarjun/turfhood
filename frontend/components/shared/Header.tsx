@@ -38,6 +38,7 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
   const notificationRef = useRef<HTMLDivElement>(null);
   const { application } = useMyApplication();
@@ -137,10 +138,14 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
             className="relative flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
           >
             <Bell className="h-5 w-5" />
+            {unreadCount > 0 && (
+              <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-red-500" aria-label={`${unreadCount} unread notifications`} />
+            )}
           </button>
           <NotificationDropdown
             open={isNotificationOpen}
             onClose={() => setIsNotificationOpen(false)}
+            onUnreadCountChange={setUnreadCount}
           />
         </div>
 
