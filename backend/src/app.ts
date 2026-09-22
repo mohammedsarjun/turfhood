@@ -10,7 +10,6 @@ import amenityRoutes from '@presentation/amenity/routes/amenity.routes';
 import turfOwnerApplicationRoutes from '@presentation/turfOwnerApplication/routes/turfOwnerApplication.routes';
 import courtRoutes from '@presentation/court/routes/court.routes';
 import locationRoutes from '@presentation/location/routes/location.routes';
-import bannerRoutes from '@presentation/banner/routes/banner.routes';
 import turfRoutes from '@presentation/turf/routes/turf.routes';
 import commissionRoutes from '@presentation/commission/routes/commission.routes';
 import bookingRoutes from '@presentation/booking/routes/booking.routes';
@@ -76,7 +75,6 @@ app.use('/api/sports', sportsTypeRoutes);
 app.use('/api/amenities', amenityRoutes);
 app.use('/api/turf-owner-applications', turfOwnerApplicationRoutes);
 app.use('/api/locations', locationRoutes);
-app.use('/api/banners', bannerRoutes);
 app.use('/api/turfs', turfRoutes);
 app.use('/api/turfs/:turfId/courts', authenticate, blockSuspendedTurfOwnerAccess, courtRoutes);
 

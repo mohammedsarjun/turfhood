@@ -1,11 +1,3 @@
-export interface BannerDTO {
-  id: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  createdAt: string;
-}
-
 export interface NearbyTurfDTO {
   id: string;
   name: string;

@@ -70,7 +70,6 @@ export const API_ROUTES = {
     cities: (countryCode: string, stateCode: string) =>
       `/locations/countries/${countryCode}/states/${stateCode}/cities`,
   },
-  banners: { base: '/banners' },
   bookings: {
     reservations: '/bookings/reservations',
     mine: '/bookings/me',

@@ -1,5 +1,4 @@
 import type {
-  BannerDTO,
   NearbyTurfDTO,
   PaginatedResponse,
   TurfDetailResponse,
@@ -8,11 +7,6 @@ import type {
 } from '@turfhood/shared';
 import { axiosInstance } from '@/lib/axios';
 import { API_ROUTES } from '@/lib/apiRoutes';
-
-export async function listBanners(): Promise<BannerDTO[]> {
-  const response = await axiosInstance.get<{ items: BannerDTO[] }>(API_ROUTES.banners.base);
-  return response.data.items;
-}
 
 export async function getPublicCourtDetails(
   turfId: string,

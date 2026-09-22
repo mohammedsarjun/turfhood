@@ -107,7 +107,6 @@ export type {
 export { CatalogErrorCode } from "./catalog/catalog-error-code.js";
 export type { LocationOption } from "./location/location.dto.js";
 export type {
-  BannerDTO,
   NearbyTurfDTO,
   TurfDiscoveryFilters,
   PublicCourtCardDTO,

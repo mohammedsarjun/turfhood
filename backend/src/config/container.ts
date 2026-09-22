@@ -1,10 +1,5 @@
 import 'reflect-metadata';
 import { container } from 'tsyringe';
-import type { IBannerRepository } from '@domain/banner/repositories/IBannerRepository';
-import { BANNER_TOKENS } from '@domain/banner/tokens';
-import { BannerRepository } from '@infrastructure/banner/repositories/BannerRepository';
-import type { IManageBannersUseCase } from '@application/banner/use-cases/IManageBannersUseCase';
-import { ManageBannersUseCase } from '@application/banner/use-cases/ManageBannersUseCase';
 import type { IUserRepository } from '@domain/user/repositories/IUserRepository';
 import type { IPasswordHasher } from '@domain/user/services/IPasswordHasher';
 import type { ITokenService } from '@domain/user/services/ITokenService';
@@ -407,12 +402,6 @@ container.register<IRevokeRefreshTokenUseCase>(REFRESH_TOKEN_TOKENS.RevokeRefres
   useClass: RevokeRefreshTokenUseCase,
 });
 container.register<ICourtRepository>(COURT_TOKENS.CourtRepository, { useClass: CourtRepository });
-container.register<IBannerRepository>(BANNER_TOKENS.BannerRepository, {
-  useClass: BannerRepository,
-});
-container.register<IManageBannersUseCase>(BANNER_TOKENS.ManageBannersUseCase, {
-  useClass: ManageBannersUseCase,
-});
 container.register<ICreateCourtUseCase>(COURT_TOKENS.CreateCourtUseCase, {
   useClass: CreateCourtUseCase,
 });
