@@ -1,5 +1,5 @@
 {
-  "outputDirectory": "frontend/.next",
-  "installCommand": "npm ci",
+  "outputDirectory": ".next",
+  "installCommand": "cd .. && npm ci",
   "framework": "nextjs"
 }
