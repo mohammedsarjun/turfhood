@@ -167,7 +167,7 @@ export function Header({ userName, avatarUrl, onLoggedOut }: HeaderProps) {
             <div
               role="menu"
               className={cn(
-                'absolute right-0 z-10 mt-2 w-48 rounded-md border border-border bg-card shadow-lg',
+                'absolute right-0 z-50 mt-2 w-48 rounded-md border border-border bg-card shadow-lg',
               )}
               style={{ paddingTop: 4, paddingBottom: 4 }}
             >

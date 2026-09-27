@@ -29,6 +29,7 @@ import { errorHandler } from '@shared/middlewares/errorHandler';
 import { env } from '@config/env';
 
 const app: Express = express();
+app.set('trust proxy', 1);
 
 app.use(cors({ origin: env.FRONTEND_URL, credentials: true }));
 app.use(express.json());
