@@ -39,7 +39,7 @@ export function AdminSportsPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between" style={{ marginBottom: 24 }}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4" style={{ marginBottom: 24 }}>
         <Heading variant="h1">Sports</Heading>
         <Button type="button" onClick={openAddModal}>
           <Plus className="h-4 w-4" />
