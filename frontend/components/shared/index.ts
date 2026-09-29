@@ -8,3 +8,4 @@ export {
   type TurfImageGalleryProps,
   type TurfImageGalleryImage,
 } from './TurfImageGallery';
+export { PageLoader } from './PageLoader';
