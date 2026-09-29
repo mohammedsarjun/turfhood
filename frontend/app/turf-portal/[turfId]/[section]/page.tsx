@@ -1,12 +1,36 @@
+import dynamic from 'next/dynamic';
 import { notFound } from 'next/navigation';
-import { OwnerBookingsPage } from '@/features/bookings';
-import { OwnerReviewsPage } from '@/features/reviews';
-import { OwnerOpenSessionsPage } from '@/features/open-sessions';
-import {
-  OwnerDashboardPage,
-  OwnerRevenuePage,
-  OwnerTurfManagementPage,
-} from '@/features/turf-portal';
+import { PageLoader } from '@/components/shared';
+
+const OwnerDashboardPage = dynamic(
+  () => import('@/features/turf-portal').then((m) => ({ default: m.OwnerDashboardPage })),
+  { loading: () => <PageLoader /> },
+);
+
+const OwnerRevenuePage = dynamic(
+  () => import('@/features/turf-portal').then((m) => ({ default: m.OwnerRevenuePage })),
+  { loading: () => <PageLoader /> },
+);
+
+const OwnerTurfManagementPage = dynamic(
+  () => import('@/features/turf-portal').then((m) => ({ default: m.OwnerTurfManagementPage })),
+  { loading: () => <PageLoader /> },
+);
+
+const OwnerBookingsPage = dynamic(
+  () => import('@/features/bookings').then((m) => ({ default: m.OwnerBookingsPage })),
+  { loading: () => <PageLoader /> },
+);
+
+const OwnerReviewsPage = dynamic(
+  () => import('@/features/reviews').then((m) => ({ default: m.OwnerReviewsPage })),
+  { loading: () => <PageLoader /> },
+);
+
+const OwnerOpenSessionsPage = dynamic(
+  () => import('@/features/open-sessions').then((m) => ({ default: m.OwnerOpenSessionsPage })),
+  { loading: () => <PageLoader /> },
+);
 
 const SECTION_TITLES: Record<string, string> = {
   dashboard: 'Dashboard',

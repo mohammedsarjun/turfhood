@@ -53,7 +53,6 @@ const NAVIGATION_GROUPS: ReadonlyArray<{
   {
     label: 'Customers',
     items: [
-      { label: 'Customers', segment: 'customers', icon: FiUsers },
       { label: 'Reviews', segment: 'reviews', icon: FiMessageSquare },
     ],
   },
